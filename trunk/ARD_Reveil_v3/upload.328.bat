@@ -1,0 +1,1 @@
+D:\arduino-0015\hardware/tools/avr/bin/avrdude -CD:\arduino-0015\hardware/tools/avr/etc/avrdude.conf -v -pm328p -c avrispv2 -P\\.\COM1   "-Uflash:w:C:\Documents and Settings\Alan\My Documents\Arduino\ARD_Reveil_v3\applet\ARD_Reveil_v3.hex:i" 
