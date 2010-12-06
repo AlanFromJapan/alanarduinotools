@@ -3,9 +3,31 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-#define BUFFLEN 8
+//Excellent sample of circular buffer under ATmega 88
+//http://jimsmindtank.com/how-to-atmega-usart-in-uart-mode-with-circular-buffers/
+////////////////////////////////
+//		Buffer Stuff
+#include <avr/interrupt.h>
 
-unsigned char mBuffer[BUFFLEN];
+#define MATRIXBUFFLEN 8
+
+unsigned char mBuffer[MATRIXBUFFLEN];
+
+#define rx_buffer_size 64
+#define rx_buffer_mask (rx_buffer_size - 1)
+
+volatile unsigned char rx_buffer_tail = 0;
+volatile unsigned char rx_buffer_head = 0;
+volatile unsigned char rx_buffer[rx_buffer_size];
+volatile unsigned char rx_buffer_overflow_flag;
+
+unsigned char data_in_buffer(void);
+unsigned char read_from_buffer(void);
+void init_usart_rx_buffer(void);
+////////////////////////////////
+
+void init_usart(unsigned long);
+
 
 void digitalWrite(unsigned char pPin, unsigned char pValue){
 	if (pValue == 1) {	
@@ -29,16 +51,10 @@ void digitalWrite(unsigned char pPin, unsigned char pValue){
 }
 
 
-void setup()   {                
-  for(unsigned char i =0; i < BUFFLEN; i++){
+void resetMatrixBuffer()   {                
+  for(unsigned char i =0; i < MATRIXBUFFLEN; i++){
     mBuffer[i] = 0;
   }  
-/*
-
-  for(int i =0; i < 16; i++){
-    digitalWrite(i, 1);  
-  }  
-*/
 }
 
 void randomOnOff(){
@@ -70,7 +86,7 @@ void loop()
 	scanLines();
 
 	//draw the in memory image
-	for (unsigned char c = 0; c < BUFFLEN; c++){
+	for (unsigned char c = 0; c < MATRIXBUFFLEN; c++){
 		PORTD = mBuffer[c];
 		PORTB = ~_BV(c);
 		
@@ -99,12 +115,131 @@ void loop()
 //
 int main(void) {
 	//all ports go output 
+	//for the matrix
 	DDRB = 0xFF;
 	DDRC = 0xFF;
 	DDRD = 0xFF;
 	
-	for (;;) loop();
+	//init the serial port
+	init_usart(9600);
+	DDRB = 0xff;
+	init_usart_rx_buffer();
+	unsigned char vCharacter = 0;
+
+	for(;;)
+	{
+		if(data_in_buffer() != 0)
+		{
+			vCharacter = read_from_buffer();
+			//echo
+			while((UCSR0A & (1<<UDRE0)) == 0) {}
+			UDR0 = vCharacter;
+			
+			if (vCharacter == 'R'){
+				resetMatrixBuffer();
+			}
+		}
+		_delay_ms(10);
+		
+		//loop the matrix drawing
+		loop();
+	}
+
 }
 
 
+void init_usart (unsigned long baud)
+{
+
+	unsigned int UBRR_2x_off;
+	unsigned int UBRR_2x_on;
+	unsigned long closest_match_2x_off;
+	unsigned long closest_match_2x_on;
+	unsigned char off_2x_error;
+	unsigned char on_2x_error;
+
+	UBRR_2x_off = F_CPU/(16*baud) - 1;
+	UBRR_2x_on = F_CPU/(8*baud) - 1;
+
+	closest_match_2x_off = F_CPU/(16*(UBRR_2x_off + 1));
+	closest_match_2x_on = F_CPU/(8*(UBRR_2x_on + 1));
+
+	off_2x_error = 255*(closest_match_2x_off/baud - 1);
+	if (off_2x_error <0) {off_2x_error *= (-1);}
+	on_2x_error = 255*(closest_match_2x_on/baud -1);
+	if (on_2x_error <0) {on_2x_error *= (-1);}
+
+	if(baud > F_CPU / 16)
+	{
+		UBRR0L = 0xff & UBRR_2x_on;
+		UBRR0H = 0xff & (UBRR_2x_on>>8);
+		UCSR0A |= (1<<U2X0);
+	} else {
+
+		if (off_2x_error > on_2x_error)
+		{
+			UBRR0L = 0xff & UBRR_2x_on;
+			UBRR0H = 0xff & (UBRR_2x_on>>8);
+			UCSR0A |= (1<<U2X0);
+		} else {
+			UBRR0L = 0xff & UBRR_2x_off;
+			UBRR0H = 0xff & (UBRR_2x_off>>8);
+			UCSR0A &= ~(1<<U2X0);
+		}
+	}
+
+	UCSR0B = (0<<RXCIE0) |
+	(0<<TXCIE0) |
+	(0<<UDRIE0) |
+	(1<<RXEN0) |
+	(1<<TXEN0) |
+	(0<<UCSZ02);
+
+	UCSR0A = (0<<U2X0) |
+	(0<<MPCM0) ;
+
+	UCSR0C = (0<<UMSEL01) | (0<<UMSEL00) |
+	(0<<UPM01) | (0<<UPM00) |
+	(0<<USBS0) |
+	(1<<UCSZ01) | (1<<UCSZ00) |
+	(0<<UCPOL0) ;
+}
+
+//////////////////////////////
+//		Buffer Stuff
+void init_usart_rx_buffer(void)
+{
+	UCSR0B |= (1<<RXCIE0);
+	sei();
+}
+
+unsigned char data_in_buffer(void)
+{
+	if(rx_buffer_head == rx_buffer_tail)
+	{
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+unsigned char read_from_buffer(void)
+{
+	while(rx_buffer_head == rx_buffer_tail) {}
+	rx_buffer_tail = (rx_buffer_tail + 1) & rx_buffer_mask;
+	return rx_buffer[rx_buffer_tail];
+}
+
+ISR(USART_RX_vect)
+{
+	if(((rx_buffer_head+1)&rx_buffer_mask) == rx_buffer_tail)
+	{
+		rx_buffer_overflow_flag = UDR0;
+		rx_buffer_overflow_flag = 1;
+	}	else	{
+		rx_buffer_head = (rx_buffer_head+1)&rx_buffer_mask;
+		rx_buffer[rx_buffer_head] = UDR0;
+	}
+}
+//////////////////////////////
 
