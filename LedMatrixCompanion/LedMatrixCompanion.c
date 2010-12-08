@@ -1,7 +1,12 @@
+//AlanFromJapan Dec2010
+//http://kalshagar.wikispaces.com/ardSolar+companion
+
 // includes
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+
+//#define DEBUG
 
 //Excellent sample of circular buffer under ATmega 88
 //http://jimsmindtank.com/how-to-atmega-usart-in-uart-mode-with-circular-buffers/
@@ -83,7 +88,7 @@ void loop()
 {
 	//change the drawing
 	//randomOnOff();
-	scanLines();
+	//scanLines();
 
 	//draw the in memory image
 	for (unsigned char c = 0; c < MATRIXBUFFLEN; c++){
@@ -109,6 +114,59 @@ void loop()
 
 }
 
+unsigned char HEX2DEC[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+unsigned char HexToInt (unsigned char pHigh, unsigned char pLow){
+	unsigned char vR = 0;
+
+	for (unsigned char i =0; i < 16; i++){
+		if (HEX2DEC[i] == pHigh){
+			vR = i << 4;
+			break;
+		}
+	}
+
+	for (unsigned char i =0; i < 16; i++){
+		if (HEX2DEC[i] == pLow){
+			vR = vR + i;
+			break;
+		}
+	}
+	
+	return vR;
+}
+
+//Reads data from the serial and update the in-memory buffer accordingly
+void ReadSerialMatrixData(){
+	if(data_in_buffer() != 0)
+	{
+		unsigned char vCharacter = read_from_buffer();
+			
+		if (vCharacter == 'R'){
+			resetMatrixBuffer();
+		}
+		else {
+			if (vCharacter >= '0' && vCharacter <= '7'){
+				unsigned char vIndex = vCharacter - '0';
+				unsigned char vHigh = read_from_buffer();
+				unsigned char vLow = read_from_buffer();
+				
+#ifdef DEBUG
+				//echo
+				while((UCSR0A & (1<<UDRE0)) == 0) {}
+				UDR0 = vCharacter;
+				while((UCSR0A & (1<<UDRE0)) == 0) {}
+				UDR0 = vHigh;				
+				while((UCSR0A & (1<<UDRE0)) == 0) {}
+				UDR0 = vLow;
+#endif				
+				mBuffer[vIndex] = HexToInt(vHigh, vLow);
+			}
+		}
+	}
+	//_delay_ms(10);
+		
+}
 
 //
 // main function
@@ -121,25 +179,17 @@ int main(void) {
 	DDRD = 0xFF;
 	
 	//init the serial port
-	init_usart(9600);
+	init_usart(19200);
 	DDRB = 0xff;
 	init_usart_rx_buffer();
-	unsigned char vCharacter = 0;
 
 	for(;;)
 	{
 		if(data_in_buffer() != 0)
 		{
-			vCharacter = read_from_buffer();
-			//echo
-			while((UCSR0A & (1<<UDRE0)) == 0) {}
-			UDR0 = vCharacter;
-			
-			if (vCharacter == 'R'){
-				resetMatrixBuffer();
-			}
+			ReadSerialMatrixData();			
 		}
-		_delay_ms(10);
+		//_delay_ms(10);
 		
 		//loop the matrix drawing
 		loop();
