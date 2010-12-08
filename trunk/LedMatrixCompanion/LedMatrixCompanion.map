@@ -6,6 +6,8 @@ D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_udivmodsi4.o)
                               LedMatrixCompanion.o (__udivmodsi4)
 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_exit.o)
                               D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4/crtm88p.o (exit)
+D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_copy_data.o)
+                              LedMatrixCompanion.o (__do_copy_data)
 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_clear_bss.o)
                               LedMatrixCompanion.o (__do_clear_bss)
 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4\libc.a(random.o)
@@ -16,8 +18,6 @@ D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_prologue.o)
                               D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4\libc.a(random.o) (__prologue_saves__)
 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_epilogue.o)
                               D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4\libc.a(random.o) (__epilogue_restores__)
-D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_copy_data.o)
-                              D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4\libc.a(random.o) (__do_copy_data)
 
 Allocating common symbols
 Common symbol       size              file
@@ -138,7 +138,7 @@ LOAD D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x60e
+.text           0x00000000      0x6d2
  *(.vectors)
  .vectors       0x00000000       0x34 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4/crtm88p.o
                 0x00000000                __vectors
@@ -176,10 +176,10 @@ LOAD D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a
  *(.init3)
  *(.init3)
  *(.init4)
- .init4         0x00000040       0x10 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_clear_bss.o)
-                0x00000040                __do_clear_bss
- .init4         0x00000050       0x16 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_copy_data.o)
-                0x00000050                __do_copy_data
+ .init4         0x00000040       0x16 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_copy_data.o)
+                0x00000040                __do_copy_data
+ .init4         0x00000056       0x10 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_clear_bss.o)
+                0x00000056                __do_clear_bss
  *(.init4)
  *(.init5)
  *(.init5)
@@ -219,50 +219,52 @@ LOAD D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a
                 0x0000006a                __vector_10
                 0x0000006a                __vector_16
                 0x0000006a                __vector_20
- .text          0x0000006c      0x3c6 LedMatrixCompanion.o
+ .text          0x0000006c      0x48a LedMatrixCompanion.o
                 0x00000128                loop
-                0x00000346                init_usart_rx_buffer
+                0x0000040a                init_usart_rx_buffer
                 0x0000006c                digitalWrite
-                0x000003fc                randomOnOff
+                0x00000196                HexToInt
+                0x000004c0                randomOnOff
+                0x000001d0                ReadSerialMatrixData
                 0x000000ee                scanLines
-                0x000002c4                main
-                0x00000366                read_from_buffer
-                0x00000354                data_in_buffer
+                0x000003d4                main
+                0x0000042a                read_from_buffer
+                0x00000418                data_in_buffer
                 0x000000de                resetMatrixBuffer
-                0x0000038c                __vector_18
-                0x00000198                init_usart
- .text          0x00000432        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_mulsi3.o)
- .text          0x00000432        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_udivmodsi4.o)
- .text          0x00000432        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_exit.o)
- .text          0x00000432        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_clear_bss.o)
- .text          0x00000432       0xb2 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4\libc.a(random.o)
-                0x000004ca                random
-                0x000004c6                random_r
-                0x000004d2                srandom
- .text          0x000004e4        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_divmodsi4.o)
- .text          0x000004e4        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_prologue.o)
- .text          0x000004e4        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_epilogue.o)
- .text          0x000004e4        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_copy_data.o)
-                0x000004e4                . = ALIGN (0x2)
+                0x00000450                __vector_18
+                0x000002a8                init_usart
+ .text          0x000004f6        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_mulsi3.o)
+ .text          0x000004f6        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_udivmodsi4.o)
+ .text          0x000004f6        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_exit.o)
+ .text          0x000004f6        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_copy_data.o)
+ .text          0x000004f6        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_clear_bss.o)
+ .text          0x000004f6       0xb2 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4\libc.a(random.o)
+                0x0000058e                random
+                0x0000058a                random_r
+                0x00000596                srandom
+ .text          0x000005a8        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_divmodsi4.o)
+ .text          0x000005a8        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_prologue.o)
+ .text          0x000005a8        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_epilogue.o)
+                0x000005a8                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x000004e4       0x3e D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_mulsi3.o)
-                0x000004e4                __mulsi3
- .text.libgcc   0x00000522       0x44 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_udivmodsi4.o)
-                0x00000522                __udivmodsi4
- .text.libgcc   0x00000566        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_exit.o)
- .text.libgcc   0x00000566        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_clear_bss.o)
- .text.libgcc   0x00000566       0x36 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_divmodsi4.o)
-                0x00000566                __divmodsi4
- .text.libgcc   0x0000059c       0x38 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_prologue.o)
-                0x0000059c                __prologue_saves__
- .text.libgcc   0x000005d4       0x36 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_epilogue.o)
-                0x000005d4                __epilogue_restores__
- .text.libgcc   0x0000060a        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_copy_data.o)
-                0x0000060a                . = ALIGN (0x2)
+ .text.libgcc   0x000005a8       0x3e D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_mulsi3.o)
+                0x000005a8                __mulsi3
+ .text.libgcc   0x000005e6       0x44 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_udivmodsi4.o)
+                0x000005e6                __udivmodsi4
+ .text.libgcc   0x0000062a        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_exit.o)
+ .text.libgcc   0x0000062a        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_copy_data.o)
+ .text.libgcc   0x0000062a        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_clear_bss.o)
+ .text.libgcc   0x0000062a       0x36 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_divmodsi4.o)
+                0x0000062a                __divmodsi4
+ .text.libgcc   0x00000660       0x38 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_prologue.o)
+                0x00000660                __prologue_saves__
+ .text.libgcc   0x00000698       0x36 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_epilogue.o)
+                0x00000698                __epilogue_restores__
+                0x000006ce                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000060a        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_exit.o)
-                0x0000060a                exit
-                0x0000060a                _exit
+ .fini9         0x000006ce        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_exit.o)
+                0x000006ce                exit
+                0x000006ce                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -281,65 +283,66 @@ LOAD D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000060a        0x4 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_exit.o)
+ .fini0         0x000006ce        0x4 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000060e                _etext = .
+                0x000006d2                _etext = .
 
-.data           0x00800100        0x4 load address 0x0000060e
+.data           0x00800100       0x14 load address 0x000006d2
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4/crtm88p.o
- .data          0x00800100        0x0 LedMatrixCompanion.o
- .data          0x00800100        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_mulsi3.o)
- .data          0x00800100        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_udivmodsi4.o)
- .data          0x00800100        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_exit.o)
- .data          0x00800100        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_clear_bss.o)
- .data          0x00800100        0x4 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4\libc.a(random.o)
- .data          0x00800104        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_divmodsi4.o)
- .data          0x00800104        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_prologue.o)
- .data          0x00800104        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_epilogue.o)
- .data          0x00800104        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_copy_data.o)
+ .data          0x00800100       0x10 LedMatrixCompanion.o
+                0x00800100                HEX2DEC
+ .data          0x00800110        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_mulsi3.o)
+ .data          0x00800110        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_udivmodsi4.o)
+ .data          0x00800110        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_exit.o)
+ .data          0x00800110        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_copy_data.o)
+ .data          0x00800110        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_clear_bss.o)
+ .data          0x00800110        0x4 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4\libc.a(random.o)
+ .data          0x00800114        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_divmodsi4.o)
+ .data          0x00800114        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_prologue.o)
+ .data          0x00800114        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_epilogue.o)
  *(.data*)
  *(.rodata)
  *(.rodata*)
  *(.gnu.linkonce.d*)
-                0x00800104                . = ALIGN (0x2)
-                0x00800104                _edata = .
-                0x00800104                PROVIDE (__data_end, .)
+                0x00800114                . = ALIGN (0x2)
+                0x00800114                _edata = .
+                0x00800114                PROVIDE (__data_end, .)
 
-.bss            0x00800104       0x4c
-                0x00800104                PROVIDE (__bss_start, .)
+.bss            0x00800114       0x4c
+                0x00800114                PROVIDE (__bss_start, .)
  *(.bss)
- .bss           0x00800104        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4/crtm88p.o
- .bss           0x00800104        0x3 LedMatrixCompanion.o
-                0x00800105                rx_buffer_head
-                0x00800104                rx_buffer_tail
-                0x00800106                mPos
- .bss           0x00800107        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_mulsi3.o)
- .bss           0x00800107        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_udivmodsi4.o)
- .bss           0x00800107        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_exit.o)
- .bss           0x00800107        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_clear_bss.o)
- .bss           0x00800107        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4\libc.a(random.o)
- .bss           0x00800107        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_divmodsi4.o)
- .bss           0x00800107        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_prologue.o)
- .bss           0x00800107        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_epilogue.o)
- .bss           0x00800107        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_copy_data.o)
+ .bss           0x00800114        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4/crtm88p.o
+ .bss           0x00800114        0x3 LedMatrixCompanion.o
+                0x00800115                rx_buffer_head
+                0x00800114                rx_buffer_tail
+                0x00800116                mPos
+ .bss           0x00800117        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_mulsi3.o)
+ .bss           0x00800117        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_udivmodsi4.o)
+ .bss           0x00800117        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_exit.o)
+ .bss           0x00800117        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_copy_data.o)
+ .bss           0x00800117        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_clear_bss.o)
+ .bss           0x00800117        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4\libc.a(random.o)
+ .bss           0x00800117        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_divmodsi4.o)
+ .bss           0x00800117        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_prologue.o)
+ .bss           0x00800117        0x0 D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_epilogue.o)
  *(.bss*)
  *(COMMON)
- COMMON         0x00800107       0x49 LedMatrixCompanion.o
-                0x00800107                rx_buffer
-                0x00800147                rx_buffer_overflow_flag
-                0x00800148                mBuffer
-                0x00800150                PROVIDE (__bss_end, .)
-                0x0000060e                __data_load_start = LOADADDR (.data)
-                0x00000612                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800117       0x49 LedMatrixCompanion.o
+                0x00800117                rx_buffer
+                0x00800157                rx_buffer_overflow_flag
+                0x00800158                mBuffer
+                0x00800160                PROVIDE (__bss_end, .)
+                0x000006d2                __data_load_start = LOADADDR (.data)
+                0x000006e6                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800150        0x0
-                0x00800150                PROVIDE (__noinit_start, .)
+.noinit         0x00800160        0x0
+                0x00800160                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800150                PROVIDE (__noinit_end, .)
-                0x00800150                _end = .
-                0x00800150                PROVIDE (__heap_start, .)
+                0x00800160                PROVIDE (__noinit_end, .)
+                0x00800160                _end = .
+                0x00800160                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -396,48 +399,51 @@ LOAD D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a
                 0x00000000       0x20 LedMatrixCompanion.o
 
 .debug_pubnames
-                0x00000000      0x12e
+                0x00000000      0x160
  *(.debug_pubnames)
  .debug_pubnames
-                0x00000000      0x12e LedMatrixCompanion.o
+                0x00000000      0x160 LedMatrixCompanion.o
 
-.debug_info     0x00000000      0x49b
+.debug_info     0x00000000      0x612
  *(.debug_info)
- .debug_info    0x00000000      0x49b LedMatrixCompanion.o
+ .debug_info    0x00000000      0x612 LedMatrixCompanion.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000      0x1fb
+.debug_abbrev   0x00000000      0x247
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x1fb LedMatrixCompanion.o
+ .debug_abbrev  0x00000000      0x247 LedMatrixCompanion.o
 
-.debug_line     0x00000000      0x431
+.debug_line     0x00000000      0x4dc
  *(.debug_line)
- .debug_line    0x00000000      0x431 LedMatrixCompanion.o
+ .debug_line    0x00000000      0x4dc LedMatrixCompanion.o
 
-.debug_frame    0x00000000       0xc0
+.debug_frame    0x00000000       0xe0
  *(.debug_frame)
- .debug_frame   0x00000000       0xc0 LedMatrixCompanion.o
+ .debug_frame   0x00000000       0xe0 LedMatrixCompanion.o
 
-.debug_str      0x00000000      0x245
+.debug_str      0x00000000      0x289
  *(.debug_str)
- .debug_str     0x00000000      0x245 LedMatrixCompanion.o
-                                0x283 (size before relaxing)
+ .debug_str     0x00000000      0x289 LedMatrixCompanion.o
+                                0x2c7 (size before relaxing)
 
-.debug_loc      0x00000000      0x177
+.debug_loc      0x00000000      0x213
  *(.debug_loc)
- .debug_loc     0x00000000      0x177 LedMatrixCompanion.o
+ .debug_loc     0x00000000      0x213 LedMatrixCompanion.o
 
 .debug_macinfo
  *(.debug_macinfo)
 OUTPUT(LedMatrixCompanion.elf elf32-avr)
 LOAD linker stubs
 
-.debug_ranges   0x00000000       0xc0
- .debug_ranges  0x00000000       0xc0 LedMatrixCompanion.o
+.debug_ranges   0x00000000       0x78
+ .debug_ranges  0x00000000       0x78 LedMatrixCompanion.o
 
 Cross Reference Table
 
 Symbol                                            File
+HEX2DEC                                           LedMatrixCompanion.o
+HexToInt                                          LedMatrixCompanion.o
+ReadSerialMatrixData                              LedMatrixCompanion.o
 __bad_interrupt                                   D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4/crtm88p.o
 __bss_end                                         D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_clear_bss.o)
 __bss_start                                       D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_clear_bss.o)
@@ -450,6 +456,7 @@ __do_clear_bss                                    D:/Portable/WinAVR-20090313/li
                                                   LedMatrixCompanion.o
 __do_copy_data                                    D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_copy_data.o)
                                                   D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4\libc.a(random.o)
+                                                  LedMatrixCompanion.o
 __epilogue_restores__                             D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/avr4\libgcc.a(_epilogue.o)
                                                   D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4\libc.a(random.o)
 __heap_end                                        D:/Portable/WinAVR-20090313/lib/gcc/avr/4.3.2/../../../../avr/lib/avr4/crtm88p.o
