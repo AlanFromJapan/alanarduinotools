@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<commands>
+  <commandRunInterpreter>
+    <customRuns>
+      <!--customRun label=""  key="" command="" params="" mustConfirm="" /-->
+      <customRun label="Run eaBook (PROD)" key="E" command="notepad.exe" params="" mustConfirm="true" />
+      <customRun label="Run eaBook (PREPROD)" key="F" command="calc.exe" params="" mustConfirm="false" />
+      <customRun label="Run GIMP" key="G" command="C:\Program Files\GIMP-2.0\bin\gimp-2.6.exe" params="" mustConfirm="true" />
+      <customRun label="(Extended custom commands for ardPlayer)" key="@" command="" params="" mustConfirm="false">
+        <customRunExt label="Playlist JPop" packetSubtype="R" packetBody="3B0035A3A904" command="wmplayer.exe" params="/Playlist jpop" mustConfirm="False" />
+        <customRunExt label="Playlist Rock" packetSubtype="R" packetBody="3B000F9750F3" command="wmplayer.exe" params="/Playlist rock" mustConfirm="False" />
+        <customRunExt label="Stop Media player" packetSubtype="R" packetBody="2A005F8ADF20" command="tskill" params="wmplayer" mustConfirm="False" />
+        <customRunExt label="Notepad" packetSubtype="" packetBody="2A005E6A6E70" command="notepad.exe" params="" mustConfirm="False" />
+      </customRun>
+    </customRuns>
+    <!--mediaPlayer playerClassName="WMPlayerApp" playerWindowName="Windows Media Player">
+		</mediaPlayer-->
+    <!--mediaPlayer playerClassName="MediaPlayerClassicW" playerWindowName="">
+		</mediaPlayer-->
+    <mediaPlayer playerClassName="WMPlayerApp" playerWindowName="Windows Media Player">
+      <customRun label="APPCOMMAND_MEDIA_PLAY_PAUSE" key="|" command="14" params="" mustConfirm="false" />
+      <customRun label="APPCOMMAND_VOLUME_DOWN" key="v" command="9" params="" mustConfirm="false" />
+      <customRun label="APPCOMMAND_VOLUME_UP" key="V" command="10" params="" mustConfirm="false" />
+      <customRun label="APPCOMMAND_MEDIA_NEXTTRACK" key="&gt;" command="11" params="" mustConfirm="false" />
+      <customRun label="APPCOMMAND_MEDIA_PREVIOUSTRACK" key="&lt;" command="12" params="" mustConfirm="false" />
+    </mediaPlayer>
+  </commandRunInterpreter>
+</commands>
