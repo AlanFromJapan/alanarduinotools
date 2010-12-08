@@ -1,0 +1,10 @@
+D:\C#Work\Arduino_Tools\ARCPO\bin\Debug\ARCPO.dll
+D:\C#Work\Arduino_Tools\ARCPO\bin\Debug\ARCPO.pdb
+D:\C#Work\Arduino_Tools\ARCPO\obj\Debug\ResolveAssemblyReference.cache
+D:\C#Work\Arduino_Tools\ARCPO\obj\Debug\ARCPO.dll
+D:\C#Work\Arduino_Tools\ARCPO\obj\Debug\ARCPO.pdb
+D:\C#Work\Arduino_Tools\ARCPO\bin\Release\ARCPO.dll
+D:\C#Work\Arduino_Tools\ARCPO\bin\Release\ARCPO.pdb
+D:\C#Work\Arduino_Tools\ARCPO\obj\Release\ResolveAssemblyReference.cache
+D:\C#Work\Arduino_Tools\ARCPO\obj\Release\ARCPO.dll
+D:\C#Work\Arduino_Tools\ARCPO\obj\Release\ARCPO.pdb

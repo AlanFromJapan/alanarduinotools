@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C# Express 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARCPO_Test", "ARCPO_Test\ARCPO_Test.csproj", "{BC5A58EA-2336-47BC-9EA2-35580DCF40BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARCPO", "ARCPO\ARCPO.csproj", "{DBBD0B54-86CA-4DC9-8AFB-4AD5996710B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arduino_ReadSerial", "Arduino_ReadSerial\Arduino_ReadSerial.csproj", "{DF8CBED9-7644-4DCF-9754-60DDC8FD12D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ardTouchConnector", "ardTouchConnector\ardTouchConnector.csproj", "{8F92A36E-6CEC-44AE-839F-1F8ED069C7F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARD_AnalogView", "ARD_AnalogView\ARD_AnalogView.csproj", "{D3FDCA17-A877-4B03-B568-5E4D2CB1BDB2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BC5A58EA-2336-47BC-9EA2-35580DCF40BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC5A58EA-2336-47BC-9EA2-35580DCF40BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC5A58EA-2336-47BC-9EA2-35580DCF40BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC5A58EA-2336-47BC-9EA2-35580DCF40BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBBD0B54-86CA-4DC9-8AFB-4AD5996710B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBBD0B54-86CA-4DC9-8AFB-4AD5996710B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBBD0B54-86CA-4DC9-8AFB-4AD5996710B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBBD0B54-86CA-4DC9-8AFB-4AD5996710B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF8CBED9-7644-4DCF-9754-60DDC8FD12D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF8CBED9-7644-4DCF-9754-60DDC8FD12D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF8CBED9-7644-4DCF-9754-60DDC8FD12D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF8CBED9-7644-4DCF-9754-60DDC8FD12D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F92A36E-6CEC-44AE-839F-1F8ED069C7F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F92A36E-6CEC-44AE-839F-1F8ED069C7F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F92A36E-6CEC-44AE-839F-1F8ED069C7F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F92A36E-6CEC-44AE-839F-1F8ED069C7F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3FDCA17-A877-4B03-B568-5E4D2CB1BDB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3FDCA17-A877-4B03-B568-5E4D2CB1BDB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3FDCA17-A877-4B03-B568-5E4D2CB1BDB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3FDCA17-A877-4B03-B568-5E4D2CB1BDB2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
