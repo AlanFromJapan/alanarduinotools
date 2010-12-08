@@ -1,0 +1,10 @@
+D:\C#Work\HomeNetworkRemoteControl\HNRC.Remoting.Common\bin\Release\HNRC.Remoting.Common.dll
+D:\C#Work\HomeNetworkRemoteControl\HNRC.Remoting.Common\bin\Release\HNRC.Remoting.Common.pdb
+D:\C#Work\HomeNetworkRemoteControl\HNRC.Remoting.Common\obj\Release\ResolveAssemblyReference.cache
+D:\C#Work\HomeNetworkRemoteControl\HNRC.Remoting.Common\obj\Release\HNRC.Remoting.Common.dll
+D:\C#Work\HomeNetworkRemoteControl\HNRC.Remoting.Common\obj\Release\HNRC.Remoting.Common.pdb
+D:\C#Work\HomeNetworkRemoteControl\HNRC.Remoting.Common\bin\Debug\HNRC.Remoting.Common.dll
+D:\C#Work\HomeNetworkRemoteControl\HNRC.Remoting.Common\bin\Debug\HNRC.Remoting.Common.pdb
+D:\C#Work\HomeNetworkRemoteControl\HNRC.Remoting.Common\obj\Debug\ResolveAssemblyReference.cache
+D:\C#Work\HomeNetworkRemoteControl\HNRC.Remoting.Common\obj\Debug\HNRC.Remoting.Common.dll
+D:\C#Work\HomeNetworkRemoteControl\HNRC.Remoting.Common\obj\Debug\HNRC.Remoting.Common.pdb
