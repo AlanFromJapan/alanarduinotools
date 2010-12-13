@@ -283,7 +283,6 @@ namespace ardTouchConnector
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "FrmMain";
-            this.Opacity = 0.9;
             this.Text = "arcTouch Connector - http://kalshagar.wikispaces.com/ardTouch";
             this.Load += new System.EventHandler(this.FrmMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).EndInit();

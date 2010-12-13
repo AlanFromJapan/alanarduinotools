@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual C# Express 2005
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARCPO_Test", "ARCPO_Test\ARCPO_Test.csproj", "{BC5A58EA-2336-47BC-9EA2-35580DCF40BE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARCPO", "ARCPO\ARCPO.csproj", "{DBBD0B54-86CA-4DC9-8AFB-4AD5996710B0}"
