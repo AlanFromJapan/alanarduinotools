@@ -53,6 +53,14 @@ namespace ardTouchConnector
         }
 
         /// <summary>
+        /// Gets if On startup start fetching mail info from outlook ?
+        /// </summary>
+        public bool FetchMailStatusOnStartup {
+            get { return Convert.ToBoolean(ConfigurationManager.AppSettings["FetchMailStatusOnStartup"]); }
+        }
+
+
+        /// <summary>
         /// Gets if Shall the window start minimized and hide in toolbar
         /// </summary>
         public bool MinimizeOnStartup {
@@ -99,6 +107,13 @@ namespace ardTouchConnector
 
             if (this.ListenOnStartup) {
                 StartListening();
+            }
+
+            if (this.FetchMailStatusOnStartup) {
+                //give a few sec to the connection to initialize, in case
+                Thread.Sleep(2000);
+                ckbMailMonitor.Checked = true;
+                this.timOutlook.Enabled = true;
             }
 
             if (this.MinimizeOnStartup) {
