@@ -1,0 +1,13 @@
+D:\C#Work\WebPicsViewer3\WebPicsViewer3\bin\Debug\WebPicsViewer3.exe
+D:\C#Work\WebPicsViewer3\WebPicsViewer3\bin\Debug\WebPicsViewer3.pdb
+D:\C#Work\WebPicsViewer3\WebPicsViewer3\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\C#Work\WebPicsViewer3\WebPicsViewer3\obj\x86\Debug\MainWindow.baml
+D:\C#Work\WebPicsViewer3\WebPicsViewer3\obj\x86\Debug\MainWindow.g.cs
+D:\C#Work\WebPicsViewer3\WebPicsViewer3\obj\x86\Debug\App.g.cs
+D:\C#Work\WebPicsViewer3\WebPicsViewer3\obj\x86\Debug\WebPicsViewer3_MarkupCompile.cache
+D:\C#Work\WebPicsViewer3\WebPicsViewer3\obj\x86\Debug\WebPicsViewer3.g.resources
+D:\C#Work\WebPicsViewer3\WebPicsViewer3\obj\x86\Debug\WebPicsViewer3.Properties.Resources.resources
+D:\C#Work\WebPicsViewer3\WebPicsViewer3\obj\x86\Debug\GenerateResource.read.1.tlog
+D:\C#Work\WebPicsViewer3\WebPicsViewer3\obj\x86\Debug\GenerateResource.write.1.tlog
+D:\C#Work\WebPicsViewer3\WebPicsViewer3\obj\x86\Debug\WebPicsViewer3.exe
+D:\C#Work\WebPicsViewer3\WebPicsViewer3\obj\x86\Debug\WebPicsViewer3.pdb
