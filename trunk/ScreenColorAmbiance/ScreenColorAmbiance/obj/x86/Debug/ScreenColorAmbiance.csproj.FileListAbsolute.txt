@@ -1,0 +1,9 @@
+D:\C#Work\ScreenColorAmbiance\ScreenColorAmbiance\bin\Debug\ScreenColorAmbiance.exe
+D:\C#Work\ScreenColorAmbiance\ScreenColorAmbiance\bin\Debug\ScreenColorAmbiance.pdb
+D:\C#Work\ScreenColorAmbiance\ScreenColorAmbiance\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\C#Work\ScreenColorAmbiance\ScreenColorAmbiance\obj\x86\Debug\ScreenColorAmbiance.FrmMain.resources
+D:\C#Work\ScreenColorAmbiance\ScreenColorAmbiance\obj\x86\Debug\ScreenColorAmbiance.Properties.Resources.resources
+D:\C#Work\ScreenColorAmbiance\ScreenColorAmbiance\obj\x86\Debug\GenerateResource.read.1.tlog
+D:\C#Work\ScreenColorAmbiance\ScreenColorAmbiance\obj\x86\Debug\GenerateResource.write.1.tlog
+D:\C#Work\ScreenColorAmbiance\ScreenColorAmbiance\obj\x86\Debug\ScreenColorAmbiance.exe
+D:\C#Work\ScreenColorAmbiance\ScreenColorAmbiance\obj\x86\Debug\ScreenColorAmbiance.pdb
