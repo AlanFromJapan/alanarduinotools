@@ -77,6 +77,7 @@ int SerialReadHexDigit()
  * Read command from the serial
  */
 void readCommand(){
+  //commands are at least 2 char
   if (Serial.available() >= 2){
     byte c = Serial.read();
     byte ledChar = Serial.read();
@@ -113,12 +114,23 @@ void readCommand(){
         break;
       case MODE_COLOR:
         leds[ledId].mode = MODE_COLOR;
-        leds[ledId].r = SerialReadHexDigit();
-        leds[ledId].g = SerialReadHexDigit();
-        leds[ledId].b = SerialReadHexDigit();
+        leds[ledId].r = SerialReadHexDigit() << 4 ;
+        leds[ledId].g = SerialReadHexDigit() << 4;
+        leds[ledId].b = SerialReadHexDigit() << 4 ;
 
 #ifdef DEBUG
-        Serial.println("MODE_COLOR");
+        Serial.print("MODE_COLOR [");
+        Serial.print(ledId, DEC);
+        Serial.print("] : ");
+        Serial.print(leds[ledId].r, DEC);
+        Serial.print(".");
+        Serial.print(leds[ledId].g, DEC);
+        Serial.print(".");
+        Serial.print(leds[ledId].b, DEC);
+        Serial.print(" = ");
+        Serial.print(leds[ledId].r, HEX);
+        Serial.print(leds[ledId].g, HEX);
+        Serial.println(leds[ledId].b, HEX);
 #endif
         break;
       }
@@ -148,30 +160,31 @@ void displayLed (int i){
     analogWrite(6, leds[i].b);
 
     //and turn on
-    digitalWrite(ledSetPin[i], HIGH);
+    //digitalWrite(ledSetPin[i], HIGH);
+    PORTD |= _BV(ledSetPin[i]);
   }
 
 }
 
 void loop() {
   int vLed = 0;
+  byte vCheckFlag = 0;
 
   while(true){
 
-    //don't read each turn, once every full round is enough
-    if (vLed == 0){
+    //don't read each turn, once every 256 round is enough
+    if (vCheckFlag++ == 0){
       readCommand();
     }
 
     //turn all off
-    digitalWrite(2, LOW);
-    digitalWrite(4, LOW);
-    digitalWrite(7, LOW);
+    PORTD = 0;
+    //digitalWrite(2, LOW);digitalWrite(4, LOW);digitalWrite(7, LOW);
 
     displayLed(vLed);
 
     //sleep a little for POV
-    delay (3);
+    delayMicroseconds (500);
 
     //go next
     vLed = ++vLed % 3;
