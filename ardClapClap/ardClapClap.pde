@@ -1,37 +1,36 @@
 /*
-  AnalogReadSerial
- Reads an analog input on pin 0, prints the result to the serial monitor 
+  ardClapClap
+  Clap twice, it triggers on/off a relay and whatever is plugged on.
+ http://kalshagar.wikispaces.com/Clapclap
  
- This example code is in the public domain.
+ This code is in the public domain.
  */
 
 #define DEBUG 
 
-void setup() {
-  
-      //factor settings is to divide internal clock 8MHz by 8.
-    //don't, and just run at 8 MHz (set the clock divider to 1 so no effect)
-//    CLKPR = (1<<CLKPCE);
-//    CLKPR = 0; // Divide by 1 
+#define LED_PIN_CLAP 6
+#define LED_PIN_CLAPCLAP 7
+#define RELAY_PIN 8
 
+void setup() {
 #ifdef DEBUG
   Serial.begin(9600);
 #endif
 
-  pinMode(7, OUTPUT);
-  pinMode(6, OUTPUT);
+  pinMode(LED_PIN_CLAPCLAP, OUTPUT);
+  pinMode(LED_PIN_CLAP, OUTPUT);
 }
-
-
 
 #define CLAP_THRESHOLD 600
 #define CLAP_GAP_IN_MS 300
-#define CLAP_GAP_TOLERANCE 50
+#define CLAP_GAP_TOLERANCE 65
 
 #define CLAP_GAP_MIN (CLAP_GAP_IN_MS - CLAP_GAP_TOLERANCE)
 #define CLAP_GAP_MAX (CLAP_GAP_IN_MS + CLAP_GAP_TOLERANCE)
 
 unsigned long mLastClap;
+boolean mRelayStatus = false;
+
 void loop() {
   int sensorValue = analogRead(0);
   if (sensorValue > CLAP_THRESHOLD){
@@ -41,32 +40,37 @@ void loop() {
     unsigned long vGap = vNow - mLastClap;
 
 #ifdef DEBUG
-      Serial.print("clap ! mLastClap = ");
-      Serial.print(mLastClap, DEC);
-      Serial.print(" ; vNow = ");
-      Serial.print(vNow, DEC);
-      Serial.print(" ; vGap = ");
-      Serial.println(vGap, DEC);
+    Serial.print("clap ! mLastClap = ");
+    Serial.print(mLastClap, DEC);
+    Serial.print(" ; vNow = ");
+    Serial.print(vNow, DEC);
+    Serial.print(" ; vGap = ");
+    Serial.println(vGap, DEC);
 #endif
-    
+
     //blink "clap"
-    digitalWrite (6, HIGH);
+    digitalWrite (LED_PIN_CLAP, HIGH);
     delay(50);
-    digitalWrite (6, LOW);
+    digitalWrite (LED_PIN_CLAP, LOW);
 
     if (
     //initialized
     mLastClap != 0
       //when overflow, last is after current, discard simply
-      //and ensure that vGap is signed correctly
+    //and ensure that vGap is signed correctly
     && mLastClap < vNow 
       //within range of duration and tolerance
     && vGap >= CLAP_GAP_MIN && vGap <= CLAP_GAP_MAX
       ){
+
+      //switch relay status
+      mRelayStatus = !mRelayStatus;
+      digitalWrite(RELAY_PIN, (mRelayStatus ? HIGH : LOW));
+
       //blink "clap-clap"
-      digitalWrite (7, HIGH);
-      delay(1000);
-      digitalWrite (7, LOW);
+      digitalWrite (LED_PIN_CLAPCLAP, HIGH);
+      delay(500);
+      digitalWrite (LED_PIN_CLAPCLAP, LOW);
 
 #ifdef DEBUG
       Serial.print("Calp-clap with delay of: ");
@@ -84,6 +88,7 @@ void loop() {
     }
   }
 }
+
 
 
 
