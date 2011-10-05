@@ -19,6 +19,7 @@ void setup() {
 
   pinMode(LED_PIN_CLAPCLAP, OUTPUT);
   pinMode(LED_PIN_CLAP, OUTPUT);
+  pinMode(RELAY_PIN, OUTPUT);
 }
 
 #define CLAP_THRESHOLD 600
