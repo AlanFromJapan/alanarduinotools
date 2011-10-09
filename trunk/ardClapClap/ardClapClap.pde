@@ -6,7 +6,7 @@
  This code is in the public domain.
  */
 
-#define DEBUG 
+//#define DEBUG 
 
 #define LED_PIN_CLAP 6
 #define LED_PIN_CLAPCLAP 7
@@ -22,7 +22,7 @@ void setup() {
   pinMode(RELAY_PIN, OUTPUT);
 }
 
-#define CLAP_THRESHOLD 590
+#define CLAP_THRESHOLD 540
 #define CLAP_GAP_IN_MS 350
 #define CLAP_GAP_TOLERANCE 200
 
