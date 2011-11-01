@@ -30,20 +30,23 @@ volatile uint32_t mTimeLastClap = 0;
 
 //B3 is 0x08 = b00001000
 void blink_clap(){
-	PORTB ^= 0x08; //toggle led
+	PORTB ^= (1 << 3); //toggle led
 	PORTD ^= (1 << 4); //toggle led
 	_delay_ms(10);
-	PORTB ^= 0x08; // toggle led
+	PORTB ^= (1 << 3); // toggle led
 	PORTD ^= (1 << 4); //toggle led
 }
 
 
-//B2 is 0x04 = b00000100
+//Blink led is on B4 = b00010000 = 0x10 = (1 << 4)
+//Relay is on B2 is 0x04 = b00000100 = 0x04 = (1 << 2)
 void blink_doubleClapDetected(){
-	PORTB ^= 0x04; //toggle led
+	PORTB ^= (1 << 4); //toggle relay
+
+	PORTB ^= (1 << 2); //toggle led
 	PORTD ^= (1 << 5); //toggle led
 	_delay_ms(10);
-	PORTB ^= 0x04; // toggle led
+	PORTB ^= (1 << 2); // toggle led
 	PORTD ^= (1 << 5); //toggle led
 }
 
@@ -57,6 +60,7 @@ ISR(ANA_COMP_vect) {
 	//with this test, ensure that indeed the interrupt result is 1 = V(AIN0) > V(AIN1)
 	//(double check ?)
 	if ( (ACSR & (1 << ACO)) != 0 ) {
+	
 		blink_clap();	
 		
 		volatile uint32_t vNow = mTimeCounterMSec;
@@ -68,8 +72,8 @@ ISR(ANA_COMP_vect) {
 			&& vGap >= CLAP_GAP_MIN && vGap <= CLAP_GAP_MAX
 			) {
 		
-			blink_doubleClapDetected();
 			mTimeLastClap = 0UL;
+			blink_doubleClapDetected();
 		}
 		else {
 			mTimeLastClap = vNow;
@@ -98,26 +102,6 @@ void test_pulse1perSecond(){
 	//this means 1 second is 13,333 cycles... look like the thing runs at 13 kHz oO; ??
 }
 
-//Test purpose. This pulses 1 per second
-//Sorry, no idea why the math work here ... that puzzles me.
-void test_pulse1perSecond2(){
-	uint32_t v = 0;
-	
-	while(1) {
-		v++;
-			
-		//do NOT ask me why with this formula ! get 1 pulse per sec, but it's a fact...
-		//the final 50/60 was made from direct measures (how many pulses on a minute)
-		if ((v % MYSTERY_DIVIDER_MILISEC) == 0L){
-			if ((v % 1000L) == 0L){
-				blink_clap();
-				v=0;
-			}
-		}
-	}
-	
-	//this means 1 second is 13,333 cycles... look like the thing runs at 13 kHz oO; ??
-}
 
 //Counts seconds
 void counterSeconds(){
@@ -170,24 +154,8 @@ int main(void) {
 		
 	
 	sei();                 // enable global interrupts
-  
-  /*
-	while (1) {//all the job is done in the interrupt 
-		// a little "is alive" debug trick that blink another led every second or so
-		//blink_clap(); _delay_ms(1000);
-		
-		mTimeCounterCycle++;
-		if (mTimeCounterCycle >= CYCLE_PER_MS){
-			//one millisec (or so) has passed
-			mTimeCounterMSec++;
-			mTimeCounterCycle = 0;
-		}
-	}
-	*/
 
-	//test_pulse1perSecond();
 	counterSeconds();
-	//test_pulse1perSecond2();
 }
 
 
