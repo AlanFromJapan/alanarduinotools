@@ -38,8 +38,8 @@ void blink_clap(){
 }
 
 
-//Blink led is on B4 = b00010000 = 0x10 = (1 << 4)
-//Relay is on B2 is 0x04 = b00000100 = 0x04 = (1 << 2)
+//Blink led is on B2 0x04 = b00000100 = 0x04 = (1 << 2)
+//Relay is on B4 = b00010000 = 0x10 = (1 << 4)
 void blink_doubleClapDetected(){
 	PORTB ^= (1 << 4); //toggle relay
 
