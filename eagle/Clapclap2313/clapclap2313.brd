@@ -70,7 +70,7 @@
 <text x="1.27" y="45.72" size="1.016" layer="21">+5v</text>
 <text x="6.35" y="41.91" size="1.016" layer="21">GND</text>
 <text x="11.43" y="6.35" size="1.016" layer="21">ATtiny 2313</text>
-<text x="5.08" y="33.02" size="1.016" layer="21">HT28V739</text>
+<text x="5.08" y="33.02" size="1.016" layer="21">HT82V739</text>
 <text x="19.05" y="36.83" size="1.016" layer="21">1uF</text>
 <text x="19.05" y="26.67" size="1.016" layer="21">1uF</text>
 <text x="17.78" y="31.75" size="1.016" layer="21">47uF</text>
@@ -92,6 +92,7 @@
 <text x="20.32" y="25.4" size="1.778" layer="21">-</text>
 <text x="15.24" y="15.24" size="1.016" layer="21" rot="R90">470o</text>
 <text x="19.05" y="15.24" size="1.016" layer="21" rot="R90">470o</text>
+<text x="20.32" y="35.56" size="1.778" layer="21">-</text>
 </plain>
 <libraries>
 <library name="atmel">
@@ -655,7 +656,7 @@ design rules under a new name.</description>
 <attribute name="OC_FARNELL" value="unknown" x="16.51" y="6.35" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="unknown" x="16.51" y="6.35" size="1.778" layer="27" display="off"/>
 </element>
-<element name="HT28V739" library="ic-package" package="SOCKET-08" value="" x="7.62" y="33.02"/>
+<element name="HT82V739" library="ic-package" package="SOCKET-08" value="" x="7.62" y="33.02"/>
 <element name="M1" library="pinhead" package="1X02" value="Mic" x="27.94" y="15.24"/>
 <element name="NPN" library="transistor" package="TO92-ECB" value="2SC2120" x="39.37" y="43.18"/>
 <element name="K1" library="relay" package="F4052" value="4052" x="39.37" y="30.48" rot="R270.1">
@@ -694,14 +695,14 @@ design rules under a new name.</description>
 </signal>
 <signal name="N$5">
 <contactref element="C1" pad="2"/>
-<contactref element="HT28V739" pad="2"/>
+<contactref element="HT82V739" pad="2"/>
 <wire x1="6.35" y1="29.21" x2="13.97" y2="36.83" width="0.254" layer="16"/>
 <wire x1="13.97" y1="36.83" x2="17.78" y2="36.83" width="0.254" layer="16"/>
 <wire x1="17.78" y1="36.83" x2="19.05" y2="35.56" width="0.254" layer="16"/>
 <wire x1="19.05" y1="35.56" x2="20.32" y2="35.56" width="0.254" layer="16"/>
 </signal>
 <signal name="N$10">
-<contactref element="HT28V739" pad="7"/>
+<contactref element="HT82V739" pad="7"/>
 <contactref element="ATTINY2313" pad="12"/>
 <wire x1="21.59" y1="6.35" x2="25.4" y2="10.16" width="0.254" layer="1"/>
 <wire x1="8.89" y1="6.35" x2="21.59" y2="6.35" width="0.254" layer="1"/>
@@ -736,7 +737,7 @@ design rules under a new name.</description>
 <contactref element="C4" pad="+"/>
 <contactref element="AMP_VOL" pad="E"/>
 <contactref element="C3" pad="1"/>
-<contactref element="HT28V739" pad="8"/>
+<contactref element="HT82V739" pad="8"/>
 <contactref element="MINIMUM_LVL" pad="E"/>
 <contactref element="ATTINY2313" pad="20"/>
 <contactref element="K1" pad="1"/>
@@ -769,9 +770,9 @@ design rules under a new name.</description>
 <contactref element="C4" pad="-"/>
 <contactref element="AMP_VOL" pad="A"/>
 <contactref element="M1" pad="2"/>
-<contactref element="HT28V739" pad="5"/>
+<contactref element="HT82V739" pad="5"/>
 <contactref element="C2" pad="2"/>
-<contactref element="HT28V739" pad="4"/>
+<contactref element="HT82V739" pad="4"/>
 <contactref element="C3" pad="2"/>
 <contactref element="MINIMUM_LVL" pad="A"/>
 <contactref element="ATTINY2313" pad="10"/>
@@ -814,7 +815,7 @@ design rules under a new name.</description>
 </polygon>
 </signal>
 <signal name="N$1">
-<contactref element="HT28V739" pad="3"/>
+<contactref element="HT82V739" pad="3"/>
 <contactref element="C2" pad="1"/>
 <wire x1="8.89" y1="29.21" x2="12.7" y2="25.4" width="0.254" layer="16"/>
 <wire x1="12.7" y1="25.4" x2="15.24" y2="25.4" width="0.254" layer="16"/>

@@ -16243,7 +16243,7 @@ Source: www.kingbright.com</description>
 </classes>
 <parts>
 <part name="ATTINY2313" library="atmel" deviceset="AT90S2313" device="P"/>
-<part name="HT28V739" library="ic-package" deviceset="DIL8" device="S"/>
+<part name="HT82V739" library="ic-package" deviceset="DIL8" device="S"/>
 <part name="M1" library="pinhead" deviceset="PINHD-1X2" device="" value="Mic"/>
 <part name="NPN" library="transistor" deviceset="*-NPN-" device="TO92-ECB" value="2SC2120"/>
 <part name="K1" library="relay" deviceset="4052" device=""/>
@@ -16270,7 +16270,7 @@ Source: www.kingbright.com</description>
 </plain>
 <instances>
 <instance part="ATTINY2313" gate="G$1" x="58.42" y="48.26"/>
-<instance part="HT28V739" gate="G$1" x="5.08" y="58.42"/>
+<instance part="HT82V739" gate="G$1" x="5.08" y="58.42"/>
 <instance part="M1" gate="G$1" x="-20.32" y="40.64"/>
 <instance part="NPN" gate="G$1" x="106.68" y="63.5"/>
 <instance part="K1" gate="1" x="109.22" y="86.36"/>
@@ -16308,7 +16308,7 @@ Source: www.kingbright.com</description>
 <segment>
 <wire x1="-10.16" y1="58.42" x2="-2.54" y2="58.42" width="0.1524" layer="91"/>
 <pinref part="C1" gate="G$1" pin="2"/>
-<pinref part="HT28V739" gate="G$1" pin="2"/>
+<pinref part="HT82V739" gate="G$1" pin="2"/>
 </segment>
 </net>
 <net name="N$10" class="0">
@@ -16318,7 +16318,7 @@ Source: www.kingbright.com</description>
 <wire x1="30.48" y1="22.86" x2="83.82" y2="22.86" width="0.1524" layer="91"/>
 <wire x1="83.82" y1="22.86" x2="83.82" y2="50.8" width="0.1524" layer="91"/>
 <wire x1="83.82" y1="50.8" x2="76.2" y2="50.8" width="0.1524" layer="91"/>
-<pinref part="HT28V739" gate="G$1" pin="7"/>
+<pinref part="HT82V739" gate="G$1" pin="7"/>
 <pinref part="ATTINY2313" gate="G$1" pin="(AIN0)PB0"/>
 </segment>
 </net>
@@ -16372,7 +16372,7 @@ Source: www.kingbright.com</description>
 <junction x="-5.08" y="78.74"/>
 <label x="-5.08" y="81.28" size="1.778" layer="95"/>
 <pinref part="C3" gate="G$1" pin="1"/>
-<pinref part="HT28V739" gate="G$1" pin="8"/>
+<pinref part="HT82V739" gate="G$1" pin="8"/>
 </segment>
 <segment>
 <wire x1="76.2" y1="93.98" x2="76.2" y2="96.52" width="0.1524" layer="91"/>
@@ -16427,7 +16427,7 @@ Source: www.kingbright.com</description>
 <wire x1="-10.16" y1="40.64" x2="-10.16" y2="33.02" width="0.1524" layer="91"/>
 <junction x="-10.16" y="40.64"/>
 <label x="-10.16" y="30.48" size="1.778" layer="95"/>
-<pinref part="HT28V739" gate="G$1" pin="5"/>
+<pinref part="HT82V739" gate="G$1" pin="5"/>
 <pinref part="C2" gate="G$1" pin="2"/>
 </segment>
 <segment>
@@ -16436,7 +16436,7 @@ Source: www.kingbright.com</description>
 <wire x1="-5.08" y1="53.34" x2="-5.08" y2="50.8" width="0.1524" layer="91"/>
 <junction x="-5.08" y="53.34"/>
 <label x="-5.08" y="48.26" size="1.778" layer="95"/>
-<pinref part="HT28V739" gate="G$1" pin="4"/>
+<pinref part="HT82V739" gate="G$1" pin="4"/>
 <pinref part="C3" gate="G$1" pin="2"/>
 </segment>
 <segment>
@@ -16470,7 +16470,7 @@ Source: www.kingbright.com</description>
 <segment>
 <wire x1="-2.54" y1="55.88" x2="-10.16" y2="55.88" width="0.1524" layer="91"/>
 <wire x1="-10.16" y1="55.88" x2="-10.16" y2="48.26" width="0.1524" layer="91"/>
-<pinref part="HT28V739" gate="G$1" pin="3"/>
+<pinref part="HT82V739" gate="G$1" pin="3"/>
 <pinref part="C2" gate="G$1" pin="1"/>
 </segment>
 </net>
