@@ -145,7 +145,7 @@
 <wire x1="36.195" y1="16.51" x2="38.735" y2="21.59" width="0.4064" layer="104"/>
 <wire x1="34.925" y1="19.685" x2="36.195" y2="19.685" width="0.4064" layer="104"/>
 <text x="10.16" y="15.24" size="0.8128" layer="104" rot="R90">http://kalshagar.wikispaces.com/WordClock</text>
-<text x="49.53" y="1.905" size="1.27" layer="104" rot="R90">Order #xxxxxxx</text>
+<text x="49.53" y="1.905" size="1.016" layer="104" rot="R90">Order #42225</text>
 <text x="7.62" y="33.02" size="0.8128" layer="104" rot="R90">v1.0 (Jan2012)</text>
 <text x="7.62" y="24.13" size="0.8128" layer="104" rot="R90">Main board</text>
 <hole x="41.91" y="38.1" drill="2"/>
