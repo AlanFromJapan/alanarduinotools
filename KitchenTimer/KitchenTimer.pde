@@ -22,7 +22,10 @@
 #define PIN_BUTTON_A (1024/3)
 #define PIN_BUTTON_B (1024/2)
 #define PIN_BUTTON_START 1024
-#define PIN_MUSIC 0
+#define PIN_MUSIC 13
+#define PIN_LED_A 2
+#define PIN_LED_B 3
+
 #define BUTTON_READ_PAUSE 300
 
 //duration associated to buttons (in seconds)
@@ -43,7 +46,7 @@ void setup() {
 
    //read inputs
    readTimeAndStart();
-   //timerDuration = 1000 * 10;
+   //timerDuration = 1000 * 5;
 
    //Save the start time
    setupForShowTime();
@@ -51,6 +54,7 @@ void setup() {
    //... and now the loop()
 }
 
+//Main loop: just in charge of showing time passing by and triggering the gameover
 void loop()
 {
    unsigned long timeSpent, remainingTime;
@@ -70,6 +74,8 @@ void loop()
 
 void setupGameOver(){
    pinMode(PIN_MUSIC, OUTPUT);
+   pinMode(PIN_LED_A, OUTPUT);
+   pinMode(PIN_LED_B, OUTPUT);
    digitalWrite (PIN_MUSIC, LOW);
 }
 
@@ -89,7 +95,28 @@ void showGameOver(){
          digitalWrite (PIN_MUSIC, LOW);
 
          //next click in 10 sec
-         vNextSound = millis() + 1000 * 10;
+         vNextSound = millis() + 1000 * 6; //every 6 sec
+
+         //it's time !
+         GLCD.SelectFont(SystemFont5x7);
+         GLCD.CursorToXY(random(0,80),random(0,64-7));
+         GLCD.Puts("It's time!");
+
+         //blingbling
+         digitalWrite(PIN_LED_A, HIGH);
+         digitalWrite(PIN_LED_B, HIGH);
+         delay(50);
+         for(int i = 0; i < 4; i++){
+            digitalWrite(PIN_LED_A, LOW);
+            digitalWrite(PIN_LED_B, HIGH);
+            delay(50);
+            digitalWrite(PIN_LED_A, HIGH);
+            digitalWrite(PIN_LED_B, LOW);
+            delay(50);
+         }
+         digitalWrite(PIN_LED_A, LOW);
+         digitalWrite(PIN_LED_B, LOW);
+
       }
    }
 }
@@ -102,17 +129,17 @@ void readTimeAndStart(){
    timerDuration = 0;
    while (!vStart){
       int sensorValue = analogRead(A5);
-      
+
       //Read button A
       if (readButton(sensorValue, PIN_BUTTON_A)){
          //Add a given amount of time
          timerDuration += (unsigned long)(1000) * (unsigned long)(DURATION_A);
          //and show
          showTime(timerDuration);
-         
+
          //don't go too fast (read x times input)
          delay(BUTTON_READ_PAUSE);
-      }      
+      }       
 
 
       //Read button B
@@ -121,7 +148,7 @@ void readTimeAndStart(){
          timerDuration += (unsigned long)(1000) * (unsigned long)(DURATION_B);
          //and show
          showTime(timerDuration);
-         
+
          //don't go too fast (read x times input)
          delay(BUTTON_READ_PAUSE);
       }      
@@ -140,7 +167,7 @@ void readTimeAndStart(){
 
 boolean readButton (int pSensorValue, int pExpected) {
    return pSensorValue > pExpected - 10
-       &&  pSensorValue < pExpected + 10;  
+      &&  pSensorValue < pExpected + 10;  
 }
 
 
@@ -158,20 +185,22 @@ void showSplashscreen(){
    //Small font : buttons
    GLCD.SelectFont(SystemFont5x7);
    GLCD.CursorToXY(0,0);
-   GLCD.Puts("+5min   +15s     Go!");
+   GLCD.Puts("+5min    +15s     Go!");
 
    //Medium font : logo
    GLCD.SelectFont(SystemFont5x7);
    //   GLCD.CursorToXY(0,(64 - 32)/2); GLCD.Puts("KitchenTimer"); 
-   GLCD.CursorToXY(0,25); 
+   GLCD.CursorToXY(0,20); 
    GLCD.Puts("    KitchenTimer"); 
 
 
 
    //Small font : ego boost
    GLCD.SelectFont(SystemFont5x7);
-   GLCD.CursorToXY(0,64-7);
-   GLCD.Puts(" http://goo.gl/xo1QV");
+   //GLCD.CursorToXY(0,64-7); GLCD.Puts(" http://goo.gl/xo1QV");
+   GLCD.CursorToXY(0,64-8*3); 
+   GLCD.Puts("http://kalshagar.wikispaces.com/KitchenTimer");
+
 
    delay(2000);
 }
@@ -202,6 +231,7 @@ void showTime(unsigned long pDuration) {
     */
    GLCD.Printf_P(PSTR("%02d:%02d.%02d"), hr, min, sec);
 }
+
 
 
 
