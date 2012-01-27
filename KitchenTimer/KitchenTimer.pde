@@ -57,18 +57,27 @@ void setup() {
 //Main loop: just in charge of showing time passing by and triggering the gameover
 void loop()
 {
-   unsigned long timeSpent, remainingTime;
-   timeSpent = millis() - startTime;
-   //don't use max because value will circle and become very big
-   remainingTime = (timerDuration > timeSpent ? timerDuration - timeSpent : 0);
+   int sec = 0, previousSec = 0;
+   while(true) {
+      unsigned long timeSpent, remainingTime;
+      timeSpent = millis() - startTime;
+      //don't use max because value will circle and become very big
+      remainingTime = (timerDuration > timeSpent ? timerDuration - timeSpent : 0);
 
-   showTime(remainingTime);
-   //delay to avoid unnecessary refresh
-   delay(500);
+      //trick : calculate just the sec and change time only when the sec change.
+      //the time change will be smooth and it avoids unnecessary refresh (blinks)
+      sec = (remainingTime / 1000) % 60;
+      if (sec != previousSec){
+         showTime(remainingTime);
+         previousSec = sec;
+      }
+      //give some time to the time to pass...and millis() to work
+      delay(10);
 
-   if (remainingTime == 0){
-      //Show the end of timer lights and sounds
-      showGameOver();
+      if (remainingTime == 0){
+         //Show the end of timer lights and sounds
+         showGameOver();
+      }
    }
 }
 
@@ -95,7 +104,7 @@ void showGameOver(){
          digitalWrite (PIN_MUSIC, LOW);
 
          //next click in 10 sec
-         vNextSound = millis() + 1000 * 6; //every 6 sec
+         vNextSound = millis() + 1000 * 5; //every 5 sec
 
          //it's time !
          GLCD.SelectFont(SystemFont5x7);
@@ -231,6 +240,8 @@ void showTime(unsigned long pDuration) {
     */
    GLCD.Printf_P(PSTR("%02d:%02d.%02d"), hr, min, sec);
 }
+
+
 
 
 
