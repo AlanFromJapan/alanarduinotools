@@ -1,1 +1,0 @@
-LedMatrixCompanion.o: LedMatrixCompanion.c
