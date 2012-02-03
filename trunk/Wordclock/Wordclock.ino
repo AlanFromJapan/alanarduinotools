@@ -1,5 +1,7 @@
 #include "DS3234.h"
 #include "WordclockLeds.h"
+#include "WordclockLayouts.h"
+
 //DS3234.h requires this to be in the main .ino file.
 #include "SPI.h"
 
@@ -20,9 +22,9 @@ void loop() {
 
    //second,minute,hour,null,day,month,year
    int vTimeArray[7];
-   ReadTimeArray(&vTimeArray[0]);
+   ReadTimeArray_Fake(&vTimeArray[0], 10);
    //Draw the in-memory matrix
-   MapTimeInLedMatrix(vTimeArray);
+   MapTimeInLedMatrix_BCD1(vTimeArray);
    //Draw the matrix in memory on the leds
    drawLedMatrix(); 
    //a little rest
@@ -30,45 +32,19 @@ void loop() {
 }
 
 
-
-//Draws the time in the matrix. Here you implement YOUR version of the design.
-//Expects //second,minute,hour,null,day,month,year
-void MapTimeInLedMatrix(int pTimeArray[]){
-   resetLedMatrix();
-
-   /*
-   My matrix : designed to be 5x5
-    Top are hours (between []) bottom are minutes
-    Since there is no '0' led nor for hours nor for time,
-    nothing lit means zero.
-    [10 20 01 02 03 
-    04 05 06 07 08
-    09]10 20 30 40
-    50 01 02 03 04
-    05 06 07 08 09
-    */
-
-   int vH = pTimeArray[2];
-   if (vH > 0) {
-      setCell(0,0, vH >= 10 && vH < 20);
-      setCell(0,1, vH >= 20);
-      if (vH % 10 > 0){
-         vH = vH % 10 + 1;
-         setCell(vH / 5, vH % 5, true);
-      }
-   }
-
-   int vM = pTimeArray[1];
-   if (vM / 10 > 0){ 
-      int vMtens = vM / 10 + 11 - 1; //+ 11 shifts you to row 2 col 1 (the 10 minutes) 
-      setCell(vMtens / 5, vMtens % 5, true);
-   }
-
-   if (vM % 10 > 0 ){
-      vM = vM % 10 + 16 -1;
-      setCell(vM / 5, vM % 5, true);
-   }
+//Reads FAKE time (time passes fast, for test purpose)
+//second,minute,hour,null,day,month,year	
+void ReadTimeArray_Fake(int* TimeDate, int SpeedFactor){
+   //(1/SpeedFactor) sec is one minute
+   unsigned long vTime = ((millis()* (unsigned long)SpeedFactor) / ((unsigned long)1000)) % (unsigned long)(24 * 60);
+   
+   *TimeDate = 0;
+   *(TimeDate + 1) = (int)(vTime % 60);
+   *(TimeDate + 2) = (int)(vTime / 60);
+   //ignore the rest...
 }
+
+
 
 
 
