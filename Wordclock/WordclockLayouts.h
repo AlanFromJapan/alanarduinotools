@@ -15,7 +15,7 @@ void MapTimeInLedMatrix_BCD1(int pTimeArray[]){
 
    /*
    BCD : Binary coded decimal for the geeks among hte geeks ... 
-   I'm not in this group but making it is a nice POC.
+    I'm not in this group but making it is a nice POC.
     xx xx xx xx xx
     xx h3 xx xx m3
     xx h2 xx mm m2
@@ -33,7 +33,7 @@ void MapTimeInLedMatrix_BCD1(int pTimeArray[]){
    setCell(2, 1, (vH & 0x04) != 0);
    setCell(3, 1, (vH & 0x02) != 0);
    setCell(4, 1, (vH & 0x01) != 0);
-   
+
 
 
    int vM = pTimeArray[1] / 10;
@@ -92,4 +92,53 @@ void MapTimeInLedMatrix_TheOriginal(int pTimeArray[]){
 }
 
 
+
+//Draws the time in the matrix. Here you implement YOUR version of the design.
+//Expects second,minute,hour,null,day,month,year
+//This version is the "Japanese v1" layout
+void MapTimeInLedMatrix_Japanese1(int pTimeArray[]){
+   resetLedMatrix();
+
+   /*
+   Japanese display [hours]
+    [10 01 02 03 04
+    05 06 07 08 09]
+    02 03 04 05 x10
+    01 02 03 04 05
+    06 07 08 09 am/PM
+    */
+
+   int vH = pTimeArray[2] % 12;
+   //hour is mod12
+   setCell(0, 0, vH >= 10);
+   //unit part of hour
+   vH = vH % 10;
+   if (vH > 0) {
+      setCell(vH / 5, vH % 5, true);
+   }
+
+
+   int vM = pTimeArray[1] / 10;
+   if (vM >= 1 ){
+      //light the "10" char
+      setCell(2, 4, true); 
+      if (vM >= 2){
+         //high part of minutes
+         setCell(2, vM -2, true);
+      }
+   }
+
+   //low part of minutes
+   vM = pTimeArray[1] % 10 + 15;
+   if ((pTimeArray[1] % 10) != 0) {
+      setCell (vM / 5, vM % 5, true);
+   }
+   
+   //am/pm ?
+   setCell(4,4, pTimeArray[2] >= 12);
+}
+
+
 #endif //__WordclockLayouts_h__
+
+
