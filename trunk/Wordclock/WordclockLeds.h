@@ -9,7 +9,7 @@ int WCLK_LED_MATRIX[5];
 #define WCLK_COL1 9
 
 //duration in us of the illumination of the current led while drawing
-#define WCLK_POV_DURATION 100
+#define WCLK_POV_DURATION 200
 
 
 void resetLedMatrix(){
