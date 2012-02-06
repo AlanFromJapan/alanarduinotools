@@ -129,7 +129,7 @@ void MapTimeInLedMatrix_Japanese1(int pTimeArray[]){
    }
 
    //low part of minutes
-   vM = pTimeArray[1] % 10 + 15;
+   vM = pTimeArray[1] % 10 + 15 -1;
    if ((pTimeArray[1] % 10) != 0) {
       setCell (vM / 5, vM % 5, true);
    }

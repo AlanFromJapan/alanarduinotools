@@ -8,7 +8,7 @@
 #include "EEPROM.h"
 
 #define BUTTON_ANALOG_PIN 0
-#define MAP_MATRIX_MFUNC MapTimeInLedMatrix_Japanese1
+#define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_Japanese1(p)
 
 void setup() {
    setupLedMatrix();
@@ -41,12 +41,11 @@ void loop() {
    vTimeArray[0] = vDate.second;
    vTimeArray[1] = vDate.minute;
    vTimeArray[2] = vDate.hour;
-   //ReadTimeArray_Fake(&vTimeArray[0], 10);
+   
+   //Uncomment the following line for a demo mode with fast time
+   //ReadTimeArray_Fake(&vTimeArray[0], 1);
 
-   //Draw the in-memory matrix
-   //MapTimeInLedMatrix_TheOriginal(vTimeArray);
-   //MapTimeInLedMatrix_BCD1(vTimeArray);
-   //MapTimeInLedMatrix_Japanese1(vTimeArray);
+   //Draw the in-memory matrix (change constant at the top of the file)
    MAP_MATRIX_MFUNC(vTimeArray);
 
    //Draw the matrix in memory on the leds
