@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# AvrStudio Solution File, Format Version 11.00
+Project("{D1100916-62DA-4D80-A9B4-55A1E7CCEEB3}") = "Blink", "Blink\Blink.avrgccproj", "{A2569589-FB48-47C3-8CA7-5A9A966DDFD2}"
+EndProject
+Project("{D1100916-62DA-4D80-A9B4-55A1E7CCEEB3}") = "ADC_Read", "ADC_Read\ADC_Read.avrgccproj", "{22E58390-400C-43E6-927C-EE93800E22BF}"
+EndProject
+Project("{D1100916-62DA-4D80-A9B4-55A1E7CCEEB3}") = "ManualPWM", "ManualPWM\ManualPWM.avrgccproj", "{C712967A-EAAF-4B71-BC18-03B5E5D54640}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A2569589-FB48-47C3-8CA7-5A9A966DDFD2}.Debug|AVR.ActiveCfg = Debug|AVR
+		{A2569589-FB48-47C3-8CA7-5A9A966DDFD2}.Debug|AVR.Build.0 = Debug|AVR
+		{A2569589-FB48-47C3-8CA7-5A9A966DDFD2}.Release|AVR.ActiveCfg = Release|AVR
+		{A2569589-FB48-47C3-8CA7-5A9A966DDFD2}.Release|AVR.Build.0 = Release|AVR
+		{22E58390-400C-43E6-927C-EE93800E22BF}.Debug|AVR.ActiveCfg = Debug|AVR
+		{22E58390-400C-43E6-927C-EE93800E22BF}.Debug|AVR.Build.0 = Debug|AVR
+		{22E58390-400C-43E6-927C-EE93800E22BF}.Release|AVR.ActiveCfg = Release|AVR
+		{22E58390-400C-43E6-927C-EE93800E22BF}.Release|AVR.Build.0 = Release|AVR
+		{C712967A-EAAF-4B71-BC18-03B5E5D54640}.Debug|AVR.ActiveCfg = Debug|AVR
+		{C712967A-EAAF-4B71-BC18-03B5E5D54640}.Debug|AVR.Build.0 = Debug|AVR
+		{C712967A-EAAF-4B71-BC18-03B5E5D54640}.Release|AVR.ActiveCfg = Release|AVR
+		{C712967A-EAAF-4B71-BC18-03B5E5D54640}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
