@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("AvrStudioFlasher")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A tool to upload hex files from AVR Studio 5 to your ATmel mcu http://kalshagar.wikispaces.com/AVRStudioFlasher")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("AvrStudioFlasher")]
-[assembly: AssemblyCopyright("Copyright ©  2012")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright AlanFromJapan  2012. Free to reuse and recode.")]
+[assembly: AssemblyTrademark("http://kalshagar.wikispaces.com/AVRStudioFlasher")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
