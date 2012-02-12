@@ -108,13 +108,22 @@ void MapTimeInLedMatrix_Japanese1(int pTimeArray[]){
     06 07 08 09 am/PM
     */
 
-   int vH = pTimeArray[2] % 12;
-   //hour is mod12
-   setCell(0, 0, vH >= 10);
-   //unit part of hour
-   vH = vH % 10;
-   if (vH > 0) {
-      setCell(vH / 5, vH % 5, true);
+   
+   if (pTimeArray[2] == 12) {
+      //little exception : I want noon to be displayed as 10+2 of afternoon,
+      //not 0 of afternoon. Otherwise algo is great for all the other cases.
+      setCell(0,0,true); //10
+      setCell(0,2, true); //2
+   }
+   else {
+      int vH = pTimeArray[2] % 12;
+      //hour is mod12
+      setCell(0, 0, vH >= 10);
+      //unit part of hour
+      vH = vH % 10;
+      if (vH > 0) {
+         setCell(vH / 5, vH % 5, true);
+      }
    }
 
 
@@ -133,12 +142,13 @@ void MapTimeInLedMatrix_Japanese1(int pTimeArray[]){
    if ((pTimeArray[1] % 10) != 0) {
       setCell (vM / 5, vM % 5, true);
    }
-   
+
    //am/pm ?
    setCell(4,4, pTimeArray[2] >= 12);
 }
 
 
 #endif //__WordclockLayouts_h__
+
 
 
