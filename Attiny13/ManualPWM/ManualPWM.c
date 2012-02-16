@@ -7,6 +7,9 @@
 
 
 #define F_CPU 8000000L
+#define LIMIT_BLUEGREEN 13
+#define LIMIT_GREENRED 20
+
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -36,18 +39,65 @@ inline void Temp2RGB_Simple( uint8_t pTemp )	{
 	mRGB[1] = 0;
 	mRGB[2] = 0;
 			
-	if (pTemp <= 13){
+	if (pTemp <= LIMIT_BLUEGREEN){
 		//blue
 		mRGB[2] = 255;
 	}
 	else {
-		if (pTemp <= 20){
+		if (pTemp <= LIMIT_GREENRED){
 			mRGB[1] = 255;
 		}
 		else {
 			mRGB[0] = 255;
 		}
 	}
+}
+
+//Fading conversion
+//inline saves 50 byte ... 50byte for 2 jump and stack in/stack out ?
+inline void Temp2RGB_Fade( uint8_t pTemp )	{
+			
+	//Blue
+	if (pTemp > LIMIT_BLUEGREEN+2){
+		mRGB[2] = 0;
+	}
+	else {
+		if (pTemp < LIMIT_BLUEGREEN-2){
+			mRGB[2] = 255;
+		}
+		else {
+			mRGB[2] = 255 - (LIMIT_BLUEGREEN +2 - pTemp) * (255/(2*2));
+		}
+	}
+	
+	
+	//Green
+	if (pTemp > LIMIT_BLUEGREEN-2 && pTemp <= LIMIT_BLUEGREEN +2){
+		mRGB[1] = (pTemp - (LIMIT_BLUEGREEN -2) ) * (255/(2*2));
+	}
+	else {
+		if (pTemp > LIMIT_GREENRED-2 && pTemp <= LIMIT_GREENRED +2){
+			mRGB[1] = 255 - (LIMIT_GREENRED +2 - pTemp) * (255/(2*2));
+		}
+		else {
+			mRGB[1] = 255;
+		}
+	}
+	
+	/*
+	if (pTemp <= LIMIT_BLUEGREEN){
+		//blue
+		mRGB[2] = 255;
+	}
+	else {
+		if (pTemp <= LIMIT_GREENRED){
+			mRGB[1] = 255;
+		}
+		else {
+			mRGB[0] = 255;
+		}
+	}
+	*/
 }
 
 int main(void)
@@ -90,7 +140,7 @@ int main(void)
 			//WTF a divide costs 92 bytes ? Oo;
 			uint8_t vTemp = (uint8_t)(((uint32_t)vADCValue * 5UL * 100UL) >> 8UL);	
 			
-			Temp2RGB_Simple(vTemp);
+			Temp2RGB_Fade(vTemp);
 
 		}
 		
