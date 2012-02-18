@@ -8,31 +8,36 @@
 
 #define F_CPU 8000000L
 #define READING_BUFFER 4
-#define LIMIT_BLUEGREEN (5UL << 4)
-#define LIMIT_GREENRED (20UL << 4)
+#define LIMIT_BLUEGREEN 12 
+#define LIMIT_GREENRED 23
+#define LIMIT_DELTA 4
 
 #include <avr/io.h>
 #include <util/delay.h>
 
 uint8_t mRGB[3];
-uint8_t mRawADCBuffer[READING_BUFFER];
+uint16_t mRawADCBuffer[READING_BUFFER];
 uint8_t mRawADCBufferHead = 0;
 
 
-uint8_t ReadADC() 
+uint16_t ReadADC() 
 {
-	ADCSRA |= (1 << ADEN); // Analog-Digital enable bit
+//	ADCSRA |= (1 << ADEN); // Analog-Digital enable bit
+	
 	ADCSRA |= (1 << ADSC); // Start conversion
- 
 	while (ADCSRA & (1 << ADSC)); // wait until conversion is done
  /*
+ //apparently when ready small values reading twice is better to allow "stabilization of the ADC"
+ //read on adafruits
+	_delay_ms(5);
 	ADCSRA |= (1 << ADSC); // start single conversion
- 
 	while (ADCSRA & (1 << ADSC)) // wait until conversion is done
  
-	ADCSRA &= ~(1<<ADEN); // shut down the ADC */
-		 
-	return ADCH;
+	ADCSRA &= ~(1<<ADEN); // shut down the ADC 
+*/
+	uint16_t vVal = ADCL;
+	vVal = (ADCH << 8) + vVal;
+	return vVal;
 }
 
 //Simple conversion by zone, no fading
@@ -58,38 +63,36 @@ inline void Temp2RGB_Simple( uint8_t pTemp )	{
 
 //Fading conversion
 //inline saves 50 byte ... 50byte for 2 jump and stack in/stack out ?
-inline void Temp2RGB_Fade( uint32_t pTemp )	{
+inline void Temp2RGB_Fade( uint16_t pTemp )	{
 			
-	uint32_t vDelta = (3UL << 4);
 	//Blue
-	if (pTemp > LIMIT_BLUEGREEN+vDelta){
+	if (pTemp > LIMIT_BLUEGREEN+LIMIT_DELTA){
 		mRGB[2] = 0;
 	}
 	else {
-		if (pTemp < LIMIT_BLUEGREEN-vDelta){
+		if (pTemp < LIMIT_BLUEGREEN-LIMIT_DELTA){
 			mRGB[2] = 255;
 		}
 		else {
-			//mRGB[2] = ((((255UL << 4) - (LIMIT_BLUEGREEN +vDelta - pTemp)) * (255UL << 4)) /(2UL*vDelta)) >> 4;
-			mRGB[2] = 255- ((255UL << 4) * (pTemp - (LIMIT_BLUEGREEN - vDelta)) / (2UL * vDelta)) >> 4;
+			mRGB[2] = 255- ((255 * (pTemp - (LIMIT_BLUEGREEN - LIMIT_DELTA)) / (2 * LIMIT_DELTA)));
 		}
 	}
 	
 	
 	//Green
-	if (pTemp >= LIMIT_BLUEGREEN-vDelta && pTemp <= LIMIT_BLUEGREEN +vDelta){
-		mRGB[1] = ((255UL << 4) * (pTemp - (LIMIT_BLUEGREEN - vDelta)) / (2UL * vDelta)) >> 4;
+	if (pTemp >= LIMIT_BLUEGREEN-LIMIT_DELTA && pTemp <= LIMIT_BLUEGREEN +LIMIT_DELTA){
+		mRGB[1] = ((255) * (pTemp - (LIMIT_BLUEGREEN - LIMIT_DELTA)) / (2 * LIMIT_DELTA)) ;
 	}
 	else {
-		if (pTemp > LIMIT_GREENRED-vDelta && pTemp <= LIMIT_GREENRED +vDelta){
-			mRGB[1] = 255 - ((255UL << 4) * (pTemp - (LIMIT_GREENRED - vDelta)) / (2UL * vDelta)) >> 4;
+		if (pTemp > LIMIT_GREENRED-LIMIT_DELTA && pTemp <= LIMIT_GREENRED +LIMIT_DELTA){
+			mRGB[1] = 255 - (((255) * (pTemp - (LIMIT_GREENRED - LIMIT_DELTA)) / (2 * LIMIT_DELTA)));
 		}
 		else {
-			if (pTemp < LIMIT_BLUEGREEN-vDelta){
+			if (pTemp < LIMIT_BLUEGREEN-LIMIT_DELTA){
 				mRGB[1] = 0;
 			}
 			else {
-				if (pTemp > LIMIT_GREENRED + vDelta){
+				if (pTemp > LIMIT_GREENRED + LIMIT_DELTA){
 					mRGB[1] = 0;
 				}
 				else {
@@ -103,11 +106,11 @@ inline void Temp2RGB_Fade( uint32_t pTemp )	{
 	
 	
 	//Red
-	if (pTemp >= LIMIT_GREENRED-vDelta && pTemp <= LIMIT_GREENRED +vDelta){
-		mRGB[0] = ((255UL << 4) * (pTemp - (LIMIT_GREENRED - vDelta)) / (2UL * vDelta)) >> 4;
+	if (pTemp >= LIMIT_GREENRED-LIMIT_DELTA && pTemp <= LIMIT_GREENRED +LIMIT_DELTA){
+		mRGB[0] = ((255) * (pTemp - (LIMIT_GREENRED - LIMIT_DELTA)) / (2 * LIMIT_DELTA));
 	}
 	else {
-		if (pTemp < LIMIT_GREENRED-vDelta){
+		if (pTemp < LIMIT_GREENRED-LIMIT_DELTA){
 			mRGB[0] = 0;
 		}
 		else {
@@ -134,13 +137,12 @@ int main(void)
 	
 	
 	//------------START ADC INIT --------------------------
-	 ADCSRA |= (1 << ADEN);
- /*| // Analog-Digital enable bit
+	 ADCSRA |= (1 << ADEN) | // Analog-Digital enable bit
  (1 << ADPS1)| // set prescaler to 8 (clock / 8)
  (1 << ADPS0); // set prescaler to 8 (clock / 8)
- */
+ ;
  ADMUX |= 
-	(1 << ADLAR) // AD result store in (more significant bit in ADCH) : ADCH holds the 8 MSB like that: perfect for PWM
+	(0 << ADLAR) //store the result left adjusted, meaning must read ADCL (LSB) then ADCH (MSB) 
 	| (1 << MUX1); // Choose AD input AD2 (BP 4)
 	//------------END ADC INIT --------------------------
 	
@@ -151,7 +153,7 @@ int main(void)
     {
 		
 		if(vADCCheckRound == 0){
-			uint8_t vADCValue = ReadADC();
+			uint16_t vADCValue = ReadADC();
 			
 			//store
 			mRawADCBuffer[mRawADCBufferHead] = vADCValue;
@@ -164,15 +166,15 @@ int main(void)
 			}
 			//overwrite (optimized, we know there's 4 items so >>2)
 			//vADCValue = vAvg / READING_BUFFER;
-			vADCValue = (uint8_t)(vAvg >> 2);
+			vADCValue = (vAvg >> 2);
 			
-			//uint8_t vTemp = (uint8_t)((uint32_t)vADCValue * 5UL * 100UL / 255UL );
-			//replace a /255 by a shift right 8 bit and save 92 bytes! 10% of the memory!!! 
-			//WTF a divide costs 92 bytes ? Oo;
-			//uint32_t vTemp = (uint32_t)(((uint32_t)vADCValue * 5UL * 100UL) >> 8UL);
-			uint32_t vTemp = (uint32_t)(((uint32_t)vADCValue * 5UL * 100UL) >> 4UL);	
+			//value read is [0;1024]. To get a temp you *5 and divide by 1024 (=1000)
+			//But then you've got a float value [0;5] (remember 1 degree C = 0.01v)
+			//So you would multiply by 100 to get a temp (0.16V -> 16 degree)
+			//Working just with integer here I shortcut the / 1000 * 100 -> /10
+			//Then we have vADCValue * 5 /10 -> vADCValue *1/2 -> vADCValue >> 1
+			uint16_t vTemp = vADCValue >> 1;
 			
-			//temp is still 2^4 = 16 times too big... it's the decimals
 			Temp2RGB_Fade(vTemp);
 
 		}
@@ -181,15 +183,15 @@ int main(void)
 		
         //todo : put this in an interrupt
 		if (vRGBCurrentRound == 0){
-			
+			/*
 			//make pins B0-2 high
 			PORTB = 
 				(1 << PORTB0) 
 				| (1 << PORTB1)
 				| (1 << PORTB2)
 				;
-				
-			/*
+			*/
+			
 			PORTB = 0x00;
 			if (mRGB[0] > 0)
 				PORTB |= (1 << PORTB0);
@@ -197,7 +199,7 @@ int main(void)
 				PORTB |= (1 << PORTB1);
 			if (mRGB[2] > 0)
 				PORTB |= (1 << PORTB2);
-				*/
+				
 		}
 		
 
@@ -221,4 +223,6 @@ int main(void)
 		
 		vADCCheckRound++;
     }
+	
+	
 }
