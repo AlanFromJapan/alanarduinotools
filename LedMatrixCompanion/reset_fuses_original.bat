@@ -1,1 +1,0 @@
-avrdude -v -v -c avrispv2 -p m88p -P com1 -U lfuse:w:0xe2:m -U hfuse:w:0xdf:m 
