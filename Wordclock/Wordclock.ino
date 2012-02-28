@@ -1,26 +1,30 @@
 #include "DS3234.h"
+#include "WordclockShared.h"
+#include "DS3231.h"
 #include "WordclockLeds.h"
 #include "WordclockLayouts.h"
 
 //DS3234.h requires this to be in the main .ino file.
 #include "SPI.h"
+//DS3231.h requires this to be in the main .ino file.
+#include "Wire.h"
 
 #include "EEPROM.h"
 
-#define BUTTON_ANALOG_PIN 0
-#define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_Japanese1(p)
+//#define BUTTON_ANALOG_PIN 0
+#define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_LaFrance(p)
+#define DRAW_MATRIX_FUNC() drawLedMatrix2x1()
+#define SETUP_MATRIX() setupLedMatrix2x1()
 
 void setup() {
-   setupLedMatrix();
-   RTC_init(true);
+   SETUP_MATRIX();
+   
+   setupDS3231();
 
-   //do this init just once, to make sure there is something "coherent" in the DS3234
+   //do this init just once, to make sure there is something "coherent" in the RTC
    if (EEPROM.read(1) != 1) {
-      //day(1-31), month(1-12), year(0-99), hour(0-23), minute(0-59), second(0-59)
-      SetTimeDate(
-      04,02,12, //dd,MM,yy
-      19,38,00  //hh,mm,ss
-      );
+      setControlRegisters();
+      setDateDS3231();
 
       EEPROM.write(1, 1); 
    }
@@ -32,24 +36,28 @@ void setup() {
 Date vDate;
 void loop() { 
    //if button is pushed, go to some subroutine and change time
-   checkButtonTimeSet();
+   //checkButtonTimeSet();
 
    //second,minute,hour,null,day,month,year
    int vTimeArray[7];
 
-   ReadTime(vDate);
-   vTimeArray[0] = vDate.second;
-   vTimeArray[1] = vDate.minute;
-   vTimeArray[2] = vDate.hour;
+   Date3231 vD3231;
+   getDateDS3231(vD3231);
+   
+   //ReadTime(vDate);
+   vTimeArray[0] = vD3231.second;
+   vTimeArray[1] = vD3231.minute;
+   vTimeArray[2] = vD3231.hour;
    
    //Uncomment the following line for a demo mode with fast time
-   //ReadTimeArray_Fake(&vTimeArray[0], 1);
+   //ReadTimeArray_Fake(&vTimeArray[0], 10);
 
    //Draw the in-memory matrix (change constant at the top of the file)
    MAP_MATRIX_MFUNC(vTimeArray);
 
    //Draw the matrix in memory on the leds
-   drawLedMatrix(); 
+   DRAW_MATRIX_FUNC();
+   
    //a little rest
    delay(5);
 }
@@ -67,7 +75,7 @@ void ReadTimeArray_Fake(int* TimeDate, int SpeedFactor){
    //ignore the rest...
 }
 
-
+/*
 //if button is pressed, vamp the execution loop and other set time routine according button pressed
 void checkButtonTimeSet(){
    //second,minute,hour,null,day,month,year
@@ -136,7 +144,7 @@ boolean readButtonPressed (int pMidValue, int pTolerance){
       && vVal >= pMidValue - pTolerance;
 }
 
-
+*/
 
 
 

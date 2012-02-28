@@ -1,9 +1,9 @@
 #include "Arduino.h"
 #include "WordclockLeds.h"
+#include "WordclockShared.h"
 
 #ifndef __WordclockLayouts_h__
 #define __WordclockLayouts_h__
-
 
 
 
@@ -108,7 +108,7 @@ void MapTimeInLedMatrix_Japanese1(int pTimeArray[]){
     06 07 08 09 am/PM
     */
 
-   
+
    if (pTimeArray[2] == 12) {
       //little exception : I want noon to be displayed as 10+2 of afternoon,
       //not 0 of afternoon. Otherwise algo is great for all the other cases.
@@ -148,7 +148,206 @@ void MapTimeInLedMatrix_Japanese1(int pTimeArray[]){
 }
 
 
+
+//Draws the time in the matrix. Here you implement YOUR version of the design.
+//Expects second,minute,hour,null,day,month,year
+//This version is the "LaFrance v1" layout, using 2 panels horizontaly
+void MapTimeInLedMatrix_LaFrance(int pTimeArray[]){
+   resetLedMatrix();
+
+   /*
+French display
+    <--- hours----> <---minutes--->
+    it-is 01 02 03 | 10 11 12 13 15
+    quatr 05 06 07 | fortn 16 20 30 
+    08 09 10 11 Hs | forty fifty 09
+    no-on midnt HH | et 01 02 03 05
+    night afternon | quatr 06 07 08
+    */
+
+   //Fixed lights: It is
+   setCell(0, 0, true); 
+   setCell(0,1,true);
+
+   int vHour = pTimeArray[2];
+   if (vHour == 12){
+      setCell(3, 0, true);
+      setCell(3, 1, true);
+   }
+   else {
+      if (vHour == 0 || vHour == 24){
+         setCell(3, 2, true);
+         setCell(3, 3, true);
+      }
+      else {
+         //ok, so it's a regular hour
+         if (vHour >= 13 && vHour <= 17){
+            //in French : de l'apres-midi between 1pm and 5pm
+            setCell (4, 2, true);
+            setCell (4, 3, true);
+            setCell (4, 4, true);
+         }
+
+         if (vHour >= 18){
+            //from 6pm it's a du soir
+            setCell(4, 0, true);
+            setCell(4, 1, true);
+         }
+
+         //move to 12h mode
+         vHour = vHour % 12;
+
+         if (vHour == 1){
+            //Hour without a 's'
+            setCell(3, 4, true);
+         }
+         else {
+            //HourS s'il vous plait
+            setCell(2, 4, true);
+         }
+
+         //at last, the figure
+         if (vHour <= 3){
+            setCell(0, 1+vHour, true);
+         }
+         else {
+            if (vHour == 4){
+               setCell(1, 0, true);
+               setCell(1, 1, true);
+            }
+            else {
+               if (vHour <= 7){
+                  setCell (1, 2 + vHour - 5, true);
+               }
+               else {
+                  setCell (2, vHour - 8, true);
+               }
+            }
+         }
+      }
+   }
+
+
+
+   int vMin = pTimeArray[1];
+   boolean vMinDone = false;
+   //irregulars
+   switch (vMin){
+   case 10:
+      setCell(0, 5, true);
+      vMinDone = true;
+      break;
+   case 11:
+      setCell(0, 6, true);
+      vMinDone = true;
+      break;
+   case 12:
+      setCell(0, 7, true);
+      vMinDone = true;
+      break;
+   case 13:
+      setCell(0, 8, true);
+      vMinDone = true;
+      break;
+   case 14:
+      setCell(1, 5, true);
+      setCell(1, 6, true);
+      vMinDone = true;
+      break;
+   case 15:
+      setCell(0, 9, true);
+      vMinDone = true;
+      break;
+   case 16:
+      setCell(1, 7, true);
+      vMinDone = true;
+      break;
+   case 17:
+      setCell(0, 5, true);
+      setCell(4, 8, true);
+      vMinDone = true;
+      break;
+   case 18:
+      setCell(0, 5, true);
+      setCell(4, 9, true);
+      vMinDone = true;
+      break;
+   case 19:
+      setCell(0, 5, true);
+      setCell(2, 9, true);
+      vMinDone = true;
+      break;
+   }
+
+   if (!vMinDone) {
+      //the tens
+      switch(vMin / 10){
+      case 1:
+         setCell(0, 5, true);
+         break;
+      case 2:
+         setCell(1, 8, true);
+         break;
+      case 3:
+         setCell(1, 9, true);
+         break;
+      case 4:
+         setCell(2, 5, true);
+         setCell(2, 6, true);
+         break;
+      case 5:
+         setCell(2, 7, true);
+         setCell(2, 8, true);
+         break;
+      }
+
+      //and the minutes
+      if (vMin == 1){
+         //just 'one' not 'and one'
+         setCell (3, 6, true);
+      }
+      else {
+         switch (vMin % 10) {
+         case 1:
+            //just 'one' not 'and one'
+            setCell (3, 5, true);
+            setCell (3, 6, true);
+            break;
+         case 2:
+            setCell (3, 7, true);
+            break;
+         case 3:
+            setCell (3, 8, true);
+            break;
+         case 4:
+            setCell (4, 5, true);
+            setCell (4, 6, true);
+            break;
+         case 5:
+            setCell (3, 9, true);
+            break;
+         case 6:
+            setCell (4, 7, true);
+            break;
+         case 7:
+            setCell (4, 8, true);
+            break;
+         case 8:
+            setCell (4, 9, true);
+            break;
+         case 9:
+            setCell (2, 9, true);
+            break;
+         }
+      }
+   }
+}
+
+
 #endif //__WordclockLayouts_h__
+
+
+
 
 
 
