@@ -5,21 +5,11 @@
 
 //Include also in the MAIN .ino file!
 #include "SPI.h"
+#include "WordclockShared.h"
 //Chip select pin. You must use this, front detection is necessary
 #define DS3234_PIN_CS 10
 
 
-
-typedef struct {
-  byte second;
-  byte minute;
-  byte hour;
-  byte dayOfWeek;
-  byte dayOfMonth; 
-  byte month;
-  byte year;
-} 
-Date;
 
 
 //=====================================
