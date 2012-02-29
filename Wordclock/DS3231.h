@@ -94,7 +94,7 @@ void setupDS3231(){
   //Wire setup to gain access to the RTC
   Wire.begin();
   //setDate3232();
-  //setControlRegisters();
+  setControlRegisters();
 }
 
 #endif
