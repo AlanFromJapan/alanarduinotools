@@ -81,6 +81,20 @@ void setDateDS3231()
   Wire.endTransmission();
 }
 
+void setDateDS3231(Date3231 pDate)                
+{
+  Wire.beginTransmission(DS3231_I2C_ADDRESS);
+  Wire.write((uint8_t)0x00);
+  Wire.write(decToBcd(pDate.second));    // sec
+  Wire.write(decToBcd(pDate.minute));   //min
+  Wire.write(decToBcd(pDate.hour));   //h   
+  Wire.write(decToBcd(2)); //dow 0= sunday
+  Wire.write(decToBcd(28)); //day
+  Wire.write(decToBcd(2)); //month
+  Wire.write(decToBcd(12)); //y
+  Wire.endTransmission();
+}
+
 void setControlRegisters(){
   Wire.beginTransmission(DS3231_I2C_ADDRESS);
   Wire.write(0x0E);  //Goto register 0Eh
