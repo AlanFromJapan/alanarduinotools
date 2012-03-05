@@ -11,7 +11,7 @@
 
 #include "EEPROM.h"
 
-//#define BUTTON_ANALOG_PIN 0
+#define BUTTON_ANALOG_PIN 2
 #define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_LaFrance(p)
 #define DRAW_MATRIX_FUNC() drawLedMatrix2x1()
 #define SETUP_MATRIX() setupLedMatrix2x1()
@@ -33,10 +33,9 @@ void setup() {
 }
 
 //second,minute,hour,null,day,month,year
-Date vDate;
 void loop() { 
    //if button is pushed, go to some subroutine and change time
-   //checkButtonTimeSet();
+   checkButtonTimeSet();
 
    //second,minute,hour,null,day,month,year
    int vTimeArray[7];
@@ -75,7 +74,7 @@ void ReadTimeArray_Fake(int* TimeDate, int SpeedFactor){
    //ignore the rest...
 }
 
-/*
+
 //if button is pressed, vamp the execution loop and other set time routine according button pressed
 void checkButtonTimeSet(){
    //second,minute,hour,null,day,month,year
@@ -93,23 +92,20 @@ void checkButtonTimeSet(){
             //debouncing on the cheap
             delay (300);
 
-            ReadTimeArray(&vTimeArray[0]);
+            Date3231 vD3231;
+            getDateDS3231(vD3231);
 
             switch(vStage){
             case 0 : //hours
-               vTimeArray[2] = (vTimeArray[2] + 1) % 24;
+               vD3231.hour = (vD3231.hour + 1) % 24;
                break;
             case 1 : //minutes
-               vTimeArray[1] = (vTimeArray[1] + 1) % 60;
+               vD3231.minute = (vD3231.minute + 1) % 60;
                break;                
             }
 
-            //day(1-31), month(1-12), year(0-99), hour(0-23), minute(0-59), second(0-59)
-            SetTimeDate(
-            vTimeArray[4],vTimeArray[5],vTimeArray[6], //dd,MM,yy
-            vTimeArray[2],vTimeArray[1],00  //hh,mm,ss
-            );
-
+            //and save the time
+            setDateDS3231(vD3231);
          }
 
          //pressed the set button
@@ -121,16 +117,18 @@ void checkButtonTimeSet(){
          }
 
          //at last, display the time
-         ReadTime(vDate);
-         vTimeArray[0] = vDate.second;
-         vTimeArray[1] = vDate.minute;
-         vTimeArray[2] = vDate.hour;
+         Date3231 vD3231;
+         getDateDS3231(vD3231);
+         vTimeArray[0] = vD3231.second;
+         vTimeArray[1] = vD3231.minute;
+         vTimeArray[2] = vD3231.hour;
 
-         //show current time
+         //Draw the in-memory matrix (change constant at the top of the file)
          MAP_MATRIX_MFUNC(vTimeArray);
-
+      
          //Draw the matrix in memory on the leds
-         drawLedMatrix(); 
+         DRAW_MATRIX_FUNC();
+   
          //a little rest longer than usual that will "blink"
          delay(50);
       }
@@ -144,7 +142,7 @@ boolean readButtonPressed (int pMidValue, int pTolerance){
       && vVal >= pMidValue - pTolerance;
 }
 
-*/
+
 
 
 
