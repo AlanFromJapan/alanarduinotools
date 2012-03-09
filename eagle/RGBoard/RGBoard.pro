@@ -2,8 +2,8 @@ EAGLE AutoRouter Statistics:
 
 Job           : C:/Users/Alan/Documents/eagle/RGBoard/RGBoard.brd
 
-Start at      : 00:12:37 (2012/03/09)
-End at        : 00:12:37 (2012/03/09)
+Start at      : 21:59:21 (2012/03/09)
+End at        : 21:59:21 (2012/03/09)
 Elapsed time  : 00:00:00
 
 Signals       :    20   RoutingGrid: 50 mil  Layers: 2
@@ -18,8 +18,8 @@ Number of Ripups  :         0         0         0         0         0         0
 max. Level        :         0         0         0         0         0         0
 max. Total        :         0         0         0         0         0         0
 
-Routed            :        28       100       100       100       100       100
-Vias              :         0        49        27        27        26        26
-Resolution        :    28.0 %   100.0 %   100.0 %   100.0 %   100.0 %   100.0 %
+Routed            :        32       100       100       100       100       100
+Vias              :         0        64        43        34        32        32
+Resolution        :    32.0 %   100.0 %   100.0 %   100.0 %   100.0 %   100.0 %
 
 Final             : 100.0% finished
