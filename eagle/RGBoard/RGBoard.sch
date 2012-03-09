@@ -126,7 +126,7 @@ Free to reuse and modify.&lt;/p&gt;</description>
 <text x="0.46" y="-1.27" size="1.27" layer="21">-</text>
 <text x="2.5" y="-1.27" size="1.27" layer="21">-</text>
 <text x="4.54" y="-1.27" size="1.27" layer="21">-</text>
-<text x="-1.31" y="-2.54" size="1.27" layer="21" rot="R90">&gt;NAME</text>
+<text x="-1.31" y="-2.54" size="1.27" layer="25" rot="R90">&gt;NAME</text>
 <wire x1="5" y1="3.3" x2="6" y2="2" width="0.127" layer="21"/>
 <wire x1="4.5" y1="4.5" x2="6.7" y2="4.5" width="0.127" layer="21"/>
 <wire x1="6.7" y1="4.5" x2="6.7" y2="1.5" width="0.127" layer="21"/>
