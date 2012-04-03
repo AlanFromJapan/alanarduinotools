@@ -10,6 +10,8 @@
 #include <avr/pgmspace.h>
 
 
+#define VOLTAGE_SCALE_FACTOR 2
+
  uint8_t mLetters[] = {
 	0b00001000,//0 positive
 	0b01011011,//1 positive
@@ -47,6 +49,17 @@ uint8_t ReadADCx()
 	while (ADCSRA & (1 << ADSC)); // wait until conversion is done
 
 	uint8_t v = ADCH;
+	return v;
+}
+
+uint16_t ReadADCx16() 
+{
+	
+	ADCSRA |= (1 << ADSC); // Start conversion
+	while (ADCSRA & (1 << ADSC)); // wait until conversion is done
+
+	uint16_t v = ADCL;
+	v = (ADCH << 8) + v;
 	return v;
 }
 
@@ -93,33 +106,45 @@ int main(void)
 	//------------START ADC INIT --------------------------
 	ADCSRA |= (1 << ADEN)  // Analog-Digital enable bit
 	
-//	| (1 << ADPS1) // set prescaler to 8 (clock / 8)
-//	| (1 << ADPS0) // set prescaler to 8 (clock / 8)
+	| (1 << ADPS1) // set prescaler to 8 (clock / 8)
+	| (1 << ADPS0) // set prescaler to 8 (clock / 8)
 	
-	| (1 << REFS1) //1.1v internal ref
+//	| (1 << REFS1) //1.1v internal ref
 //	| (1 << REFS2) | (1 << REFS1) //2.56v internal ref, without AREF
+	| (1 << REFS1) | (0 << REFS0) //2.56v internal ref, without AREF
 	;
+	ADCSRB |= 
+	(1 << REFS2) //2.56v internal ref, without AREF
+	| (0 << GSEL) //no gain
+	| (0 << MUX5) //adc9 = 001001
+	;
+	
 	ADMUX |= 
-	(1 << ADLAR) //just read ADH 
-	| (1 << 3) | 1 //adc9 = 001001
+//	(1 << ADLAR) //just read ADH 	
+	(0 << ADLAR) //read ADL then ADH 
+	| (1 << MUX3) | (1 << MUX0) //adc9 = 001001
 	;
 	//------------END ADC INIT --------------------------
 
-	uint8_t i = 0;
+	uint16_t i = 0;
     while(1)
     {
-		//i in [0;255]
-		i = ReadADCx();
+		
+//		i = ReadADCx();//i in [0;255]
+		i = ReadADCx16();//i in [0;1024]
+		
+		//adjustement : my readings are a little to high (+10%)
+		//also readings [0:1024]->[0:2.56v] and since voltage is measured through a divider scale, adjust
+		i = i * VOLTAGE_SCALE_FACTOR - VOLTAGE_SCALE_FACTOR * i /10;
 		
 		//uint16_t i50 = (uint16_t)i * (uint16_t)50 / (uint16_t)255;
-		uint16_t i50 = (uint16_t)i * (uint16_t)50; i50 = i50 >> 8;
+//		uint16_t i50 = (uint16_t)i * (uint16_t)50; i50 = i50 >> 8; //same as /255
+		uint16_t i50 = (uint16_t)i * (uint16_t)50; i50 = i50 >> 10; //same as /1024
 		
-		
+		//just some silly temporisation
 		for (uint32_t j = 0; j < 1500; j++){
 			showDigit(i50);
 		}
-
-		//i= (i + 1) % 100;
     }
 	
 }
