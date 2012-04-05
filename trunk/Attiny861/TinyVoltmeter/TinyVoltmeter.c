@@ -13,16 +13,16 @@
 #define VOLTAGE_SCALE_FACTOR 2
 
  uint8_t mLetters[] = {
-	0b00001000,//0 positive
-	0b01011011,//1 positive
-	0b00100010,//2 positive
-	0b00010010,//3 positive
-	0b01010001,//4 positive
-	0b00010100,//5 positive
-	0b00000100,//6 positive
-	0b01011010,//7 positive
+	0b00000100,//0 positive
+	0b01100111,//1 positive
+	0b00010010,//2 positive
+	0b00100010,//3 positive
+	0b01100001,//4 positive
+	0b00101000,//5 positive
+	0b00001000,//6 positive
+	0b01100110,//7 positive
 	0b00000000,//8 positive
-	0b00010000//9 positive
+	0b00100000//9 positive
 };
 
 
@@ -63,45 +63,22 @@ uint16_t ReadADCx16()
 	return v;
 }
 
-int main(void)
-{
-	//Timer full speed on internal oscillator !
-	CLKPR = (1<<CLKPCE);
-	CLKPR = 0; // Divide by 1 
-	
-	//all port A goes output 
-	DDRA = 0xFF;
-	//port B goes output save adc9/PB6
-	DDRB = 0b10111111;
-	
-	
-	
-/*	
-	PORTA = 0b00001000;//0 positive
-	PORTA = 0b01011011;//1 positive
-	PORTA = 0b00100010;//2 positive
-	PORTA = 0b00010010;//3 positive
-	PORTA = 0b01010001;//4 positive
-	PORTA = 0b00010100;//5 positive
-	PORTA = 0b00000100;//6 positive
-	PORTA = 0b01011010;//7 positive
-	PORTA = 0b00000000;//8 positive
-	PORTA = 0b00010000;//9 positive
-	
-	PORTB =  (1 << 4) | (1<< 5);
-*/	
 
-/*	
+void numbers99(){
+	
 	uint8_t i = 0;
     while(1)
     {
-        PORTA =  mLetters[i];
-		PORTB =  (1 << 4);
+		//just some silly temporisation
+		for (uint32_t j = 0; j < 1500; j++){
+			showDigit(i);
+		}
 		
-		i= (i + 1) % 10;
-		_delay_ms(10000);
-    }
-*/
+		i= (i + 1) % 100;
+    }	
+}
+
+void voltmeter(){
 
 	//------------START ADC INIT --------------------------
 	ADCSRA |= (1 << ADEN)  // Analog-Digital enable bit
@@ -145,6 +122,26 @@ int main(void)
 		for (uint32_t j = 0; j < 1500; j++){
 			showDigit(i50);
 		}
-    }
+    }	
+	
+}
+	
+int main(void)
+{
+	//Timer full speed on internal oscillator !
+	CLKPR = (1<<CLKPCE);
+	CLKPR = 0; // Divide by 1 
+	
+	//all port A goes output 
+	DDRA = 0xFF;
+	//port B goes output save adc9/PB6
+	DDRB = 0b10111111;
+	
+	
+	//test numbers 99
+	//numbers99();
+
+	//voltmeter
+	voltmeter();
 	
 }
