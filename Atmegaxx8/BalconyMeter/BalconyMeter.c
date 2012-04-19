@@ -8,6 +8,9 @@
 #include <avr/io.h>
 #include <avr/delay.h>
 #include <avr/sleep.h>
+#include <avr/interrupt.h>
+#include <avr/power.h>
+#include <avr/wdt.h>
 
  uint8_t mLetters[] = {
 	0b11101011,//0 positive
@@ -34,6 +37,14 @@ uint8_t mTempBufferHead = 0;
 #define PINBIT_TENS 4
 
 
+//watchdog interrupt : just resume activity
+ISR(WDT_vect) {
+	cli();
+	wdt_disable();
+	sei();
+}
+
+
 //We consider that all digit given as parameter are x10 compared to the real value (for showing 1 decimal)
 // 3 means 0.3, 99 means 9.9, 123  means 12.3
 void showDigit(uint16_t pValue){
@@ -56,6 +67,9 @@ void showDigit(uint16_t pValue){
 		//pov	
 		_delay_us(DIGIT_POV_US);
 	}	
+	
+	//and turn everybody off
+	PORTD = 0x00;
 }
 
 void numbers99dot9(){
@@ -91,10 +105,28 @@ void TestAllSegments()
     }
 }
 
+
+/*
+ *  ShutOffADC      shut down the ADC and prepare for power reduction
+ * http://www.seanet.com/~karllunt/atmegapowerdown.html
+ */
+void  ShutOffADC(void)
+{
+    ACSR = (1<<ACD);                        // disable A/D comparator
+    ADCSRA = (0<<ADEN);                     // disable A/D converter
+    DIDR0 = 0x3f;                           // disable all A/D inputs (ADC0-ADC5)
+    DIDR1 = 0x03;                           // disable AIN0 and AIN1
+}
+
+//Read ADC value into a 16 bits uint16
 uint16_t ReadADCx16() 
 {
-	//goto ADC noise reduction mode
-	//SMCR = (1 << SM0) | (1 << SE); 	sleep_mode();
+	//goto ADC noise reduction mode, startup the ADC
+	PRR &= ~(1<<PRADC);
+    ADCSRA = (1<<ADEN);   
+	//stop all digit display (to avoid noise)
+	PORTD = 0x00; _delay_ms(2);     
+	
 	
 	
 	ADCSRA |= (1 << ADSC); // Start conversion
@@ -103,13 +135,31 @@ uint16_t ReadADCx16()
 	uint16_t v = ADCL;
 	v = (ADCH << 8) + v;
 	
-
+	
+	
+	//stop all the ADC stuffs, disable ADC
+	PRR = 0xFF;
+    ADCSRA = (0<<ADEN);                     // disable A/D converter
+	ShutOffADC();
 	
 	return v;
 }
 
+//Watchdog setup to be 8sec sleep(consumption goes like 0.4 mA
+//http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1258212686
+void myWatchdogEnable() {  // turn on watchdog timer; interrupt mode every n sec
+  cli();
+  MCUSR = 0;
+  WDTCSR |= 0b00011000;
+  //WDTCSR = 0b01000111; //sleep 2sec
+  WDTCSR = 0b01100001; //sleep 8sec
+  sei();
+} 
+
+//Main body in fact, an inifinite loop
 void ReadTemp(){
 	
+	set_sleep_mode(SLEEP_MODE_PWR_SAVE);
 	
     while(1)
     {
@@ -122,7 +172,7 @@ void ReadTemp(){
 		//ad'hoc calibration
 		//apparently my system reads a bit too high temp, about 5% too high
 		//I don't have the will to make extensive test, calculate formula etc... 
-		v = v - v/20;
+		//v = v - v/20; //finally readings are ok like that after comparison, just keep the code for memory
 		
 		//average the temp with latest readings
 		mTempBufferAverage[mTempBufferHead] = v;
@@ -130,26 +180,48 @@ void ReadTemp(){
 		
 		//calculate an average with a circle buffer
 		v= 0;
-		for (uint32_t j = 0; j < AVGBUFFER_LEN; j++){
+		for (uint16_t j = 0; j < AVGBUFFER_LEN; j++){
 			v += mTempBufferAverage[j];
 		}
 		v = v / AVGBUFFER_LEN;
 		
 		//just some silly temporisation
-		for (uint32_t j = 0; j < 150; j++){
+		for (uint16_t j = 0; j < 10000; j++){
 			showDigit(v);
+			//_delay_us(1000);
+			//_delay_ms(1); // save about 0.5mA per ms of sleep. 1 does not change the brightness, after it does but saves more power... depends if you want to read the temperature by daylight too.
 		}
 		
 		
+		//and now the sleep n time 8 sec
+		for (int i =0; i < 2; i++){
+			wdt_reset();
+			myWatchdogEnable();
+			sleep_mode();
+		}		
     }	
 }
 
 
 
 
+void InitADC(){
+	/*********************************************************************/
+	//ADC setup
+	//ADC0, right adjust, using aref
+	//ADMUX = 0x00;
+	ADMUX = 0x00 | (1 << REFS0) | (0 << ADLAR);
+	
+	ADCSRA |= (1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0)|(1<<ADEN);
+	
+/*********************************************************************/	
+	
+}
+
 int main(void)
 {
 	//uses a 12MHz crystal because I messed the fuses ... so let's go slowly and run 1/256th of that speed to save electricity
+	//EDIT: I managed to rechange the fuses to internal 8MHz oscillator, save 3 mA power
 	CLKPR = (1 << CLKPCE) | (1 << CLKPS3);
 	
 	//PORTD is the 7segment control, everybody goes output
@@ -162,21 +234,20 @@ int main(void)
 	//start with all segments off
 	PORTC = 0x00;
 	
-	
-/*********************************************************************/
-	//ADC setup
-	//ADC0, right adjust, using aref
-	//ADMUX = 0x00;
-	ADMUX = 0x00 | (1 << REFS0) | (0 << ADLAR);
-	
-	ADCSRA |= (1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0)|(1<<ADEN);
-	
-/*********************************************************************/	
+	//init the ADC
+	InitADC();
+
 	//SimpleTestDigit();
 	
 	//numbers99dot9();
 	
     //TestAllSegments();
+
+/*********************************************************************/	
+	cli();                                    // quiet for just a moment
+	ShutOffADC();                             // prepare ADC for sleep
+	PRR = (1<<PRTWI) | (1<<PRTIM0) | (1<<PRTIM1) | (1<<PRTIM2) | (1<<PRSPI) | (1<<PRADC) | (1<<PRUSART0);
+/*********************************************************************/	
 
 	ReadTemp();
 }
