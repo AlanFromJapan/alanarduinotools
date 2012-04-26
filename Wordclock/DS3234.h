@@ -13,7 +13,7 @@
 
 
 //=====================================
-int RTC_init(boolean pSetRegisters){ 
+int setupDS3234(boolean pSetRegisters){ 
    pinMode(DS3234_PIN_CS,OUTPUT); // chip select
    // start the SPI library:
    SPI.begin();
@@ -29,6 +29,10 @@ int RTC_init(boolean pSetRegisters){
    delay(10);
 
    return 0;
+}
+
+int setupDS3234(){ 
+   return setupDS3234(false);
 }
 //=====================================
 //Taken from Sparfun sample (as is)

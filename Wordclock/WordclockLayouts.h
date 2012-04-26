@@ -344,6 +344,151 @@ French display
 }
 
 
+
+
+//Draws the time in the matrix. Here you implement YOUR version of the design.
+//Expects second,minute,hour,null,day,month,year
+//This version is the "Korea v3", a 1x1 (5 leds x 5 leds) layout
+void MapTimeInLedMatrix_Korea3(int pTimeArray[]){
+   resetLedMatrix();
+
+   /*
+   Korea display [hours]
+   Time is rounded to closest 5 minutes
+   [10 01 05 03 04
+    02 06 65 07 07
+    08 08 09 09 HH]
+    xx 20 30 50 x10
+    xx 40x10 05 mm
+    */
+
+   //HOURS HOURS HOURS HOURS HOURS
+   //The hours 'si'
+   setCell(2, 4, true);
+   //hour is 12h based
+   int vHour = pTimeArray[2] % 12;
+   switch (vHour){
+      case 0:
+         setCell(0, 0, true);
+         setCell(1, 0, true);
+         break;
+      case 1:
+         setCell(0, 1, true);
+         break;
+      case 2:
+         setCell(1, 0, true);
+         break;
+      case 3:
+         setCell(0, 3, true);
+         break;      
+      case 4:
+         setCell(0, 4, true);
+         break;
+      case 5:
+         setCell(0, 2, true);
+         setCell(1, 2, true);
+         break;
+      case 6:
+         setCell(1, 1, true);
+         setCell(1, 2, true);
+         break;
+      case 7:
+         setCell(1, 3, true);
+         setCell(1, 4, true);
+         break;
+      case 8:
+         setCell(2, 0, true);
+         setCell(2, 1, true);
+         break;
+      case 9:
+         setCell(2, 2, true);
+         setCell(2, 3, true);
+         break;
+      case 10:
+         setCell(0, 0, true);
+         break;
+      case 11:
+         setCell(0, 0, true);
+         setCell(0, 1, true);
+         break;
+   }
+
+   //MINUTES MINUTES MINUTES MINUTES MINUTES 
+   //NB: in this version minutes are rounded to closest 5 minutes
+   //The minutes 'bun'
+   setCell(4, 4, true);
+   
+   int vMin = pTimeArray[1];
+   if ((vMin -3)  % 10 <= 5){
+      //if minutes are between x3 and x8, the the '5' minutes
+      setCell(4, 3, true);
+   }
+   
+   vMin = vMin /10;
+   
+   switch(vMin){
+      case 1:
+         setCell (4, 2, true);
+         break;
+      case 2:
+         setCell (3, 1, true);
+         setCell (4, 2, true);
+         break;
+      case 3:
+         setCell (3, 2, true);
+         setCell (4, 2, true);
+         break;
+      case 4:
+         setCell (4, 1, true);
+         setCell (4, 2, true);
+         break;
+      case 5:
+         setCell (3, 3, true);
+         setCell (3, 4, true);
+         break;
+   }
+   
+/*
+   if (pTimeArray[2] == 12) {
+      //little exception : I want noon to be displayed as 10+2 of afternoon,
+      //not 0 of afternoon. Otherwise algo is great for all the other cases.
+      setCell(0,0,true); //10
+      setCell(0,2, true); //2
+   }
+   else {
+      int vH = pTimeArray[2] % 12;
+      //hour is mod12
+      setCell(0, 0, vH >= 10);
+      //unit part of hour
+      vH = vH % 10;
+      if (vH > 0) {
+         setCell(vH / 5, vH % 5, true);
+      }
+   }
+
+
+   int vM = pTimeArray[1] / 10;
+   if (vM >= 1 ){
+      //light the "10" char
+      setCell(2, 4, true); 
+      if (vM >= 2){
+         //high part of minutes
+         setCell(2, vM -2, true);
+      }
+   }
+
+   //low part of minutes
+   vM = pTimeArray[1] % 10 + 15 -1;
+   if ((pTimeArray[1] % 10) != 0) {
+      setCell (vM / 5, vM % 5, true);
+   }
+
+   //am/pm ?
+   setCell(4,4, pTimeArray[2] >= 12);
+   */
+}
+
+
 #endif //__WordclockLayouts_h__
 
 
