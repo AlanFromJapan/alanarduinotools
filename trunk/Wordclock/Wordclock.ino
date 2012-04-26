@@ -12,15 +12,16 @@
 #include "EEPROM.h"
 
 #define BUTTON_ANALOG_PIN 2
-#define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_LaFrance(p)
-#define DRAW_MATRIX_FUNC() drawLedMatrix2x1()
-#define SETUP_MATRIX() setupLedMatrix2x1()
+#define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_Korea3(p)
+#define DRAW_MATRIX_FUNC() drawLedMatrix()
+#define SETUP_MATRIX() setupLedMatrix()
+#define SETUP_RTC(p) setupDS3234(p)
 
 void setup() {
    SETUP_MATRIX();
    
-   setupDS3231();
-
+   SETUP_RTC(false);
+/*
    //do this init just once, to make sure there is something "coherent" in the RTC
    if (EEPROM.read(1) != 1) {
       setControlRegisters();
@@ -28,18 +29,19 @@ void setup() {
 
       EEPROM.write(1, 1); 
    }
-
+*/
 
 }
 
 //second,minute,hour,null,day,month,year
 void loop() { 
    //if button is pushed, go to some subroutine and change time
-   checkButtonTimeSet();
+   //checkButtonTimeSet();
 
    //second,minute,hour,null,day,month,year
    int vTimeArray[7];
 
+/*
    Date3231 vD3231;
    getDateDS3231(vD3231);
    
@@ -47,9 +49,17 @@ void loop() {
    vTimeArray[0] = vD3231.second;
    vTimeArray[1] = vD3231.minute;
    vTimeArray[2] = vD3231.hour;
+*/
+   //man I really have to rewrite this thing... sorry, I need a DS3231 under my hand to check I ain't break everyhting
+   Date vD;
+   ReadTime(vD);
+   vTimeArray[0] = vD.second;
+   vTimeArray[1] = vD.minute;
+   vTimeArray[2] = vD.hour;
+   
    
    //Uncomment the following line for a demo mode with fast time
-   //ReadTimeArray_Fake(&vTimeArray[0], 10);
+   ReadTimeArray_Fake(&vTimeArray[0], 10);
 
    //Draw the in-memory matrix (change constant at the top of the file)
    MAP_MATRIX_MFUNC(vTimeArray);

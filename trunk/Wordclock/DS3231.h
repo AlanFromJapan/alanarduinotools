@@ -104,11 +104,17 @@ void setControlRegisters(){
   
 }
 
-void setupDS3231(){
+int setupDS3231(boolean pSetRegisters){
   //Wire setup to gain access to the RTC
   Wire.begin();
   //setDate3232();
   setControlRegisters();
+  
+  return 0;
+}
+
+int setupDS3231(){
+  return setupDS3231(false);
 }
 
 #endif
