@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# AvrStudio Solution File, Format Version 11.00
+Project("{D1100916-62DA-4D80-A9B4-55A1E7CCEEB3}") = "AttinySNESPad", "AttinySNESPad\AttinySNESPad.avrgccproj", "{1FC2AE31-FD84-43E7-B18A-DC5A881E2CDD}"
+EndProject
+Project("{D1100916-62DA-4D80-A9B4-55A1E7CCEEB3}") = "Clapclap2313", "Clapclap2313\Clapclap2313.avrgccproj", "{203FD81A-1A76-4FDA-B0DE-3CF651286E29}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1FC2AE31-FD84-43E7-B18A-DC5A881E2CDD}.Debug|AVR.ActiveCfg = Debug|AVR
+		{1FC2AE31-FD84-43E7-B18A-DC5A881E2CDD}.Debug|AVR.Build.0 = Debug|AVR
+		{1FC2AE31-FD84-43E7-B18A-DC5A881E2CDD}.Release|AVR.ActiveCfg = Release|AVR
+		{1FC2AE31-FD84-43E7-B18A-DC5A881E2CDD}.Release|AVR.Build.0 = Release|AVR
+		{203FD81A-1A76-4FDA-B0DE-3CF651286E29}.Debug|AVR.ActiveCfg = Debug|AVR
+		{203FD81A-1A76-4FDA-B0DE-3CF651286E29}.Debug|AVR.Build.0 = Debug|AVR
+		{203FD81A-1A76-4FDA-B0DE-3CF651286E29}.Release|AVR.ActiveCfg = Release|AVR
+		{203FD81A-1A76-4FDA-B0DE-3CF651286E29}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
