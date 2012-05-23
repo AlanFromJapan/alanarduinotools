@@ -52,10 +52,42 @@
 
 volatile uint16_t mCountTest = 0;
 
+uint16_t mButtonStatus = (1 << ORDER_BUTTON_START);
+
+
+void SendButtonStatus2() 
+{
+			
+PORTB = 0xFF;
+PORTA = 0xFF;
+
+if (mCountTest % 180 == 0) {
+	for (uint8_t i = 0; i < 16; i++){
+		if ((mButtonStatus & (1 << i)) == 0){
+			PORTA = 0x00;
+			PORTB = 0x00;
+		}
+		else {
+			PORTA = 0xFF;
+			PORTB = 0xFF;
+		}
+		_delay_loop_1(12);
+	}
+}
+PORTB = 0xFF;	
+PORTA = 0xFF;	
+
+mCountTest++;
+}
+
+
 //Handles the INT1 pin : LATCH signal going DOWN (falling hedge)
 SIGNAL (SIG_INT1)
 { 
+	//cli();
+	
     // Do some stuff
+	//PORTB = 0xFF;
 /*
 	//blink
 	PORTD ^= (1 << 0);
@@ -63,40 +95,14 @@ SIGNAL (SIG_INT1)
 	PORTD ^= (1 << 0);
 */
 
-	//in 6us will start the reception of the first clock signal
-	//clock is normal low, goes high for 6us then sleep again 6us : the SNES will sample the DATA line on the FALLING hedge
-	for (int vRound = 0; vRound < TOTALORDER; vRound++ ){
-		
-		//wait for CLOCK pin to go HIGH and set the value
-		while ((PORTA & (1 <<PIN_CLOCK)) == 0){} 
-		
-		//HIGH means NOT PRESSED
-		PORTA = 0xFF;
-		
-		/*
-		//for the test, just send UP
-		if (mCountTest % 120 == 0 && vRound == ORDER_BUTTON_UP){
-			PORTA = (0 << PIN_DATA);
-		}
-		else {
-			PORTA = (1 << PIN_DATA);
-		}
-		*/
-		
-		//for the test, just send right
-		if (vRound == ORDER_BUTTON_START){
-			PORTA = 0x00;// (0 << PIN_DATA);
-		}
-		else {
-			PORTA = 0xFF; // (1 << PIN_DATA);
-		}
-		
-		
-		//wait for CLOCK pin to go LOW and let's roll for next turn...
-		while ((PORTA & (1 <<PIN_CLOCK)) != 0){} 
-	}
+
+	SendButtonStatus2();
 	
-	mCountTest++;
+	//mCountTest++;
+	
+	//PORTB = 0x00;
+	
+	//sei();
 }
 
 void setupInterrupt(){
@@ -123,8 +129,14 @@ int main(void)
 	
 	//port a : CLOCK in, DATA out
 	DDRA = (0 << PIN_CLOCK) | (1 << PIN_DATA);
+	//PORTA input + DDRA = 1 => pullups
+	//PORTA = 0xFF;
+	
 	//port d as output except the int1 (PD3)
 	DDRD = 0xFF ^ (1 << PD3);
+	
+	//for the test
+	//DDRB = 0xFF;
 	
 	//turn on the interrupts
 	setupInterrupt();
