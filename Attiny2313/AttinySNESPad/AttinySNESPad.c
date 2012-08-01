@@ -1,15 +1,17 @@
 /*
  * AttinySNESPad.c
  * Howto make your SNES pad compatible controller with a attiny2313.
+ * http://kalshagar.wikispaces.com/Around+a+SNES
  * 
  * Created: 2012/04/29 12:08:04
- *  Author: Alan
+ *  Author: AlanFromJapan
  * Sources:
  *  http://www.gamesx.com/controldata/snesdat.htm
  *  http://www.gamesx.com/controldata/nessnes.htm
  *
  * Interrupts:
  *  http://www.windmeadow.com/node/19
+ *  http://www.nongnu.org/avr-libc/user-manual/group__avr__interrupts.html
  * 
  */ 
 
@@ -189,30 +191,107 @@ void ReadButtonsStatus()
 	mButtonStatus = ~mButtonStatus;
 }
 
-//Handles the INT1 pin : LATCH signal going DOWN (falling hedge)
+
+void ReadButtonsStatus_TESTReadSetDown() 
+{
+	mButtonStatus = 0xFFFF; // all UP (nothing pressed)
+	
+	if ((PINB & (1 << 0)) == 0) {
+		//button pressed
+		mButtonStatus = 0x0000;
+	}
+}
+
+void ReadButtonsStatus_TESTReadSetDown2() 
+{
+	mButtonStatus = 0xFFFF; // all UP (nothing pressed)
+	
+	if ((PINB & (1 << 1)) == 0) {
+		//button pressed
+		mButtonStatus = 0xFFFF ^ (1 << ORDER_BUTTON_START);
+	}
+}
+
+//Fake, return starts
+void ReadButtonsStatus_TestSTART() 
+{
+	mButtonStatus = 0x0000; // all UP (nothing pressed)
+	
+		mButtonStatus ^= (1 << ORDER_BUTTON_START);
+	
+	mButtonStatus = ~mButtonStatus;
+}
+
+//fake return 0x0000
+void ReadButtonsStatus_TestAllDown() 
+{
+	mButtonStatus = 0x0000; // all down
+}
+
+//fake return 0b1010101010
+void ReadButtonsStatus_TestAlternate() 
+{
+	mButtonStatus = 0b1010101010101010; // all down
+}
+
+//Fake, return starts once in a while
+void ReadButtonsStatus_TestSTART2() 
+{
+	if (mTestFlag == 0 ){
+	
+	
+		//all down
+		mButtonStatus = 0x0000;
+	
+	}
+	else {
+		//all up
+		mButtonStatus = 0xFFFF;
+	}	
+	
+	mTestFlag++;
+}
+
+
+
+//Handles the INT1 pin : LATCH signal going DOWN (falling hedge) : STARTUP
 SIGNAL (SIG_INT1)
 { 
-	SendButtonStatusTEST2();
+	//read button status before the clock ticks in
+	ReadButtonsStatus_TESTReadSetDown2();
+	mCountTest = 0;
 	
-	//Yes, send the previous then read. Because we want to start on time so reading now would delay us.
-	//Plus we read at 60Hz so there's a very low chance that it makes any noticeable difference for the player (really)
-	
-	//Send the previously memorized buttons status
-	//SendButtonStatus();
+	if ((mButtonStatus & (1 << mCountTest)) == 0){
+		PORTA = 0x00;
+	}
+	else {
+		PORTA = 0xFF;
+	}
+}
 
-	//Read the new status(take your time, next interrupt is in 16ms...)
-	//ReadButtonsStatus();
+//Handles the INT0 pin : LATCH signal going DOWN (falling hedge) : CLOCK
+SIGNAL (SIG_INT0)
+{ 
+	
+	if ((mButtonStatus & (1 << mCountTest)) == 0){
+		PORTA = 0x00;
+	}
+	else {
+		PORTA = 0xFF;
+	}
+		
+	mCountTest++;
 }
 
 void setupInterrupt(){
-	//use INT1
-	PCMSK |= (1 << PIND3);
+	//use INT1 and INT0
+	PCMSK |= (1 << PIND3) | (1 << PIND2);
 	
-	// interrupt on INT1 pin falling edge (sensor triggered) 
-	MCUCR |= (1<<ISC11);
+	// interrupt on INT0/INT1 pin falling edge (sensor triggered) 
+	MCUCR |= (1<<ISC11) | (1<<ISC01);
 
 	// turn on interrupts!
-	GIMSK  |= (1<<INT1);
+	GIMSK  |= (1<<INT1) | (1<<INT0);
 	
 	//without a call to sei() it doesn't work it seems...
 	sei();
@@ -231,11 +310,13 @@ int main(void)
 	//PORTA input + DDRA = 1 => pullups
 	//PORTA = 0xFF;
 	
-	//port d as output except the int1 (PD3)
-	DDRD = 0xFF ^ (1 << PD3);
+	//port d as input on all pins (buttons and INT0 and INT1)
+	DDRD = 0x00;
 	
-	//port b is only inputs (the buttons)
+	//port b is only inputs (the buttons), with pullups
 	DDRB = 0x00;
+	PORTB = 0xFF; //pullups
+	MCUCR |= (0 << PUD); //just make sure pullups are NOT disabled
 	
 	//turn on the interrupts
 	setupInterrupt();
