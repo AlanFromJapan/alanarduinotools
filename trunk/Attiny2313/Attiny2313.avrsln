@@ -5,6 +5,8 @@ Project("{D1100916-62DA-4D80-A9B4-55A1E7CCEEB3}") = "AttinySNESPad", "AttinySNES
 EndProject
 Project("{D1100916-62DA-4D80-A9B4-55A1E7CCEEB3}") = "Clapclap2313", "Clapclap2313\Clapclap2313.avrgccproj", "{203FD81A-1A76-4FDA-B0DE-3CF651286E29}"
 EndProject
+Project("{D1100916-62DA-4D80-A9B4-55A1E7CCEEB3}") = "Test2313", "Test2313\Test2313.avrgccproj", "{02317524-116E-4CD6-A999-3589AE34ED78}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -19,6 +21,10 @@ Global
 		{203FD81A-1A76-4FDA-B0DE-3CF651286E29}.Debug|AVR.Build.0 = Debug|AVR
 		{203FD81A-1A76-4FDA-B0DE-3CF651286E29}.Release|AVR.ActiveCfg = Release|AVR
 		{203FD81A-1A76-4FDA-B0DE-3CF651286E29}.Release|AVR.Build.0 = Release|AVR
+		{02317524-116E-4CD6-A999-3589AE34ED78}.Debug|AVR.ActiveCfg = Debug|AVR
+		{02317524-116E-4CD6-A999-3589AE34ED78}.Debug|AVR.Build.0 = Debug|AVR
+		{02317524-116E-4CD6-A999-3589AE34ED78}.Release|AVR.ActiveCfg = Release|AVR
+		{02317524-116E-4CD6-A999-3589AE34ED78}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
