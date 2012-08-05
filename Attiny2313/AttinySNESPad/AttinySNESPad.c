@@ -57,27 +57,44 @@ volatile uint8_t mCurrentButtonIndex = 0;
 volatile uint16_t mButtonStatus = 0xFFFF; // all UP (nothing pressed)
 
 
-void ReadButtonsStatus_TESTReadSetDown2() 
+void ReadButtonsStatus() 
 {
 	mButtonStatus = 0xFFFF; // all UP (nothing pressed)
 	
-	if ((PINB & (1 << 1)) == 0) {
+	if ((PINB & (1 << 0)) == 0) {
 		//button pressed
 		mButtonStatus ^= (1 << ORDER_BUTTON_START);
 	}
 	
+	if ((PINB & (1 << 1)) == 0) {
+		//button pressed. DONT FORGET to force the stupid compiler to work with uint16!!
+		mButtonStatus ^= (uint16_t)(1 << ORDER_BUTTON_UP);
+	}
+
+	
 	if ((PINB & (1 << 2)) == 0) {
+		//button pressed. DONT FORGET to force the stupid compiler to work with uint16!!
+		mButtonStatus ^= (uint16_t)(1 << ORDER_BUTTON_DOWN);
+	}
+	
+		
+	if ((PINB & (1 << 3)) == 0) {
 		//button pressed. DONT FORGET to force the stupid compiler to work with uint16!!
 		mButtonStatus ^= (uint16_t)(1 << ORDER_BUTTON_RIGHT);
 	}
-
+	
+		
+	if ((PINB & (1 << 4)) == 0) {
+		//button pressed. DONT FORGET to force the stupid compiler to work with uint16!!
+		mButtonStatus ^= (uint16_t)(1 << ORDER_BUTTON_LEFT);
+	}
 }
 
 //Write one value on the DATA line
 //inline : in short the compiler will copy the code and not make a jump to function, to go faster.
 //no pointer, short, need of extra speed : the perfect client for /inline/.
 inline void WriteNextData(){
-	//push the first value on the clock (will be read on CLOCK going DOWN)
+	//push the first value on the clock (will be read on next CLOCK going DOWN)
 	if ((mButtonStatus & (1 << mCurrentButtonIndex)) == 0){
 		PORTA = 0x00;
 	}
@@ -93,7 +110,7 @@ inline void WriteNextData(){
 SIGNAL (SIG_INT1)
 { 
 	//read button status before the clock ticks in
-	ReadButtonsStatus_TESTReadSetDown2();
+	ReadButtonsStatus();
 	mCurrentButtonIndex = 0;
 	
 	//put already the first bit on the rail for reading 
