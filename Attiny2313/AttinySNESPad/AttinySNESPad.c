@@ -49,9 +49,6 @@
 #define TOTALORDER				16
 
 
-#define PIN_CLOCK				0
-#define PIN_DATA				1
-
 volatile uint8_t mCurrentButtonIndex = 0;
 
 volatile uint16_t mButtonStatus = 0xFFFF; // all UP (nothing pressed)
@@ -63,28 +60,66 @@ void ReadButtonsStatus()
 	
 	if ((PINB & (1 << 0)) == 0) {
 		//button pressed
-		mButtonStatus ^= (1 << ORDER_BUTTON_START);
+		mButtonStatus ^= (uint16_t)(1 << ORDER_BUTTON_START);
 	}
 	
 	if ((PINB & (1 << 1)) == 0) {
+		//button pressed
+		mButtonStatus ^= (uint16_t)(1 << ORDER_BUTTON_SELECT);
+	}
+		
+	if ((PINB & (1 << 2)) == 0) {
+		//button pressed
+		mButtonStatus ^= (uint16_t)(1 << ORDER_BUTTON_X);
+	}
+		
+	if ((PINB & (1 << 3)) == 0) {
+		//button pressed
+		mButtonStatus ^= (uint16_t)(1 << ORDER_BUTTON_Y);
+	}
+		
+	if ((PINB & (1 << 4)) == 0) {
+		//button pressed
+		mButtonStatus ^= (uint16_t)(1 << ORDER_BUTTON_A);
+	}
+		
+	if ((PINB & (1 << 5)) == 0) {
+		//button pressed
+		mButtonStatus ^= (uint16_t)(1 << ORDER_BUTTON_B);
+	}
+		
+	if ((PINB & (1 << 6)) == 0) {
+		//button pressed
+		mButtonStatus ^= (uint16_t)(1 << ORDER_BUTTON_R);
+	}
+		
+	if ((PINB & (1 << 7)) == 0) {
+		//button pressed
+		mButtonStatus ^= (uint16_t)(1 << ORDER_BUTTON_L);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	// The joystick wires are close together, use D0-D1-A1-A0
+	
+	if ((PIND & (1 << 0)) == 0) {
 		//button pressed. DONT FORGET to force the stupid compiler to work with uint16!!
 		mButtonStatus ^= (uint16_t)(1 << ORDER_BUTTON_UP);
 	}
 
 	
-	if ((PINB & (1 << 2)) == 0) {
+	if ((PIND & (1 << 1)) == 0) {
 		//button pressed. DONT FORGET to force the stupid compiler to work with uint16!!
 		mButtonStatus ^= (uint16_t)(1 << ORDER_BUTTON_DOWN);
 	}
 	
 		
-	if ((PINB & (1 << 3)) == 0) {
+	if ((PINA & (1 << 1)) == 0) {
 		//button pressed. DONT FORGET to force the stupid compiler to work with uint16!!
 		mButtonStatus ^= (uint16_t)(1 << ORDER_BUTTON_RIGHT);
 	}
 	
 		
-	if ((PINB & (1 << 4)) == 0) {
+	if ((PINA & (1 << 0)) == 0) {
 		//button pressed. DONT FORGET to force the stupid compiler to work with uint16!!
 		mButtonStatus ^= (uint16_t)(1 << ORDER_BUTTON_LEFT);
 	}
@@ -96,10 +131,10 @@ void ReadButtonsStatus()
 inline void WriteNextData(){
 	//push the first value on the clock (will be read on next CLOCK going DOWN)
 	if ((mButtonStatus & (1 << mCurrentButtonIndex)) == 0){
-		PORTA = 0x00;
+		PORTD &= ~(1 << 4); //make D4 = 0
 	}
 	else {
-		PORTA = 0xFF;
+		PORTD |= (1 << 4);  //make D4 = 1
 	}
 	
 	//go next
@@ -131,7 +166,7 @@ void setupInterrupt(){
 	
 	// interrupt on INT1 pin falling edge 
 	//INT0 goes on falling hedge
-	MCUCR |= (1<<ISC11) | (1<<ISC01); // | (1<<ISC00);
+	MCUCR |= (1<<ISC11) | (1<<ISC01); 
 
 	// turn on interrupts!
 	GIMSK  |= (1<<INT1) | (1<<INT0);
@@ -147,19 +182,21 @@ int main(void)
 	CLKPR = (1<<CLKPCE);
 	CLKPR = 0; // Divide by 1 
 	
+	//port A is all input with pullups
+	DDRA = 0x00;
+	PORTA = 0xFF;
 	
-	//port a : CLOCK in, DATA out
-	DDRA = (0 << PIN_CLOCK) | (1 << PIN_DATA);
-	//PORTA input + DDRA = 1 => pullups
-	//PORTA = 0xFF;
-	
-	//port d as input on all pins (buttons and INT0 and INT1)
-	DDRD = 0x00;
+	//port d as input on all pins (buttons and INT0 and INT1) EXCEPT D4 that is DATA (output)
+	DDRD = 0x10;
+	//pullups everywhere except D2,D3,D4 (INT0, INT1 and DATA)
+	PORTD = 0b11100011;
 	
 	//port b is only inputs (the buttons), with pullups
 	DDRB = 0x00;
 	PORTB = 0xFF; //pullups
-	MCUCR |= (0 << PUD); //just make sure pullups are NOT disabled
+	
+	//just make sure pullups are NOT disabled
+	MCUCR |= (0 << PUD); 
 	
 	//turn on the interrupts
 	setupInterrupt();
