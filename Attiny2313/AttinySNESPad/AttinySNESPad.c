@@ -17,7 +17,6 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <avr/delay.h>
 
 /*
 1 	B
@@ -48,6 +47,13 @@
 #define ORDER_BUTTON_R			11
 #define TOTALORDER				16
 
+
+/*
+register volatile uint8_t mCurrentButtonIndex asm("r2");
+
+register volatile uint8_t mButtonStatusL asm("r3");
+register volatile uint8_t mButtonStatusH asm("r4");
+*/
 
 volatile uint8_t mCurrentButtonIndex = 0;
 
@@ -125,17 +131,20 @@ void ReadButtonsStatus()
 	}
 }
 
+
+
 //Write one value on the DATA line
 //inline : in short the compiler will copy the code and not make a jump to function, to go faster.
 //no pointer, short, need of extra speed : the perfect client for /inline/.
-inline void WriteNextData(){
+//inline 
+void WriteNextData(){
 	//push the first value on the clock (will be read on next CLOCK going DOWN)
-	if ((mButtonStatus & (1 << mCurrentButtonIndex)) == 0){
+	if ((mButtonStatus & (uint16_t)(1 << mCurrentButtonIndex)) == 0){
 		PORTD &= ~(1 << 4); //make D4 = 0
 	}
 	else {
 		PORTD |= (1 << 4);  //make D4 = 1
-	}
+	} 
 	
 	//go next
 	mCurrentButtonIndex++;
@@ -144,29 +153,38 @@ inline void WriteNextData(){
 //Handles the INT1 pin : LATCH signal going DOWN (falling hedge) : STARTUP 
 SIGNAL (SIG_INT1)
 { 
-	//read button status before the clock ticks in
-	ReadButtonsStatus();
 	mCurrentButtonIndex = 0;
 	
 	//put already the first bit on the rail for reading 
 	WriteNextData();
 }
 
-//Handles the INT0 pin : CLOCK signal going DOWN (falling hedge) = reading
+
+//Handles the INT0 pin : CLOCK signal going UP (rising hedge) = put data that will be read on falling hedge in 6uS
 // push next value to the value pin
 SIGNAL (SIG_INT0)
 { 
 	//move next
-	WriteNextData();
+	WriteNextData();		
+	
+	//go next
+	mCurrentButtonIndex++;
+	
+	if (mCurrentButtonIndex >= 12){
+		//read button status for next round (too long to read BEFORE the first tick)
+		ReadButtonsStatus();
+	}
 }
+
+
 
 void setupInterrupt(){
 	//use INT1 and INT0
 	PCMSK |= (1 << PIND3) | (1 << PIND2);
 	
-	// interrupt on INT1 pin falling edge 
-	//INT0 goes on falling hedge
-	MCUCR |= (1<<ISC11) | (1<<ISC01); 
+	// interrupt on INT1 pin falling edge (prepare for reading)
+	//INT0 goes on rising hedge (send value on raise, will be read on fall)
+	MCUCR |= (1<<ISC11) | (1<<ISC01) | (1<<ISC11); 
 
 	// turn on interrupts!
 	GIMSK  |= (1<<INT1) | (1<<INT0);
@@ -197,6 +215,9 @@ int main(void)
 	
 	//just make sure pullups are NOT disabled
 	MCUCR |= (0 << PUD); 
+	
+	//by default buttons are all up
+	mButtonStatus = 0xffff;
 	
 	//turn on the interrupts
 	setupInterrupt();
