@@ -7,6 +7,10 @@ Project("{D1100916-62DA-4D80-A9B4-55A1E7CCEEB3}") = "Clapclap2313", "Clapclap231
 EndProject
 Project("{D1100916-62DA-4D80-A9B4-55A1E7CCEEB3}") = "Test2313", "Test2313\Test2313.avrgccproj", "{02317524-116E-4CD6-A999-3589AE34ED78}"
 EndProject
+Project("{18226A42-8477-4023-8AD2-40C49DA407C9}") = "AsmSNESPad", "AsmSNESPad\AsmSNESPad.avrasmproj", "{74C7C4E4-506E-4E0A-B676-949EF94D2F58}"
+EndProject
+Project("{18226A42-8477-4023-8AD2-40C49DA407C9}") = "AsmTest2313", "AsmTest2313\AsmTest2313.avrasmproj", "{E8AD5C0E-699F-4674-BC7B-696AD63E42F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -25,6 +29,14 @@ Global
 		{02317524-116E-4CD6-A999-3589AE34ED78}.Debug|AVR.Build.0 = Debug|AVR
 		{02317524-116E-4CD6-A999-3589AE34ED78}.Release|AVR.ActiveCfg = Release|AVR
 		{02317524-116E-4CD6-A999-3589AE34ED78}.Release|AVR.Build.0 = Release|AVR
+		{74C7C4E4-506E-4E0A-B676-949EF94D2F58}.Debug|AVR.ActiveCfg = Debug|AVR
+		{74C7C4E4-506E-4E0A-B676-949EF94D2F58}.Debug|AVR.Build.0 = Debug|AVR
+		{74C7C4E4-506E-4E0A-B676-949EF94D2F58}.Release|AVR.ActiveCfg = Release|AVR
+		{74C7C4E4-506E-4E0A-B676-949EF94D2F58}.Release|AVR.Build.0 = Release|AVR
+		{E8AD5C0E-699F-4674-BC7B-696AD63E42F6}.Debug|AVR.ActiveCfg = Debug|AVR
+		{E8AD5C0E-699F-4674-BC7B-696AD63E42F6}.Debug|AVR.Build.0 = Debug|AVR
+		{E8AD5C0E-699F-4674-BC7B-696AD63E42F6}.Release|AVR.ActiveCfg = Release|AVR
+		{E8AD5C0E-699F-4674-BC7B-696AD63E42F6}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
