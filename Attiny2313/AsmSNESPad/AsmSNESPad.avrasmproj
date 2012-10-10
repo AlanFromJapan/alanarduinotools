@@ -60,5 +60,10 @@
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="upload.attiny2313.bat">
+      <SubType>Code</SubType>
+    </None>
+  </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\Vs\AvrAssembler.targets" />
 </Project>
