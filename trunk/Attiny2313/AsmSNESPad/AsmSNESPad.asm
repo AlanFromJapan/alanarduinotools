@@ -215,7 +215,7 @@ writenext_outro:
 	
 ; ---------------------------------------------------------
 ; SIG_INT1 interrupt 
-; Handles the INT1 pin : LATCH signal going DOWN (falling hedge) : STARTUP 
+; Handles the INT1 pin : LATCH signal going UP (raising hedge) : STARTUP 
 SIG_INT1:
 
 	push r16
@@ -223,8 +223,8 @@ SIG_INT1:
 	ldi r16, 0x00
 	mov mCurrentButtonIndex, r16
 
-	;send the first value
-	;rcall writenext
+	;send the first value : it will be ready on the next RAISING hedge of INT0 (read)
+	rcall writenext
 
 	;and back to the normal process
 	pop r16
@@ -234,7 +234,9 @@ SIG_INT1:
 	
 ; ---------------------------------------------------------
 ; SIG_INT0 interrupt
-; Handles the INT0 pin : CLOCK signal going DOWN (falling hedge) = reading
+; Handles the INT0 pin : CLOCK signal going UP (raising hedge) = reading
+; trick : since writing on falling for being read on raising is too short, start writing on rising hedge, it will be reading for next reading.
+; you can start for the first one by using the latch raising hedge. there you go !
 SIG_INT0:
 
 	push r16
@@ -244,7 +246,8 @@ SIG_INT0:
 	;mCurrentButtonIndex ++
 	;done in writenext() inc mCurrentButtonIndex
 
-	;if mCurrentButtonIndex > 12 call ReadButtonsStatus
+	;everything was sent ? read status now
+	;if mCurrentButtonIndex > 16 call ReadButtonsStatus
 	mov r16,mCurrentButtonIndex
 	CPI r16, 16
 	BRLO SIG_INT0_vect_outro
@@ -272,7 +275,7 @@ setupInterrupt:
 	//INT0 goes on rising hedge (send value on raise, will be read on fall)
 	//MCUCR |= (1<<ISC11) | (1<<ISC01) | (1<<ISC11); 
 	in	r24, 0x35
-	ori	r24, 0x0A ;0xff = both rising ;0x0A = both falling
+	ori	r24, 0x0f ;0x0f = both rising ;0x0A = both falling
 	out	0x35, r24
 
 	// turn on interrupts!
