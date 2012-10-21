@@ -79,7 +79,73 @@ void setup()
 
 }
 
-void loop()
+void shiftOutX(uint8_t pR, uint8_t pG, uint8_t pB)
+{
+   //PD5 = data
+   //PC5 = clock
+   //PC4 = latch
+
+   //digitalWrite(latchPin, LOW);
+   PORTC &= 0b11101111; // ~PC4
+
+   for (uint8_t j = 0; j < 3; j++){   
+      uint8_t vVal = pB;
+      switch (j){
+         //case 0: vVal = pB; break;
+         case 1: vVal = pG; break;
+         case 2: vVal = pR; break;
+      }
+      
+      for (uint8_t i = 0; i < 8; i++)  {
+         //digitalWrite(dataPin, !!(val & (1 << (7 - i))));
+         if ((vVal & (1 << i)) == 0){
+            PORTD &= 0b11011111;
+         }
+         else {
+            PORTD |= 0b00100000;         
+         }
+
+         //Clock up-down
+         //digitalWrite(clockPin, HIGH);
+         PORTC |= 0b00100000; // ~PC5
+         delayMicroseconds(2);
+         //digitalWrite(clockPin, LOW);  
+         PORTC &= 0b11011111; // ~PC5          
+      }
+   }
+
+   //digitalWrite(latchPin, HIGH);
+   PORTC |= 0b00010000; // ~PC4
+}
+
+void writeRGB (int pR, int pG, int pB){
+   
+   shiftOutX(pR,pG,pB);
+/*   
+   // take the latchPin low so 
+   // the LEDs don't change while you're sending in bits:
+   digitalWrite(latchPin, LOW);
+
+   //blue
+   // shift out the bits:
+   shiftOut(dataPin, clockPin, MSBFIRST, pB);  
+
+   //green
+   // shift out the bits:
+   shiftOut(dataPin, clockPin, MSBFIRST, pG);
+
+   //red
+   // shift out the bits:
+   shiftOut(dataPin, clockPin, MSBFIRST, pR);
+
+   //take the latch pin high so the LEDs will light up:
+   digitalWrite(latchPin, HIGH);
+*/
+}
+
+/***************************************************************************************/
+/***************************************************************************************/
+void allAtTheSameTime()
 {
    // take the latchPin low so 
    // the LEDs don't change while you're sending in bits:
@@ -142,6 +208,297 @@ void loop()
    //wait a little before next round
    delay (500 * random(10) + 1000);
 }
+
+
+/***************************************************************************************/
+/***************************************************************************************/
+void colorPerColor()
+{
+   int vR = random(256);
+   int vG = random(256);
+   int vB = random(256);
+
+   //and ground 
+   int vGround = random(256);
+   while (vGround == 0){
+      vGround = random(256);
+   }
+
+   int vStep = 25 + random(50);
+   int vDelay = 25 + random(50);
+   int vMax = 3000; //4095
+
+   int vRout, vGout, vBout;
+   vRout = 0; 
+   vRout = 0; 
+   vBout = 0;   
+
+   uint8_t vColorFlag = 0;
+
+   while (vColorFlag != 0x07){
+      //choose one color
+      int vBit = random(3);
+      while ((vColorFlag & (1 << vBit)) != 0){
+         vBit = random(3);
+      }
+
+      vColorFlag |= (1 << vBit);
+
+      switch(vBit){
+      case 0: 
+         vRout = vR; 
+         break;
+      case 1: 
+         vGout = vG; 
+         break;
+      case 2: 
+         vBout = vB; 
+         break;
+      }
+
+      // take the latchPin low so 
+      // the LEDs don't change while you're sending in bits:
+      digitalWrite(latchPin, LOW);
+
+      //blue
+      // shift out the bits:
+      shiftOut(dataPin, clockPin, MSBFIRST, vBout);  
+
+      //green
+      // shift out the bits:
+      shiftOut(dataPin, clockPin, MSBFIRST, vGout);
+
+      //red
+      // shift out the bits:
+      shiftOut(dataPin, clockPin, MSBFIRST, vRout);
+
+      //take the latch pin high so the LEDs will light up:
+      digitalWrite(latchPin, HIGH);
+
+
+
+      //light up
+      for (int i =0; i < vMax; i += vStep){
+         for (int j =1; j <= 8; j++){
+            if ((vGround & (j-1)) != 0){
+               Tlc.set(j, i);
+            }
+         }
+         Tlc.update();
+         delay (vDelay);
+      }
+
+   }
+   //light down
+   for (int i =vMax; i > 0; i -= vStep){
+      for (int j =1; j <= 8; j++){
+         if ((vGround & (j-1)) != 0){
+            Tlc.set(j, i);
+         }
+      }
+      Tlc.update();
+      delay (vDelay);
+   }
+
+   //Zero
+   for (int j =1; j <= 8; j++){
+      Tlc.set(j, 0);
+   }
+   Tlc.update();
+
+   //wait a little before next round
+   delay (500 * random(10) + 1000);
+}
+
+
+/***************************************************************************************/
+/***************************************************************************************/
+void aLaMatrix()
+{
+   int vR = 1 << random(8);
+   int vG = 1 << random(8);
+   int vB = 1 << random(8);
+
+   //and ground 
+   int vGround = 0;
+
+   int vStep = 100 + random(150);
+   int vDelay = 10 + random(25);
+   int vMax = 3000; //4095
+
+   int vRout, vGout, vBout;
+   vRout = 0; 
+   vGout = 0; 
+   vBout = 0;   
+
+   uint8_t vColorFlag = 0;
+
+   while (vColorFlag != 0x07){
+      //choose one color
+      int vBit = random(3);
+      while ((vColorFlag & (1 << vBit)) != 0){
+         vBit = random(3);
+      }
+
+      vColorFlag |= (1 << vBit);
+
+      switch(vBit){
+      case 0: 
+         vRout = vR; 
+         break;
+      case 1: 
+         vGout = vG; 
+         break;
+      case 2: 
+         vBout = vB; 
+         break;
+      }
+
+      // take the latchPin low so 
+      // the LEDs don't change while you're sending in bits:
+      digitalWrite(latchPin, LOW);
+
+      //blue
+      // shift out the bits:
+      shiftOut(dataPin, clockPin, MSBFIRST, vBout);  
+
+      //green
+      // shift out the bits:
+      shiftOut(dataPin, clockPin, MSBFIRST, vGout);
+
+      //red
+      // shift out the bits:
+      shiftOut(dataPin, clockPin, MSBFIRST, vRout);
+
+      //take the latch pin high so the LEDs will light up:
+      digitalWrite(latchPin, HIGH);
+
+
+
+      //light up
+      for (int j =1; j <= 8; j++){
+         for (int i =0; i < vMax; i += vStep){
+            Tlc.set(j, i);
+
+            Tlc.update();
+            delay (vDelay);
+         }
+      }
+
+   }
+   //light down
+   for (int i =vMax; i > 0; i -= vStep){
+      for (int j =1; j <= 8; j++){
+         Tlc.set(j, i);
+
+      }
+      Tlc.update();
+      delay (vDelay);
+   }
+
+   //Zero
+   for (int j =1; j <= 8; j++){
+      Tlc.set(j, 0);
+   }
+   Tlc.update();
+
+   //wait a little before next round
+   delay (500 * random(10) + 1000);
+}
+
+
+
+/***************************************************************************************/
+/***************************************************************************************/
+void oneCell()
+{
+   int vR = 0x02;
+   int vG = 0x02;
+   int vB = 0x00;
+
+   //and ground 
+   int vGround = 0;
+
+   int vStep = 10 + random(15);
+   int vDelay = 2;
+   int vMax = 3000; //4095
+
+   int vRout, vGout, vBout;
+   vRout = vR; 
+   vGout = vG; 
+   vBout = 0;   
+
+
+   //light up
+   for (int j =1; j <= 8; j++){
+      for (int i =0; i < vMax; i += vStep){
+         writeRGB(0, 0x40, 0);
+         Tlc.set(j, i);
+         Tlc.update();
+         delay (vDelay);
+
+
+         writeRGB(0x40, 0, 0);
+         Tlc.set(j, i);
+         Tlc.update();
+         delay (vDelay);
+
+
+         writeRGB(0, 0, 0x02);
+         Tlc.set(j, i);
+         Tlc.update();
+         delay (vDelay);
+      }
+   }
+
+
+
+
+   //light down
+   for (int i =vMax; i > 0; i -= vStep){
+      for (int j =1; j <= 8; j++){
+         Tlc.set(j, i);
+
+      }
+      Tlc.update();
+      delay (vDelay);
+   }
+
+   //Zero
+   for (int j =1; j <= 8; j++){
+      Tlc.set(j, 0);
+   }
+   Tlc.update();
+
+   //wait a little before next round
+   delay (1000);
+}
+
+/***************************************************************************************/
+/***************************************************************************************/
+void loop()
+{
+   oneCell();
+   /*
+   int vPattern = random (2);
+    switch(vPattern){
+    case 0:
+    allAtTheSameTime();
+    break;
+    case 1:
+    colorPerColor();
+    break;
+    
+    }
+    */
+
+}
+
+
+
+
+
+
 
 
 
