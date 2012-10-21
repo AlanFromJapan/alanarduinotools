@@ -6,7 +6,7 @@
 
 /*
 TLC5940 lib comment
-    Basic Pin setup:
+ Basic Pin setup:
  ------------                                  ---u----
  ARDUINO   13|-> SCLK (pin 25)           OUT1 |1     28| OUT channel 0
  12|                           OUT2 |2     27|-> GND (VPRG)
@@ -97,6 +97,12 @@ void loop()
    // shift out the bits:
    shiftOut(dataPin, clockPin, MSBFIRST, random(256));
 
+   //and ground 
+   int vGround = random(256);
+   while (vGround == 0){
+      vGround = random(256);
+   }
+
    //take the latch pin high so the LEDs will light up:
    digitalWrite(latchPin, HIGH);
 
@@ -108,16 +114,20 @@ void loop()
    //light up
    for (int i =0; i < vMax; i += vStep){
       for (int j =1; j <= 8; j++){
-         Tlc.set(j, i);
+         if ((vGround & (j-1)) != 0){
+            Tlc.set(j, i);
+         }
       }
       Tlc.update();
       delay (vDelay);
    }
-   
+
    //light down
    for (int i =vMax; i > 0; i -= vStep){
       for (int j =1; j <= 8; j++){
-         Tlc.set(j, i);
+         if ((vGround & (j-1)) != 0){
+            Tlc.set(j, i);
+         }
       }
       Tlc.update();
       delay (vDelay);
@@ -132,6 +142,7 @@ void loop()
    //wait a little before next round
    delay (500 * random(10) + 1000);
 }
+
 
 
 
