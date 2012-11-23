@@ -3,6 +3,7 @@
 #include "DS3231.h"
 #include "WordclockLeds.h"
 #include "WordclockLayouts.h"
+#include "WordclockTinyNumitron.h"
 
 //DS3234.h requires this to be in the main .ino file.
 #include "SPI.h"
@@ -12,24 +13,29 @@
 #include "EEPROM.h"
 
 #define BUTTON_ANALOG_PIN 2
-#define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_Korea3(p)
-#define DRAW_MATRIX_FUNC() drawLedMatrix()
-#define SETUP_MATRIX() setupLedMatrix()
-#define SETUP_RTC(p) setupDS3234(p)
+#define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_TinyNumitronIV16(p)
+#define DRAW_MATRIX_FUNC() drawLedMatrix_TinyNumitron7seg()
+#define SETUP_MATRIX() setupTinyNumitron7seg()
+#define SETUP_RTC(p) setupDS3231(p)
+
+//Uncomment one of the two to indicate which RTC you use
+#define RTC_DS3231
+//#define RTC_DS3234
+
 
 void setup() {
    SETUP_MATRIX();
-   
-   SETUP_RTC(false);
-/*
-   //do this init just once, to make sure there is something "coherent" in the RTC
-   if (EEPROM.read(1) != 1) {
-      setControlRegisters();
-      setDateDS3231();
 
-      EEPROM.write(1, 1); 
-   }
-*/
+   SETUP_RTC(false);
+   /*
+   //do this init just once, to make sure there is something "coherent" in the RTC
+    if (EEPROM.read(1) != 1) {
+    setControlRegisters();
+    setDateDS3231();
+    
+    EEPROM.write(1, 1); 
+    }
+    */
 
 }
 
@@ -41,32 +47,33 @@ void loop() {
    //second,minute,hour,null,day,month,year
    int vTimeArray[7];
 
-/*
+#ifdef RTC_DS3231
    Date3231 vD3231;
    getDateDS3231(vD3231);
-   
+
    //ReadTime(vDate);
    vTimeArray[0] = vD3231.second;
    vTimeArray[1] = vD3231.minute;
    vTimeArray[2] = vD3231.hour;
-*/
-   //man I really have to rewrite this thing... sorry, I need a DS3231 under my hand to check I ain't break everyhting
-   Date vD;
-   ReadTime(vD);
-   vTimeArray[0] = vD.second;
-   vTimeArray[1] = vD.minute;
-   vTimeArray[2] = vD.hour;
-   
-   
+#endif //RTC_DS3231
+#ifdef RTC_DS3234
+    Date vD;
+    ReadTime(vD);
+    vTimeArray[0] = vD.second;
+    vTimeArray[1] = vD.minute;
+    vTimeArray[2] = vD.hour;
+#endif //RTC_DS3234
+
    //Uncomment the following line for a demo mode with fast time
-   ReadTimeArray_Fake(&vTimeArray[0], 10);
+   //ReadTimeArray_Fake(&vTimeArray[0], 10);
 
    //Draw the in-memory matrix (change constant at the top of the file)
    MAP_MATRIX_MFUNC(vTimeArray);
 
+
    //Draw the matrix in memory on the leds
    DRAW_MATRIX_FUNC();
-   
+
    //a little rest
    delay(5);
 }
@@ -135,10 +142,10 @@ void checkButtonTimeSet(){
 
          //Draw the in-memory matrix (change constant at the top of the file)
          MAP_MATRIX_MFUNC(vTimeArray);
-      
+
          //Draw the matrix in memory on the leds
          DRAW_MATRIX_FUNC();
-   
+
          //a little rest longer than usual that will "blink"
          delay(50);
       }
@@ -151,6 +158,7 @@ boolean readButtonPressed (int pMidValue, int pTolerance){
    return vVal <= pMidValue + pTolerance 
       && vVal >= pMidValue - pTolerance;
 }
+
 
 
 
