@@ -1,32 +1,58 @@
+/********************************************************************************
+**
+** Wordclock by AlanFromJapan
+** http://kalshagar.wikispaces.com/WordClock
+**
+********************************************************************************/
+
+
+
+/********************************************************************************
+**
+** Choose which display to use
+** (must be before the includes because the #define is used in the .h)
+**
+********************************************************************************/
+//#define USE_DISPLAY_NUMITRON
+//#define USE_DISPLAY_KOREA3
+//#define USE_DISPLAY_LAFRANCE1
+//#define USE_DISPLAY_JAPANESE1
+//#define USE_DISPLAY_THEORIGINAL
+#define USE_DISPLAY_BCD1
+
+//Uncomment one of the two to indicate which RTC you use
+//#define RTC_DS3231
+#define RTC_DS3234
+
+
+//List of includes
 #include "DS3234.h"
-#include "WordclockShared.h"
 #include "DS3231.h"
+#include "WordclockShared.h"
 #include "WordclockLeds.h"
 #include "WordclockLayouts.h"
 #include "WordclockTinyNumitron.h"
+#include "EEPROM.h"
 
 //DS3234.h requires this to be in the main .ino file.
 #include "SPI.h"
 //DS3231.h requires this to be in the main .ino file.
 #include "Wire.h"
 
-#include "EEPROM.h"
 
-#define BUTTON_ANALOG_PIN 2
-#define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_TinyNumitronIV16(p)
-#define DRAW_MATRIX_FUNC() drawLedMatrix_TinyNumitron7seg()
-#define SETUP_MATRIX() setupTinyNumitron7seg()
-#define SETUP_RTC(p) setupDS3231(p)
-
-//Uncomment one of the two to indicate which RTC you use
-#define RTC_DS3231
-//#define RTC_DS3234
 
 
 void setup() {
    SETUP_MATRIX();
 
-   SETUP_RTC(false);
+#ifdef RTC_DS3231
+   setupDS3231(false);
+#endif //RTC_DS3231
+
+#ifdef RTC_DS3234
+   setupDS3234(false);
+#endif //RTC_DS3234
+
    /*
    //do this init just once, to make sure there is something "coherent" in the RTC
     if (EEPROM.read(1) != 1) {

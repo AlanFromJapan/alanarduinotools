@@ -3,6 +3,13 @@
 #ifndef __WordclockTinyNumitron_h__
 #define __WordclockTinyNumitron_h__
 
+#ifdef  USE_DISPLAY_NUMITRON
+   #define BUTTON_ANALOG_PIN 2
+   #define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_TinyNumitronIV16(p)
+   #define DRAW_MATRIX_FUNC() drawLedMatrix_TinyNumitron7seg()
+   #define SETUP_MATRIX() setupTinyNumitron7seg()
+#endif
+
 //Pin connected to ST_CP of 74HC595
 int latchPin = 7;
 //Pin connected to SH_CP of 74HC595
@@ -30,6 +37,10 @@ uint8_t DIGITS[] = {
    DIGIT5, DIGIT6, DIGIT7, DIGIT8, DIGIT9 };
 
 
+//animation requires fast update
+boolean mFastPace = false;
+unsigned int mAnimationCounter = 0;
+
 void setupTinyNumitron7seg() {
   //set pins to output so you can control the shift register
   pinMode(latchPin, OUTPUT);
@@ -39,63 +50,56 @@ void setupTinyNumitron7seg() {
 
 void drawLedMatrix_TinyNumitron7seg() {
    //basically override the "default version". do nothing for some time and the refresh
-   delay(3000);
+   if (mFastPace){
+      delay (max((int)100 - (int)mAnimationCounter, (int)5));
+   }
+   else {
+      delay(1000);
+   }
 }
 
 //Expects second,minute,hour,null,day,month,year
 //This version is the "Tiny Numitron IV16 x4 hh mm" layout
 void MapTimeInLedMatrix_TinyNumitronIV16(int pTimeArray[]){
+
+   //every hour and half-hour, animation for 10 seconds   
+   if ((pTimeArray[1] == 0 || pTimeArray[1] == 30) && pTimeArray[0] < 10) {
+//   if (pTimeArray[0] < 10 || (pTimeArray[0] > 30 && pTimeArray[0] < 40)) {
+      if (!mFastPace){
+         mFastPace = true;
+         mAnimationCounter = 0;
+      }
+   }  
+   else {
+      mFastPace = false;
+   }
    
-    digitalWrite(latchPin, LOW);
+   int vSeconds = mAnimationCounter++;//pTimeArray[0];
+   
+   digitalWrite(latchPin, LOW);
     
    //Minutes
    //units
-   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pTimeArray[1] % 10]);
+   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pTimeArray[1] % 10] | (mFastPace && vSeconds % 4 == 0? 0b10000000 : 0x00));
    //tens
-   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pTimeArray[1] / 10]);
+   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pTimeArray[1] / 10] | (mFastPace && vSeconds % 4 == 1? 0b10000000 : 0x00));
 
    //Hours
    //units
-   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pTimeArray[2] % 10]);
+   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pTimeArray[2] % 10] | (mFastPace && vSeconds % 4 == 2? 0b10000000 : 0x00));
    //tens
    //if less than 10 turn the tens digit off for hours
    if (pTimeArray[2] < 10){
       shiftOut(dataPin, clockPin, MSBFIRST, DIGIT_OFF);
    }
    else {
-      shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pTimeArray[2] / 10]);
+      shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pTimeArray[2] / 10] | (mFastPace && vSeconds % 4 == 3? 0b10000000 : 0x00));
    }
    
    
     digitalWrite(latchPin, HIGH);
 }
 
-void loop9999(){
-   boolean vLight = false;
-   
-   for (int i = 0; i < 10000; i++){
-    // take the latchPin low so 
-    // the LEDs don't change while you're sending in bits:
-    digitalWrite(latchPin, LOW);
-    // shift out the bits:
-    //units
-    shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[i % 10]             | ( vLight && (i / 10) % 4 == 0 ? 0b10000000 : 0x00));  
-    
-    // shift out the bits:
-    //tens
-    shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[(i / 10) % 10]      | ( vLight && (i / 10) % 4 == 1 ? 0b10000000 : 0x00));  
-    //hundreds
-    shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[(i / 100) % 10]     | ( vLight && (i / 10) % 4 == 2 ? 0b10000000 : 0x00));  
-    //thousands
-    shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[(i / 1000) % 10]    | ( vLight && (i / 10) % 4 == 3 ? 0b10000000 : 0x00));   
-
-    //take the latch pin high so the LEDs will light up:
-    digitalWrite(latchPin, HIGH);
-    // pause before next value:
-    delay(1000);
-    
-   }
-}
 
 #endif //__WordclockTinyNumitron_h__
 
