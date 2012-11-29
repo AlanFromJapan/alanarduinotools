@@ -514,6 +514,124 @@ void MapTimeInLedMatrix_Korea3(int pTimeArray[]){
 }
 
 
+#ifdef  USE_DISPLAY_WINDMILL
+   #define BUTTON_ANALOG_PIN 2
+   #define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_Windmill(p)
+   #define DRAW_MATRIX_FUNC() ;
+   #define SETUP_MATRIX() setupLedMatrix()
+#endif
+int mWindmillPulse = 10;
+int mWindmillPulseDelta = 1;
+//Draws the time in the matrix. Here you implement YOUR version of the design.
+//Expects second,minute,hour,null,day,month,year
+//This version is the "Windmill" layout
+void MapTimeInLedMatrix_Windmill(int pTimeArray[]){
+   resetLedMatrix();
+
+   /*
+   Windmill (5 minutes rounded, center is pulse)
+    55 05 06 07 08
+    50 04 00 05 09
+    45 03 xx 10 10
+    40 02 01 15 11
+    35 30 25 20 12
+    */
+
+   //row, col, value
+   //setCell (0, 4, true);
+
+   //Hours
+   int vHour = pTimeArray[2] % 12;
+   if (vHour == 0) {
+      vHour = 12;
+   }
+   
+   if (vHour >= 1) setCell(3,2,true);
+   if (vHour >= 2) setCell(3,1,true);
+   if (vHour >= 3) setCell(2,1,true);
+   if (vHour >= 4) setCell(1,1,true);
+   if (vHour >= 5) setCell(0,1,true);
+   if (vHour >= 6) setCell(0,2,true);
+   if (vHour >= 7) setCell(0,3,true);
+   if (vHour >= 8) setCell(0,4,true);
+   if (vHour >= 9) setCell(1,4,true);
+   if (vHour >= 10) setCell(2,4,true);
+   if (vHour >= 11) setCell(3,4,true);
+   if (vHour >= 12) setCell(4,4,true);
+   
+   //Minutes
+   int vMinutes = pTimeArray[1] / 5;
+   
+   if (vMinutes >= 0) setCell(1,2,true);
+   if (vMinutes >= 1) setCell(1,3,true);
+   if (vMinutes >= 2) setCell(2,3,true);
+   if (vMinutes >= 3) setCell(3,3,true);
+   if (vMinutes >= 4) setCell(4,3,true);
+   if (vMinutes >= 5) setCell(4,2,true);
+   if (vMinutes >= 6) setCell(4,1,true);
+   if (vMinutes >= 7) setCell(4,0,true);
+   if (vMinutes >= 8) setCell(3,0,true);
+   if (vMinutes >= 9) setCell(2,0,true);
+   if (vMinutes >= 10) setCell(1,0,true);
+   if (vMinutes >= 11) setCell(0,0,true);
+   
+   //center pulse is always on
+   setCell(2,2,true);
+   
+   //Drawing : rewritten here because it's complex (nothing instead of drawLedMatrix())
+   //Reason is my white (hours) leds are too bright so I need different POV timing for minutes or hours
+   //Any other led would make it just fine ...
+      
+   //COLUMNS are NEGATIVE side, so turn them off by putting them all HIGH
+   //My bad : the pinds are reversed ordered but that was easier to wire...
+   for (int i=WCLK_COL1; i> WCLK_COL1 - WCLK_MATRIX_SIZE; i--){
+      digitalWrite(i, HIGH);
+   } 
+
+   //this does NOT run in constant time because we only turns led on, those off are already off so they are skipped.
+   //side effect: the more there is led on, the slower it is to draw it.
+   for (int r=0; r < WCLK_MATRIX_SIZE; r++){
+      for (int c=0; c < WCLK_MATRIX_SIZE; c++){
+         if (0 != (WCLK_LED_MATRIX[r] & (1 << c))){
+            //turn the led on
+            digitalWrite(r + WCLK_ROWA, HIGH);
+            digitalWrite(WCLK_COL1- c, LOW); //minus because reverse order
+
+            //POV
+            if (c == 4
+               || (r == 0 && c >= 1)
+               || (c == 1 && r <= 3)
+               || (c == 2 && r == 3)){
+               //Hours POV
+               delayMicroseconds(10);
+            }
+            else {
+               if (c == 2 && r == 2){
+                  //Pulse middle
+                  delayMicroseconds(mWindmillPulse*2);
+                  mWindmillPulse += mWindmillPulseDelta;
+                  if (mWindmillPulse >= 250 || mWindmillPulse <= 1){
+                     mWindmillPulseDelta = -mWindmillPulseDelta;
+                  }
+               }
+               else {
+                  //Minutes POV
+                  delayMicroseconds(250);            
+               }
+            }
+               
+            
+
+            //reverse the pins HIGH/LOW status to turn it off
+            digitalWrite(r + WCLK_ROWA, LOW);
+            digitalWrite(WCLK_COL1- c, HIGH); //minus because reverse order
+         }
+      }   
+   }
+
+}
+
+
 #endif //__WordclockLayouts_h__
 
 
