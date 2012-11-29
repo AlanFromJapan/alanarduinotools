@@ -522,6 +522,8 @@ void MapTimeInLedMatrix_Korea3(int pTimeArray[]){
 #endif
 int mWindmillPulse = 10;
 int mWindmillPulseDelta = 1;
+#define WINDMILL_MAXPULSE 500
+#define WINDMILL_MINPULSE 200
 //Draws the time in the matrix. Here you implement YOUR version of the design.
 //Expects second,minute,hour,null,day,month,year
 //This version is the "Windmill" layout
@@ -608,9 +610,21 @@ void MapTimeInLedMatrix_Windmill(int pTimeArray[]){
             else {
                if (c == 2 && r == 2){
                   //Pulse middle
-                  delayMicroseconds(mWindmillPulse*2);
+                  
+                  //inspiration from http://thecustomgeek.com/2011/06/17/breathing-sleep-led/
+                  if (mWindmillPulse < WINDMILL_MINPULSE) delayMicroseconds (1);
+                  else {
+                     int x = (mWindmillPulse - WINDMILL_MINPULSE) / 10;
+                     //the nice touch here is the square (x*x), to have a feeling of acceleration
+                     x = x * x * 10 + 1;
+                     delayMicroseconds(x);
+                  }
+                  
+                  //simple version, just go back and forth
+                  //delayMicroseconds(mWindmillPulse*2);
+                  
                   mWindmillPulse += mWindmillPulseDelta;
-                  if (mWindmillPulse >= 250 || mWindmillPulse <= 1){
+                  if (mWindmillPulse >= WINDMILL_MAXPULSE || mWindmillPulse <= 1){
                      mWindmillPulseDelta = -mWindmillPulseDelta;
                   }
                }
