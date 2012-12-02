@@ -13,17 +13,17 @@
 ** (must be before the includes because the #define is used in the .h)
 **
 ********************************************************************************/
-//#define USE_DISPLAY_NUMITRON
+#define USE_DISPLAY_NUMITRON
 //#define USE_DISPLAY_KOREA3
 //#define USE_DISPLAY_LAFRANCE1
 //#define USE_DISPLAY_JAPANESE1
 //#define USE_DISPLAY_THEORIGINAL
 //#define USE_DISPLAY_BCD1
-#define USE_DISPLAY_WINDMILL
+//#define USE_DISPLAY_WINDMILL
 
 //Uncomment one of the two to indicate which RTC you use
-//#define RTC_DS3231
-#define RTC_DS3234
+#define RTC_DS3231
+//#define RTC_DS3234
 
 
 //List of includes
@@ -92,7 +92,7 @@ void loop() {
 #endif //RTC_DS3234
 
    //Uncomment the following line for a demo mode with fast time
-   ReadTimeArray_Fake(&vTimeArray[0], 10);
+   //ReadTimeArray_Fake(&vTimeArray[0], 10);
 
    //Draw the in-memory matrix (change constant at the top of the file)
    MAP_MATRIX_MFUNC(vTimeArray);
