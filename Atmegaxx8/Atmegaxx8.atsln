@@ -6,6 +6,8 @@ Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "BalconyMeter", "BalconyMete
 EndProject
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "Rapide7seg_Test", "Rapide7seg_Test\Rapide7seg_Test.cproj", "{A882311E-91DF-4895-9D19-A930C9D3522E}"
 EndProject
+Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "WhatAWatt", "WhatAWatt\WhatAWatt.cppproj", "{986904D2-7EA1-41A0-A831-295E6DF38990}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -24,6 +26,10 @@ Global
 		{A882311E-91DF-4895-9D19-A930C9D3522E}.Debug|AVR.Build.0 = Debug|AVR
 		{A882311E-91DF-4895-9D19-A930C9D3522E}.Release|AVR.ActiveCfg = Release|AVR
 		{A882311E-91DF-4895-9D19-A930C9D3522E}.Release|AVR.Build.0 = Release|AVR
+		{986904D2-7EA1-41A0-A831-295E6DF38990}.Debug|AVR.ActiveCfg = Debug|AVR
+		{986904D2-7EA1-41A0-A831-295E6DF38990}.Debug|AVR.Build.0 = Debug|AVR
+		{986904D2-7EA1-41A0-A831-295E6DF38990}.Release|AVR.ActiveCfg = Release|AVR
+		{986904D2-7EA1-41A0-A831-295E6DF38990}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
