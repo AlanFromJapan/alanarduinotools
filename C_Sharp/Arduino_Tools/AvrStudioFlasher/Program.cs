@@ -10,6 +10,7 @@ using System.Diagnostics;
 namespace AvrStudioFlasher {
     class Program {
         public const string HEX_FLASH_FILE_PATH = "HEX_FLASH_FILE_PATH";
+        public const string OUTPUT_FILE_PATH = "OUTPUT_FILE_PATH +=";
 
         private static readonly Regex REGEX_MCU = new Regex(@"-mmcu=(?<mcutype>[^ ]+)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
@@ -72,7 +73,45 @@ namespace AvrStudioFlasher {
         }
 
         private static UploadInfo ReadMakefile(string pPath) {
+            string vAVRStudioVersion = ConfigurationManager.AppSettings["AVRStudioVersion"];
+
+            switch (vAVRStudioVersion) { 
+                case "5":
+                    return ReadMakefile5(pPath);
+                case "6":
+                    return ReadMakefile6(pPath);
+            }
+
+            throw new Exception("Unknown AVR Studio version : " + vAVRStudioVersion);
+        }
+
+        /// <summary>
+        /// Common job for settingup the UploadInfo
+        /// </summary>
+        /// <param name="pPath"></param>
+        /// <returns></returns>
+        private static UploadInfo ReadMakefileCommon() {
             UploadInfo vInfo = new UploadInfo();
+
+            vInfo.mCOMPort = ConfigurationManager.AppSettings["COMport"];
+            vInfo.mParams = ConfigurationManager.AppSettings["Params"];
+            vInfo.mUploader = ConfigurationManager.AppSettings["UploaderExe"];
+            vInfo.mProgrammerProtocol = ConfigurationManager.AppSettings["ProgrammerProtocol"];
+
+            return vInfo;
+ 
+        }
+
+
+
+        /// <summary>
+        /// Reads the file for a makefile done by AVR Studio 6
+        /// </summary>
+        /// <param name="pPath"></param>
+        /// <returns></returns>
+        private static UploadInfo ReadMakefile6(string pPath) {
+            UploadInfo vInfo = ReadMakefileCommon();
+
             string vPath = pPath;
             if (!vPath.EndsWith("makefile", StringComparison.InvariantCultureIgnoreCase)) {
                 vPath = Path.Combine(vPath, "makefile");
@@ -82,7 +121,61 @@ namespace AvrStudioFlasher {
                 //second chance, search in bin\debug
                 vPath = Path.Combine(
                     Path.GetDirectoryName(vPath),
-                    @"debug\makefile"); 
+                    @"debug\makefile");
+
+                if (!File.Exists(vPath)) {
+                    throw new FileNotFoundException("Missing makefile : " + vPath);
+                }
+            }
+            vInfo.mMakefilePath = vPath;
+
+            using (StreamReader vSR = new StreamReader(new FileStream(vPath, FileMode.Open, FileAccess.Read, FileShare.Read))) {
+                string vLine = null;
+                while ((vLine = vSR.ReadLine()) != null) {
+
+                    if (string.IsNullOrEmpty(vInfo.mHexFilepath) && vLine.StartsWith(OUTPUT_FILE_PATH)) {
+                        //OUTPUT_FILE_PATH +=Blink.elf
+                        //get the .elf name
+                        string vElfName = vLine.Substring(vLine.LastIndexOf("=") + 1).Trim();
+                        //make it a .hex name
+                        string vHexfile = Path.GetFileNameWithoutExtension(vElfName) + ".hex";
+
+                        if (!string.IsNullOrEmpty(vHexfile)) {
+                            vInfo.mHexFilepath = Path.Combine(Path.GetDirectoryName(vPath), vHexfile);
+                        }
+                    }
+
+                    if (vInfo.mMCU == null && REGEX_MCU.IsMatch(vLine)) {
+                        //... -std=gnu99  -mmcu=attiny13a   -MD ...
+                        //get the mcu type
+                        vInfo.mMCU = REGEX_MCU.Match(vLine).Result("${mcutype}");
+                    }
+                }
+            }
+
+
+            return vInfo;
+        }
+
+
+        /// <summary>
+        /// Reads the file for a makefile done by AVR Studio 5
+        /// </summary>
+        /// <param name="pPath"></param>
+        /// <returns></returns>
+        private static UploadInfo ReadMakefile5(string pPath) {
+            UploadInfo vInfo = ReadMakefileCommon();
+
+            string vPath = pPath;
+            if (!vPath.EndsWith("makefile", StringComparison.InvariantCultureIgnoreCase)) {
+                vPath = Path.Combine(vPath, "makefile");
+            }
+
+            if (!File.Exists(vPath)) {
+                //second chance, search in bin\debug
+                vPath = Path.Combine(
+                    Path.GetDirectoryName(vPath),
+                    @"debug\makefile");
 
                 if (!File.Exists(vPath)) {
                     throw new FileNotFoundException("Missing makefile : " + vPath);
@@ -112,10 +205,6 @@ namespace AvrStudioFlasher {
                 }
             }
 
-            vInfo.mCOMPort = ConfigurationManager.AppSettings["COMport"];
-            vInfo.mParams = ConfigurationManager.AppSettings["Params"];
-            vInfo.mUploader = ConfigurationManager.AppSettings["UploaderExe"];
-            vInfo.mProgrammerProtocol = ConfigurationManager.AppSettings["ProgrammerProtocol"];
 
             return vInfo;
         }
