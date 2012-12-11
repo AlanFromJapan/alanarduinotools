@@ -13,6 +13,7 @@
 #define RAPIDE7SEG_H_
 
 
+#define DIGIT_OFF	0b11111111
 #define DIGIT_DOT	0b01111111
 #define DIGIT_0		0b11000000
 #define DIGIT_1		0b11111001
@@ -83,7 +84,7 @@ void showDisplayTab(uint8_t pFromLeft, uint8_t pToRight){
 	}
 }
 
-#define POV_ITERATIONS 10
+#define POV_ITERATIONS 50
 void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight){
 	//display on the 3 leftmost digits
 	mDisplayTab[3] = DIGITS[pNumber % (uint16_t)10];
