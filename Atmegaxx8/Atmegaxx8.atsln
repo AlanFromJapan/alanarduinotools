@@ -1,0 +1,31 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "Blink", "Blink\Blink.cproj", "{35ABFC48-88AE-4017-9687-94D3954D3A67}"
+EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "BalconyMeter", "BalconyMeter\BalconyMeter.cproj", "{D88046A8-F000-46AC-BA3F-6191B06C11C6}"
+EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "Rapide7seg_Test", "Rapide7seg_Test\Rapide7seg_Test.cproj", "{A882311E-91DF-4895-9D19-A930C9D3522E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{35ABFC48-88AE-4017-9687-94D3954D3A67}.Debug|AVR.ActiveCfg = Debug|AVR
+		{35ABFC48-88AE-4017-9687-94D3954D3A67}.Debug|AVR.Build.0 = Debug|AVR
+		{35ABFC48-88AE-4017-9687-94D3954D3A67}.Release|AVR.ActiveCfg = Release|AVR
+		{35ABFC48-88AE-4017-9687-94D3954D3A67}.Release|AVR.Build.0 = Release|AVR
+		{D88046A8-F000-46AC-BA3F-6191B06C11C6}.Debug|AVR.ActiveCfg = Debug|AVR
+		{D88046A8-F000-46AC-BA3F-6191B06C11C6}.Debug|AVR.Build.0 = Debug|AVR
+		{D88046A8-F000-46AC-BA3F-6191B06C11C6}.Release|AVR.ActiveCfg = Release|AVR
+		{D88046A8-F000-46AC-BA3F-6191B06C11C6}.Release|AVR.Build.0 = Release|AVR
+		{A882311E-91DF-4895-9D19-A930C9D3522E}.Debug|AVR.ActiveCfg = Debug|AVR
+		{A882311E-91DF-4895-9D19-A930C9D3522E}.Debug|AVR.Build.0 = Debug|AVR
+		{A882311E-91DF-4895-9D19-A930C9D3522E}.Release|AVR.ActiveCfg = Release|AVR
+		{A882311E-91DF-4895-9D19-A930C9D3522E}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
