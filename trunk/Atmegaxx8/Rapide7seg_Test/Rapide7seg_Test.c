@@ -52,6 +52,8 @@ uint8_t mDisplayTab[4];
 
 
 #define POV_DURATION 5
+//Shows the in-memory table of 4 7segs
+//Says from which to start and till which to go (0= leftmost, 3= rightmost)
 void showDisplayTab(uint8_t pFromLeft, uint8_t pToRight){
 	if (pFromLeft <= 0 && pToRight >= 0){
 		PORTD = mDisplayTab[0];
@@ -78,6 +80,19 @@ void showDisplayTab(uint8_t pFromLeft, uint8_t pToRight){
 	}
 }
 
+#define POV_ITERATIONS 10
+void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight){
+	//display on the 3 leftmost digits
+	mDisplayTab[3] = DIGITS[pNumber % (uint16_t)10];
+	mDisplayTab[2] = DIGITS[(pNumber / (uint16_t)10) % (uint16_t)10];
+	mDisplayTab[1] = DIGITS[(pNumber / (uint16_t)100) % (uint16_t)10];
+	mDisplayTab[0] = DIGITS[(pNumber / (uint16_t)1000) % (uint16_t)10];
+			
+	for (uint16_t vPOV = 0; vPOV < POV_ITERATIONS; vPOV++){
+		showDisplayTab(pFromLeft,pToRight);
+	}	
+}
+
 int main(void)
 {
 	//factory settings is to divide internal clock 8MHz by 8.
@@ -97,7 +112,7 @@ int main(void)
 	
 	while(1)
 	{
-		/*
+		/* 
 		for (uint8_t i= 0; i < (uint8_t)4; i++){
 			
 			PORTD = DIGIT_9;
@@ -115,18 +130,24 @@ int main(void)
 			}
 		}
 		*/
-
+/*
 		for (uint16_t vNumber = 0; vNumber < 1000; vNumber++){
+			uint16_t vVal = vNumber * 10;
+			
 			//display on the 3 leftmost digits
-			mDisplayTab[3] = DIGITS[vNumber % (uint16_t)10];
-			mDisplayTab[2] = DIGITS[(vNumber / (uint16_t)10) % (uint16_t)10];
-			mDisplayTab[1] = DIGITS[(vNumber / (uint16_t)100) % (uint16_t)10];
-			mDisplayTab[0] = DIGITS[(vNumber / (uint16_t)1000) % (uint16_t)10];
+			mDisplayTab[3] = DIGITS[vVal % (uint16_t)10];
+			mDisplayTab[2] = DIGITS[(vVal / (uint16_t)10) % (uint16_t)10];
+			mDisplayTab[1] = DIGITS[(vVal / (uint16_t)100) % (uint16_t)10];
+			mDisplayTab[0] = DIGITS[(vVal / (uint16_t)1000) % (uint16_t)10];
 			
 			for (uint16_t vPOV = 0; vPOV < 10; vPOV++){
 				showDisplayTab(0,2);
 			}
-			
+		}
+*/		
+		for (uint16_t vNumber = 0; vNumber < 1000; vNumber++){
+			uint16_t vVal = vNumber * 10;
+			showNumber(vVal, 0, 2);
 		}
 	}
 }
