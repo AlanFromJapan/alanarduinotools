@@ -55,42 +55,50 @@ uint8_t DIGITS[] = {
 uint8_t mDisplayTab[4];
 
 
-#define POV_DURATION 5
+#define POV_DURATION_US 500
 //Shows the in-memory table of 4 7segs
 //Says from which to start and till which to go (0= leftmost, 3= rightmost)
 void showDisplayTab(uint8_t pFromLeft, uint8_t pToRight){
 	if (pFromLeft <= 0 && pToRight >= 0){
 		PORTD = mDisplayTab[0];
 		PORTC = 0x01;
-		_delay_ms(POV_DURATION);
+		_delay_us(POV_DURATION_US);
 	}
 
 	if (pFromLeft <= 1 && pToRight >= 1){
 		PORTD = mDisplayTab[1];
 		PORTC = 0x02;
-		_delay_ms(POV_DURATION);
+		_delay_us(POV_DURATION_US);
 	}
 	
 	if (pFromLeft <= 2 && pToRight >= 2){
 		PORTD = mDisplayTab[2];
 		PORTC = 0x04;
-		_delay_ms(POV_DURATION);
+		_delay_us(POV_DURATION_US);
 	}
 
 	if (pFromLeft <= 3 && pToRight >= 3){
 		PORTD = mDisplayTab[3];
 		PORTC = 0x08;
-		_delay_ms(POV_DURATION);
+		_delay_us(POV_DURATION_US);
 	}
 }
 
-#define POV_ITERATIONS 50
-void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight){
+#define POV_ITERATIONS 25
+void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight, bool pShowLeadingZeros){
 	//display on the 3 leftmost digits
-	mDisplayTab[3] = DIGITS[pNumber % (uint16_t)10];
-	mDisplayTab[2] = DIGITS[(pNumber / (uint16_t)10) % (uint16_t)10];
-	mDisplayTab[1] = DIGITS[(pNumber / (uint16_t)100) % (uint16_t)10];
 	mDisplayTab[0] = DIGITS[(pNumber / (uint16_t)1000) % (uint16_t)10];
+	if (!pShowLeadingZeros && mDisplayTab[0] == DIGIT_0){
+		mDisplayTab[0] = DIGIT_OFF;
+	}
+	
+	mDisplayTab[1] = DIGITS[(pNumber / (uint16_t)100) % (uint16_t)10];
+	if (!pShowLeadingZeros && mDisplayTab[0] == DIGIT_OFF && mDisplayTab[1] == DIGIT_0){
+		mDisplayTab[1] = DIGIT_OFF;
+	}			
+	
+	mDisplayTab[2] = DIGITS[(pNumber / (uint16_t)10) % (uint16_t)10];		
+	mDisplayTab[3] = DIGITS[pNumber % (uint16_t)10];
 	
 	for (uint16_t vPOV = 0; vPOV < POV_ITERATIONS; vPOV++){
 		showDisplayTab(pFromLeft,pToRight);
