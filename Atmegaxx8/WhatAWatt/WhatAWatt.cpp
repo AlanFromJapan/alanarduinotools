@@ -45,6 +45,11 @@ void InitADC(){
 
 int main(void)
 {
+	//factory settings is to divide internal clock 8MHz by 8.
+	//don't, and just run at 8 MHz (set the clock divider to 1 so no effect)
+	CLKPR = (1<<CLKPCE);
+	CLKPR = 0; // Divide by 1
+		
 	setup7seg();
 	InitADC(); 
 	
