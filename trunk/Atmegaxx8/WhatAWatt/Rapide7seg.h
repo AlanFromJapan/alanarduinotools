@@ -98,10 +98,6 @@ void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight){
 }
 
 void setup7seg(){
-	//factory settings is to divide internal clock 8MHz by 8.
-	//don't, and just run at 8 MHz (set the clock divider to 1 so no effect)
-	CLKPR = (1<<CLKPCE);
-	CLKPR = 0; // Divide by 1
 		
 	//Driver of the common anode is from PC0 (1st 7seg) to PC3 (4th 7seg)
 	//Lower 4 go output
