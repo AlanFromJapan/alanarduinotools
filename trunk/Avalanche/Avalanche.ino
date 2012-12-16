@@ -92,10 +92,14 @@ void shiftOutX(uint8_t pR, uint8_t pG, uint8_t pB)
       uint8_t vVal = pB;
       switch (j){
          //case 0: vVal = pB; break;
-         case 1: vVal = pG; break;
-         case 2: vVal = pR; break;
+      case 1: 
+         vVal = pG; 
+         break;
+      case 2: 
+         vVal = pR; 
+         break;
       }
-      
+
       for (uint8_t i = 0; i < 8; i++)  {
          //digitalWrite(dataPin, !!(val & (1 << (7 - i))));
          if ((vVal & (1 << i)) == 0){
@@ -108,7 +112,11 @@ void shiftOutX(uint8_t pR, uint8_t pG, uint8_t pB)
          //Clock up-down
          //digitalWrite(clockPin, HIGH);
          PORTC |= 0b00100000; // ~PC5
-         delayMicroseconds(2);
+
+         //just a little time to make sure the registers have time to read
+         //asm volatile("nop\n\t"::);
+         //-> not needed, just need a few ns according datasheet, at 16MHz the CPU match the requirement even without temporization
+
          //digitalWrite(clockPin, LOW);  
          PORTC &= 0b11011111; // ~PC5          
       }
@@ -119,28 +127,28 @@ void shiftOutX(uint8_t pR, uint8_t pG, uint8_t pB)
 }
 
 void writeRGB (int pR, int pG, int pB){
-   
+
    shiftOutX(pR,pG,pB);
-/*   
-   // take the latchPin low so 
-   // the LEDs don't change while you're sending in bits:
-   digitalWrite(latchPin, LOW);
-
-   //blue
-   // shift out the bits:
-   shiftOut(dataPin, clockPin, MSBFIRST, pB);  
-
-   //green
-   // shift out the bits:
-   shiftOut(dataPin, clockPin, MSBFIRST, pG);
-
-   //red
-   // shift out the bits:
-   shiftOut(dataPin, clockPin, MSBFIRST, pR);
-
-   //take the latch pin high so the LEDs will light up:
-   digitalWrite(latchPin, HIGH);
-*/
+   /*   
+    // take the latchPin low so 
+    // the LEDs don't change while you're sending in bits:
+    digitalWrite(latchPin, LOW);
+    
+    //blue
+    // shift out the bits:
+    shiftOut(dataPin, clockPin, MSBFIRST, pB);  
+    
+    //green
+    // shift out the bits:
+    shiftOut(dataPin, clockPin, MSBFIRST, pG);
+    
+    //red
+    // shift out the bits:
+    shiftOut(dataPin, clockPin, MSBFIRST, pR);
+    
+    //take the latch pin high so the LEDs will light up:
+    digitalWrite(latchPin, HIGH);
+    */
 }
 
 /***************************************************************************************/
@@ -206,7 +214,7 @@ void allAtTheSameTime()
    Tlc.update();
 
    //wait a little before next round
-   delay (500 * random(10) + 1000);
+   delay (500 * random(8) + 500);
 }
 
 
@@ -307,7 +315,7 @@ void colorPerColor()
    Tlc.update();
 
    //wait a little before next round
-   delay (500 * random(10) + 1000);
+   delay (500 * random(10) + 500);
 }
 
 
@@ -354,25 +362,27 @@ void aLaMatrix()
          break;
       }
 
+      /*
       // take the latchPin low so 
-      // the LEDs don't change while you're sending in bits:
-      digitalWrite(latchPin, LOW);
-
-      //blue
-      // shift out the bits:
-      shiftOut(dataPin, clockPin, MSBFIRST, vBout);  
-
-      //green
-      // shift out the bits:
-      shiftOut(dataPin, clockPin, MSBFIRST, vGout);
-
-      //red
-      // shift out the bits:
-      shiftOut(dataPin, clockPin, MSBFIRST, vRout);
-
-      //take the latch pin high so the LEDs will light up:
-      digitalWrite(latchPin, HIGH);
-
+       // the LEDs don't change while you're sending in bits:
+       digitalWrite(latchPin, LOW);
+       
+       //blue
+       // shift out the bits:
+       shiftOut(dataPin, clockPin, MSBFIRST, vBout);  
+       
+       //green
+       // shift out the bits:
+       shiftOut(dataPin, clockPin, MSBFIRST, vGout);
+       
+       //red
+       // shift out the bits:
+       shiftOut(dataPin, clockPin, MSBFIRST, vRout);
+       
+       //take the latch pin high so the LEDs will light up:
+       digitalWrite(latchPin, HIGH);
+       */
+      writeRGB(vRout, vGout, vBout);
 
 
       //light up
@@ -403,7 +413,7 @@ void aLaMatrix()
    Tlc.update();
 
    //wait a little before next round
-   delay (500 * random(10) + 1000);
+   delay (500 * random(8) + 500);
 }
 
 
@@ -432,11 +442,12 @@ void oneCell()
    //light up
    for (int j =1; j <= 8; j++){
       for (int i =0; i < vMax; i += vStep){
+         /*
          writeRGB(0, 0x40, 0);
-         Tlc.set(j, i);
-         Tlc.update();
-         delay (vDelay);
-
+          Tlc.set(j, i);
+          Tlc.update();
+          delay (vDelay);
+          */
 
          writeRGB(0x40, 0, 0);
          Tlc.set(j, i);
@@ -474,25 +485,133 @@ void oneCell()
    delay (1000);
 }
 
+
+
+/***************************************************************************************/
+/***  Fade in/fade out a few leds, one by one                                        ***/
+/***************************************************************************************/
+void blingBling1()
+{
+
+   int vStep = 5 + random(25);
+   int vDelay = 4;
+   int vMax = 3000; //4095
+   uint8_t vLedsMax = 3 + random(15);
+
+   //light a few leds
+   for (uint8_t vLeds = 0; vLeds < vLedsMax; vLeds++){
+      uint8_t vR, vG, vB;
+      vR = random(2);
+      vG = random(2);
+      vB = random(2);
+
+      uint8_t vCol, vRow, vGnd, vGnd2;
+      vGnd = random(8);
+      vGnd2 = random(8);
+      vCol = 1 << random(8);
+      vRow = 1 << random(8);
+
+
+      //light up
+      for (int i =0; i < vMax; i += vStep){
+
+         if (vR != 0) {
+            writeRGB(vRow, 0, 0);
+            Tlc.set(1 + vGnd, i);
+            Tlc.set(1 + vGnd2, i);
+            Tlc.update();
+            delay (vDelay);
+         }
+
+         if (vG != 0) {
+            writeRGB(0, vRow, 0);
+            Tlc.set(1 + vGnd, i);
+            Tlc.set(1 + vGnd2, i);
+            Tlc.update();
+            delay (vDelay);
+         }
+
+         if (vB != 0) {
+            writeRGB(0, 0, vCol);
+            Tlc.set(1 + vGnd, i);
+            Tlc.set(1 + vGnd2, i);
+            Tlc.update();
+            delay (vDelay);
+         }
+      }
+
+      //light down
+      for (int i = vMax; i > 0; i -= vStep){
+
+         if (vR != 0) {
+            writeRGB(vRow, 0, 0);
+            Tlc.set(1 + vGnd, i);
+            Tlc.set(1 + vGnd2, i);
+            Tlc.update();
+            delay (vDelay);
+         }
+
+         if (vG != 0) {
+            writeRGB(0, vRow, 0);
+            Tlc.set(1 + vGnd, i);
+            Tlc.set(1 + vGnd2, i);
+            Tlc.update();
+            delay (vDelay);
+         }
+
+         if (vB != 0) {
+            writeRGB(0, 0, vCol);
+            Tlc.set(1 + vGnd, i);
+            Tlc.set(1 + vGnd2, i);
+            Tlc.update();
+            delay (vDelay);
+         }
+      }
+   }
+
+
+   //Zero
+   for (int j =1; j <= 8; j++){
+      Tlc.set(j, 0);
+   }
+   Tlc.update();
+
+   //wait a little before next round
+   delay (1000);
+}
+
+
 /***************************************************************************************/
 /***************************************************************************************/
 void loop()
 {
-   oneCell();
-   /*
-   int vPattern = random (2);
-    switch(vPattern){
-    case 0:
-    allAtTheSameTime();
-    break;
-    case 1:
-    colorPerColor();
-    break;
-    
-    }
-    */
+
+   int vPattern = random (4);
+   switch(vPattern){
+   case 0:
+      allAtTheSameTime();
+      break;
+   case 1:
+      colorPerColor();
+      break;
+   case 2:
+      blingBling1();
+      break;
+   case 3:
+      aLaMatrix();
+      break;
+
+   }
+
 
 }
+
+
+
+
+
+
+
 
 
 
