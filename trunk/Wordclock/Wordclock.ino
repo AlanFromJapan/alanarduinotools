@@ -13,17 +13,17 @@
 ** (must be before the includes because the #define is used in the .h)
 **
 ********************************************************************************/
-#define USE_DISPLAY_NUMITRON
+//#define USE_DISPLAY_NUMITRON
 //#define USE_DISPLAY_KOREA3
 //#define USE_DISPLAY_LAFRANCE1
 //#define USE_DISPLAY_JAPANESE1
 //#define USE_DISPLAY_THEORIGINAL
 //#define USE_DISPLAY_BCD1
-//#define USE_DISPLAY_WINDMILL
+#define USE_DISPLAY_WINDMILL
 
 //Uncomment one of the two to indicate which RTC you use
-#define RTC_DS3231
-//#define RTC_DS3234
+//#define RTC_DS3231
+#define RTC_DS3234
 
 
 //List of includes
@@ -54,15 +54,22 @@ void setup() {
    setupDS3234(false);
 #endif //RTC_DS3234
 
-   /*
+   
    //do this init just once, to make sure there is something "coherent" in the RTC
     if (EEPROM.read(1) != 1) {
+
+#ifdef RTC_DS3231      
     setControlRegisters();
     setDateDS3231();
-    
+#endif 
+
+#ifdef RTC_DS3234
+   SetTimeDate(16,12,2012,13,23,30);
+#endif //RTC_DS3234
+
     EEPROM.write(1, 1); 
     }
-    */
+
 
 }
 
@@ -120,7 +127,7 @@ void ReadTimeArray_Fake(int* TimeDate, int SpeedFactor){
 
 
 //if button is pressed, vamp the execution loop and other set time routine according button pressed
-void checkButtonTimeSet(){
+void checkButtonTimeSet(){ 
    //second,minute,hour,null,day,month,year
    int vTimeArray[7];
 
