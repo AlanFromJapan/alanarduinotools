@@ -7,23 +7,6 @@ Desktop="Desktop"
 
 [Globals]
 AutoSaveProject=1
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/LilyPad-Wearables.lbr"
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Aesthetics.lbr"
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-AnalogIC.lbr"
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Boards.lbr"
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Capacitors.lbr"
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Connectors.lbr"
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-DigitalIC.lbr"
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-DiscreteSemi.lbr"
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Displays.lbr"
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Electromechanical.lbr"
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-FreqCtrl.lbr"
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-LED.lbr"
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Passives.lbr"
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-PowerIC.lbr"
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Resistors.lbr"
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-RF.lbr"
-UsedLibrary="C:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Sensors.lbr"
 
 [Win_1]
 Type="Control Panel"
@@ -32,5 +15,5 @@ State=1
 Number=0
 
 [Desktop]
-Screen="1366 768"
+Screen="1920 1080"
 Window="Win_1"
