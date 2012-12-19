@@ -111,8 +111,8 @@
 <text x="42.8625" y="36.83" size="1.27" layer="125">X</text>
 <text x="42.8625" y="31.4325" size="1.27" layer="125">Z</text>
 <text x="37.7825" y="35.2425" size="2.1844" layer="125">Z</text>
-<text x="6.985" y="32.7025" size="1.778" layer="125">ATmega64a</text>
-<text x="7.9375" y="0.3175" size="1.27" layer="125">http://kalshagar.wikispaces.com/Rapide64a</text>
+<text x="6.985" y="32.7025" size="1.4224" layer="125" font="vector">ATmega64a</text>
+<text x="7.9375" y="0.3175" size="1.016" layer="125" font="vector">http://kalshagar.wikispaces.com/Rapide64a</text>
 <wire x1="3.4925" y1="13.97" x2="46.355" y2="13.97" width="0.254" layer="21"/>
 <wire x1="46.355" y1="13.97" x2="46.355" y2="11.43" width="0.254" layer="21"/>
 <wire x1="46.355" y1="11.43" x2="3.4925" y2="11.43" width="0.254" layer="21"/>
@@ -154,12 +154,12 @@
 <wire x1="42.8625" y1="26.035" x2="42.8625" y2="24.765" width="0.254" layer="125"/>
 <wire x1="42.2275" y1="26.67" x2="43.4975" y2="26.67" width="0.254" layer="125"/>
 <wire x1="42.2275" y1="24.13" x2="43.4975" y2="24.13" width="0.254" layer="125"/>
-<text x="29.21" y="29.21" size="1.778" layer="125">Rapide64a</text>
+<text x="29.21" y="29.21" size="1.4224" layer="125" font="vector">Rapide64a</text>
 <wire x1="28.575" y1="31.75" x2="28.575" y2="28.575" width="0.254" layer="125"/>
 <wire x1="28.575" y1="28.575" x2="41.5925" y2="28.575" width="0.254" layer="125"/>
 <wire x1="41.5925" y1="28.575" x2="41.5925" y2="31.75" width="0.254" layer="125"/>
 <wire x1="41.5925" y1="31.75" x2="28.575" y2="31.75" width="0.254" layer="125"/>
-<text x="31.115" y="27.305" size="1.016" layer="125">Dec2012  v1.0</text>
+<text x="31.115" y="27.305" size="0.8128" layer="125" font="vector">Dec2012  v1.0</text>
 <wire x1="22.5425" y1="27.6225" x2="20.955" y2="27.6225" width="0.254" layer="125"/>
 <wire x1="20.955" y1="27.6225" x2="21.59" y2="28.2575" width="0.254" layer="125"/>
 <wire x1="21.59" y1="28.2575" x2="21.59" y2="26.9875" width="0.254" layer="125"/>
