@@ -518,7 +518,10 @@ void MapTimeInLedMatrix_Korea3(int pTimeArray[]){
   #define BUTTON_ANALOG_PIN 2
   #define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_Windmill(p)
   #define DRAW_MATRIX_FUNC() ;
-  #define SETUP_MATRIX() setupLedMatrix()
+  #define SETUP_MATRIX() setupLedMatrix_Windmill()
+  
+  //pin A3 = pin 13
+  #define PLASMA_BALL_REMOTE_PIN 17
 #endif
 int mWindmillPulse = 10;
 int mWindmillPulseDelta = 1;
@@ -528,6 +531,17 @@ int mWindmillPulseDelta = 1;
 //define WINDMILL_NEXT_MIN_PULSE and the "next" minute will glow brighter the closer we are
 //don't define it and you just see the 5 minutes division we are in
 #define WINDMILL_NEXT_MIN_PULSE
+
+void setupLedMatrix_Windmill(){
+  //setup the pin for controlling plasma ball as output
+  pinMode(PLASMA_BALL_REMOTE_PIN, OUTPUT);
+  
+  //turn the plasma ball OFF (reverse logic)
+  digitalWrite(PLASMA_BALL_REMOTE_PIN, HIGH);
+  
+  //call the basic one
+  setupLedMatrix();
+}
 
 //Draws the time in the matrix. Here you implement YOUR version of the design.
 //Expects second,minute,hour,null,day,month,year
@@ -545,6 +559,18 @@ void MapTimeInLedMatrix_Windmill(int pTimeArray[]){
    40 02 01 15 11
    35 30 25 20 12
    */
+
+#ifdef PLASMA_BALL_REMOTE_PIN
+  //Plasma ball : one for 15 sec at half hour, 1 minute at exact hour
+  if (pTimeArray[1] == 0 || (pTimeArray[1] == 30 && pTimeArray[0] < 16)){
+    //turn the plasma ball ON (reverse logic)
+    digitalWrite(PLASMA_BALL_REMOTE_PIN, LOW);
+  }
+  else {
+    //turn the plasma ball OFF (reverse logic)
+    digitalWrite(PLASMA_BALL_REMOTE_PIN, HIGH);
+  }
+#endif //PLASMA_BALL_REMOTE_PIN
 
   //row, col, value
   //setCell (0, 4, true);
