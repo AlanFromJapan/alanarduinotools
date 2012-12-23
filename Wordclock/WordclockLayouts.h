@@ -15,7 +15,7 @@
 //Draws the time in the matrix. Here you implement YOUR version of the design.
 //Expects second,minute,hour,null,day,month,year
 //This version is the "BCD v1" layout
-void MapTimeInLedMatrix_BCD1(int pTimeArray[]){
+void MapTimeInLedMatrix_BCD1(Date& pD){
   resetLedMatrix();
 
   /*
@@ -28,7 +28,7 @@ void MapTimeInLedMatrix_BCD1(int pTimeArray[]){
    hh h0 xx mm m0
    */
 
-  int vH = pTimeArray[2];
+  int vH = pD.hour;
   //high part of hour
   setCell(3, 0, vH >= 20);
   setCell(4, 0, vH >= 10 && vH < 20);
@@ -41,13 +41,13 @@ void MapTimeInLedMatrix_BCD1(int pTimeArray[]){
 
 
 
-  int vM = pTimeArray[1] / 10;
+  int vM = pD.minute / 10;
   //high part of minutes
   setCell(2, 3, (vM & 0x04) != 0);
   setCell(3, 3, (vM & 0x02) != 0);
   setCell(4, 3, (vM & 0x01) != 0);
   //low part of minutes
-  vM = pTimeArray[1] % 10;
+  vM = pD.minute % 10;
   setCell(1, 4, (vM & 0x08) != 0);
   setCell(2, 4, (vM & 0x04) != 0);
   setCell(3, 4, (vM & 0x02) != 0);
@@ -64,7 +64,7 @@ void MapTimeInLedMatrix_BCD1(int pTimeArray[]){
 //Draws the time in the matrix. Here you implement YOUR version of the design.
 //Expects second,minute,hour,null,day,month,year
 //This version is the "original v1" layout
-void MapTimeInLedMatrix_TheOriginal(int pTimeArray[]){
+void MapTimeInLedMatrix_TheOriginal(Date& pD){
   resetLedMatrix();
 
   /*
@@ -79,7 +79,7 @@ void MapTimeInLedMatrix_TheOriginal(int pTimeArray[]){
    05 06 07 08 09
    */
 
-  int vH = pTimeArray[2];
+  int vH = pD.hour;
   if (vH > 0) {
     setCell(0,0, vH >= 10 && vH < 20);
     setCell(0,1, vH >= 20);
@@ -89,7 +89,7 @@ void MapTimeInLedMatrix_TheOriginal(int pTimeArray[]){
     }
   }
 
-  int vM = pTimeArray[1];
+  int vM = pD.minute;
   if (vM / 10 > 0){ 
     int vMtens = vM / 10 + 11 - 1; //+ 11 shifts you to row 2 col 1 (the 10 minutes) 
     setCell(vMtens / 5, vMtens % 5, true);
@@ -111,7 +111,7 @@ void MapTimeInLedMatrix_TheOriginal(int pTimeArray[]){
 //Draws the time in the matrix. Here you implement YOUR version of the design.
 //Expects second,minute,hour,null,day,month,year
 //This version is the "Japanese v1" layout
-void MapTimeInLedMatrix_Japanese1(int pTimeArray[]){
+void MapTimeInLedMatrix_Japanese1(Date& pD){
   resetLedMatrix();
 
   /*
@@ -124,14 +124,14 @@ void MapTimeInLedMatrix_Japanese1(int pTimeArray[]){
    */
 
 
-  if (pTimeArray[2] == 12) {
+  if (pD.hour == 12) {
     //little exception : I want noon to be displayed as 10+2 of afternoon,
     //not 0 of afternoon. Otherwise algo is great for all the other cases.
     setCell(0,0,true); //10
     setCell(0,2, true); //2
   }
   else {
-    int vH = pTimeArray[2] % 12;
+    int vH = pD.hour % 12;
     //hour is mod12
     setCell(0, 0, vH >= 10);
     //unit part of hour
@@ -142,7 +142,7 @@ void MapTimeInLedMatrix_Japanese1(int pTimeArray[]){
   }
 
 
-  int vM = pTimeArray[1] / 10;
+  int vM = pD.minute / 10;
   if (vM >= 1 ){
     //light the "10" char
     setCell(2, 4, true); 
@@ -153,13 +153,13 @@ void MapTimeInLedMatrix_Japanese1(int pTimeArray[]){
   }
 
   //low part of minutes
-  vM = pTimeArray[1] % 10 + 15 -1;
-  if ((pTimeArray[1] % 10) != 0) {
+  vM = pD.minute % 10 + 15 -1;
+  if ((pD.minute % 10) != 0) {
     setCell (vM / 5, vM % 5, true);
   }
 
   //am/pm ?
-  setCell(4,4, pTimeArray[2] >= 12);
+  setCell(4,4, pD.hour >= 12);
 }
 
 
@@ -172,7 +172,7 @@ void MapTimeInLedMatrix_Japanese1(int pTimeArray[]){
 //Draws the time in the matrix. Here you implement YOUR version of the design.
 //Expects second,minute,hour,null,day,month,year
 //This version is the "LaFrance v1" layout, using 2 panels horizontaly
-void MapTimeInLedMatrix_LaFrance(int pTimeArray[]){
+void MapTimeInLedMatrix_LaFrance(Date& pD){
   resetLedMatrix();
 
   /*
@@ -189,7 +189,7 @@ French display
   setCell(0, 0, true); 
   setCell(0,1,true);
 
-  int vHour = pTimeArray[2];
+  int vHour = pD.hour;
   if (vHour == 12){
     setCell(3, 0, true);
     setCell(3, 1, true);
@@ -249,7 +249,7 @@ French display
 
 
 
-  int vMin = pTimeArray[1];
+  int vMin = pD.minute;
   boolean vMinDone = false;
   //irregulars
   switch (vMin){
@@ -374,7 +374,7 @@ French display
 //Draws the time in the matrix. Here you implement YOUR version of the design.
 //Expects second,minute,hour,null,day,month,year
 //This version is the "Korea v3", a 1x1 (5 leds x 5 leds) layout
-void MapTimeInLedMatrix_Korea3(int pTimeArray[]){
+void MapTimeInLedMatrix_Korea3(Date& pD){
   resetLedMatrix();
 
   /*
@@ -391,7 +391,7 @@ void MapTimeInLedMatrix_Korea3(int pTimeArray[]){
   //The hours 'si'
   setCell(2, 4, true);
   //hour is 12h based
-  int vHour = pTimeArray[2] % 12;
+  int vHour = pD.hour % 12;
   switch (vHour){
   case 0:
     setCell(0, 0, true);
@@ -443,7 +443,7 @@ void MapTimeInLedMatrix_Korea3(int pTimeArray[]){
   //The minutes 'bun'
   setCell(4, 4, true);
 
-  int vMin = pTimeArray[1];
+  int vMin = pD.minute;
   if ((vMin -3)  % 10 <= 5){
     //if minutes are between x3 and x8, the the '5' minutes
     setCell(4, 3, true);
@@ -546,7 +546,7 @@ void setupLedMatrix_Windmill(){
 //Draws the time in the matrix. Here you implement YOUR version of the design.
 //Expects second,minute,hour,null,day,month,year
 //This version is the "Windmill" layout
-void MapTimeInLedMatrix_Windmill(int pTimeArray[]){
+void MapTimeInLedMatrix_Windmill(Date& pD){
   resetLedMatrix();
   //the position of the NEXT minute indicator (pulse it)
   uint8_t vNextMinuteXY [2];
@@ -562,7 +562,7 @@ void MapTimeInLedMatrix_Windmill(int pTimeArray[]){
 
 #ifdef PLASMA_BALL_REMOTE_PIN
   //Plasma ball : one for 15 sec at half hour, 1 minute at exact hour
-  if (pTimeArray[1] == 0 || (pTimeArray[1] == 30 && pTimeArray[0] < 16)){
+  if (pD.minute == 0 || (pD.minute == 30 && pD.second < 16)){
     //turn the plasma ball ON (reverse logic)
     digitalWrite(PLASMA_BALL_REMOTE_PIN, LOW);
   }
@@ -576,7 +576,7 @@ void MapTimeInLedMatrix_Windmill(int pTimeArray[]){
   //setCell (0, 4, true);
 
   //Hours
-  int vHour = pTimeArray[2] % 12;
+  int vHour = pD.hour % 12;
   if (vHour == 0) {
     vHour = 12;
   }
@@ -595,9 +595,9 @@ void MapTimeInLedMatrix_Windmill(int pTimeArray[]){
   if (vHour >= 12) setCell(4,4,true);
 
   //Minutes
-  int vMinutes = pTimeArray[1] / 5;
+  int vMinutes = pD.minute / 5;
   //Minutes to "next" minutes indicator. Value is within [1..5]
-  int vMinutes2Next = 1+ (pTimeArray[1] % 5);
+  int vMinutes2Next = 1+ (pD.minute % 5);
 
   if (vMinutes >= 0) { 
     setCell(1,2,true); 
