@@ -8,21 +8,12 @@
 //#define DEBUGSERIAL
 
 #include "Wire.h"
+#include "WordclockShared.h"
 
 #define DS3231_I2C_ADDRESS B01101000  // This is the I2C address 7bits
 
-typedef struct {
-  byte second;
-  byte minute;
-  byte hour;
-  byte dayOfWeek;
-  byte dayOfMonth; 
-  byte month;
-  byte year;
-} 
-Date3231;
 
-Date3231 mLatestReadDate;
+Date mLatestReadDate;
 
 // Convert normal decimal numbers to binary coded decimal
 byte decToBcd(byte val)
@@ -40,7 +31,7 @@ byte bcdToDec(byte val)
 
 
 // Gets the Date3231 and time from the ds1307 and prints result
-void getDateDS3231(Date3231& pD)
+void getDateDS3231(Date& pD)
 {
   // Reset the register pointer
 
@@ -81,17 +72,17 @@ void setDateDS3231()
   Wire.endTransmission();
 }
 
-void setDateDS3231(Date3231 pDate)                
+void setDateDS3231(Date& pDate)                
 {
   Wire.beginTransmission(DS3231_I2C_ADDRESS);
   Wire.write((uint8_t)0x00);
   Wire.write(decToBcd(pDate.second));    // sec
   Wire.write(decToBcd(pDate.minute));   //min
   Wire.write(decToBcd(pDate.hour));   //h   
-  Wire.write(decToBcd(2)); //dow 0= sunday
-  Wire.write(decToBcd(28)); //day
-  Wire.write(decToBcd(2)); //month
-  Wire.write(decToBcd(12)); //y
+  Wire.write(decToBcd(pDate.dayOfWeek)); //dow 0= sunday
+  Wire.write(decToBcd(pDate.dayOfMonth)); //day
+  Wire.write(decToBcd(pDate.month)); //month
+  Wire.write(decToBcd(pDate.year)); //y
   Wire.endTransmission();
 }
 

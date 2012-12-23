@@ -73,37 +73,54 @@ void setup() {
 
 }
 
+
+//second,minute,hour,null,day,month,year
+void readTimeArray(int* pTimeArray){
+   Date vD;
+  
+#ifdef RTC_DS3231
+   getDateDS3231(vD);
+#endif //RTC_DS3231
+
+#ifdef RTC_DS3234
+    ReadTime(vD);
+#endif //RTC_DS3234
+
+    dateDateToArray(pTimeArray, vD);
+}
+
+//second,minute,hour,null,day,month,year
+void setTimeArray (int* pTimeArray){
+
+   Date vD;
+   dateArrayToDate(pTimeArray, vD);
+    
+#ifdef RTC_DS3231
+
+   setDateDS3231(vD);
+#endif //RTC_DS3231
+#ifdef RTC_DS3234
+
+   SetTimeDate(vD.dayOfMonth, vD.month, vD.year, vD.hour, vD.minute, vD.second);
+#endif //RTC_DS3234
+
+}
+
+
 //second,minute,hour,null,day,month,year
 void loop() { 
    //if button is pushed, go to some subroutine and change time
-   //checkButtonTimeSet();
+   checkButtonTimeSet();
 
    //second,minute,hour,null,day,month,year
-   int vTimeArray[7];
-
-#ifdef RTC_DS3231
-   Date3231 vD3231;
-   getDateDS3231(vD3231);
-
-   //ReadTime(vDate);
-   vTimeArray[0] = vD3231.second;
-   vTimeArray[1] = vD3231.minute;
-   vTimeArray[2] = vD3231.hour;
-#endif //RTC_DS3231
-#ifdef RTC_DS3234
-    Date vD;
-    ReadTime(vD);
-    vTimeArray[0] = vD.second;
-    vTimeArray[1] = vD.minute;
-    vTimeArray[2] = vD.hour;
-#endif //RTC_DS3234
+   int vTimeArray [7];
+   readTimeArray(vTimeArray);
 
    //Uncomment the following line for a demo mode with fast time
-   //ReadTimeArray_Fake(&vTimeArray[0], 10);
+   //readTimeArray_Fake(&vTimeArray[0], 10);
 
    //Draw the in-memory matrix (change constant at the top of the file)
    MAP_MATRIX_MFUNC(vTimeArray);
-
 
    //Draw the matrix in memory on the leds
    DRAW_MATRIX_FUNC();
@@ -115,7 +132,7 @@ void loop() {
 
 //Reads FAKE time (time passes fast, for test purpose)
 //second,minute,hour,null,day,month,year	
-void ReadTimeArray_Fake(int* TimeDate, int SpeedFactor){
+void readTimeArray_Fake(int* TimeDate, int SpeedFactor){
    //(1/SpeedFactor) sec is one minute
    unsigned long vTime = ((millis()* (unsigned long)SpeedFactor) / ((unsigned long)1000)) % (unsigned long)(24 * 60);
 
@@ -143,20 +160,20 @@ void checkButtonTimeSet(){
             //debouncing on the cheap
             delay (300);
 
-            Date3231 vD3231;
-            getDateDS3231(vD3231);
+            //read current time
+            readTimeArray(vTimeArray);
 
             switch(vStage){
             case 0 : //hours
-               vD3231.hour = (vD3231.hour + 1) % 24;
+               vTimeArray[2] = (vTimeArray[2] + 1) % 24;
                break;
             case 1 : //minutes
-               vD3231.minute = (vD3231.minute + 1) % 60;
+               vTimeArray[1] = (vTimeArray[1] + 1) % 60;
                break;                
             }
 
             //and save the time
-            setDateDS3231(vD3231);
+            setTimeArray(vTimeArray);
          }
 
          //pressed the set button
@@ -167,16 +184,13 @@ void checkButtonTimeSet(){
             vStage++;
          }
 
+        //read current time
+        readTimeArray(vTimeArray);
+            
          //at last, display the time
-         Date3231 vD3231;
-         getDateDS3231(vD3231);
-         vTimeArray[0] = vD3231.second;
-         vTimeArray[1] = vD3231.minute;
-         vTimeArray[2] = vD3231.hour;
-
          //Draw the in-memory matrix (change constant at the top of the file)
          MAP_MATRIX_MFUNC(vTimeArray);
-
+      
          //Draw the matrix in memory on the leds
          DRAW_MATRIX_FUNC();
 
