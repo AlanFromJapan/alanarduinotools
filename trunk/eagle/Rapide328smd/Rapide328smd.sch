@@ -16408,7 +16408,7 @@ Standard SMD solder jumper. Used to automate production. Two varients : Normally
 <wire x1="53.34" y1="66.04" x2="33.02" y2="66.04" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$2" class="0">
+<net name="N$26" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PB7(XTAL2/TOSC2)"/>
 <pinref part="Y1" gate="G$1" pin="1"/>
@@ -16422,7 +16422,7 @@ Standard SMD solder jumper. Used to automate production. Two varients : Normally
 <wire x1="50.8" y1="60.96" x2="33.02" y2="60.96" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$3" class="0">
+<net name="N$30" class="0">
 <segment>
 <pinref part="LED_POWER" gate="G$1" pin="C"/>
 <pinref part="R1" gate="G$1" pin="2"/>
@@ -16623,7 +16623,7 @@ Standard SMD solder jumper. Used to automate production. Two varients : Normally
 <junction x="73.66" y="12.7"/>
 </segment>
 </net>
-<net name="N$25" class="0">
+<net name="N$3" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="AREF"/>
 <wire x1="33.02" y1="76.2" x2="20.32" y2="76.2" width="0.1524" layer="91"/>
