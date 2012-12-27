@@ -16472,112 +16472,112 @@ Standard SMD solder jumper. Used to automate production. Two varients : Normally
 <wire x1="81.28" y1="30.48" x2="88.9" y2="30.48" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$4" class="0">
+<net name="N$11" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PC0(ADC0)"/>
 <pinref part="JPC" gate="G$1" pin="1"/>
 <wire x1="81.28" y1="83.82" x2="88.9" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$5" class="0">
+<net name="N$9" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PC1(ADC1)"/>
 <pinref part="JPC" gate="G$1" pin="2"/>
 <wire x1="81.28" y1="81.28" x2="88.9" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$6" class="0">
+<net name="N$7" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PC2(ADC2)"/>
 <pinref part="JPC" gate="G$1" pin="3"/>
 <wire x1="81.28" y1="78.74" x2="88.9" y2="78.74" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$7" class="0">
+<net name="N$17" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PC3(ADC3)"/>
 <pinref part="JPC" gate="G$1" pin="4"/>
 <wire x1="81.28" y1="76.2" x2="88.9" y2="76.2" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$8" class="0">
+<net name="N$16" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PC4(ADC4/SDA)"/>
 <pinref part="JPC" gate="G$1" pin="5"/>
 <wire x1="81.28" y1="73.66" x2="88.9" y2="73.66" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$9" class="0">
+<net name="N$15" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PC5(ADC5/SCL)"/>
 <pinref part="JPC" gate="G$1" pin="6"/>
 <wire x1="81.28" y1="71.12" x2="88.9" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$10" class="0">
+<net name="N$14" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="ADC6"/>
 <pinref part="JPC" gate="G$1" pin="7"/>
 <wire x1="81.28" y1="68.58" x2="88.9" y2="68.58" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$11" class="0">
+<net name="N$12" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="ADC7"/>
 <pinref part="JPC" gate="G$1" pin="8"/>
 <wire x1="81.28" y1="66.04" x2="88.9" y2="66.04" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$12" class="0">
+<net name="N$44" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PD0(RXD)"/>
 <pinref part="JPD" gate="G$1" pin="1"/>
 <wire x1="81.28" y1="60.96" x2="96.52" y2="60.96" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$13" class="0">
+<net name="N$43" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PD1(TXD)"/>
 <pinref part="JPD" gate="G$1" pin="2"/>
 <wire x1="81.28" y1="58.42" x2="96.52" y2="58.42" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$14" class="0">
+<net name="N$41" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PD2(INT0)"/>
 <pinref part="JPD" gate="G$1" pin="3"/>
 <wire x1="81.28" y1="55.88" x2="96.52" y2="55.88" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$15" class="0">
+<net name="N$40" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PD3(INT1)"/>
 <pinref part="JPD" gate="G$1" pin="4"/>
 <wire x1="81.28" y1="53.34" x2="96.52" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$16" class="0">
+<net name="N$39" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PD4(XCK/T0)"/>
 <pinref part="JPD" gate="G$1" pin="5"/>
 <wire x1="81.28" y1="50.8" x2="96.52" y2="50.8" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$17" class="0">
+<net name="N$36" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PD5(T1)"/>
 <pinref part="JPD" gate="G$1" pin="6"/>
 <wire x1="81.28" y1="48.26" x2="96.52" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$18" class="0">
+<net name="N$32" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PD6(AIN0)"/>
 <pinref part="JPD" gate="G$1" pin="7"/>
 <wire x1="81.28" y1="45.72" x2="96.52" y2="45.72" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$19" class="0">
+<net name="N$28" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PD7(AIN1)"/>
 <pinref part="JPD" gate="G$1" pin="8"/>
@@ -16623,7 +16623,7 @@ Standard SMD solder jumper. Used to automate production. Two varients : Normally
 <junction x="73.66" y="12.7"/>
 </segment>
 </net>
-<net name="N$3" class="0">
+<net name="N$18" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="AREF"/>
 <wire x1="33.02" y1="76.2" x2="20.32" y2="76.2" width="0.1524" layer="91"/>
