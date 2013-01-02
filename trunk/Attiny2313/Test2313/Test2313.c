@@ -15,11 +15,11 @@ int main(void)
 	//TestPullups();
 	
 	AquestLSI_Init();
+	_delay_ms(1000);
 	
     while(1)
     {
-	    _delay_ms(1000);
-		
-	    SayKonnichiwa();
+		//SayKonnichiwa();
+	    SayAll();
     }
 }
