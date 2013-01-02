@@ -5,14 +5,21 @@
  *  Author: Alan
  */ 
 
+#define F_CPU 1000000UL	      // Sets up the default speed for delay.h
+
 #include <avr/io.h>
+#include <util/delay.h>
 
 int main(void)
 {
-	TestPullups();
+	//TestPullups();
+	
+	AquestLSI_Init();
 	
     while(1)
     {
-        //TODO:: Please write your application code 
+	    _delay_ms(1000);
+		
+	    SayKonnichiwa();
     }
 }
