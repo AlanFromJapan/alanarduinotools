@@ -151,7 +151,7 @@ void WriteNextData(){
 }
 
 //Handles the INT1 pin : LATCH signal going DOWN (falling hedge) : STARTUP 
-SIGNAL (SIG_INT1)
+SIGNAL (INT1_vect)
 { 
 	mCurrentButtonIndex = 0;
 	
@@ -162,7 +162,7 @@ SIGNAL (SIG_INT1)
 
 //Handles the INT0 pin : CLOCK signal going UP (rising hedge) = put data that will be read on falling hedge in 6uS
 // push next value to the value pin
-SIGNAL (SIG_INT0)
+SIGNAL (INT0_vect)
 { 
 	//move next
 	WriteNextData();		
