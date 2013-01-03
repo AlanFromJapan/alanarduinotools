@@ -16073,6 +16073,8 @@ We've spent an enormous amount of time creating and checking these footprints an
 <part name="JP9" library="SparkFun-Connectors" deviceset="M16" device="1X16_NO_SILK"/>
 <part name="JP10" library="SparkFun-Connectors" deviceset="M16" device="1X16_NO_SILK"/>
 <part name="H4" library="holes" deviceset="MOUNT-HOLE" device="2.8"/>
+<part name="R2" library="resistor" deviceset="R-EU_" device="0204/5" value="1k+"/>
+<part name="LED_INFO" library="led" deviceset="LED" device="KA-3528ASYC"/>
 </parts>
 <sheets>
 <sheet>
@@ -16111,6 +16113,8 @@ We've spent an enormous amount of time creating and checking these footprints an
 <instance part="JP9" gate="G$1" x="137.16" y="-45.72"/>
 <instance part="JP10" gate="G$1" x="149.86" y="-45.72"/>
 <instance part="H4" gate="G$1" x="-45.72" y="7.62"/>
+<instance part="R2" gate="G$1" x="73.66" y="5.08" rot="R90"/>
+<instance part="LED_INFO" gate="G$1" x="76.2" y="15.24"/>
 </instances>
 <busses>
 </busses>
@@ -16198,8 +16202,13 @@ We've spent an enormous amount of time creating and checking these footprints an
 <segment>
 <pinref part="JPB" gate="G$1" pin="7"/>
 <wire x1="88.9" y1="22.86" x2="83.82" y2="22.86" width="0.1524" layer="91"/>
-<wire x1="83.82" y1="22.86" x2="83.82" y2="5.08" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="22.86" x2="83.82" y2="7.62" width="0.1524" layer="91"/>
 <label x="83.82" y="2.54" size="1.778" layer="95"/>
+<pinref part="R2" gate="G$1" pin="1"/>
+<wire x1="83.82" y1="7.62" x2="83.82" y2="5.08" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="0" x2="81.28" y2="0" width="0.1524" layer="91"/>
+<wire x1="81.28" y1="0" x2="81.28" y2="7.62" width="0.1524" layer="91"/>
+<wire x1="81.28" y1="7.62" x2="83.82" y2="7.62" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="VCC" class="0">
@@ -16336,6 +16345,10 @@ We've spent an enormous amount of time creating and checking these footprints an
 <pinref part="IC1" gate="G$1" pin="PB5(SCK)"/>
 <pinref part="JPB" gate="G$1" pin="6"/>
 <wire x1="81.28" y1="25.4" x2="88.9" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="81.28" y1="25.4" x2="81.28" y2="20.32" width="0.1524" layer="91"/>
+<pinref part="LED_INFO" gate="G$1" pin="A"/>
+<wire x1="81.28" y1="20.32" x2="76.2" y2="20.32" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="20.32" x2="76.2" y2="17.78" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="RESET" class="0">
@@ -16505,6 +16518,13 @@ We've spent an enormous amount of time creating and checking these footprints an
 <pinref part="AREF_SOURCE" gate="G$1" pin="3"/>
 <pinref part="JPAREF" gate="G$1" pin="1"/>
 <wire x1="15.24" y1="86.36" x2="15.24" y2="91.44" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$3" class="0">
+<segment>
+<pinref part="LED_INFO" gate="G$1" pin="C"/>
+<pinref part="R2" gate="G$1" pin="2"/>
+<wire x1="76.2" y1="10.16" x2="73.66" y2="10.16" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
