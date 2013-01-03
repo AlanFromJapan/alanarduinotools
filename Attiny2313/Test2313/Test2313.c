@@ -26,10 +26,10 @@ int main(void)
 	    //SayAll();
 		
 		_delay_ms(3000);
-		//TestVCROnOff();
+		TestVCROnOff();
 		//PORTD = ~PORTD;
 		
 		
-		TestTVOnOff();
+		//TestTVOnOff();
     }
 }
