@@ -163,21 +163,7 @@
 #define IRKEY_IN_START      0xFB
 #define IRKEY_EZ_ADJUST     0xFF
 
-// The following array defines the order in which the command codes
-// cycle when browsing them by the "SELECT" button. If you do not
-// need this kind of selection mechanism, feel free to simplify it
-// as you see fit.
 
-uint8_t ir_commands[8] = {
-	IRKEY_CHANNEL_PLUS,
-	IRKEY_CHANNEL_MINUS,
-	IRKEY_VOLUME_PLUS,
-	IRKEY_VOLUME_MINUS,
-	IRKEY_MUTE,
-	IRKEY_Q_MENU,
-	IRKEY_IN_START,
-	IRKEY_EZ_ADJUST
-};
 
 // Since the ATtiny2313 microcontroller only has 2K of flash and
 // 128 bytes of SRAM, using a ready-made IR library would
@@ -377,5 +363,80 @@ for( i = 0; i < 4; i++ ) {
 transmit_nec_ir_pulse(NEC_IR_END);
 }
 
+
+#define NEC_BIT_MARK 560
+//Theory
+//#define NEC_ONE_SPACE (2250 - SHARP_BIT_MARK)
+//#define NEC_ZERO_SPACE (1125 - SHARP_BIT_MARK)
+//Real life (should be 1690 and 560)
+#define NEC_ONE_SPACE 1600
+#define NEC_ZERO_SPACE 510
+
+
+//Send the pulse at 38kHz for pMicroSec duration
+void markNEC (double pDurationUS){
+	//how many time shall we send the pulse over the period (rounded up)
+	uint16_t vCount = 1+ pDurationUS / NEC_IR_CARRIER_CYCLE_DURATION_TOTAL;
+	
+	for(uint16_t i = 0; i < vCount; i++){
+		//on
+		PORTD = 0xFF;
+		_delay_us(NEC_IR_CARRIER_CYCLE_DURATION_HIGH);
+		
+		//off
+		PORTD = 0x00;
+		_delay_us(NEC_IR_CARRIER_CYCLE_DURATION_LOW);
+	}
+}
+
+inline void spaceNEC (uint16_t pDurationUS){
+	//Low
+	//off
+	PORTD = 0x00;
+	_delay_us(pDurationUS);
+}
+
+void IRSendNEC(uint16_t address, uint8_t command){
+	markNEC(9000);
+	
+	spaceNEC(4500);
+	
+	for (uint8_t i = 0; i < 16; i++) {
+		if (address & 0x00000001) {
+			mark(NEC_BIT_MARK);
+			space(NEC_ONE_SPACE);
+		}
+		else {
+			mark(NEC_BIT_MARK);
+			space(NEC_ZERO_SPACE);
+		}
+		address >>= 1;
+	}
+	
+	uint8_t commandBar = ~command;
+	for (uint8_t i = 0; i < 8; i++) {
+		if (command & 0x00000001) {
+			mark(NEC_BIT_MARK);
+			space(NEC_ONE_SPACE);
+		}
+		else {
+			mark(NEC_BIT_MARK);
+			space(NEC_ZERO_SPACE);
+		}
+		command >>= 1;
+	}	
+	for (uint8_t i = 0; i < 8; i++) {
+		if (commandBar & 0x00000001) {
+			mark(NEC_BIT_MARK);
+			space(NEC_ONE_SPACE);
+		}
+		else {
+			mark(NEC_BIT_MARK);
+			space(NEC_ZERO_SPACE);
+		}
+		commandBar >>= 1;
+	}
+	
+}
 
 #endif /* IR_NEC_H_ */

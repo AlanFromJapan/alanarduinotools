@@ -9,13 +9,13 @@ void TestVCROnOff() {
 	
 	//transmit_nec_ir_commandExt(0x30EE, 0xB1);
 	
-	
+	IRSendNEC(0x30EE, 0xB1);
 
 }	
 
 void TestTVOnOff(){
 		    //TV power, works ok
-		    //IRSendSharp (0x41A2, 15);
+		    IRSendSharp (0x41A2, 15);
 			
 			//vol- ok
 			//IRSendSharp (0x42A2, 15);
