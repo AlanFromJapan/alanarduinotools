@@ -3,6 +3,9 @@
  *
  * Created: 2013/01/03 20:11:53
  *  Author: Alan
+ * Based on the IRremote lib for Arduino and the great work done on : http://www.sbprojects.com/knowledge/ir/sharp.php
+ * Codes for sharp : http://lirc.sourceforge.net/remotes/sharp/GA538WJSA
+ * 
  */ 
 
 
@@ -17,7 +20,7 @@
 #include <util/delay.h>
 
 //Durations in MICRO Sec
-//The hard coded adjustment are for the execution of the code itself that spoils the timing
+//The hard coded adjustment are for the execution of the code itself that spoils the timing (valid for 1MHz F_CPU)
 #define SHARP_BIT_MARK 320
 #define SHARP_ONE_SPACE (2000 - SHARP_BIT_MARK -50)
 #define SHARP_ZERO_SPACE (1000 - SHARP_BIT_MARK -50)
@@ -34,7 +37,7 @@
 
 //Send the pulse at 38kHz for pMicroSec duration
 void mark (double pDurationUS){
-	//how many time shall we send the pulse over the period
+	//how many time shall we send the pulse over the period (rounded up)
 	uint16_t vCount = 1+ pDurationUS / SHARP_PULSE_FULL_PERIOD;
 	
 	for(uint16_t i = 0; i < vCount; i++){
@@ -69,12 +72,6 @@ from the oscilloscope:
 Sharp LCD TV:
 http://lirc.sourceforge.net/remotes/sharp/GA538WJSA
 
-DISH NETWORK (echostar 301):
-http://lirc.sourceforge.net/remotes/echostar/301_501_3100_5100_58xx_59xx
-
-For the DISH codes, only send the last for characters of the hex.
-i.e. use 0x1C10 instead of 0x0000000000001C10 which is listed in the
-linked LIRC file.
 */
 
 void IRSendSharp(uint16_t data, uint8_t nbits) {
