@@ -9,8 +9,11 @@ void TestVCROnOff() {
 	
 	//transmit_nec_ir_commandExt(0x30EE, 0xB1);
 	
-	IRSendNEC(0x30EE, 0xB1);
+	//POWER
+	//IRSendNEC(0x30EE, 0xB1);
 
+	//LIST OF RECORD
+	IRSendNEC(0x30EE, 0xC7);
 }	
 
 void TestTVOnOff(){
