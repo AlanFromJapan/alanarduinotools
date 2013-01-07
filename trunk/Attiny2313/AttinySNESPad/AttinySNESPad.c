@@ -195,6 +195,11 @@ void setupInterrupt(){
 
 int main(void)
 {
+	CannotCompile
+	This version has a wrong timing, so don't use it. Use the AsmSNESPAD that works fine.
+	This is just kept for memory.
+	/CannotCompile
+	
 	//factory settings is to divide internal clock 8MHz by 8.
 	//don't, and just run at 8 MHz (set the clock divider to 1 so no effect)
 	CLKPR = (1<<CLKPCE);
