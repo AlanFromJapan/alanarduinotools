@@ -363,15 +363,20 @@ for( i = 0; i < 4; i++ ) {
 transmit_nec_ir_pulse(NEC_IR_END);
 }
 
-
-#define NEC_BIT_MARK 560
+//Theory 560us, real life it's a little shorter because of the surrounding code that causes "inertia"
+#define NEC_BIT_MARK 715
 //Theory
 //#define NEC_ONE_SPACE (2250 - SHARP_BIT_MARK)
 //#define NEC_ZERO_SPACE (1125 - SHARP_BIT_MARK)
 //Real life (should be 1690 and 560)
-#define NEC_ONE_SPACE 1600
-#define NEC_ZERO_SPACE 510
+#define NEC_ONE_SPACE 1490
+#define NEC_ZERO_SPACE 375
 
+
+//BUFFALO HDD VCR
+//Perfect timings as measured with a IR receiver and a logic analyzer
+//ON : 705us / 0 LOW 410us / 1 LOW 1540
+//HEADER 9180us 4355us
 
 //Send the pulse at 38kHz for pMicroSec duration
 void markNEC (double pDurationUS){
@@ -402,7 +407,7 @@ void IRSendNEC(uint16_t address, uint8_t command){
 	spaceNEC(4500);
 	
 	for (uint8_t i = 0; i < 16; i++) {
-		if (address & 0x00000001) {
+		if (address & 0x8000) {
 			mark(NEC_BIT_MARK);
 			space(NEC_ONE_SPACE);
 		}
@@ -410,12 +415,12 @@ void IRSendNEC(uint16_t address, uint8_t command){
 			mark(NEC_BIT_MARK);
 			space(NEC_ZERO_SPACE);
 		}
-		address >>= 1;
+		address <<= 1;
 	}
 	
 	uint8_t commandBar = ~command;
 	for (uint8_t i = 0; i < 8; i++) {
-		if (command & 0x00000001) {
+		if (command & 0x80) {
 			mark(NEC_BIT_MARK);
 			space(NEC_ONE_SPACE);
 		}
@@ -423,10 +428,10 @@ void IRSendNEC(uint16_t address, uint8_t command){
 			mark(NEC_BIT_MARK);
 			space(NEC_ZERO_SPACE);
 		}
-		command >>= 1;
+		command <<= 1;
 	}	
 	for (uint8_t i = 0; i < 8; i++) {
-		if (commandBar & 0x00000001) {
+		if (commandBar & 0x80) {
 			mark(NEC_BIT_MARK);
 			space(NEC_ONE_SPACE);
 		}
@@ -434,8 +439,12 @@ void IRSendNEC(uint16_t address, uint8_t command){
 			mark(NEC_BIT_MARK);
 			space(NEC_ZERO_SPACE);
 		}
-		commandBar >>= 1;
+		commandBar <<= 1;
 	}
+	
+	
+	//final marker ?	
+	mark(NEC_BIT_MARK);
 	
 }
 
