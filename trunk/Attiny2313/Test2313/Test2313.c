@@ -18,15 +18,15 @@ int main(void)
 	//_delay_ms(1000);
 	
 	DDRD = 0xFF;
-	PORTD = 0xFF;
+	PORTD = 0xff;
 	
     while(1)
     {
 		//SayKonnichiwa();
-	    //SayAll();
+	    SayAll();
 		
 		_delay_ms(3000);
-		TestVCROnOff();
+		//TestVCROnOff();
 		//PORTD = ~PORTD;
 		
 		
