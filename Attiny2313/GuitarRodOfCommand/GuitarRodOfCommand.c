@@ -12,6 +12,8 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include "IR/IR_Sharp.h"
+//#include "IR/IR_NEC.h"
 
 //Buttons are on PORTB
 #define BUTTON_A	0x01
@@ -19,6 +21,7 @@
 #define BUTTON_X	0x04
 #define BUTTON_Y	0x08
 #define BUTTON_ZL	0x10
+#define BUTTON_ACTION_MASK (BUTTON_B | BUTTON_X | BUTTON_Y | BUTTON_ZL)
 
 //Different modes
 #define MODE_KILLER	0x00
@@ -44,24 +47,6 @@ void setupRGB(){
 	DDRD |= 0x1C; //0b00011100
 }
 	
-void testRGB(){
-	uint8_t v = 0;
-	
-	while (1){
-		_delay_ms(1000);
-		v += 1;
-		
-		uint8_t vrgb = v << 2;
-		
-		PORTD &= 0b11100011;
-		PORTD |= vrgb;
-		
-		if (v >= 0x07){
-			v = 0;
-		}
-	}
-	
-}
 
 //Color are 0b000RBG00
 void setColor (uint8_t pColor){
@@ -92,6 +77,26 @@ void setMode (uint8_t pMode){
 	}
 }
 
+//What to do when click a button in mode KILLER
+void doAction_Killer (uint8_t pButton){
+	//save color
+	//uint8_t vOldPORTD = PORTD;
+	
+	switch(pButton){
+		case BUTTON_B:
+			//TV Sharp ON/OFF
+			IRSendSharp (0x41A2, 15);
+			break;
+		case BUTTON_X:
+			//VCR Buffalo ON/OFF
+//			IRSendNEC(0x30EE, 0xB1);
+			break;		
+	}
+	
+	//reset to previous value
+	//PORTD = vOldPORTD;
+}
+
 	
 int main(void)
 {
@@ -101,6 +106,9 @@ int main(void)
 	
 	setMode(mCurrentMode);
 	
+	//IR pin is D6 as output
+	DDRD |= 0b01000000;
+	
     while(1)
     {
 		//BUTTON A : CHANGE MODE
@@ -109,5 +117,26 @@ int main(void)
 			setMode(vMode);
 		}
 		
+		
+		//Action button pressed (B-X-Y-ZL)		
+		//Check if ANY one is pressed : /PINB != 0
+		if ((~(PINB) & BUTTON_ACTION_MASK) != 0x00){
+			uint8_t vButton = 0x00;
+			
+			//get which button was pressed 
+			vButton = ((PINB & BUTTON_B) == 0x00 ? BUTTON_B : vButton);
+			vButton = ((PINB & BUTTON_X) == 0x00 ? BUTTON_X : vButton);
+			vButton = ((PINB & BUTTON_Y) == 0x00 ? BUTTON_Y : vButton);
+			vButton = ((PINB & BUTTON_ZL) == 0x00 ? BUTTON_ZL : vButton);
+			
+			switch(mCurrentMode){
+				case MODE_KILLER:
+					doAction_Killer(vButton);
+					break;
+			}
+			
+			//debouncing on the cheap
+			_delay_ms(500);
+		}
     }
 }
