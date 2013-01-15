@@ -34,6 +34,10 @@ void AquestLSI_Init(){
 	
 	//send 4 bytes
 	USI_TWI_Start_Read_Write( mBuff, 5 );
+	
+	//Just in my version, the /enable of the opamp is on D0
+	//force it OFF
+	//PORTD |= 0x01;
 }
 	
 //Returns 1 if busy
@@ -55,6 +59,10 @@ uint8_t LsiIsBusy(){
 }
 
 void SaySomething(const char* pMessage, uint8_t pWaitTillEnd){
+	//Just in my version, the /enable of the opamp is on D0
+	//force it on
+	//PORTD &= 0xFE;
+	
 	
 	USI_TWI_Master_Initialise();
 	
@@ -74,6 +82,10 @@ void SaySomething(const char* pMessage, uint8_t pWaitTillEnd){
 	if (pWaitTillEnd){
 		while (LsiIsBusy() == 1){_delay_ms(50);}
 	}	
+
+	//Just in my version, the /enable of the opamp is on D0
+	//force it OFF
+	//PORTD |= 0x01;
 }
 
 /*

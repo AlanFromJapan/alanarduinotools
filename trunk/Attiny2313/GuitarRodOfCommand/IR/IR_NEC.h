@@ -9,6 +9,7 @@
 #ifndef IR_NEC_H_
 #define IR_NEC_H_
 
+#include "IR_Shared.h"
 
 //Source : http://openlgtv.org.ru/wiki/index.php/Using_a_generic_microcontroller_board_as_an_LG_service_remote
 
@@ -112,8 +113,7 @@
 // As for blinking out the IR commands, we actually set _all_ the
 // eight LEDs on and off "in unison":
 
-#define set_ir_led_on()  PORTD = 0xFF;
-#define set_ir_led_off() PORTD = 0x00;
+
 
 // If you do not use this dual-purpose LED approach but have a
 // separate IR LED for blinking the code out, redefining the
@@ -153,16 +153,16 @@
 // follows. (Of course, I didn't really _need_ any other than
 // the IN_START and the EZ_ADJUST codes, but the others were a
 // nice thing to have for initial testing.)
-
-#define IRKEY_CHANNEL_PLUS  0x00
-#define IRKEY_CHANNEL_MINUS 0x01
-#define IRKEY_VOLUME_PLUS   0x02
-#define IRKEY_VOLUME_MINUS  0x03
-#define IRKEY_MUTE          0x09
-#define IRKEY_Q_MENU        0x45
-#define IRKEY_IN_START      0xFB
-#define IRKEY_EZ_ADJUST     0xFF
-
+//
+//#define IRKEY_CHANNEL_PLUS  0x00
+//#define IRKEY_CHANNEL_MINUS 0x01
+//#define IRKEY_VOLUME_PLUS   0x02
+//#define IRKEY_VOLUME_MINUS  0x03
+//#define IRKEY_MUTE          0x09
+//#define IRKEY_Q_MENU        0x45
+//#define IRKEY_IN_START      0xFB
+//#define IRKEY_EZ_ADJUST     0xFF
+//
 
 
 // Since the ATtiny2313 microcontroller only has 2K of flash and
@@ -249,7 +249,7 @@
 // weren't that important. And maybe this kind of a simplistic,
 // hardware-independent approach will make it easier to port the same
 // code over to other platforms, if required.
-
+/*
 void transmit_nec_ir_pulse(uint8_t pulse_type_id) {
 
 	// Calculate how many cycles of the 38 kHz carrier we need
@@ -362,7 +362,7 @@ for( i = 0; i < 4; i++ ) {
 
 transmit_nec_ir_pulse(NEC_IR_END);
 }
-
+*/
 //Theory 560us, real life it's a little shorter because of the surrounding code that causes "inertia"
 #define NEC_BIT_MARK 715
 //Theory

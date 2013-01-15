@@ -19,6 +19,8 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
+#include "IR_Shared.h"
+
 //Durations in MICRO Sec
 //The hard coded adjustment are for the execution of the code itself that spoils the timing (valid for 1MHz F_CPU)
 #define SHARP_BIT_MARK 320
@@ -42,11 +44,11 @@ void mark (double pDurationUS){
 	
 	for(uint16_t i = 0; i < vCount; i++){
 		//on
-		PORTD = 0xFF;
+		set_ir_led_on();
 		_delay_us(SHARP_PULSE_HIGH_US);
 	
 		//off
-		PORTD = 0x00;
+		set_ir_led_off();
 		_delay_us(SHARP_PULSE_LOW_US);
 	}	
 }
@@ -54,7 +56,7 @@ void mark (double pDurationUS){
 inline void space (uint16_t pDurationUS){
 	//Low
 	//off
-	PORTD = 0x00;
+	set_ir_led_off();
 	_delay_us(pDurationUS);
 }
 
