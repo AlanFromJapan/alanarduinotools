@@ -13,7 +13,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include "IR/IR_Sharp.h"
-//#include "IR/IR_NEC.h"
+#include "IR/IR_NEC.h"
 
 //Buttons are on PORTB
 #define BUTTON_A	0x01
@@ -94,7 +94,7 @@ void doAction_Killer (uint8_t pButton){
 			break;
 		case BUTTON_X:
 			//VCR Buffalo ON/OFF
-//			IRSendNEC(0x30EE, 0xB1);
+			IRSendNEC(0x30EE, 0xB1);
 			break;		
 	}
 	
@@ -130,6 +130,33 @@ void doAction_TV (uint8_t pButton){
 	PORTD = vOldPORTD;
 }
 
+//What to do when click a button in mode VCR
+void doAction_VCR (uint8_t pButton){
+	//save color
+	uint8_t vOldPORTD = PORTD;
+	
+	switch(pButton){
+		case BUTTON_B:
+		//Play/Pause
+		IRSendNEC(0x30EE, 0x8B);
+		break;
+		case BUTTON_X:
+		//List of records
+		IRSendNEC(0x30EE, 0xC7);
+		break;
+		case BUTTON_Y:
+		//UP
+		IRSendNEC(0x30EE, 0x39);
+		break;
+		case BUTTON_ZL:
+		//DOWN
+		IRSendNEC(0x30EE, 0x43);
+		break;
+	}
+	
+	//reset to previous value
+	PORTD = vOldPORTD;
+}
 	
 int main(void)
 {
@@ -167,6 +194,9 @@ int main(void)
 					break;
 				case MODE_TV:
 					doAction_TV(vButton);
+					break;
+				case MODE_VCR:
+					doAction_VCR(vButton);
 					break;
 			}
 			
