@@ -46,7 +46,12 @@ void setupButtons(){
 void setupRGB(){
 	DDRD |= 0x1C; //0b00011100
 }
-	
+
+//D6 is the IR	
+void setupIR() {
+	//IR pin is D6 as output
+	DDRD |= 0b01000000;
+}
 
 //Color are 0b000RBG00
 void setColor (uint8_t pColor){
@@ -60,7 +65,7 @@ void setMode (uint8_t pMode){
 	switch(mCurrentMode){
 		case MODE_KILLER:
 			setColor(0x10); //RED
-			SaySomething("kira-mo-do.", 0x01);
+			SaySomething("pawa-mo-do.", 0x01);
 			break;
 		case MODE_TV:
 			setColor(0x08); //BLUE
@@ -80,7 +85,7 @@ void setMode (uint8_t pMode){
 //What to do when click a button in mode KILLER
 void doAction_Killer (uint8_t pButton){
 	//save color
-	//uint8_t vOldPORTD = PORTD;
+	uint8_t vOldPORTD = PORTD;
 	
 	switch(pButton){
 		case BUTTON_B:
@@ -94,7 +99,35 @@ void doAction_Killer (uint8_t pButton){
 	}
 	
 	//reset to previous value
-	//PORTD = vOldPORTD;
+	PORTD = vOldPORTD;
+}
+
+
+//What to do when click a button in mode TV
+void doAction_TV (uint8_t pButton){
+	//save color
+	uint8_t vOldPORTD = PORTD;
+	
+	switch(pButton){
+		case BUTTON_B:
+		//TV Sharp Input change
+		IRSendSharp (0x4322, 15);
+		break;
+		case BUTTON_X:
+		//TV Sharp VOLUME+
+		IRSendSharp (0x40A2, 15);
+		break;
+		case BUTTON_Y:
+		//TV Sharp VOLUME-
+		IRSendSharp (0x42A2, 15);
+		break;
+		case BUTTON_ZL:
+		//nothing
+		break;
+	}
+	
+	//reset to previous value
+	PORTD = vOldPORTD;
 }
 
 	
@@ -103,11 +136,10 @@ int main(void)
 	AquestLSI_Init();
 	setupButtons();
 	setupRGB();
+	setupIR();
 	
-	setMode(mCurrentMode);
-	
-	//IR pin is D6 as output
-	DDRD |= 0b01000000;
+	//set current mode
+	setMode(mCurrentMode);	
 	
     while(1)
     {
@@ -132,6 +164,9 @@ int main(void)
 			switch(mCurrentMode){
 				case MODE_KILLER:
 					doAction_Killer(vButton);
+					break;
+				case MODE_TV:
+					doAction_TV(vButton);
 					break;
 			}
 			
