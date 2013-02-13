@@ -639,24 +639,23 @@ Free to reuse and modify.&lt;/p&gt;</description>
 <wire x1="3.175" y1="2.54" x2="4.445" y2="2.54" width="0.3048" layer="1"/>
 <wire x1="4.445" y1="2.54" x2="6.35" y2="5.08" width="0.3048" layer="1"/>
 <wire x1="5.08" y1="1.27" x2="8.89" y2="5.08" width="0.3048" layer="1"/>
-<smd name="P$199" x="-5.08" y="0.635" dx="2.032" dy="0.635" layer="1" rot="R90"/>
-<smd name="P$1" x="-5.08" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
+<smd name="S16" x="-5.08" y="0.635" dx="2.032" dy="0.635" layer="1" rot="R90"/>
+<smd name="S1" x="-5.08" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
 <wire x1="-5.715" y1="-4.445" x2="-5.08" y2="-5.08" width="0.3048" layer="1"/>
-<smd name="P$2" x="-3.81" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
-<smd name="P$3" x="-2.54" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
-<smd name="P$4" x="-1.27" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
-<smd name="P$5" x="0" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
-<smd name="P$6" x="1.27" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
-<smd name="P$8" x="1.27" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
-<smd name="P$7" x="2.54" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
-<smd name="P$10" x="3.81" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
-<smd name="P$11" x="-3.81" y="0.635" dx="2.032" dy="0.635" layer="1" rot="R90"/>
-<smd name="P$12" x="-2.54" y="0.635" dx="2.032" dy="0.635" layer="1" rot="R90"/>
-<smd name="P$13" x="-1.27" y="0.635" dx="2.032" dy="0.635" layer="1" rot="R90"/>
-<smd name="P$14" x="0" y="0.635" dx="2.032" dy="0.635" layer="1" rot="R90"/>
-<smd name="P$15" x="1.27" y="0.635" dx="2.032" dy="0.635" layer="1" rot="R90"/>
-<smd name="P$16" x="2.54" y="0.635" dx="2.032" dy="0.635" layer="1" rot="R90"/>
-<smd name="P$17" x="3.81" y="0.635" dx="2.032" dy="0.635" layer="1" rot="R90"/>
+<smd name="S2" x="-3.81" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
+<smd name="S3" x="-2.54" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
+<smd name="S4" x="-1.27" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
+<smd name="S5" x="0" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
+<smd name="S6" x="1.27" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
+<smd name="S7" x="2.54" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
+<smd name="S8" x="3.81" y="-5.715" dx="2.032" dy="0.635" layer="1" rot="R90"/>
+<smd name="S15" x="-3.81" y="0.635" dx="2.032" dy="0.635" layer="1" rot="R90"/>
+<smd name="S14" x="-2.54" y="0.635" dx="2.032" dy="0.635" layer="1" rot="R90"/>
+<smd name="S13" x="-1.27" y="0.635" dx="2.032" dy="0.635" layer="1" rot="R90"/>
+<smd name="S12" x="0" y="0.635" dx="2.032" dy="0.635" layer="1" rot="R90"/>
+<smd name="S11" x="1.27" y="0.635" dx="2.032" dy="0.635" layer="1" rot="R90"/>
+<smd name="S10" x="2.54" y="0.635" dx="2.032" dy="0.635" layer="1" rot="R90"/>
+<smd name="S9" x="3.81" y="0.635" dx="2.032" dy="0.635" layer="1" rot="R90"/>
 <wire x1="-3.81" y1="-4.445" x2="-3.81" y2="-5.715" width="0.3048" layer="1"/>
 <wire x1="-2.54" y1="-3.81" x2="-2.54" y2="-5.715" width="0.3048" layer="1"/>
 <wire x1="-1.27" y1="-2.54" x2="-1.27" y2="-5.715" width="0.3048" layer="1"/>
@@ -1119,6 +1118,8 @@ Free to reuse and modify.&lt;/p&gt;</description>
 <pin name="SER" x="-15.24" y="15.24" length="middle" direction="in"/>
 <pin name="QA" x="10.16" y="15.24" length="middle" direction="hiz" rot="R180"/>
 <pin name="QH*" x="10.16" y="-7.62" length="middle" direction="hiz" rot="R180"/>
+<pin name="GND" x="-15.24" y="0" length="middle" direction="pwr"/>
+<pin name="VCC" x="-15.24" y="-2.54" length="middle" direction="pwr"/>
 </symbol>
 <symbol name="IV6_NUMITRON">
 <pin name="NC" x="-15.24" y="10.16" length="middle"/>
@@ -1314,6 +1315,7 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 <device name="" package="DIL16_SO16_PAC">
 <connects>
 <connect gate="G$1" pin="G" pad="13 29"/>
+<connect gate="G$1" pin="GND" pad="8 24"/>
 <connect gate="G$1" pin="QA" pad="15 31"/>
 <connect gate="G$1" pin="QB" pad="1 17"/>
 <connect gate="G$1" pin="QC" pad="2 18"/>
@@ -1327,6 +1329,30 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 <connect gate="G$1" pin="SCK" pad="11 27"/>
 <connect gate="G$1" pin="SCL" pad="10 26"/>
 <connect gate="G$1" pin="SER" pad="14 30"/>
+<connect gate="G$1" pin="VCC" pad="16 32"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="THINPAD" package="DIL16_SO16_PAC2">
+<connects>
+<connect gate="G$1" pin="G" pad="13 S13"/>
+<connect gate="G$1" pin="GND" pad="8 S8"/>
+<connect gate="G$1" pin="QA" pad="15 S15"/>
+<connect gate="G$1" pin="QB" pad="1 S1"/>
+<connect gate="G$1" pin="QC" pad="2 S2"/>
+<connect gate="G$1" pin="QD" pad="3 S3"/>
+<connect gate="G$1" pin="QE" pad="4 S4"/>
+<connect gate="G$1" pin="QF" pad="5 S5"/>
+<connect gate="G$1" pin="QG" pad="6 S6"/>
+<connect gate="G$1" pin="QH" pad="7 S7"/>
+<connect gate="G$1" pin="QH*" pad="9 S9"/>
+<connect gate="G$1" pin="RCK" pad="12 S12"/>
+<connect gate="G$1" pin="SCK" pad="11 S11"/>
+<connect gate="G$1" pin="SCL" pad="10 S10"/>
+<connect gate="G$1" pin="SER" pad="14 S14"/>
+<connect gate="G$1" pin="VCC" pad="16 S16"/>
 </connects>
 <technologies>
 <technology name=""/>
