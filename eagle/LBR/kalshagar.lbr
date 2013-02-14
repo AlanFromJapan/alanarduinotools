@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.05" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -555,7 +555,7 @@ Free to reuse and modify.&lt;/p&gt;</description>
 <wire x1="7.62" y1="2.54" x2="8.89" y2="3.81" width="0.3048" layer="1"/>
 </package>
 <package name="IV6_NUMITRON_PAC">
-<pad name="GRID_M" x="0" y="-4.445" drill="0.8"/>
+<pad name="GRID_P" x="0" y="-4.445" drill="0.8"/>
 <pad name="BR" x="2.2225" y="-3.81" drill="0.8"/>
 <pad name="DOT" x="3.81" y="-2.2225" drill="0.8"/>
 <pad name="NC" x="4.445" y="0" drill="0.8" shape="square"/>
@@ -701,7 +701,7 @@ Free to reuse and modify.&lt;/p&gt;</description>
 <wire x1="5.43" y1="6.405" x2="5.43" y2="4.04" width="0.127" layer="21"/>
 </package>
 <package name="IV6_NUMITRON_PAC_LARGE">
-<pad name="GRID_M" x="0" y="-5.715" drill="0.8"/>
+<pad name="GRID_P" x="0" y="-5.715" drill="0.8"/>
 <pad name="BR" x="3.4925" y="-5.08" drill="0.8"/>
 <pad name="DOT" x="5.08" y="-2.8575" drill="0.8"/>
 <pad name="NC" x="5.715" y="0" drill="0.8" shape="square"/>
@@ -1374,7 +1374,7 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 <connect gate="G$1" pin="DOT" pad="DOT"/>
 <connect gate="G$1" pin="FIL_M" pad="FIL_M"/>
 <connect gate="G$1" pin="FIL_P" pad="FIL_P"/>
-<connect gate="G$1" pin="GRID_P" pad="GRID_M"/>
+<connect gate="G$1" pin="GRID_P" pad="GRID_P"/>
 <connect gate="G$1" pin="MIDDLE" pad="MID"/>
 <connect gate="G$1" pin="NC" pad="NC"/>
 <connect gate="G$1" pin="TL" pad="TL"/>
@@ -1393,7 +1393,7 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 <connect gate="G$1" pin="DOT" pad="DOT"/>
 <connect gate="G$1" pin="FIL_M" pad="FIL_M"/>
 <connect gate="G$1" pin="FIL_P" pad="FIL_P"/>
-<connect gate="G$1" pin="GRID_P" pad="GRID_M"/>
+<connect gate="G$1" pin="GRID_P" pad="GRID_P"/>
 <connect gate="G$1" pin="MIDDLE" pad="MID"/>
 <connect gate="G$1" pin="NC" pad="NC"/>
 <connect gate="G$1" pin="TL" pad="TL"/>
