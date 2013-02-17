@@ -8,9 +8,11 @@
 
 #define F_CPU 8000000L
 #define READING_BUFFER 4
-#define LIMIT_BLUEGREEN 12 
-#define LIMIT_GREENRED 23
+#define LIMIT_BLUEGREEN 14 
+#define LIMIT_GREENRED 24
 #define LIMIT_DELTA 4
+
+#define OFFSET_TEMP 4
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -155,18 +157,21 @@ int main(void)
 		if(vADCCheckRound == 0){
 			uint16_t vADCValue = ReadADC();
 			
+			/*
 			//store
 			mRawADCBuffer[mRawADCBufferHead] = vADCValue;
 			mRawADCBufferHead = (mRawADCBufferHead + 1) % READING_BUFFER;
 			
 			//average
 			uint16_t vAvg = 0;
-			for (int i =0; i < READING_BUFFER;i++){
+			for (uint8_t i =0; i < READING_BUFFER;i++){
 				vAvg += mRawADCBuffer[i];
 			}
+			
 			//overwrite (optimized, we know there's 4 items so >>2)
 			//vADCValue = vAvg / READING_BUFFER;
 			vADCValue = (vAvg >> 2);
+			*/
 			
 			//value read is [0;1024]. To get a temp you *5 and divide by 1024 (=1000)
 			//But then you've got a float value [0;5] (remember 1 degree C = 0.01v)
@@ -174,6 +179,10 @@ int main(void)
 			//Working just with integer here I shortcut the / 1000 * 100 -> /10
 			//Then we have vADCValue * 5 /10 -> vADCValue *1/2 -> vADCValue >> 1
 			uint16_t vTemp = vADCValue >> 1;
+			
+			//offsetting : seems my reading a a bit too high once in the plastic egg
+			//lets adjust manually. A bit ad'hoc method,but should work.
+			vTemp = (vTemp >= OFFSET_TEMP ? vTemp - OFFSET_TEMP: 0);
 			
 			Temp2RGB_Fade(vTemp);
 
