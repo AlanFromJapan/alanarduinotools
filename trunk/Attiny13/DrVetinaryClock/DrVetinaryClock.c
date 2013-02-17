@@ -33,10 +33,8 @@ inline void tick(){
 
 int main(void)
 {
-	//default uses the 9.6MHz internal crystal ... don't need so much speed
-	//CKSEL |= 0x03; //internal oscillator
-	
-	CLKPR = (0<<CLKPCE); // & (1 << CLKPS3);
+	//default uses the 9.6MHz internal crystal ... and leave it as is.
+	CLKPR = (0<<CLKPCE); 
 	
 	//all ports output!
 	DDRB = 0xFF;
