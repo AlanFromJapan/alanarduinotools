@@ -26,14 +26,13 @@ int main(void)
 	while (1){
 		_delay_ms(1000);
 		
-		PORTB |= (1 << PB4) | (1 << PB3);
+		PORTB = vPort;
 		_delay_ms(15);
-		PORTB &= ~((1 << PB4) | (1 << PB3));
+		PORTB = 0x00;
 
-		_delay_ms(5);
-		PORTB |= (1 << PB4) | (1 << PB3);
-		_delay_ms(15);
-		PORTB &= ~((1 << PB4) | (1 << PB3));
+		//reverse status of PB3 and PB4 : the electro-magnet must change direction each time
+		vPort ^= (1 << PB4) | (1 << PB3);
 				
+	
 	}
 }
