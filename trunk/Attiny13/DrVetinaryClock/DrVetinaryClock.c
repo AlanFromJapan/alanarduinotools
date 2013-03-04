@@ -17,7 +17,7 @@
 //Approximate duration of 1 step to move 1 tick
 #define TICK_DURATION_MS (TICK_SLEEP_MS + 20)
 //probability to skip time
-#define SKIP_EVERY_N 6
+#define SKIP_EVERY_N 45
 
 volatile uint8_t vPort = (1 << PB4) | (0 << PB3);
 
