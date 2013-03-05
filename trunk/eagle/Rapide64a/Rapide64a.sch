@@ -7256,24 +7256,6 @@ We've spent an enormous amount of time creating and checking these footprints an
 <busses>
 </busses>
 <nets>
-<net name="N$1" class="0">
-<segment>
-<pinref part="IC1" gate="G$1" pin="(RXD/PDI)PE0"/>
-<wire x1="73.66" y1="7.62" x2="187.96" y2="7.62" width="0.1524" layer="91"/>
-<wire x1="187.96" y1="7.62" x2="187.96" y2="22.86" width="0.1524" layer="91"/>
-<pinref part="JP_E_D" gate="G$1" pin="1"/>
-<wire x1="187.96" y1="22.86" x2="200.66" y2="22.86" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$61" class="0">
-<segment>
-<pinref part="IC1" gate="G$1" pin="(TXD/PDO)PE1"/>
-<wire x1="73.66" y1="10.16" x2="185.42" y2="10.16" width="0.1524" layer="91"/>
-<wire x1="185.42" y1="10.16" x2="185.42" y2="25.4" width="0.1524" layer="91"/>
-<pinref part="JP_E_D" gate="G$1" pin="2"/>
-<wire x1="185.42" y1="25.4" x2="200.66" y2="25.4" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="N$62" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="(XCK0/AIN0)PE2"/>
@@ -7535,7 +7517,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="73.66" y1="76.2" x2="200.66" y2="76.2" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$15" class="0">
+<net name="SCK" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="(SCK)PB1"/>
 <pinref part="JP_B" gate="G$1" pin="2"/>
@@ -7551,24 +7533,14 @@ We've spent an enormous amount of time creating and checking these footprints an
 <segment>
 <pinref part="IC1" gate="G$1" pin="(MOSI)PB2"/>
 <pinref part="JP_B" gate="G$1" pin="3"/>
-<wire x1="73.66" y1="81.28" x2="114.3" y2="81.28" width="0.1524" layer="91"/>
-<pinref part="J1" gate="G$1" pin="4"/>
-<wire x1="114.3" y1="81.28" x2="200.66" y2="81.28" width="0.1524" layer="91"/>
-<wire x1="106.68" y1="134.62" x2="114.3" y2="134.62" width="0.1524" layer="91"/>
-<wire x1="114.3" y1="134.62" x2="114.3" y2="81.28" width="0.1524" layer="91"/>
-<junction x="114.3" y="81.28"/>
+<wire x1="73.66" y1="81.28" x2="200.66" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$36" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="(MISO)PB3"/>
 <pinref part="JP_B" gate="G$1" pin="4"/>
-<wire x1="73.66" y1="83.82" x2="83.82" y2="83.82" width="0.1524" layer="91"/>
-<pinref part="J1" gate="G$1" pin="1"/>
-<wire x1="83.82" y1="83.82" x2="200.66" y2="83.82" width="0.1524" layer="91"/>
-<wire x1="88.9" y1="137.16" x2="83.82" y2="137.16" width="0.1524" layer="91"/>
-<wire x1="83.82" y1="137.16" x2="83.82" y2="83.82" width="0.1524" layer="91"/>
-<junction x="83.82" y="83.82"/>
+<wire x1="73.66" y1="83.82" x2="200.66" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$42" class="0">
@@ -7760,7 +7732,7 @@ We've spent an enormous amount of time creating and checking these footprints an
 <wire x1="71.12" y1="-27.94" x2="71.12" y2="-20.32" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$57" class="0">
+<net name="RESET" class="0">
 <segment>
 <pinref part="JP_X" gate="G$1" pin="2"/>
 <pinref part="IC1" gate="G$1" pin="RESET"/>
@@ -7884,6 +7856,34 @@ We've spent an enormous amount of time creating and checking these footprints an
 <pinref part="S2" gate="G$1" pin="2"/>
 <pinref part="JP10" gate="G$1" pin="1"/>
 <wire x1="45.72" y1="-10.16" x2="71.12" y2="-10.16" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="MOSI" class="0">
+<segment>
+<pinref part="J1" gate="G$1" pin="4"/>
+<wire x1="106.68" y1="134.62" x2="114.3" y2="134.62" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="(RXD/PDI)PE0"/>
+<wire x1="73.66" y1="7.62" x2="114.3" y2="7.62" width="0.1524" layer="91"/>
+<wire x1="114.3" y1="7.62" x2="187.96" y2="7.62" width="0.1524" layer="91"/>
+<wire x1="187.96" y1="7.62" x2="187.96" y2="22.86" width="0.1524" layer="91"/>
+<pinref part="JP_E_D" gate="G$1" pin="1"/>
+<wire x1="187.96" y1="22.86" x2="200.66" y2="22.86" width="0.1524" layer="91"/>
+<wire x1="114.3" y1="134.62" x2="114.3" y2="7.62" width="0.1524" layer="91"/>
+<junction x="114.3" y="7.62"/>
+</segment>
+</net>
+<net name="MISO" class="0">
+<segment>
+<pinref part="J1" gate="G$1" pin="1"/>
+<wire x1="88.9" y1="137.16" x2="83.82" y2="137.16" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="(TXD/PDO)PE1"/>
+<wire x1="73.66" y1="10.16" x2="83.82" y2="10.16" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="10.16" x2="185.42" y2="10.16" width="0.1524" layer="91"/>
+<wire x1="185.42" y1="10.16" x2="185.42" y2="25.4" width="0.1524" layer="91"/>
+<pinref part="JP_E_D" gate="G$1" pin="2"/>
+<wire x1="185.42" y1="25.4" x2="200.66" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="83.82" y1="137.16" x2="83.82" y2="10.16" width="0.1524" layer="91"/>
+<junction x="83.82" y="10.16"/>
 </segment>
 </net>
 </nets>
