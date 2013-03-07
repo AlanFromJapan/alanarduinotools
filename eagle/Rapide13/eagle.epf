@@ -1,0 +1,38 @@
+[Eagle]
+Version="06 03 00"
+Platform="Windows"
+Serial="62191E841E-LSR-WLM-1EL"
+Globals="Globals"
+Desktop="Desktop"
+
+[Globals]
+AutoSaveProject=1
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/atmel.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/v-reg.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/LilyPad-Wearables.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Aesthetics.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-AnalogIC.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Boards.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Capacitors.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Connectors.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-DigitalIC.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-DiscreteSemi.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Displays.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Electromechanical.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-FreqCtrl.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-LED.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Passives.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-PowerIC.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Resistors.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-RF.lbr"
+UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Sensors.lbr"
+
+[Win_1]
+Type="Control Panel"
+Loc="0 0 943 1001"
+State=2
+Number=0
+
+[Desktop]
+Screen="1920 1080"
+Window="Win_1"
