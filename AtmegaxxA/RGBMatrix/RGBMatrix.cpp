@@ -19,38 +19,6 @@ void AllOff (){
 	PORTC = 0x0f; PORTA = 0xf0;
 }
 
-void SwipeAll4() 
-{
-		while(1)
-	{
-		for (uint8_t a = 0; a <= 0xff; a++)
-		{
-			for (uint8_t c = 0; c <= 0xff; c++)
-			{
-				for (uint8_t e = 0; e <= 0xff; e++)
-				{
-					for (uint8_t d = 0; d <= 0xff; d++)
-					{
-						PORTA = a;
-						PORTC = c;
-						PORTD = d;
-						PORTE = e;
-						_delay_us(POV_ON_US);
-
-						AllOff();
-						_delay_us(POV_OFF_US);
-						
-					}
-					
-				}
-				
-			}
-			
-		}
-	}
-}
-
-
 uint8_t mBlueMatrix [8];
 uint8_t mRedMatrix [8];
 uint8_t mGreenMatrix [8];
@@ -66,8 +34,11 @@ void showMatrix(){
 	PORTC = 0x0f;
 	
 	for (int y = 0; y < 8; y++){
-		uint8_t pValue = mBlueMatrix[y];
+		uint8_t vBlue = mBlueMatrix[y];
+		uint8_t vGreen = mGreenMatrix[y];
+		uint8_t vRed = mRedMatrix[y];
 		
+		//set the line on
 		if (y < 4){
 			PORTC = (1 << (7-y)) | 0x0f;
 			PORTA = 0xf0;
@@ -79,9 +50,17 @@ void showMatrix(){
 		}
 		
 
-		//blue is simply PORTB					
-		PORTD = ~pValue;
-					
+		//blue is simply PORTD
+		PORTD = ~vBlue;
+		
+		//green is shared on PORTA4-7 & PORTC0-3
+		vGreen = ~vGreen; //negative logic
+		PORTA = (vGreen << 4) | (PORTA & 0x0f);
+		PORTC = (vGreen >> 4) | (PORTC & 0xf0);
+		
+		//red is PORTE
+		PORTE = ~vRed;
+									
 		_delay_us(POV_ON_US);
 		//Blue all off
 		PORTD = 0xff;
@@ -90,24 +69,6 @@ void showMatrix(){
 	}	
 }
 
-void Light0x0() 
-{
-		
-	uint8_t i = 0;
-	while(1)
-	{
-		//PORTA = 0x01; PORTE = 0x01;
-		
-		//PORTE = 0x01; PORTA = 0x0e;
-		
-		PORTD = ~0x80; PORTE = 0xff; PORTC = 0x8f; PORTA = 0xf0;
-		
-		_delay_us(POV_ON_US);
-
-		AllOff();
-		_delay_us(POV_OFF_US);
-	}
-}
 
 int main(void)
 {
@@ -160,6 +121,18 @@ int main(void)
 	//mBlueMatrix[7] = 0b11000000;
 	
 	mGreenMatrix[0] = 0b00000001;
+	mBlueMatrix[0] = 0b00000111;
+	mGreenMatrix[1] = 0b10101010;
+	mBlueMatrix[1] = 0b01010101;
+	mGreenMatrix[2] = 0b01010101;
+	mBlueMatrix[2] = 0b01010101;
+	
+	mRedMatrix[3] = 0b01010101;
+	mRedMatrix[1] = 0xf0;
+	mRedMatrix[4] = 0b10101010;
+	
+	
+	mRedMatrix[5] = 0xf0;
 	
 	while (1){
 		
