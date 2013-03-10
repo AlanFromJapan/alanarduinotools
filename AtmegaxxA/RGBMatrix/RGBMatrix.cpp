@@ -9,8 +9,8 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#define POV_ON_US 500
-#define POV_OFF_US 1500
+#define POV_ON_US 300
+#define POV_OFF_US 500
 
 void AllOff (){
 	PORTD = 0xff;
@@ -35,8 +35,6 @@ void showMatrix(){
 	
 	for (int y = 0; y < 8; y++){
 		uint8_t vBlue = mBlueMatrix[y];
-		uint8_t vGreen = mGreenMatrix[y];
-		uint8_t vRed = mRedMatrix[y];
 		
 		//set the line on
 		if (y < 4){
@@ -52,21 +50,71 @@ void showMatrix(){
 
 		//blue is simply PORTD
 		PORTD = ~vBlue;
+									
+		_delay_us(POV_ON_US);
+		//all off
+		PORTD = 0xff;
+		_delay_us(POV_OFF_US);
+	
+	}	
+
+
+	for (int y = 0; y < 8; y++){
+		uint8_t vGreen = mGreenMatrix[y];
+		
+		//set the line on
+		if (y < 4){
+			PORTC = (1 << (7-y)) | 0x0f;
+			PORTA = 0xf0;
+		}
+		else {
+			//y >= 4
+			PORTA = (1 << (7-y)) | 0xf0;
+			PORTC = 0x0f;
+		}
 		
 		//green is shared on PORTA4-7 & PORTC0-3
 		vGreen = ~vGreen; //negative logic
 		PORTA = (vGreen << 4) | (PORTA & 0x0f);
 		PORTC = (vGreen >> 4) | (PORTC & 0xf0);
 		
+		_delay_us(POV_ON_US);
+		//all off	
+		PORTA = 0xf0;
+		PORTC = 0x0f;
+		_delay_us(POV_OFF_US);
+		
+	}
+	
+	
+	for (int y = 0; y < 8; y++){
+		uint8_t vRed = mRedMatrix[y];
+			
+		//set the line on
+		if (y < 4){
+			PORTC = (1 << (7-y)) | 0x0f;
+			PORTA = 0xf0;
+		}
+		else {
+			//y >= 4
+			PORTA = (1 << (7-y)) | 0xf0;
+			PORTC = 0x0f;
+		}
+			
+			
 		//red is PORTE
 		PORTE = ~vRed;
-									
+			
 		_delay_us(POV_ON_US);
-		//Blue all off
-		PORTD = 0xff;
+		//all off
+		PORTE = 0xff;
 		_delay_us(POV_OFF_US);
+			
+	}
 	
-	}	
+	PORTE = 0xff;
+	PORTA = 0xf0;
+	PORTC = 0x0f;
 }
 
 
@@ -133,23 +181,17 @@ int main(void)
 	
 	
 	mRedMatrix[5] = 0xf0;
+	mBlueMatrix[4] = 0b00001010;
+	mGreenMatrix[4] = 0b00001010;
 	
+	mGreenMatrix[7] = 0x0f;
+	mBlueMatrix[7] = 0xf0;
+	mRedMatrix[7] = 0b00111100;
+		
 	while (1){
 		
-		
 		showMatrix();
-/*		
-		for (uint8_t i = 0; i < 7; i++){
-			//setMatrix('B', i % 8, i / 8, 1);
-			uint8_t x = i;
-			uint8_t y = i;
-		
-			//setMatrix('B', x, y, 1);
-		
-			showMatrix();
-		}		
-		//i = (i >= 64 ? 0 : i+1);
-*/		
+
 	}
 	
 }
