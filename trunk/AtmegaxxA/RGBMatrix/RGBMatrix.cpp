@@ -12,127 +12,51 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include <stdlib.h>
+#include "RGBMatrix.h"
 
-#define POV_ON_US 300
-#define POV_OFF_US 5000
-
-void AllOff (){
-	PORTD = 0xff;
-	PORTE = 0xff;
-	
-	PORTC = 0x0f; PORTA = 0xf0;
-}
-
-volatile uint8_t mBlueMatrix	[8];
-volatile uint8_t mRedMatrix		[8];
-volatile uint8_t mGreenMatrix	[8];
-
-void setMatrix(uint8_t pRGB, uint8_t pX, uint8_t pY, uint8_t pValue){
-	if (pRGB == 'B') {
-		mBlueMatrix[pY] = (pValue == 0 ? mBlueMatrix[pY] & ~(1 << pX) : mBlueMatrix[pY] | (1 << pX));
-	}	
-	if (pRGB == 'R') {
-		mRedMatrix[pY] = (pValue == 0 ? mRedMatrix[pY] & ~(1 << pX) : mRedMatrix[pY] | (1 << pX));
-	}
-	if (pRGB == 'G') {
-		mGreenMatrix[pY] = (pValue == 0 ? mGreenMatrix[pY] & ~(1 << pX) : mGreenMatrix[pY] | (1 << pX));
-	}
-}
-
-
-void showMatrix(){
-	PORTE = 0xff;
-	PORTA = 0xf0;
-	PORTC = 0x0f;
-	
-	for (int y = 0; y < 8; y++){
-		uint8_t vBlue = mBlueMatrix[y];
-		
-		//set the line on
-		if (y < 4){
-			PORTC = (1 << (7-y)) | 0x0f;
-			PORTA = 0xf0;
-		}
-		else {
-			//y >= 4
-			PORTA = (1 << (7-y)) | 0xf0;
-			PORTC = 0x0f;
-		}
-		
-
-		//blue is simply PORTD
-		PORTD = ~vBlue;
-									
-		_delay_us(POV_ON_US);
-		//all off
-		PORTD = 0xff;
-		_delay_us(POV_OFF_US);
-	
-	}	
-
-
-	for (int y = 0; y < 8; y++){
-		uint8_t vGreen = mGreenMatrix[y];
-		
-		//set the line on
-		if (y < 4){
-			PORTC = (1 << (7-y)) | 0x0f;
-			PORTA = 0xf0;
-		}
-		else {
-			//y >= 4
-			PORTA = (1 << (7-y)) | 0xf0;
-			PORTC = 0x0f;
-		}
-		
-		//green is shared on PORTA4-7 & PORTC0-3
-		vGreen = ~vGreen; //negative logic
-		PORTA = (vGreen << 4) | (PORTA & 0x0f);
-		PORTC = (vGreen >> 4) | (PORTC & 0xf0);
-		
-		_delay_us(POV_ON_US);
-		//all off	
-		PORTA = 0xf0;
-		PORTC = 0x0f;
-		_delay_us(POV_OFF_US);
-		
-	}
-	
-	
-	for (int y = 0; y < 8; y++){
-		uint8_t vRed = mRedMatrix[y];
-			
-		//set the line on
-		if (y < 4){
-			PORTC = (1 << (7-y)) | 0x0f;
-			PORTA = 0xf0;
-		}
-		else {
-			//y >= 4
-			PORTA = (1 << (7-y)) | 0xf0;
-			PORTC = 0x0f;
-		}
-			
-			
-		//red is PORTE
-		PORTE = ~vRed;
-			
-		_delay_us(POV_ON_US);
-		//all off
-		PORTE = 0xff;
-		_delay_us(POV_OFF_US);
-			
-	}
-	
-	PORTE = 0xff;
-	PORTA = 0xf0;
-	PORTC = 0x0f;
-}
 
 volatile uint8_t mCount = 0;
-ISR(TIMER2_OVF_vect){
+volatile uint8_t mCompo	= 0;
+volatile uint8_t mTiming = 0;
 
-	mCount++;
+
+
+void WavesRandom() 
+{
+	if (mTiming >= 2) {
+		mTiming = 0;
+		
+		volatile uint8_t* vMx;
+	
+		if (mCompo == 0){
+			vMx = mRedMatrix;
+		}
+		else {
+			if (mCompo == 1){
+				vMx = mGreenMatrix;
+			}
+			else {
+				vMx = mBlueMatrix;
+			}
+		}
+
+		(vMx)[mCount % 8] = rand();
+
+		if ((mCount % 8) == 7){
+			mCompo = rand() % 3;
+		}
+		
+		mCount++;	
+	}	
+	mTiming++;
+}
+
+
+
+
+void RandomColors() 
+{
+		mCount++;
 	
 	if (mCount >= 10) {
 		mCount = 0;
@@ -140,6 +64,88 @@ ISR(TIMER2_OVF_vect){
 		mRedMatrix[rand()%8] = (uint8_t)rand();
 		mBlueMatrix[rand()%8] = (uint8_t)rand();
 	}	
+}
+
+
+
+
+
+
+void Waves1()
+{
+	uint8_t vCount = mCount;
+	if (mCount < 64) {
+		setMatrix('G', vCount / 8, vCount % 8, 1);
+	}
+	else {
+		vCount -= 64;
+		if (mCount < 128) {
+			setMatrix('R', vCount / 8, vCount % 8, 1);
+		}
+		else {
+			vCount -= 64;
+			if (mCount < 196) {
+				setMatrix('B', vCount / 8, vCount % 8, 1);
+			}
+			
+		}
+	}
+	mCount++;
+}
+
+
+volatile uint8_t mLine = 0;
+volatile int8_t mLineStart = -1;
+volatile int8_t mLineEnd = -1;
+
+ISR(TIMER2_OVF_vect){
+	//RandomColors();
+	//Waves1();
+	//WavesRandom();
+
+	if (mTiming >= 1) {
+		mTiming = 0;
+		volatile uint8_t* vMx;
+		
+		if (mCompo == 0){
+			vMx = mRedMatrix;
+		}
+		else {
+			if (mCompo == 1){
+				vMx = mGreenMatrix;
+			}
+			else {
+				vMx = mBlueMatrix;
+			}
+		}
+
+		
+		if (mLineEnd < 7){
+			if (mLineEnd < 0){
+				mLine = rand() % 8;
+			}
+			//new line
+			mLineEnd++;
+			//setMatrix('R', mLineEnd, mLine, 1);
+			vMx[mLine] = vMx[mLine] | (1 << mLineEnd);
+		}
+		else {
+			if (mLineStart < 7) {
+				mLineStart++;
+				//setMatrix('R', mLineStart, mLine, 0);
+				vMx[mLine] = vMx[mLine]  & ~(1 << mLineStart);
+			}
+			else {
+				vMx[mLine] = 0x00;
+				mLineStart = -1;
+				mLineEnd = -1;
+				mCompo = rand()% 3;
+			}
+		}
+		
+				
+	}
+	mTiming++;
 	
 }
 
