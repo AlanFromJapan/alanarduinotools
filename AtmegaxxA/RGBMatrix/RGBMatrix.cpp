@@ -129,10 +129,18 @@ void showMatrix(){
 	PORTC = 0x0f;
 }
 
-
+volatile uint8_t mCount = 0;
 ISR(TIMER2_OVF_vect){
-	//setMatrix('R', 0, 0, 1);
-	//mRedMatrix[0] = 0xff;
+
+	mCount++;
+	
+	if (mCount >= 10) {
+		mCount = 0;
+		mGreenMatrix[rand()%8] = (uint8_t)rand();
+		mRedMatrix[rand()%8] = (uint8_t)rand();
+		mBlueMatrix[rand()%8] = (uint8_t)rand();
+	}	
+	
 }
 
 //inits timer 1 to do interrupt on overflow (calls ISR(TIMER2_OVF_vect))
@@ -165,17 +173,11 @@ int main(void)
 	
 	XDIV = 0x00;
 
-	//init_timer2_OVF();
+	init_timer2_OVF();
 	
 	while (1){
 	
-		mGreenMatrix[rand()%8] = (uint8_t)rand();	
-		mRedMatrix[rand()%8] = (uint8_t)rand();
-		mBlueMatrix[rand()%8] = (uint8_t)rand();
-		
-		for (uint8_t i = 0; i < 30; i++){
-			showMatrix();
-		}	
+		showMatrix();
 				
 	}
 	
