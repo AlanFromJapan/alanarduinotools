@@ -5,12 +5,16 @@
 *  Author: Alan
 */
 
+//well in real it's more like 8MHz but this value makes a nice flickerless display so...
+#define F_CPU 1000000L
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
+#include <stdlib.h>
 
 #define POV_ON_US 300
-#define POV_OFF_US 500
+#define POV_OFF_US 5000
 
 void AllOff (){
 	PORTD = 0xff;
@@ -19,12 +23,20 @@ void AllOff (){
 	PORTC = 0x0f; PORTA = 0xf0;
 }
 
-uint8_t mBlueMatrix [8];
-uint8_t mRedMatrix [8];
-uint8_t mGreenMatrix [8];
+volatile uint8_t mBlueMatrix	[8];
+volatile uint8_t mRedMatrix		[8];
+volatile uint8_t mGreenMatrix	[8];
 
 void setMatrix(uint8_t pRGB, uint8_t pX, uint8_t pY, uint8_t pValue){
-	mBlueMatrix[pY] = (pValue == 0 ? mBlueMatrix[pY] & ~(1 << pX) : mBlueMatrix[pY] | (1 << pX));
+	if (pRGB == 'B') {
+		mBlueMatrix[pY] = (pValue == 0 ? mBlueMatrix[pY] & ~(1 << pX) : mBlueMatrix[pY] | (1 << pX));
+	}	
+	if (pRGB == 'R') {
+		mRedMatrix[pY] = (pValue == 0 ? mRedMatrix[pY] & ~(1 << pX) : mRedMatrix[pY] | (1 << pX));
+	}
+	if (pRGB == 'G') {
+		mGreenMatrix[pY] = (pValue == 0 ? mGreenMatrix[pY] & ~(1 << pX) : mGreenMatrix[pY] | (1 << pX));
+	}
 }
 
 
@@ -118,6 +130,29 @@ void showMatrix(){
 }
 
 
+ISR(TIMER2_OVF_vect){
+	//setMatrix('R', 0, 0, 1);
+	//mRedMatrix[0] = 0xff;
+}
+
+//inits timer 1 to do interrupt on overflow (calls ISR(TIMER2_OVF_vect))
+void init_timer2_OVF() {
+	
+	//timer 2
+	TCCR2 = 
+		//No PWM
+		(1 << FOC2) 
+		//Divide by 1024
+		| (1 << CS22) | (1 << CS20);
+	
+	//trigger the interrupt vector TIMER1_OVF_vect when timer 1 is overflow
+	TIMSK = (1 << TOV2);
+	
+	//sets the interruptions to enabled
+	sei();
+}
+
+
 int main(void)
 {
 	DDRD = 0xFF;
@@ -128,70 +163,20 @@ int main(void)
 	//A0-A3 : are the negative row 1-4
 	//C4-C7 : are the negative row 5-8
 	
-	//	AllOff();
-
-
 	XDIV = 0x00;
 
-	//SwipeAll4();
-	//Light0x0();
-
-/*	
-	uint8_t c = 0;
-	setMatrix('B', c, c, 1);c++;
-	setMatrix('B', c, c, 1);c++;
-	setMatrix('B', c, c, 1);c++;
-	setMatrix('B', c, c, 1);c++;
-	setMatrix('B', c, c, 1);c++;
-	setMatrix('B', c, c, 1);c++;
-	setMatrix('B', c, c, 1);c++;
-	//setMatrix('B', c, c, 1);c++;
-*/	
-	/*
-	mBlueMatrix[0] = 0b00000101;
-	mBlueMatrix[2] = 0b00001010;
-	mBlueMatrix[6] = 0b00010100;
-	*/
-/*
-	mBlueMatrix[0] = 0b00000001;
-	mBlueMatrix[1] = 0b00000010;
-	mBlueMatrix[2] = 0b00000100;
-	mBlueMatrix[3] = 0b00001000;
-	mBlueMatrix[4] = 0b00010000;
-	mBlueMatrix[5] = 0b00100000;
-	mBlueMatrix[6] = 0b01000000;
-	//mBlueMatrix[7] = 0b10000000;
-*/
-
-
-	mBlueMatrix[5] = 0b11100000;
-	mBlueMatrix[6] = 0b11000000;
-	//mBlueMatrix[7] = 0b11000000;
+	//init_timer2_OVF();
 	
-	mGreenMatrix[0] = 0b00000001;
-	mBlueMatrix[0] = 0b00000111;
-	mGreenMatrix[1] = 0b10101010;
-	mBlueMatrix[1] = 0b01010101;
-	mGreenMatrix[2] = 0b01010101;
-	mBlueMatrix[2] = 0b01010101;
-	
-	mRedMatrix[3] = 0b01010101;
-	mRedMatrix[1] = 0xf0;
-	mRedMatrix[4] = 0b10101010;
-	
-	
-	mRedMatrix[5] = 0xf0;
-	mBlueMatrix[4] = 0b00001010;
-	mGreenMatrix[4] = 0b00001010;
-	
-	mGreenMatrix[7] = 0x0f;
-	mBlueMatrix[7] = 0xf0;
-	mRedMatrix[7] = 0b00111100;
-		
 	while (1){
+	
+		mGreenMatrix[rand()%8] = (uint8_t)rand();	
+		mRedMatrix[rand()%8] = (uint8_t)rand();
+		mBlueMatrix[rand()%8] = (uint8_t)rand();
 		
-		showMatrix();
-
+		for (uint8_t i = 0; i < 30; i++){
+			showMatrix();
+		}	
+				
 	}
 	
 }
