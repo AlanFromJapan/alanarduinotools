@@ -21,6 +21,49 @@ volatile uint8_t mBlueMatrix	[8];
 volatile uint8_t mRedMatrix		[8];
 volatile uint8_t mGreenMatrix	[8];
 
+
+/************************************************************************/
+/* Returns the character corresponding to the int value (0=R, 1=B,...)  */
+/************************************************************************/
+uint8_t idToRGB( uint8_t pColorIntId )
+{
+	switch(pColorIntId){
+		case 0:
+		pColorIntId = 'R';
+		break;
+		case 1:
+		pColorIntId = 'G';
+		break;
+		case 2:
+		pColorIntId = 'B';
+		break;
+		case 3:
+		pColorIntId = 'Y';
+		break;
+		case 4:
+		pColorIntId = 'P';
+		break;
+		case 5:
+		pColorIntId = 'C';
+		break;
+	}
+	return pColorIntId;
+}
+
+void matrixClearOne (volatile uint8_t* pMx){
+	int8_t i = 7;
+	do {
+		pMx[i] = 0x00;
+		i--;
+	} while (i >= 0);
+}
+
+void matrixClearAll(){
+	matrixClearOne(mRedMatrix);
+	matrixClearOne(mGreenMatrix);
+	matrixClearOne(mBlueMatrix);
+}
+
 void setMatrix(uint8_t pRGB, uint8_t pX, uint8_t pY, uint8_t pValue){
 	if (pRGB == 'B') {
 		mBlueMatrix[pY] = (pValue == 0 ? mBlueMatrix[pY] & ~(1 << pX) : mBlueMatrix[pY] | (1 << pX));
