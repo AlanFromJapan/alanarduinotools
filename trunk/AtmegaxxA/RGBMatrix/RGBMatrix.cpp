@@ -18,6 +18,89 @@
 volatile uint8_t mCount = 0;
 volatile uint8_t mCompo	= 0;
 volatile uint8_t mTiming = 0;
+volatile uint8_t mLine = 0;
+volatile int8_t mLineStart = -1;
+volatile int8_t mLineEnd = -1;
+
+
+void NexusLike() 
+{
+		if (mTiming >= 10) {
+		mTiming = 0;
+		volatile uint8_t* vMx;
+		volatile uint8_t* vMx2;
+		
+		if (mCompo == 0){
+			vMx = mRedMatrix;
+		}
+		else {
+			if (mCompo == 1){
+				vMx = mGreenMatrix;
+			}
+			else {
+				vMx = mBlueMatrix;
+			}
+		}
+
+		switch(mCompo){
+			case 0:
+			vMx = mRedMatrix;
+			vMx2 = mRedMatrix;
+			break;
+			case 1:
+			vMx = mGreenMatrix;
+			vMx2 = mGreenMatrix;
+			break;
+			case 2:
+			vMx = mBlueMatrix;
+			vMx2 = mBlueMatrix;
+			break;
+			case 3:
+			vMx = mRedMatrix;
+			vMx2 = mGreenMatrix;
+			break;
+			case 4:
+			vMx = mRedMatrix;
+			vMx2 = mBlueMatrix;
+			break;
+			case 5:
+			vMx = mGreenMatrix;
+			vMx2 = mBlueMatrix;
+			break;
+		}
+		
+		if (mLineEnd < 7){
+			if (mLineEnd < 0){
+				mLine = rand() % 8;
+			}
+			//new line
+			mLineEnd++;
+
+			vMx[mLine] = vMx[mLine] | (1 << mLineEnd);
+			vMx2[mLine] = vMx2[mLine] | (1 << mLineEnd);
+		}
+		else {
+			if (mLineStart < 7) {
+				mLineStart++;
+
+				vMx[mLine] = vMx[mLine]  & ~(1 << mLineStart);
+				vMx2[mLine] = vMx2[mLine]  & ~(1 << mLineStart);
+			}
+			else {
+				vMx[mLine] = 0x00;
+				vMx2[mLine] = 0x00;
+				mLineStart = -1;
+				mLineEnd = -1;
+				mCompo = rand()% 6;
+			}
+		}
+		
+				
+	}
+	mTiming++;
+}
+
+
 
 
 
@@ -94,58 +177,14 @@ void Waves1()
 }
 
 
-volatile uint8_t mLine = 0;
-volatile int8_t mLineStart = -1;
-volatile int8_t mLineEnd = -1;
 
 ISR(TIMER2_OVF_vect){
 	//RandomColors();
 	//Waves1();
 	//WavesRandom();
 
-	if (mTiming >= 1) {
-		mTiming = 0;
-		volatile uint8_t* vMx;
-		
-		if (mCompo == 0){
-			vMx = mRedMatrix;
-		}
-		else {
-			if (mCompo == 1){
-				vMx = mGreenMatrix;
-			}
-			else {
-				vMx = mBlueMatrix;
-			}
-		}
+	NexusLike();
 
-		
-		if (mLineEnd < 7){
-			if (mLineEnd < 0){
-				mLine = rand() % 8;
-			}
-			//new line
-			mLineEnd++;
-			//setMatrix('R', mLineEnd, mLine, 1);
-			vMx[mLine] = vMx[mLine] | (1 << mLineEnd);
-		}
-		else {
-			if (mLineStart < 7) {
-				mLineStart++;
-				//setMatrix('R', mLineStart, mLine, 0);
-				vMx[mLine] = vMx[mLine]  & ~(1 << mLineStart);
-			}
-			else {
-				vMx[mLine] = 0x00;
-				mLineStart = -1;
-				mLineEnd = -1;
-				mCompo = rand()% 3;
-			}
-		}
-		
-				
-	}
-	mTiming++;
 	
 }
 
@@ -156,8 +195,8 @@ void init_timer2_OVF() {
 	TCCR2 = 
 		//No PWM
 		(1 << FOC2) 
-		//Divide by 1024
-		| (1 << CS22) | (1 << CS20);
+		//Divide by 64
+		| (1 << CS21) | (1 << CS20);
 	
 	//trigger the interrupt vector TIMER1_OVF_vect when timer 1 is overflow
 	TIMSK = (1 << TOV2);

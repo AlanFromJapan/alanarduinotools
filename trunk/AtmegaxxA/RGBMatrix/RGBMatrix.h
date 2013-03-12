@@ -13,7 +13,7 @@
 #include <stdlib.h>
 
 
-#define POV_ON_US 200
+#define POV_ON_US 500
 #define POV_OFF_US 5000
 
 
