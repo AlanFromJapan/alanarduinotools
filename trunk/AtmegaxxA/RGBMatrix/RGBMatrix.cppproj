@@ -84,10 +84,16 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Font.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="RGBMatrix.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="RGBMatrix.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SimpleAlgo.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
