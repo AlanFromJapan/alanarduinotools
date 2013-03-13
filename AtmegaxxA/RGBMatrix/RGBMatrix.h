@@ -22,6 +22,29 @@ volatile uint8_t mRedMatrix		[8];
 volatile uint8_t mGreenMatrix	[8];
 
 
+void matrixSlide(int8_t pAmt){
+	uint8_t vShift = abs(pAmt);
+	
+	if (pAmt > 0){
+		int8_t i = 7;
+		do {
+			mRedMatrix[i]   = mRedMatrix[i] << vShift;
+			mGreenMatrix[i] = mGreenMatrix[i] << vShift;
+			mBlueMatrix[i]  = mBlueMatrix[i] << vShift;
+			i--;
+		} while (i >= 0);		
+	}
+	else {
+		int8_t i = 7;
+		do {
+			mRedMatrix[i]   = mRedMatrix[i] >> vShift;
+			mGreenMatrix[i] = mGreenMatrix[i] >> vShift;
+			mBlueMatrix[i]  = mBlueMatrix[i] >> vShift;
+			i--;
+		} while (i >= 0);
+	}
+}
+	
 /************************************************************************/
 /* Returns the character corresponding to the int value (0=R, 1=B,...)  */
 /************************************************************************/
