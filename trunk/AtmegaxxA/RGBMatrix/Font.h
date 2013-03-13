@@ -10,6 +10,8 @@
 #define FONT_H_
 
 #define DIGIT_HEIGHT 6
+#define DIGIT_WIDTH  5
+
 
 uint8_t DIGIT0[] = {
 	0b01100,
@@ -20,14 +22,13 @@ uint8_t DIGIT0[] = {
 	0b01100
 	};
 	
-
 uint8_t DIGIT1[] = {
 	0b00100,
 	0b00110,
 	0b00100,
 	0b00100,
 	0b00100,
-	0b11111
+	0b01110
 };
 
 uint8_t DIGIT2[] = {
@@ -67,8 +68,8 @@ uint8_t DIGIT5[] = {
 };
 
 uint8_t DIGIT6[] = {
-	0b11110,
-	0b00001,
+	0b01100,
+	0b00010,
 	0b00001,
 	0b01111,
 	0b10001,
@@ -98,10 +99,18 @@ uint8_t DIGIT9[] = {
 	0b10001,
 	0b11110,
 	0b10000,
-	0b10000,
-	0b01110,
+	0b01000,
+	0b00110,
 };
 
+uint8_t DIGIT_SEMICOLON[] = {
+	0b00000,
+	0b00000,
+	0b01100,
+	0b00000,
+	0b01100,
+	0b00000,
+};
 
  uint8_t* DIGITS[] ={
 	DIGIT0,
@@ -144,6 +153,26 @@ void ShowOne (uint8_t pRGB, uint8_t pDigit){
 	copyToBuffer (pRGB, 1, DIGITS[pDigit]);
 }
 
+void ShowDigits (uint16_t pValue, int8_t pPos){
+	volatile uint8_t* vMx;
+	vMx = mRedMatrix;
+
+	matrixClearAll();
+	
+	int8_t i = DIGIT_HEIGHT-1;
+	do {
+		//vMx[i + (8-DIGIT_HEIGHT) / 2] = pSource[i];
+		//vMx[i + (8-DIGIT_HEIGHT) / 2] <<= pX;
+		
+		if (pPos >= 1 && pPos < 8+DIGIT_WIDTH){
+			//show digit 0
+			uint8_t vVal = (pPos / 1000) % 10;
+			//STOPPED HERE ...
+		}
+			
+		i--;
+	} while (i >= 0);
+}
 
 	
 #endif /* FONT_H_ */

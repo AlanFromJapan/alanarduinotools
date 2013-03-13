@@ -17,6 +17,9 @@
 #include "Font.h"
 
 
+#define MODE_NEXUS 0
+#define MODE_DIGITS 1
+volatile uint8_t mShowMode = MODE_NEXUS;
 
 
 
@@ -28,20 +31,24 @@ ISR(TIMER2_OVF_vect){
 	//Waves1();
 	//WavesRandom();
 
-	//NexusLike();
-
-	if (mTiming == 400){
-		mTiming = 0;
-		mCount = (mCount >= 9 ? 0 : mCount+1);
-		
-		uint8_t vColor = rand() % 3;
-		vColor = idToRGB(vColor);
-
-		
-		ShowOne(vColor, mCount);
+	if (mShowMode == MODE_NEXUS){
+		NexusLike();
 	}
-	mTiming++;
-	
+	else {
+		if (mTiming == 400){
+			mTiming = 0;
+			mCount = (mCount >= 9 ? 0 : mCount+1);
+		
+			uint8_t vColor = rand() % 3;
+			vColor = idToRGB(vColor);
+
+		
+			ShowOne(vColor, mCount);
+		
+			//matrixSlide(-1);
+		}
+		mTiming++;
+	}	
 }
 
 //inits timer 1 to do interrupt on overflow (calls ISR(TIMER2_OVF_vect))
@@ -64,10 +71,18 @@ void init_timer2_OVF() {
 
 int main(void)
 {
+	//PORTS A,C,E,D are dedicated to matrix display
 	DDRD = 0xFF;
 	DDRE = 0xFF;
 	DDRA = 0xFF;
 	DDRC = 0xFF;
+	
+	//G port is for input
+	DDRG = 0x00;
+	//pullups for everyone
+	PORTG = 0xff;
+	//just make sure pullups are NOT disabled
+	MCUCR |= (0 << PUD);
 	
 	//A0-A3 : are the negative row 1-4
 	//C4-C7 : are the negative row 5-8
@@ -76,11 +91,15 @@ int main(void)
 
 	init_timer2_OVF();
 		
-	
 	while (1){
 	
 		showMatrix();
-				
+		
+		//check if PING3 is pressed (back board button)
+		if ((~PING & (1 << PING3)) != 0){
+			matrixClearAll();
+			mShowMode = (mShowMode + 1) % 2;
+		}
 	}
 	
 }
