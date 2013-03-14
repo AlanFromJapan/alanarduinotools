@@ -21,37 +21,16 @@
 #define MODE_NEXUS 2
 #define MODE_DIGITS 1
 #define MODE_SLIDE 0
+
 volatile uint8_t mShowMode = MODE_SLIDE;
 
 
 
-
-
-
+/************************************************************************/
+/* TIMER 2 interrupt code                                               */
+/************************************************************************/
 ISR(TIMER2_OVF_vect){
-	//RandomColors();
-	//Waves1();
-	//WavesRandom();
 
-	//if (mShowMode == MODE_NEXUS){
-		//NexusLike();
-	//}
-	//else {
-		//if (mTiming == 400){
-			//mTiming = 0;
-			//mCount = (mCount >= 9 ? 0 : mCount+1);
-		//
-			//uint8_t vColor = rand() % 3;
-			//vColor = idToRGB(vColor);
-//
-		//
-			//ShowOne(vColor, mCount);
-		//
-			////matrixSlide(-1);
-		//}
-		//mTiming++;
-	//}	
-	
 	switch(mShowMode){
 		case MODE_NEXUS:
 			NexusLike();
@@ -70,23 +49,18 @@ ISR(TIMER2_OVF_vect){
 				//matrixSlide(-1);
 			}
 			mTiming++;
-		break;
+			break;
 		case MODE_SLIDE:
-			if (mTiming == 50){
-				mTiming = 0;
-				mCount = (mCount >= 8+DIGIT_WIDTH*5-1 ? 0 : mCount+1);
-				
-				ShowDigits(1234, mCount);
-			}
-			mTiming++;
-		
-		break;		
+			SlidingTime();
+			break;		
 	}
 
 			
 }
 
-//inits timer 1 to do interrupt on overflow (calls ISR(TIMER2_OVF_vect))
+/************************************************************************/
+/*inits timer 1 to do interrupt on overflow (calls ISR(TIMER2_OVF_vect))*/
+/************************************************************************/
 void init_timer2_OVF() {
 	
 	//timer 2
@@ -127,7 +101,7 @@ int main(void)
 	init_timer2_OVF();
 		
 	while (1){
-	
+		//refresh display
 		showMatrix();
 		
 		//check if PING3 is pressed (back board button)
