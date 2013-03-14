@@ -17,9 +17,11 @@
 #include "Font.h"
 
 
-#define MODE_NEXUS 0
+#define MODE_COUNT 3
+#define MODE_NEXUS 2
 #define MODE_DIGITS 1
-volatile uint8_t mShowMode = MODE_NEXUS;
+#define MODE_SLIDE 0
+volatile uint8_t mShowMode = MODE_SLIDE;
 
 
 
@@ -31,24 +33,57 @@ ISR(TIMER2_OVF_vect){
 	//Waves1();
 	//WavesRandom();
 
-	if (mShowMode == MODE_NEXUS){
-		NexusLike();
+	//if (mShowMode == MODE_NEXUS){
+		//NexusLike();
+	//}
+	//else {
+		//if (mTiming == 400){
+			//mTiming = 0;
+			//mCount = (mCount >= 9 ? 0 : mCount+1);
+		//
+			//uint8_t vColor = rand() % 3;
+			//vColor = idToRGB(vColor);
+//
+		//
+			//ShowOne(vColor, mCount);
+		//
+			////matrixSlide(-1);
+		//}
+		//mTiming++;
+	//}	
+	
+	switch(mShowMode){
+		case MODE_NEXUS:
+			NexusLike();
+			break;
+		case MODE_DIGITS:
+			if (mTiming == 400){
+				mTiming = 0;
+				mCount = (mCount >= 9 ? 0 : mCount+1);
+	
+				uint8_t vColor = rand() % 3;
+				vColor = idToRGB(vColor);
+	
+	
+				ShowOne(vColor, mCount);
+	
+				//matrixSlide(-1);
+			}
+			mTiming++;
+		break;
+		case MODE_SLIDE:
+			if (mTiming == 400){
+				mTiming = 0;
+				mCount = (mCount >= 8+DIGIT_WIDTH-1 ? 0 : mCount+1);
+				
+				ShowDigits(0, mCount);
+			}
+			mTiming++;
+		
+		break;		
 	}
-	else {
-		if (mTiming == 400){
-			mTiming = 0;
-			mCount = (mCount >= 9 ? 0 : mCount+1);
-		
-			uint8_t vColor = rand() % 3;
-			vColor = idToRGB(vColor);
 
-		
-			ShowOne(vColor, mCount);
-		
-			//matrixSlide(-1);
-		}
-		mTiming++;
-	}	
+			
 }
 
 //inits timer 1 to do interrupt on overflow (calls ISR(TIMER2_OVF_vect))
@@ -98,7 +133,7 @@ int main(void)
 		//check if PING3 is pressed (back board button)
 		if ((~PING & (1 << PING3)) != 0){
 			matrixClearAll();
-			mShowMode = (mShowMode + 1) % 2;
+			mShowMode = (mShowMode + 1) % MODE_COUNT;
 		}
 	}
 	
