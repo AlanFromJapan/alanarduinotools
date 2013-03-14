@@ -53,7 +53,7 @@ uint8_t DIGIT4[] = {
 	0b01000,
 	0b01100,
 	0b01010,
-	0b11111,
+	0b11110,
 	0b01000,
 	0b01000,
 };
@@ -153,6 +153,22 @@ void ShowOne (uint8_t pRGB, uint8_t pDigit){
 	copyToBuffer (pRGB, 1, DIGITS[pDigit]);
 }
 
+
+inline void paintDigit(int8_t pPos, uint8_t pLineData, volatile uint8_t* pMx, int8_t pLineIndex, uint8_t pNthDigit) 
+{
+	int8_t vShiftAmount = 8 - pPos+DIGIT_WIDTH*pNthDigit;
+	if (vShiftAmount < 0){
+		vShiftAmount = - vShiftAmount;
+		pLineData >>= vShiftAmount;
+	}
+	else {
+		pLineData <<= vShiftAmount;
+	}
+
+	
+	pMx[1+pLineIndex] |= pLineData;
+}
+
 void ShowDigits (uint16_t pValue, int8_t pPos){
 	volatile uint8_t* vMx;
 	vMx = mRedMatrix;
@@ -161,103 +177,61 @@ void ShowDigits (uint16_t pValue, int8_t pPos){
 	
 	int8_t i = DIGIT_HEIGHT-1;
 	do {
-		
-		if (pPos >= 1 && pPos < 8+DIGIT_WIDTH){
-			//show digit 0
-			uint8_t vVal = (pValue / 1000) % 10;
-			uint8_t vLine = DIGITS[vVal][i];
-			
-			int8_t vShiftAmount = 8 - pPos;
-			if (vShiftAmount < 0){
-				vShiftAmount = - vShiftAmount;
-				vLine >>= vShiftAmount;
-			}
-			else {
-				vLine <<= vShiftAmount;
-			}
+		uint8_t vNthDigit = 0;
+		uint8_t vVal = 0;
+		uint8_t vLine = 0;
 
+		//format ab:cd		
+		if (pPos >= 1 + DIGIT_WIDTH * vNthDigit && pPos < 8+DIGIT_WIDTH*(1+vNthDigit)){
+			//show digit a
+			vVal = (pValue / 1000) % 10;
+			vLine = DIGITS[vVal][i];
 			
-			vMx[1+i] |= vLine;
+			paintDigit(pPos,vLine,vMx,i,vNthDigit);
 		}
-
+		vNthDigit++;
 
 		
-		if (pPos >= 1+DIGIT_WIDTH && pPos < 8+DIGIT_WIDTH*2){
-			//show digit 0
-			uint8_t vVal = (pValue / 100) % 10;
-			uint8_t vLine = DIGITS[vVal][i];
+		if (pPos >= 1 + DIGIT_WIDTH * vNthDigit && pPos < 8+DIGIT_WIDTH*(1+vNthDigit)){
+			//show digit b
+			vVal = (pValue / 100) % 10;
+			vLine = DIGITS[vVal][i];
 			
-			int8_t vShiftAmount = 8 - pPos+DIGIT_WIDTH;
-			if (vShiftAmount < 0){
-				vShiftAmount = - vShiftAmount;
-				vLine >>= vShiftAmount;
-			}
-			else {
-				vLine <<= vShiftAmount;
-			}
-
-			
-			vMx[1+i] |= vLine;
+			paintDigit(pPos,vLine,vMx,i,vNthDigit);
 		}
+		vNthDigit++;
 
 
 
-		if (pPos >= 1+DIGIT_WIDTH*2 && pPos < 8+DIGIT_WIDTH*3){
-			//show digit 0
-			uint8_t vLine = DIGIT_SEMICOLON[i];
+		if (pPos >= 1 + DIGIT_WIDTH * vNthDigit && pPos < 8+DIGIT_WIDTH*(1+vNthDigit)){
+			//show semicolon
+			vLine = DIGIT_SEMICOLON[i];
 	
-			int8_t vShiftAmount = 8 - pPos+DIGIT_WIDTH*2;
-			if (vShiftAmount < 0){
-				vShiftAmount = - vShiftAmount;
-				vLine >>= vShiftAmount;
-			}
-			else {
-				vLine <<= vShiftAmount;
-			}
-
-	
-			vMx[1+i] |= vLine;
+			paintDigit(pPos,vLine,vMx,i,vNthDigit);
 		}
+		vNthDigit++;
 
 
 
-		if (pPos >= 1+DIGIT_WIDTH*3 && pPos < 8+DIGIT_WIDTH*4){
-			//show digit 0
-			uint8_t vVal = (pValue / 10) % 10;
-			uint8_t vLine = DIGITS[vVal][i];
+		if (pPos >= 1 + DIGIT_WIDTH * vNthDigit && pPos < 8+DIGIT_WIDTH*(1+vNthDigit)){
+			//show digit c
+			vVal = (pValue / 10) % 10;
+			vLine = DIGITS[vVal][i];
 		
-			int8_t vShiftAmount = 8 - pPos+DIGIT_WIDTH*3;
-			if (vShiftAmount < 0){
-				vShiftAmount = - vShiftAmount;
-				vLine >>= vShiftAmount;
-			}
-			else {
-				vLine <<= vShiftAmount;
-			}
-
-		
-			vMx[1+i] |= vLine;
+			paintDigit(pPos,vLine,vMx,i,vNthDigit);
 		}
+		vNthDigit++;
 
 
 
-		if (pPos >= 1+DIGIT_WIDTH*4 && pPos < 8+DIGIT_WIDTH*5){
-			//show digit 0
-			uint8_t vVal = pValue % 10;
-			uint8_t vLine = DIGITS[vVal][i];
+		if (pPos >= 1 + DIGIT_WIDTH * vNthDigit && pPos < 8+DIGIT_WIDTH*(1+vNthDigit)){
+			//show digit d
+			vVal = pValue % 10;
+			vLine = DIGITS[vVal][i];
 		
-			int8_t vShiftAmount = 8 - pPos+DIGIT_WIDTH*4;
-			if (vShiftAmount < 0){
-				vShiftAmount = - vShiftAmount;
-				vLine >>= vShiftAmount;
-			}
-			else {
-				vLine <<= vShiftAmount;
-			}
-
-		
-			vMx[1+i] |= vLine;
+			paintDigit(pPos,vLine,vMx,i,vNthDigit);
 		}
+		vNthDigit++;
 			
 		i--;
 	} while (i >= 0);
