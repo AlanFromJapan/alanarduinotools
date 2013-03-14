@@ -37,31 +37,31 @@ uint8_t DIGIT2[] = {
 	0b01000,
 	0b00100,
 	0b00010,
-	0b11111,
+	0b11110,
 };
 
 uint8_t DIGIT3[] = {
 	0b01110,
-	0b10001,
-	0b01000,
 	0b10000,
-	0b10001,
+	0b01100,
+	0b10000,
+	0b10000,
 	0b01110,
 };
 
 uint8_t DIGIT4[] = {
-	0b10000,
-	0b11000,
-	0b10100,
-	0b11110,
-	0b10000,
-	0b10000,
+	0b01000,
+	0b01100,
+	0b01010,
+	0b11111,
+	0b01000,
+	0b01000,
 };
 
 uint8_t DIGIT5[] = {
-	0b11111,
-	0b00001,
-	0b01111,
+	0b11110,
+	0b00010,
+	0b01110,
 	0b10000,
 	0b10000,
 	0b01110,
@@ -70,10 +70,10 @@ uint8_t DIGIT5[] = {
 uint8_t DIGIT6[] = {
 	0b01100,
 	0b00010,
-	0b00001,
-	0b01111,
-	0b10001,
+	0b00010,
 	0b01110,
+	0b10010,
+	0b01100,
 };
 
 uint8_t DIGIT7[] = {
@@ -86,21 +86,21 @@ uint8_t DIGIT7[] = {
 };
 
 uint8_t DIGIT8[] = {
-	0b01110,
-	0b10001,
-	0b01110,
-	0b10001,
-	0b10001,
-	0b01110,
+	0b01100,
+	0b10010,
+	0b01100,
+	0b10010,
+	0b10010,
+	0b01100,
 };
 
 uint8_t DIGIT9[] = {
-	0b01110,
-	0b10001,
-	0b11110,
+	0b01100,
+	0b10010,
+	0b11100,
 	0b10000,
-	0b01000,
-	0b00110,
+	0b10000,
+	0b01100,
 };
 
 uint8_t DIGIT_SEMICOLON[] = {
@@ -167,7 +167,21 @@ void ShowDigits (uint16_t pValue, int8_t pPos){
 		if (pPos >= 1 && pPos < 8+DIGIT_WIDTH){
 			//show digit 0
 			uint8_t vVal = (pPos / 1000) % 10;
-			//STOPPED HERE ...
+			uint8_t vLine = DIGITS[vVal][i];
+			
+			int8_t vShiftAmount = 8 - pPos;
+			if (vShiftAmount < 0){
+				vShiftAmount = - vShiftAmount;
+				vLine >>= vShiftAmount;
+			}
+			else {
+				vLine <<= vShiftAmount;
+			}
+
+
+			
+			
+			vMx[i] = vLine;
 		}
 			
 		i--;
