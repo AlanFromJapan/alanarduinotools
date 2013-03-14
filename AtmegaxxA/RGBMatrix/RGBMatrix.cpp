@@ -72,11 +72,11 @@ ISR(TIMER2_OVF_vect){
 			mTiming++;
 		break;
 		case MODE_SLIDE:
-			if (mTiming == 200){
+			if (mTiming == 50){
 				mTiming = 0;
 				mCount = (mCount >= 8+DIGIT_WIDTH*5-1 ? 0 : mCount+1);
 				
-				ShowDigits(6789, mCount);
+				ShowDigits(1234, mCount);
 			}
 			mTiming++;
 		
