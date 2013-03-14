@@ -153,9 +153,12 @@ void ShowOne (uint8_t pRGB, uint8_t pDigit){
 	copyToBuffer (pRGB, 1, DIGITS[pDigit]);
 }
 
-
+/*************************************************************************************************/
+/* Sliding digits: draws the piece of digit correctly adjusted in position in the color matrix   */
+/*************************************************************************************************/
 inline void paintDigit(int8_t pPos, uint8_t pLineData, volatile uint8_t* pMx, int8_t pLineIndex, uint8_t pNthDigit) 
 {
+	//shift by the left or the right to get the line correctly aligned : will depend on the sign of this variable
 	int8_t vShiftAmount = 8 - pPos+DIGIT_WIDTH*pNthDigit;
 	if (vShiftAmount < 0){
 		vShiftAmount = - vShiftAmount;
@@ -165,19 +168,26 @@ inline void paintDigit(int8_t pPos, uint8_t pLineData, volatile uint8_t* pMx, in
 		pLineData <<= vShiftAmount;
 	}
 
-	
+	//1+pLineIndex because digits are 6 led height and I want to center vertically
 	pMx[1+pLineIndex] |= pLineData;
 }
 
-void ShowDigits (uint16_t pValue, int8_t pPos){
+
+/***************************************************************************************/
+/* Show sliding digit format 'ab:cd'. Pos is the shifitng amount from initial position */
+/***************************************************************************************/
+void ShowSlidingDigits (uint16_t pValue, int8_t pPos){
 	matrixClearAll();
 	
 	int8_t i = DIGIT_HEIGHT-1;
+	//do while(dec) are best performance loop according atmel optimization doc
 	do {
 		uint8_t vNthDigit = 0;
 		uint8_t vVal = 0;
 		uint8_t vLine = 0;
 
+		//This is written as a flatten loop for performance, space vs speed constraint (this must be fast)
+		//and writing it as a loop would still require a few ifs-ifs or make it less readable.
 		//format ab:cd		
 		if (pPos >= 1 + DIGIT_WIDTH * vNthDigit && pPos < 8+DIGIT_WIDTH*(1+vNthDigit)){
 			//show digit a

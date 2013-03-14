@@ -180,7 +180,7 @@ void SlidingTime()
 		mCount = (mCount >= 8+DIGIT_WIDTH*5-1 ? 0 : mCount+1);
 		
 		//value to show, mCount is the shift position
-		ShowDigits(mTime, mCount);
+		ShowSlidingDigits(mTime, mCount);
 		
 		if (mCount == 0){
 			mTime++;
