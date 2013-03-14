@@ -68,8 +68,8 @@ uint8_t DIGIT5[] = {
 };
 
 uint8_t DIGIT6[] = {
-	0b01100,
-	0b00010,
+	0b01000,
+	0b00100,
 	0b00010,
 	0b01110,
 	0b10010,
@@ -161,12 +161,10 @@ void ShowDigits (uint16_t pValue, int8_t pPos){
 	
 	int8_t i = DIGIT_HEIGHT-1;
 	do {
-		//vMx[i + (8-DIGIT_HEIGHT) / 2] = pSource[i];
-		//vMx[i + (8-DIGIT_HEIGHT) / 2] <<= pX;
 		
 		if (pPos >= 1 && pPos < 8+DIGIT_WIDTH){
 			//show digit 0
-			uint8_t vVal = (pPos / 1000) % 10;
+			uint8_t vVal = (pValue / 1000) % 10;
 			uint8_t vLine = DIGITS[vVal][i];
 			
 			int8_t vShiftAmount = 8 - pPos;
@@ -178,10 +176,87 @@ void ShowDigits (uint16_t pValue, int8_t pPos){
 				vLine <<= vShiftAmount;
 			}
 
+			
+			vMx[1+i] |= vLine;
+		}
+
+
+		
+		if (pPos >= 1+DIGIT_WIDTH && pPos < 8+DIGIT_WIDTH*2){
+			//show digit 0
+			uint8_t vVal = (pValue / 100) % 10;
+			uint8_t vLine = DIGITS[vVal][i];
+			
+			int8_t vShiftAmount = 8 - pPos+DIGIT_WIDTH;
+			if (vShiftAmount < 0){
+				vShiftAmount = - vShiftAmount;
+				vLine >>= vShiftAmount;
+			}
+			else {
+				vLine <<= vShiftAmount;
+			}
 
 			
-			
-			vMx[i] = vLine;
+			vMx[1+i] |= vLine;
+		}
+
+
+
+		if (pPos >= 1+DIGIT_WIDTH*2 && pPos < 8+DIGIT_WIDTH*3){
+			//show digit 0
+			uint8_t vLine = DIGIT_SEMICOLON[i];
+	
+			int8_t vShiftAmount = 8 - pPos+DIGIT_WIDTH*2;
+			if (vShiftAmount < 0){
+				vShiftAmount = - vShiftAmount;
+				vLine >>= vShiftAmount;
+			}
+			else {
+				vLine <<= vShiftAmount;
+			}
+
+	
+			vMx[1+i] |= vLine;
+		}
+
+
+
+		if (pPos >= 1+DIGIT_WIDTH*3 && pPos < 8+DIGIT_WIDTH*4){
+			//show digit 0
+			uint8_t vVal = (pValue / 10) % 10;
+			uint8_t vLine = DIGITS[vVal][i];
+		
+			int8_t vShiftAmount = 8 - pPos+DIGIT_WIDTH*3;
+			if (vShiftAmount < 0){
+				vShiftAmount = - vShiftAmount;
+				vLine >>= vShiftAmount;
+			}
+			else {
+				vLine <<= vShiftAmount;
+			}
+
+		
+			vMx[1+i] |= vLine;
+		}
+
+
+
+		if (pPos >= 1+DIGIT_WIDTH*4 && pPos < 8+DIGIT_WIDTH*5){
+			//show digit 0
+			uint8_t vVal = pValue % 10;
+			uint8_t vLine = DIGITS[vVal][i];
+		
+			int8_t vShiftAmount = 8 - pPos+DIGIT_WIDTH*4;
+			if (vShiftAmount < 0){
+				vShiftAmount = - vShiftAmount;
+				vLine >>= vShiftAmount;
+			}
+			else {
+				vLine <<= vShiftAmount;
+			}
+
+		
+			vMx[1+i] |= vLine;
 		}
 			
 		i--;
