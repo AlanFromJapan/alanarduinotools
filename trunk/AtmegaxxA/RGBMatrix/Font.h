@@ -170,9 +170,6 @@ inline void paintDigit(int8_t pPos, uint8_t pLineData, volatile uint8_t* pMx, in
 }
 
 void ShowDigits (uint16_t pValue, int8_t pPos){
-	volatile uint8_t* vMx;
-	vMx = mRedMatrix;
-
 	matrixClearAll();
 	
 	int8_t i = DIGIT_HEIGHT-1;
@@ -187,7 +184,7 @@ void ShowDigits (uint16_t pValue, int8_t pPos){
 			vVal = (pValue / 1000) % 10;
 			vLine = DIGITS[vVal][i];
 			
-			paintDigit(pPos,vLine,vMx,i,vNthDigit);
+			paintDigit(pPos,vLine,mRedMatrix,i,vNthDigit);
 		}
 		vNthDigit++;
 
@@ -197,7 +194,8 @@ void ShowDigits (uint16_t pValue, int8_t pPos){
 			vVal = (pValue / 100) % 10;
 			vLine = DIGITS[vVal][i];
 			
-			paintDigit(pPos,vLine,vMx,i,vNthDigit);
+			paintDigit(pPos,vLine,mRedMatrix,i,vNthDigit);
+			paintDigit(pPos,vLine,mBlueMatrix,i,vNthDigit);
 		}
 		vNthDigit++;
 
@@ -207,7 +205,7 @@ void ShowDigits (uint16_t pValue, int8_t pPos){
 			//show semicolon
 			vLine = DIGIT_SEMICOLON[i];
 	
-			paintDigit(pPos,vLine,vMx,i,vNthDigit);
+			paintDigit(pPos,vLine,mBlueMatrix,i,vNthDigit);
 		}
 		vNthDigit++;
 
@@ -218,7 +216,7 @@ void ShowDigits (uint16_t pValue, int8_t pPos){
 			vVal = (pValue / 10) % 10;
 			vLine = DIGITS[vVal][i];
 		
-			paintDigit(pPos,vLine,vMx,i,vNthDigit);
+			paintDigit(pPos,vLine,mGreenMatrix,i,vNthDigit);
 		}
 		vNthDigit++;
 
@@ -229,7 +227,8 @@ void ShowDigits (uint16_t pValue, int8_t pPos){
 			vVal = pValue % 10;
 			vLine = DIGITS[vVal][i];
 		
-			paintDigit(pPos,vLine,vMx,i,vNthDigit);
+			paintDigit(pPos,vLine,mGreenMatrix,i,vNthDigit);
+			paintDigit(pPos,vLine,mRedMatrix,i,vNthDigit);
 		}
 		vNthDigit++;
 			

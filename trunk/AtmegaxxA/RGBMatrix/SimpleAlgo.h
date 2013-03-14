@@ -4,7 +4,7 @@
  * Created: 2013/03/12 21:18:51
  *  Author: Alan
  */ 
-
+#include "Font.h"
 
 #ifndef SIMPLEALGO_H_
 #define SIMPLEALGO_H_
@@ -171,6 +171,26 @@ void Waves1()
 	mCount++;
 }
 
+
+volatile uint16_t mTime = 0;
+void SlidingTime()
+{
+	if (mTiming == 40){
+		mTiming = 0;
+		mCount = (mCount >= 8+DIGIT_WIDTH*5-1 ? 0 : mCount+1);
+		
+		//value to show, mCount is the shift position
+		ShowDigits(mTime, mCount);
+		
+		if (mCount == 0){
+			mTime++;
+			if (mTime >= 1000){
+				mTime = 0;
+			}
+		}
+	}
+	mTiming++;
+}
 
 
 #endif /* SIMPLEALGO_H_ */
