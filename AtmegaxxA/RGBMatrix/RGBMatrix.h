@@ -13,8 +13,8 @@
 #include <stdlib.h>
 
 
-#define POV_ON_US 500
-#define POV_OFF_US 5000
+#define POV_ON_US 50
+#define POV_OFF_US 500
 
 
 volatile uint8_t mBlueMatrix	[8];

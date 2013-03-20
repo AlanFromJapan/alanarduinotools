@@ -6,7 +6,7 @@
 */
 
 //well in real it's more like 8MHz but this value makes a nice flickerless display so...
-#define F_CPU 1000000L
+#define F_CPU 8000000L
 
 #include <avr/io.h>
 #include <util/delay.h>
