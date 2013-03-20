@@ -18,6 +18,7 @@
 /************************************************************************/
 volatile int16_t mRemainingOnDuration = 0;
 #define ONE_SEC 10
+#define MAX_DURATION_SEC (ONE_SEC * 60 *10)
 
 void turnOn(){
 	PORTB |= (1 << PORTB1);
@@ -64,7 +65,7 @@ int main(void)
 	//PB1 out, PB5 & PB0 in
 	DDRB = 0x02;
 	//Pullup on PB0 % PB5
-	PORTB = 0x01; 
+	PORTB = (1 << PORTB5) | (1 << PORTB0);
 	//just make sure pullups are NOT disabled
 	MCUCR |= (0 << PUD);
 	
@@ -114,11 +115,15 @@ int main(void)
 		}
 		
 		
-		//check for button press
+		//check for button press : PB0 -> Add 3 minutes
 		if ((~PINB & (1 << PINB0)) != 0){
 			clearDisplay();
 			//pushed button : turns on if not already anyway and add and extra 3 minutes
-			mRemainingOnDuration +=ONE_SEC *30;
+			mRemainingOnDuration +=ONE_SEC * 180;
+			//max is 10 minutes
+			if (mRemainingOnDuration > MAX_DURATION_SEC){
+				mRemainingOnDuration = MAX_DURATION_SEC;
+			}
 			turnOn();
 			
 			//wait while pressed and wait again 1/2 sec (debouncing) 
@@ -126,5 +131,17 @@ int main(void)
 			_delay_ms(300);
 		}
 		
+		
+		//check for button press : PB5 -> Stop now !
+		if ((~PINB & (1 << PINB5)) != 0){
+			clearDisplay();
+			//pushed button : turns off
+			mRemainingOnDuration = 0;
+			turnOff();
+					
+			//wait while pressed and wait again 1/2 sec (debouncing)
+			while ((~PINB & (1 << PINB5)) != 0);
+			_delay_ms(300);
+		}
 	}
 }
