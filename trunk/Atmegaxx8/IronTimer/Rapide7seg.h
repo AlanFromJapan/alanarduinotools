@@ -68,7 +68,7 @@ uint8_t ANIM[] = {
 uint8_t mDisplayTab[4];
 
 
-#define POV_DURATION_US 500
+#define POV_DURATION_US 50
 //Shows the in-memory table of 4 7segs
 //Says from which to start and till which to go (0= leftmost, 3= rightmost)
 void showDisplayTab(uint8_t pFromLeft, uint8_t pToRight){
@@ -96,6 +96,16 @@ void showDisplayTab(uint8_t pFromLeft, uint8_t pToRight){
 		_delay_us(POV_DURATION_US);
 	}
 }
+
+
+void clearDisplay (){
+	mDisplayTab[0] = DIGIT_OFF;
+	mDisplayTab[1] = DIGIT_OFF;
+	mDisplayTab[2] = DIGIT_OFF;
+	mDisplayTab[3] = DIGIT_OFF;
+	showDisplayTab(0,3);
+}
+
 
 #define POV_ITERATIONS 25
 void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight, bool pShowLeadingZeros){
