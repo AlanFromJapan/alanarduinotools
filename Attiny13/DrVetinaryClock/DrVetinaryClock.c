@@ -19,15 +19,19 @@
 //probability to skip time
 #define SKIP_EVERY_N 45
 
-volatile uint8_t vPort = (1 << PB4) | (0 << PB3);
+
+#define TICK_PULSE_MS_5V 7
+#define TICK_PULSE_MS_3V 15
+
+volatile uint8_t mPort = (1 << PB4) | (0 << PB3);
 
 inline void tick(){
-	PORTB = vPort;
-	_delay_ms(15);
+	PORTB = mPort;
+	_delay_ms(TICK_PULSE_MS_5V);
 	PORTB = 0x00;
 
 	//reverse status of PB3 and PB4 : the electro-magnet must change direction each time
-	vPort ^= (1 << PB4) | (1 << PB3);
+	mPort ^= (1 << PB4) | (1 << PB3);
 	
 }
 
