@@ -5,7 +5,7 @@
 *  Author: Alan
 */
 
-//#define F_CPU 9600000
+#define F_CPU 9600000
 
 #include <avr/io.h>
 #include <avr/delay.h>
@@ -19,7 +19,7 @@
 //probability to skip time
 #define SKIP_EVERY_N 45
 
-
+//duration of the pulse according the voltage
 #define TICK_PULSE_MS_5V 7
 #define TICK_PULSE_MS_3V 15
 
