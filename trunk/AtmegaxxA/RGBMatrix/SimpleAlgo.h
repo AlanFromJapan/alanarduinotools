@@ -173,34 +173,36 @@ void Waves1()
 
 
 volatile uint16_t mTime = 0;
+volatile uint8_t mCount2 = 0;
+volatile uint16_t mTiming2 = 0;
 void SlidingTime()
 {
-	if (mTiming == 40){
-		mTiming = 0;
-		mCount = (mCount >= 8+DIGIT_WIDTH*5-1 ? 0 : mCount+1);
+	if (mTiming2 == 40){
+		mTiming2 = 0;
+		mCount2 = (mCount2 >= 8+DIGIT_WIDTH*5-1 ? 0 : mCount2+1);
 		
-		//value to show, mCount is the shift position
-		ShowSlidingDigits(mTime, mCount);
+		//value to show, mCount2 is the shift position
+		ShowSlidingDigits(mTime, mCount2);
 		
-		if (mCount == 0){
+		if (mCount2 == 0){
 			mTime++;
 			if (mTime >= 1000){
 				mTime = 0;
 			}
 		}
 	}
-	mTiming++;
+	mTiming2++;
 }
 void SlidingTime(uint16_t pTimeFormatHHmm)
 {
-	if (mTiming == 40){
-		mTiming = 0;
-		mCount = (mCount >= 8+DIGIT_WIDTH*5-1 ? 0 : mCount+1);
+	if (mTiming2 == 40){
+		mTiming2 = 0;
+		mCount2 = (mCount2 >= 8+DIGIT_WIDTH*5-1 ? 0 : mCount2+1);
 		
-		//value to show, mCount is the shift position
-		ShowSlidingDigits(pTimeFormatHHmm, mCount);
+		//value to show, mCount2 is the shift position
+		ShowSlidingDigits(pTimeFormatHHmm, mCount2);
 	}
-	mTiming++;
+	mTiming2++;
 }
 
 void threeColors() {

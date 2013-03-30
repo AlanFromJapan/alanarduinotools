@@ -18,15 +18,17 @@
 #include "DS1302.h"
 
 
-#define MODE_COUNT 4
+#define MODE_COUNT 5
+
+#define MODE_AUTOTIME 4
 #define MODE_MIXER 3
 #define MODE_NEXUS 2
 #define MODE_DIGITS 1
 #define MODE_SLIDE 0
 
-volatile uint8_t mShowMode = MODE_SLIDE;
+volatile uint8_t mShowMode = MODE_AUTOTIME;
 volatile ds1302_struct rtc;
-
+volatile uint8_t mSubModeSwitched = 0;
 
 /************************************************************************/
 /* TIMER 2 interrupt code : calls the drawing method                    */
@@ -59,6 +61,24 @@ ISR(TIMER2_OVF_vect){
 		case MODE_MIXER:
 			threeColors();
 			break;
+		case MODE_AUTOTIME:
+			if (rtc.Seconds10 * 10 + rtc.Seconds <= 5) {
+				//the 5 first seconds of the minute (show time)
+				if (mSubModeSwitched == 1){
+					mSubModeSwitched = 0;
+					matrixClearAll();
+				}
+				SlidingTime(rtc.h24.Hour10 * 1000 + rtc.h24.Hour * 100 + rtc.Minutes10 * 10 + rtc.Minutes);
+			}
+			else {
+				if (mSubModeSwitched == 0){
+					mSubModeSwitched = 1;
+					matrixClearAll();
+				}
+				//Otherwise it's nexus
+				NexusLike();
+			}
+			break;
 	}
 
 			
@@ -69,7 +89,7 @@ ISR(TIMER2_OVF_vect){
 /************************************************************************/
 volatile uint8_t mTimer0Divider = 0;
 ISR(TIMER0_OVF_vect){
-	if (mShowMode == MODE_SLIDE && mTimer0Divider == 0) {
+	if (mTimer0Divider == 0) {
 		DS1302_clock_burst_read( (uint8_t *) &rtc);
 	}	
 	mTimer0Divider++;

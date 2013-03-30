@@ -73,7 +73,7 @@ uint8_t idToRGB( uint8_t pColorIntId )
 	return pColorIntId;
 }
 
-void matrixClearOne (volatile uint8_t* pMx){
+inline void matrixClearOne (volatile uint8_t* pMx){
 	int8_t i = 7;
 	do {
 		pMx[i] = 0x00;
