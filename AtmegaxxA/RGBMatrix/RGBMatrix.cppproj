@@ -84,6 +84,12 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DS1302.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="DS1302.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Font.h">
       <SubType>compile</SubType>
     </Compile>
