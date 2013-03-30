@@ -5,29 +5,31 @@
 *  Author: Alan
 */
 
-//well in real it's more like 8MHz but this value makes a nice flickerless display so...
 #define F_CPU 8000000L
 
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+#include <avr/wdt.h>
 #include <stdlib.h>
 #include "RGBMatrix.h"
 #include "SimpleAlgo.h"
 #include "Font.h"
+#include "DS1302.h"
 
 
-#define MODE_COUNT 3
+#define MODE_COUNT 4
+#define MODE_MIXER 3
 #define MODE_NEXUS 2
 #define MODE_DIGITS 1
 #define MODE_SLIDE 0
 
 volatile uint8_t mShowMode = MODE_SLIDE;
-
+volatile ds1302_struct rtc;
 
 
 /************************************************************************/
-/* TIMER 2 interrupt code                                               */
+/* TIMER 2 interrupt code : calls the drawing method                    */
 /************************************************************************/
 ISR(TIMER2_OVF_vect){
 
@@ -51,15 +53,33 @@ ISR(TIMER2_OVF_vect){
 			mTiming++;
 			break;
 		case MODE_SLIDE:
-			SlidingTime();
+			SlidingTime(rtc.h24.Hour10 * 1000 + rtc.h24.Hour * 100 + rtc.Minutes10 * 10 + rtc.Minutes);
+			//SlidingTime(rtc.h24.Hour10 * 1000 + rtc.h24.Hour * 100 + rtc.Seconds10 *10 + rtc.Seconds);
 			break;		
+		case MODE_MIXER:
+			threeColors();
+			break;
 	}
 
 			
 }
 
 /************************************************************************/
-/*inits timer 1 to do interrupt on overflow (calls ISR(TIMER2_OVF_vect))*/
+/* TIMER 0 interrupt code : reads the time about every second           */
+/************************************************************************/
+volatile uint8_t mTimer0Divider = 0;
+ISR(TIMER0_OVF_vect){
+	if (mShowMode == MODE_SLIDE && mTimer0Divider == 0) {
+		DS1302_clock_burst_read( (uint8_t *) &rtc);
+	}	
+	mTimer0Divider++;
+	if (mTimer0Divider > (0xff >> 3)){
+		mTimer0Divider = 0;
+	}
+}
+
+/************************************************************************/
+/*inits timer 2 to do interrupt on overflow (calls ISR(TIMER2_OVF_vect))*/
 /************************************************************************/
 void init_timer2_OVF() {
 	
@@ -71,12 +91,31 @@ void init_timer2_OVF() {
 		| (1 << CS21) | (1 << CS20);
 	
 	//trigger the interrupt vector TIMER1_OVF_vect when timer 1 is overflow
-	TIMSK = (1 << TOV2);
+	TIMSK |= (1 << TOV2);
 	
 	//sets the interruptions to enabled
 	sei();
 }
 
+
+/************************************************************************/
+/*inits timer 0 to do interrupt on overflow (calls ISR(TIMER2_OVF_vect))*/
+/************************************************************************/
+void init_timer0_OVF() {
+	
+	//timer 0
+	TCCR0 =
+	//No PWM
+	(1 << FOC0)
+	//Divide by 1024
+	| (1 << CS02) | (1 << CS01) | (1 << CS00);
+	
+	//trigger the interrupt vector TIMER1_OVF_vect when timer 1 is overflow
+	TIMSK |= (1 << TOV0);
+	
+	//sets the interruptions to enabled
+	sei();
+}
 
 int main(void)
 {
@@ -99,7 +138,11 @@ int main(void)
 	XDIV = 0x00;
 
 	init_timer2_OVF();
-		
+	init_timer0_OVF();
+	
+	//DS1302 is plugged on the G port	
+	setupDS1302();
+			
 	while (1){
 		//refresh display
 		showMatrix();
@@ -108,6 +151,7 @@ int main(void)
 		if ((~PING & (1 << PING3)) != 0){
 			matrixClearAll();
 			mShowMode = (mShowMode + 1) % MODE_COUNT;
+			_delay_ms(500);
 		}
 	}
 	

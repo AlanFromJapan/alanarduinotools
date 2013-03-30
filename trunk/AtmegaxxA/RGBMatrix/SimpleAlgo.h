@@ -191,6 +191,46 @@ void SlidingTime()
 	}
 	mTiming++;
 }
+void SlidingTime(uint16_t pTimeFormatHHmm)
+{
+	if (mTiming == 40){
+		mTiming = 0;
+		mCount = (mCount >= 8+DIGIT_WIDTH*5-1 ? 0 : mCount+1);
+		
+		//value to show, mCount is the shift position
+		ShowSlidingDigits(pTimeFormatHHmm, mCount);
+	}
+	mTiming++;
+}
+
+void threeColors() {
+mGreenMatrix[0] =	0b11111111;	
+mGreenMatrix[1] =	0b11111111;
+mGreenMatrix[2] =	0b11111111;
+mGreenMatrix[3] =	0b11111111;
+mGreenMatrix[4] =	0b00000000;
+mGreenMatrix[5] =	0b00000000;
+mGreenMatrix[6] =	0b00000000;
+mGreenMatrix[7] =	0b00000000;
 
 
+mRedMatrix[0] =	0b10000000;
+mRedMatrix[1] =	0b11000000;
+mRedMatrix[2] =	0b11100000;
+mRedMatrix[3] =	0b11110000;
+mRedMatrix[4] =	0b11111000;
+mRedMatrix[5] =	0b11111100;
+mRedMatrix[6] =	0b11111110;
+mRedMatrix[7] =	0b11111111;	
+
+
+mBlueMatrix[0] =	0b00000001;
+mBlueMatrix[1] =	0b00000011;
+mBlueMatrix[2] =	0b00000111;
+mBlueMatrix[3] =	0b00001111;
+mBlueMatrix[4] =	0b00011111;
+mBlueMatrix[5] =	0b00111111;
+mBlueMatrix[6] =	0b01111111;
+mBlueMatrix[7] =	0b11111111;
+}
 #endif /* SIMPLEALGO_H_ */
