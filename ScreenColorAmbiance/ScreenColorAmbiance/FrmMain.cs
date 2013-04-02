@@ -29,22 +29,41 @@ namespace ScreenColorAmbiance {
             gfxScreenshot.CopyFromScreen(Screen.PrimaryScreen.Bounds.X, Screen.PrimaryScreen.Bounds.Y, 0, 0, Screen.PrimaryScreen.Bounds.Size, CopyPixelOperation.SourceCopy);
 
 
+            Rectangle vRect = new Rectangle(0, 0, 100, Screen.PrimaryScreen.Bounds.Height);
+            lblL.BackColor = GetZoneAverageColor(bmpScreenshot, vRect);
 
+            vRect = new Rectangle(0, 0, Screen.PrimaryScreen.Bounds.Width, 100);
+            lblT.BackColor = GetZoneAverageColor(bmpScreenshot, vRect);
+
+            vRect = new Rectangle(Screen.PrimaryScreen.Bounds.Width - 100, 0, 100, Screen.PrimaryScreen.Bounds.Height);
+            lblR.BackColor = GetZoneAverageColor(bmpScreenshot, vRect);
+
+            bmpScreenshot.Dispose();
+            gfxScreenshot.Dispose();
+            GC.Collect();
+            
+        }
+
+        private Color GetZoneAverageColor(Bitmap pBmp, Rectangle pRect) {
             decimal vRed = decimal.Zero;
             decimal vGreen = decimal.Zero;
             decimal vBlue = decimal.Zero;
             int vStep = 5;
-            decimal vDivisor = ((decimal)bmpScreenshot.Width * (decimal)bmpScreenshot.Height) / ((decimal)vStep * (decimal)vStep);
-            for (int x = 0; x < bmpScreenshot.Width; x += vStep) {
-                for (int y = 0; y < bmpScreenshot.Height; y += vStep) {
-                    Color vCol = bmpScreenshot.GetPixel(x, y);
+            decimal vDivisor = ((decimal)pRect.Width * (decimal)pRect.Height) / ((decimal)vStep * (decimal)vStep);
+            for (int x = pRect.X; x < pRect.X + pRect.Width; x += vStep) {
+                for (int y = pRect.Y; y < pRect.Y + pRect.Height; y += vStep) {
+                    Color vCol = pBmp.GetPixel(x, y);
                     vRed += (decimal)vCol.R / vDivisor;
                     vGreen += (decimal)vCol.G / vDivisor;
                     vBlue += (decimal)vCol.B / vDivisor;
                 }
             }
 
-            this.BackColor = Color.FromArgb((int)vRed, (int)vGreen, (int)vBlue);
+           return Color.FromArgb((int)vRed, (int)vGreen, (int)vBlue);
+        }
+
+        private void FrmMain_Load(object sender, EventArgs e) {
+
         }
     }
 }
