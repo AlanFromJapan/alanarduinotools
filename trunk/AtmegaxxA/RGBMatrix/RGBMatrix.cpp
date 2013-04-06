@@ -18,8 +18,9 @@
 #include "DS1302.h"
 
 
-#define MODE_COUNT 5
+#define MODE_COUNT 6
 
+#define MODE_SEA 5
 #define MODE_AUTOTIME 4
 #define MODE_MIXER 3
 #define MODE_NEXUS 2
@@ -60,6 +61,9 @@ ISR(TIMER2_OVF_vect){
 			break;		
 		case MODE_MIXER:
 			threeColors();
+			break;
+		case MODE_SEA:
+			RandomColors();
 			break;
 		case MODE_AUTOTIME:
 			if (rtc.Seconds10 * 10 + rtc.Seconds <= 5) {
