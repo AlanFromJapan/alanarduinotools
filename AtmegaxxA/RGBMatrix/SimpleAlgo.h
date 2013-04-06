@@ -136,7 +136,7 @@ void RandomColors()
 {
 	mCount++;
 	
-	if (mCount >= 10) {
+	if (mCount >= 100) {
 		mCount = 0;
 		mGreenMatrix[rand()%8] = (uint8_t)rand();
 		mRedMatrix[rand()%8] = (uint8_t)rand();
@@ -234,5 +234,15 @@ mBlueMatrix[4] =	0b00011111;
 mBlueMatrix[5] =	0b00111111;
 mBlueMatrix[6] =	0b01111111;
 mBlueMatrix[7] =	0b11111111;
+}
+
+volatile uint8_t mWorm[] = {0x00, 0x01, 0x02, 0x03};
+void wormRandom() {
+	mCount++;
+	
+	if (mCount >= 100) {
+		mCount = 0;
+
+	}	
 }
 #endif /* SIMPLEALGO_H_ */

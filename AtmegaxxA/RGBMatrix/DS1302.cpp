@@ -473,7 +473,7 @@ void setupDS1302()
 
 	// Remove the next define,
 	// after the right date and time are set.
-//#define SET_DATE_TIME_JUST_ONCE
+#define SET_DATE_TIME_JUST_ONCE
 #ifdef SET_DATE_TIME_JUST_ONCE
 
 	// Fill these variables with the date and time.
@@ -482,11 +482,11 @@ void setupDS1302()
 	// Example for april 15, 2013, 10:08, monday is 2nd day of Week.
 	// Set your own time and date in these variables.
 	seconds    = 21;
-	minutes    = 43;
-	hours      = 17;
-	dayofweek  = 6;  // Day of week, any day can be first, counts 1...7
-	dayofmonth = 30; // Day of month, 1...31
-	month      = 3;  // month 1...12
+	minutes    = 40;
+	hours      = 22;
+	dayofweek  = 2;  // Day of week, any day can be first, counts 1...7
+	dayofmonth = 2; // Day of month, 1...31
+	month      = 4;  // month 1...12
 	year       = 2013;
 
 	// Set a time and date
