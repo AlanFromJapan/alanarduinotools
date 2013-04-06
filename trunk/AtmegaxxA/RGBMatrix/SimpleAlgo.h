@@ -238,8 +238,8 @@ mBlueMatrix[7] =	0b11111111;
 
 
 struct wormStatus {
-	int8_t headx ;
-	int8_t heady ;
+	uint8_t headx ;
+	uint8_t heady ;
 	int8_t deltax ;
 	int8_t deltay ;
 	uint8_t bodyLen ;
@@ -261,11 +261,11 @@ void wormRandom() {
 	mCount++;
 
 	//temporization	
-	if (mCount >= 150) {
+	if (mCount >= 50) {
 		mCount = 0;
 
-		//erase tail
-		mRedMatrix[(uint8_t)(mWS.body[mWS.bodyLen-1] & 0x0f)] &= ~(1 << (mWS.body[mWS.bodyLen-1] >> 4));
+		//erase all
+		matrixClearAll();
 		
 		
 		//change direction ?		
@@ -276,17 +276,20 @@ void wormRandom() {
 		}
 		
 		//move
-		mWS.headx = (mWS.headx + mWS.deltax) % 8;
-		mWS.heady = (mWS.heady + mWS.deltay) % 8;
+		mWS.headx = (uint8_t)((int8_t)(mWS.headx) + mWS.deltax) % 8;
+		mWS.heady = (uint8_t)((int8_t)(mWS.heady) + mWS.deltay) % 8;
 		
-		//draw head
-		mRedMatrix[(uint8_t)mWS.heady] |= (1 << (uint8_t)mWS.headx);
-
 		//update body info
 		for (int8_t i = mWS.bodyLen-2 ; i >= 0; i--){
 			mWS.body[i+1] = mWS.body[i];
 		}
 		mWS.body[0] = ((uint8_t)mWS.headx << 4) | (0x0f & (uint8_t)mWS.heady);
+		
+		//draw all
+		for (uint8_t i = 0; i < mWS.bodyLen; i++){		
+			mRedMatrix[((uint8_t)mWS.body[i] & 0x0f)]  |= (1 << (uint8_t)(((uint8_t)mWS.body[i]) >> 4));
+		}		
+
 	}	
 }
 	
