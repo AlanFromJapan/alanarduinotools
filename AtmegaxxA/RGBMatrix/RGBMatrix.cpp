@@ -18,8 +18,9 @@
 #include "DS1302.h"
 
 
-#define MODE_COUNT 6
+#define MODE_COUNT 7
 
+#define MODE_WORM 6
 #define MODE_SEA 5
 #define MODE_AUTOTIME 4
 #define MODE_MIXER 3
@@ -27,7 +28,7 @@
 #define MODE_DIGITS 1
 #define MODE_SLIDE 0
 
-volatile uint8_t mShowMode = MODE_AUTOTIME;
+volatile uint8_t mShowMode = MODE_WORM;
 volatile ds1302_struct rtc;
 volatile uint8_t mSubModeSwitched = 0;
 
@@ -64,6 +65,9 @@ ISR(TIMER2_OVF_vect){
 			break;
 		case MODE_SEA:
 			RandomColors();
+			break;
+		case MODE_WORM:
+			wormRandom();
 			break;
 		case MODE_AUTOTIME:
 			if (rtc.Seconds10 * 10 + rtc.Seconds <= 5) {
@@ -167,6 +171,8 @@ int main(void)
 	//DS1302 is plugged on the G port	
 	setupDS1302();
 			
+	wormInit();
+	
 	while (1){
 		//refresh display
 		showMatrix();

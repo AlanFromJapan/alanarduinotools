@@ -236,13 +236,58 @@ mBlueMatrix[6] =	0b01111111;
 mBlueMatrix[7] =	0b11111111;
 }
 
-volatile uint8_t mWorm[] = {0x00, 0x01, 0x02, 0x03};
+
+struct wormStatus {
+	int8_t headx ;
+	int8_t heady ;
+	int8_t deltax ;
+	int8_t deltay ;
+	uint8_t bodyLen ;
+	uint8_t body[4];
+};
+volatile wormStatus mWS;
+void wormInit(){
+	mWS.headx = 5;
+	mWS.heady = 4;
+	mWS.deltax = 1;
+	mWS.deltay = 0;
+	mWS.bodyLen = 4;
+	mWS.body[0] = (mWS.headx << 4) | (0x0f & mWS.heady);
+	mWS.body[1] = ((mWS.headx-1) << 4) | (0x0f & mWS.heady);
+	mWS.body[2] = ((mWS.headx-2) << 4) | (0x0f & mWS.heady);
+	mWS.body[3] = ((mWS.headx-3) << 4) | (0x0f & mWS.heady);
+}
 void wormRandom() {
 	mCount++;
-	
-	if (mCount >= 100) {
+
+	//temporization	
+	if (mCount >= 150) {
 		mCount = 0;
 
+		//erase tail
+		mRedMatrix[(uint8_t)(mWS.body[mWS.bodyLen-1] & 0x0f)] &= ~(1 << (mWS.body[mWS.bodyLen-1] >> 4));
+		
+		
+		//change direction ?		
+		if (rand() % 5 == 0){
+			mWS.deltax = -1 + (rand() % 3);
+			mWS.deltay = -1 + (rand() % 3);
+			
+		}
+		
+		//move
+		mWS.headx = (mWS.headx + mWS.deltax) % 8;
+		mWS.heady = (mWS.heady + mWS.deltay) % 8;
+		
+		//draw head
+		mRedMatrix[(uint8_t)mWS.heady] |= (1 << (uint8_t)mWS.headx);
+
+		//update body info
+		for (int8_t i = mWS.bodyLen-2 ; i >= 0; i--){
+			mWS.body[i+1] = mWS.body[i];
+		}
+		mWS.body[0] = ((uint8_t)mWS.headx << 4) | (0x0f & (uint8_t)mWS.heady);
 	}	
 }
+	
 #endif /* SIMPLEALGO_H_ */
