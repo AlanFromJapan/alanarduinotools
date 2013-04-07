@@ -45,6 +45,7 @@ void matrixSlide(int8_t pAmt){
 	}
 }
 	
+#define POSSIBLE_COLORS 7
 /************************************************************************/
 /* Returns the character corresponding to the int value (0=R, 1=B,...)  */
 /************************************************************************/
@@ -69,6 +70,9 @@ uint8_t idToRGB( uint8_t pColorIntId )
 		case 5:
 		pColorIntId = 'C';
 		break;
+		case 6:
+		pColorIntId = 'W';
+		break;
 	}
 	return pColorIntId;
 }
@@ -88,13 +92,13 @@ void matrixClearAll(){
 }
 
 void setMatrix(uint8_t pRGB, uint8_t pX, uint8_t pY, uint8_t pValue){
-	if (pRGB == 'B') {
+	if (pRGB == 'B' || pRGB == 'P' || pRGB == 'C' || pRGB == 'W') {
 		mBlueMatrix[pY] = (pValue == 0 ? mBlueMatrix[pY] & ~(1 << pX) : mBlueMatrix[pY] | (1 << pX));
 	}
-	if (pRGB == 'R') {
+	if (pRGB == 'R' || pRGB == 'Y' || pRGB == 'P' || pRGB == 'W') {
 		mRedMatrix[pY] = (pValue == 0 ? mRedMatrix[pY] & ~(1 << pX) : mRedMatrix[pY] | (1 << pX));
 	}
-	if (pRGB == 'G') {
+	if (pRGB == 'G' || pRGB == 'Y' || pRGB == 'C' || pRGB == 'W') {
 		mGreenMatrix[pY] = (pValue == 0 ? mGreenMatrix[pY] & ~(1 << pX) : mGreenMatrix[pY] | (1 << pX));
 	}
 }
