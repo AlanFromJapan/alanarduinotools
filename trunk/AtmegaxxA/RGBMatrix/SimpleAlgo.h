@@ -246,6 +246,7 @@ struct wormStatus {
 	int8_t deltax ;
 	int8_t deltay ;
 	uint8_t body[WORM_BODY_LEN];
+	uint8_t colorChar;
 };
 volatile wormStatus mWS;
 void wormInit(){
@@ -253,6 +254,7 @@ void wormInit(){
 	mWS.heady = 4;
 	mWS.deltax = 1;
 	mWS.deltay = 0;
+	mWS.colorChar = 'G';
 	
 	for (uint8_t i = 0; i < WORM_BODY_LEN; i++){
 		mWS.body[i] = (mWS.headx << 4) | (0x0f & mWS.heady);
@@ -262,7 +264,7 @@ void wormRandom(uint8_t pBounce) {
 	mCount++;
 
 	//temporization	
-	if (mCount >= 50) {
+	if (mCount >= 100) {
 		mCount = 0;
 
 		//erase all
@@ -278,25 +280,33 @@ void wormRandom(uint8_t pBounce) {
 		
 		//move
 		if (pBounce == WORM_BOUNCING){
-			//bouncing
+			//bouncing : change the direction
+			uint8_t vBounced = 0;
+			
 			int8_t vNewx = (int8_t)(mWS.headx) + mWS.deltax;
 			if (vNewx > 7 || vNewx < 0){
 				mWS.deltax = -mWS.deltax;
+				vBounced = 1;
 			}
 
 			int8_t vNewy = (int8_t)(mWS.heady) + mWS.deltay;
 			if (vNewy > 7 || vNewy < 0){
 				mWS.deltay = -mWS.deltay;
+				vBounced = 1;
 			}
 			
-			mWS.headx = (uint8_t)((int8_t)(mWS.headx) + mWS.deltax) % 8;
-			mWS.heady = (uint8_t)((int8_t)(mWS.heady) + mWS.deltay) % 8;
+			//bounced : change the color
+			if (vBounced != 0){
+				mWS.colorChar = idToRGB(rand() % POSSIBLE_COLORS);
+			}
 		}
 		else {
-			//no bouncing
-			mWS.headx = (uint8_t)((int8_t)(mWS.headx) + mWS.deltax) % 8;
-			mWS.heady = (uint8_t)((int8_t)(mWS.heady) + mWS.deltay) % 8;
+			//no bouncing : nothing to do
 		}
+		
+		//new head position
+		mWS.headx = (uint8_t)((int8_t)(mWS.headx) + mWS.deltax) % 8;
+		mWS.heady = (uint8_t)((int8_t)(mWS.heady) + mWS.deltay) % 8;
 					
 		//update body info
 		for (int8_t i = WORM_BODY_LEN-2 ; i >= 0; i--){
@@ -306,7 +316,8 @@ void wormRandom(uint8_t pBounce) {
 		
 		//draw all
 		for (uint8_t i = 0; i < WORM_BODY_LEN; i++){		
-			mRedMatrix[((uint8_t)mWS.body[i] & 0x0f)]  |= (1 << (uint8_t)(((uint8_t)mWS.body[i]) >> 4));
+			//mRedMatrix[((uint8_t)mWS.body[i] & 0x0f)]  |= (1 << (uint8_t)(((uint8_t)mWS.body[i]) >> 4));
+			setMatrix(mWS.colorChar, (uint8_t)(((uint8_t)mWS.body[i]) >> 4),((uint8_t)mWS.body[i] & 0x0f), 1);
 		}		
 
 	}	
