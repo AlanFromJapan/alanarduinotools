@@ -18,20 +18,22 @@
 #include "DS1302.h"
 
 
-#define MODE_COUNT 8
+#define MODE_COUNT 9
 
+#define MODE_TIME_RND 8
 #define MODE_WORM_TIME 7
 #define MODE_WORM 6
 #define MODE_SEA 5
-#define MODE_AUTOTIME 4
+#define MODE_NEXUS_TIME 4
 #define MODE_MIXER 3
 #define MODE_NEXUS 2
 #define MODE_DIGITS 1
 #define MODE_SLIDE 0
 
-volatile uint8_t mShowMode = MODE_WORM_TIME;
+volatile uint8_t mShowMode = MODE_TIME_RND;
 volatile ds1302_struct rtc;
 volatile uint8_t mSubModeSwitched = 0;
+volatile uint8_t mSubModeAnimId = 0;
 
 /************************************************************************/
 /* TIMER 2 interrupt code : calls the drawing method                    */
@@ -71,7 +73,8 @@ ISR(TIMER2_OVF_vect){
 			wormRandom(WORM_BOUNCING);
 			break;
 		case MODE_WORM_TIME:
-		case MODE_AUTOTIME:
+		case MODE_NEXUS_TIME:
+		case MODE_TIME_RND:
 			if (rtc.Seconds10 * 10 + rtc.Seconds <= 5) {
 				//the 5 first seconds of the minute (show time)
 				if (mSubModeSwitched == 1){
@@ -84,14 +87,29 @@ ISR(TIMER2_OVF_vect){
 				if (mSubModeSwitched == 0){
 					mSubModeSwitched = 1;
 					matrixClearAll();
+					
+					mSubModeAnimId = rand() % 2;
 				}
 				//Otherwise it's nexus or worm
-				if (mShowMode == MODE_AUTOTIME){
-					NexusLike();
-				}
-				else {
-					wormRandom(WORM_BOUNCING);
-				}			
+				switch(mShowMode){
+					case MODE_WORM_TIME:
+						wormRandom(WORM_BOUNCING);
+						break;
+					case MODE_NEXUS_TIME:
+						NexusLike();
+						break;
+					case MODE_TIME_RND:
+						//animation is random
+						switch (mSubModeAnimId){
+							case 0 : 
+							wormRandom(WORM_BOUNCING);
+							break;
+							case 1 :
+							NexusLike();
+							break;
+						}
+						break;
+				}	
 			}
 			break;
 	}
