@@ -236,14 +236,13 @@ mBlueMatrix[6] =	0b01111111;
 mBlueMatrix[7] =	0b11111111;
 }
 
-
+#define WORM_BODY_LEN 5
 struct wormStatus {
 	uint8_t headx ;
 	uint8_t heady ;
 	int8_t deltax ;
 	int8_t deltay ;
-	uint8_t bodyLen ;
-	uint8_t body[4];
+	uint8_t body[WORM_BODY_LEN];
 };
 volatile wormStatus mWS;
 void wormInit(){
@@ -251,11 +250,10 @@ void wormInit(){
 	mWS.heady = 4;
 	mWS.deltax = 1;
 	mWS.deltay = 0;
-	mWS.bodyLen = 4;
-	mWS.body[0] = (mWS.headx << 4) | (0x0f & mWS.heady);
-	mWS.body[1] = ((mWS.headx-1) << 4) | (0x0f & mWS.heady);
-	mWS.body[2] = ((mWS.headx-2) << 4) | (0x0f & mWS.heady);
-	mWS.body[3] = ((mWS.headx-3) << 4) | (0x0f & mWS.heady);
+	
+	for (uint8_t i = 0; i < WORM_BODY_LEN; i++){
+		mWS.body[i] = (mWS.headx << 4) | (0x0f & mWS.heady);
+	}
 }
 void wormRandom() {
 	mCount++;
@@ -280,13 +278,13 @@ void wormRandom() {
 		mWS.heady = (uint8_t)((int8_t)(mWS.heady) + mWS.deltay) % 8;
 		
 		//update body info
-		for (int8_t i = mWS.bodyLen-2 ; i >= 0; i--){
+		for (int8_t i = WORM_BODY_LEN-2 ; i >= 0; i--){
 			mWS.body[i+1] = mWS.body[i];
 		}
 		mWS.body[0] = ((uint8_t)mWS.headx << 4) | (0x0f & (uint8_t)mWS.heady);
 		
 		//draw all
-		for (uint8_t i = 0; i < mWS.bodyLen; i++){		
+		for (uint8_t i = 0; i < WORM_BODY_LEN; i++){		
 			mRedMatrix[((uint8_t)mWS.body[i] & 0x0f)]  |= (1 << (uint8_t)(((uint8_t)mWS.body[i]) >> 4));
 		}		
 
