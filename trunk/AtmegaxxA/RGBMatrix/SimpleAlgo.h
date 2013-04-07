@@ -236,6 +236,9 @@ mBlueMatrix[6] =	0b01111111;
 mBlueMatrix[7] =	0b11111111;
 }
 
+
+#define WORM_BOUNCING		0x00
+#define WORM_NOT_BOUNCING	0x01
 #define WORM_BODY_LEN 5
 struct wormStatus {
 	uint8_t headx ;
@@ -255,7 +258,7 @@ void wormInit(){
 		mWS.body[i] = (mWS.headx << 4) | (0x0f & mWS.heady);
 	}
 }
-void wormRandom() {
+void wormRandom(uint8_t pBounce) {
 	mCount++;
 
 	//temporization	
@@ -274,9 +277,27 @@ void wormRandom() {
 		}
 		
 		//move
-		mWS.headx = (uint8_t)((int8_t)(mWS.headx) + mWS.deltax) % 8;
-		mWS.heady = (uint8_t)((int8_t)(mWS.heady) + mWS.deltay) % 8;
-		
+		if (pBounce == WORM_BOUNCING){
+			//bouncing
+			int8_t vNewx = (int8_t)(mWS.headx) + mWS.deltax;
+			if (vNewx > 7 || vNewx < 0){
+				mWS.deltax = -mWS.deltax;
+			}
+
+			int8_t vNewy = (int8_t)(mWS.heady) + mWS.deltay;
+			if (vNewy > 7 || vNewy < 0){
+				mWS.deltay = -mWS.deltay;
+			}
+			
+			mWS.headx = (uint8_t)((int8_t)(mWS.headx) + mWS.deltax) % 8;
+			mWS.heady = (uint8_t)((int8_t)(mWS.heady) + mWS.deltay) % 8;
+		}
+		else {
+			//no bouncing
+			mWS.headx = (uint8_t)((int8_t)(mWS.headx) + mWS.deltax) % 8;
+			mWS.heady = (uint8_t)((int8_t)(mWS.heady) + mWS.deltay) % 8;
+		}
+					
 		//update body info
 		for (int8_t i = WORM_BODY_LEN-2 ; i >= 0; i--){
 			mWS.body[i+1] = mWS.body[i];
