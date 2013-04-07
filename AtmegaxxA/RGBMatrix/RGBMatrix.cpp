@@ -67,7 +67,7 @@ ISR(TIMER2_OVF_vect){
 			RandomColors();
 			break;
 		case MODE_WORM:
-			wormRandom();
+			wormRandom(WORM_BOUNCING);
 			break;
 		case MODE_AUTOTIME:
 			if (rtc.Seconds10 * 10 + rtc.Seconds <= 5) {
