@@ -6,12 +6,14 @@
 */
 
 //4.8Mhz internal with a 8 factor divisor 600kHz : save power and run until lower voltage
-#define F_CPU 600000
+//#define F_CPU 600000
+#define F_CPU 4800000
 
 #include <avr/io.h>
 #include <avr/delay.h>
 #include <avr/wdt.h>
 #include <avr/interrupt.h>
+#include <avr/sleep.h>
 
 //maximum number of seconds to skip
 #define MAX_RAND 4
@@ -20,7 +22,7 @@
 //Approximate duration of 1 step to move 1 tick
 #define TICK_DURATION_MS (TICK_SLEEP_MS + 20)
 //probability to skip time
-#define SKIP_EVERY_N 15
+#define SKIP_EVERY_N 45
 
 //after multiple test, one second shall not be 1,000ms but a little less. This works for me.
 #define ONE_SECOND_MS (933)
@@ -105,10 +107,19 @@ int main(void)
 	//all ports output!
 	DDRB = 0xFF;
 	
+	//save more power
+	ADCSRA &= ~(1<<ADEN); //Disable ADC
+	ACSR = (1<<ACD); //Disable the analog comparator
+	
+	//set sleep mode
+	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+	sleep_enable();
+	
 	//start the WD
 	setupWatchdog();
 	
 	while (1){
 		//do nothing
+		sleep_mode();
 	}
 }
