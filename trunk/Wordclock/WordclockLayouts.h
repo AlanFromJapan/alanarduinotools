@@ -533,12 +533,15 @@ int mWindmillPulseDelta = 1;
 #define WINDMILL_NEXT_MIN_PULSE
 
 void setupLedMatrix_Windmill(){
+
+#ifdef PLASMA_BALL_REMOTE_PIN  
   //setup the pin for controlling plasma ball as output
   pinMode(PLASMA_BALL_REMOTE_PIN, OUTPUT);
   
   //turn the plasma ball OFF (reverse logic)
   digitalWrite(PLASMA_BALL_REMOTE_PIN, HIGH);
-  
+#endif //PLASMA_BALL_REMOTE_PIN  
+
   //call the basic one
   setupLedMatrix();
 }
