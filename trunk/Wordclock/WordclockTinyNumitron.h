@@ -83,11 +83,12 @@ void shiftOutX (uint8_t pVal){
 
  
 }
+boolean mLightOnOff = false;
 
 void drawLedMatrix_TinyNumitron7seg() {
    //basically override the "default version". do nothing for some time and the refresh
    if (mFastPace){
-      delay (max((int)100 - (int)mAnimationCounter, (int)5));
+      delay (max((int)100 - ((int)100 - (int)mAnimationCounter), (int)5));
    }
    else {
       delay(1000);
@@ -104,6 +105,7 @@ void MapTimeInLedMatrix_TinyNumitronIV16(Date& pD){
       if (!mFastPace){
          mFastPace = true;
          mAnimationCounter = 0;
+         mLightOnOff = true;
       }
    }  
    else {
@@ -116,23 +118,23 @@ void MapTimeInLedMatrix_TinyNumitronIV16(Date& pD){
 
    //Minutes
    //units
-   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pD.minute % 10] | (mFastPace && vSeconds % 4 == 0? 0b10000000 : 0x00));
+   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pD.minute % 10] | (mFastPace && mLightOnOff ? 0b10000000 : 0x00));
    //tens
-   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pD.minute / 10] | (mFastPace && vSeconds % 4 == 1? 0b10000000 : 0x00));
+   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pD.minute / 10] | (mFastPace && mLightOnOff ? 0b10000000 : 0x00));
 
    //Hours
    //units
-   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pD.hour % 10] | (mFastPace && vSeconds % 4 == 2? 0b10000000 : 0x00));
+   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pD.hour % 10] | (mFastPace && mLightOnOff ? 0b10000000 : 0x00));
    //tens
    //if less than 10 turn the tens digit off for hours
    if (pD.hour < 10){
-      shiftOut(dataPin, clockPin, MSBFIRST, DIGIT_OFF | (mFastPace && vSeconds % 4 == 3? 0b10000000 : 0x00));
+      shiftOut(dataPin, clockPin, MSBFIRST, DIGIT_OFF | (mFastPace  && mLightOnOff? 0b10000000 : 0x00));
    }
    else {
-      shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pD.hour / 10] | (mFastPace && vSeconds % 4 == 3? 0b10000000 : 0x00));
+      shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pD.hour / 10] | (mFastPace && mLightOnOff ? 0b10000000 : 0x00));
    }
 
-
+   mLightOnOff = !mLightOnOff;
    digitalWrite(latchPin, HIGH);
 }
 
