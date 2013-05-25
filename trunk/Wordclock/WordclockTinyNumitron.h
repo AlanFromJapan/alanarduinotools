@@ -96,10 +96,10 @@ void drawLedMatrix_TinyNumitron7seg() {
 
 //Expects second,minute,hour,null,day,month,year
 //This version is the "Tiny Numitron IV16 x4 hh mm" layout
-void MapTimeInLedMatrix_TinyNumitronIV16(int pTimeArray[]){
+void MapTimeInLedMatrix_TinyNumitronIV16(Date& pD){
 
    //every hour and half-hour, animation for 10 seconds   
-   if ((pTimeArray[1] == 0 || pTimeArray[1] == 30) && pTimeArray[0] < 10) {
+   if ((pD.minute == 0 || pD.minute == 30) && pD.second < 10) {
       //   if (pTimeArray[0] < 10 || (pTimeArray[0] > 30 && pTimeArray[0] < 40)) {
       if (!mFastPace){
          mFastPace = true;
@@ -116,20 +116,20 @@ void MapTimeInLedMatrix_TinyNumitronIV16(int pTimeArray[]){
 
    //Minutes
    //units
-   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pTimeArray[1] % 10] | (mFastPace && vSeconds % 4 == 0? 0b10000000 : 0x00));
+   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pD.minute % 10] | (mFastPace && vSeconds % 4 == 0? 0b10000000 : 0x00));
    //tens
-   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pTimeArray[1] / 10] | (mFastPace && vSeconds % 4 == 1? 0b10000000 : 0x00));
+   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pD.minute / 10] | (mFastPace && vSeconds % 4 == 1? 0b10000000 : 0x00));
 
    //Hours
    //units
-   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pTimeArray[2] % 10] | (mFastPace && vSeconds % 4 == 2? 0b10000000 : 0x00));
+   shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pD.hour % 10] | (mFastPace && vSeconds % 4 == 2? 0b10000000 : 0x00));
    //tens
    //if less than 10 turn the tens digit off for hours
-   if (pTimeArray[2] < 10){
+   if (pD.hour < 10){
       shiftOut(dataPin, clockPin, MSBFIRST, DIGIT_OFF | (mFastPace && vSeconds % 4 == 3? 0b10000000 : 0x00));
    }
    else {
-      shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pTimeArray[2] / 10] | (mFastPace && vSeconds % 4 == 3? 0b10000000 : 0x00));
+      shiftOut(dataPin, clockPin, MSBFIRST, DIGITS[pD.hour / 10] | (mFastPace && vSeconds % 4 == 3? 0b10000000 : 0x00));
    }
 
 
