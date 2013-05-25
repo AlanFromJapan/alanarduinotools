@@ -13,13 +13,13 @@
 ** (must be before the includes because the #define is used in the .h)
 **
 ********************************************************************************/
-//#define USE_DISPLAY_NUMITRON
+#define USE_DISPLAY_NUMITRON
 //#define USE_DISPLAY_KOREA3
 //#define USE_DISPLAY_LAFRANCE1
 //#define USE_DISPLAY_JAPANESE1
 //#define USE_DISPLAY_THEORIGINAL
 //#define USE_DISPLAY_BCD1
-#define USE_DISPLAY_WINDMILL
+//#define USE_DISPLAY_WINDMILL
 
 //Uncomment one of the two to indicate which RTC you use
 //#define RTC_DS3231
@@ -51,7 +51,7 @@ void setup() {
 #endif //RTC_DS3231
 
 #ifdef RTC_DS3234
-   setupDS3234(false);
+   setupDS3234(true);
 #endif //RTC_DS3234
 
    
@@ -64,7 +64,7 @@ void setup() {
 #endif 
 
 #ifdef RTC_DS3234
-   SetTimeDate(16,12,2012,13,23,30);
+   SetTimeDate(25,05,2013,18,14,00);
 #endif //RTC_DS3234
 
     EEPROM.write(1, 1); 
@@ -112,7 +112,7 @@ void loop() {
    readTimeArray(vD);
 
    //Uncomment the following line for a demo mode with fast time
-   //readTimeArray_Fake(vD, 10);
+   //readTimeArray_Fake(vD, 100);
 
    //Draw the in-memory matrix (change constant at the top of the file)
    MAP_MATRIX_MFUNC(vD);
