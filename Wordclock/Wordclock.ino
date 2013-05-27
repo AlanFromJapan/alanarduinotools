@@ -22,8 +22,8 @@
 //#define USE_DISPLAY_WINDMILL
 
 //Uncomment one of the two to indicate which RTC you use
-//#define RTC_DS3231
-#define RTC_DS3234
+#define RTC_DS3231
+//#define RTC_DS3234
 
 
 //List of includes

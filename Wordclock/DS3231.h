@@ -63,12 +63,12 @@ void setDateDS3231()
   Wire.beginTransmission(DS3231_I2C_ADDRESS);
   Wire.write((uint8_t)0x00);
   Wire.write(decToBcd(00));    // sec
-  Wire.write(decToBcd(31));   //min
-  Wire.write(decToBcd(1));   //h   
-  Wire.write(decToBcd(6)); //dow 0= sunday
-  Wire.write(decToBcd(24)); //day
-  Wire.write(decToBcd(11)); //month
-  Wire.write(decToBcd(12)); //y
+  Wire.write(decToBcd(27));   //min
+  Wire.write(decToBcd(22));   //h   
+  Wire.write(decToBcd(1)); //dow 0= sunday
+  Wire.write(decToBcd(27)); //day
+  Wire.write(decToBcd(5)); //month
+  Wire.write(decToBcd(13)); //y
   Wire.endTransmission();
 }
 
