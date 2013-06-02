@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.05" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -57,8 +57,12 @@
 <layer number="47" name="Measures" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="50" name="dxf" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
+<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
+<layer number="56" name="wert" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="92" name="Busses" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="93" name="Pins" color="2" fill="1" visible="yes" active="yes"/>
@@ -67,6 +71,40 @@
 <layer number="96" name="Values" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="97" name="Info" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="98" name="Guide" color="6" fill="1" visible="yes" active="yes"/>
+<layer number="100" name="Muster" color="7" fill="1" visible="no" active="no"/>
+<layer number="101" name="Patch_Top" color="12" fill="4" visible="yes" active="yes"/>
+<layer number="102" name="Vscore" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="103" name="tMap" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="104" name="Name" color="16" fill="1" visible="yes" active="yes"/>
+<layer number="105" name="tPlate" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="106" name="bPlate" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="107" name="Crop" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="116" name="Patch_BOT" color="9" fill="4" visible="yes" active="yes"/>
+<layer number="121" name="_tsilk" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="122" name="_bsilk" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="125" name="_tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="144" name="Drill_legend" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="151" name="HeatSink" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="200" name="200bmp" color="1" fill="10" visible="yes" active="yes"/>
+<layer number="201" name="201bmp" color="2" fill="10" visible="yes" active="yes"/>
+<layer number="202" name="202bmp" color="3" fill="10" visible="yes" active="yes"/>
+<layer number="203" name="203bmp" color="4" fill="10" visible="yes" active="yes"/>
+<layer number="204" name="204bmp" color="5" fill="10" visible="yes" active="yes"/>
+<layer number="205" name="205bmp" color="6" fill="10" visible="yes" active="yes"/>
+<layer number="206" name="206bmp" color="7" fill="10" visible="yes" active="yes"/>
+<layer number="207" name="207bmp" color="8" fill="10" visible="yes" active="yes"/>
+<layer number="208" name="208bmp" color="9" fill="10" visible="yes" active="yes"/>
+<layer number="209" name="209bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="210" name="210bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="211" name="211bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="212" name="212bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="213" name="213bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="214" name="214bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="215" name="215bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="216" name="216bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="250" name="Descript" color="3" fill="1" visible="no" active="no"/>
+<layer number="251" name="SMDround" color="12" fill="11" visible="no" active="no"/>
+<layer number="254" name="cooling" color="7" fill="1" visible="yes" active="yes"/>
 </layers>
 <library>
 <description>&lt;b&gt;Kalshagar.wikispaces.com&lt;/b&gt;
@@ -731,6 +769,65 @@ Free to reuse and modify.&lt;/p&gt;</description>
 <pad name="P$6" x="12.7" y="0" drill="0.9" diameter="1.778"/>
 <pad name="P$7" x="15.24" y="0" drill="0.9" diameter="1.778"/>
 </package>
+<package name="SOP14">
+<wire x1="4.7068" y1="2.0663" x2="-3.7768" y2="2.0663" width="0.1524" layer="21"/>
+<wire x1="4.7068" y1="-2.2263" x2="5.0878" y2="-1.8453" width="0.1524" layer="21" curve="90"/>
+<wire x1="-4.1578" y1="1.6853" x2="-3.7768" y2="2.0663" width="0.1524" layer="21" curve="-90"/>
+<wire x1="4.7068" y1="2.0663" x2="5.0878" y2="1.6853" width="0.1524" layer="21" curve="-90"/>
+<wire x1="-4.1578" y1="-1.8453" x2="-3.7768" y2="-2.2263" width="0.1524" layer="21" curve="90"/>
+<wire x1="-3.7768" y1="-2.2263" x2="4.7068" y2="-2.2263" width="0.1524" layer="21"/>
+<wire x1="5.0878" y1="-1.8453" x2="5.0878" y2="1.6853" width="0.1524" layer="21"/>
+<wire x1="-4.1578" y1="1.6853" x2="-4.1578" y2="1.19" width="0.1524" layer="21"/>
+<wire x1="-4.1578" y1="1.19" x2="-4.1578" y2="-1.35" width="0.1524" layer="21"/>
+<wire x1="-4.1578" y1="-1.35" x2="-4.1578" y2="-1.8453" width="0.1524" layer="21"/>
+<wire x1="-4.1578" y1="1.19" x2="-4.1578" y2="-1.35" width="0.1524" layer="21" curve="-180"/>
+<smd name="1" x="-3.345" y="-2.7597" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="2" x="-2.075" y="-2.7597" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="3" x="-0.805" y="-2.7597" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="4" x="0.465" y="-2.7597" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="5" x="1.735" y="-2.7597" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="6" x="3.005" y="-2.7597" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="7" x="4.275" y="-2.7597" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="8" x="4.275" y="2.9172" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="9" x="3.005" y="2.9172" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="10" x="1.735" y="2.9172" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="11" x="0.465" y="2.9172" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="12" x="-0.805" y="2.9172" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="13" x="-2.075" y="2.9172" dx="0.6604" dy="2.032" layer="1"/>
+<smd name="14" x="-3.345" y="2.9172" dx="0.6604" dy="2.032" layer="1"/>
+<text x="-4.488" y="-2.6835" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
+<rectangle x1="-3.599" y1="-2.3533" x2="-3.091" y2="-2.2263" layer="21"/>
+<rectangle x1="-3.599" y1="-2.3533" x2="-3.091" y2="-2.2263" layer="21"/>
+<rectangle x1="-3.599" y1="-3.509" x2="-3.091" y2="-2.0358" layer="51"/>
+<rectangle x1="-2.329" y1="-2.3533" x2="-1.821" y2="-2.2263" layer="21"/>
+<rectangle x1="-2.329" y1="-3.509" x2="-1.821" y2="-2.0358" layer="51"/>
+<rectangle x1="-1.059" y1="-2.3533" x2="-0.551" y2="-2.2263" layer="21"/>
+<rectangle x1="-1.059" y1="-3.509" x2="-0.551" y2="-2.0358" layer="51"/>
+<rectangle x1="0.211" y1="-3.509" x2="0.719" y2="-2.0358" layer="51"/>
+<rectangle x1="0.211" y1="-2.3533" x2="0.719" y2="-2.2263" layer="21"/>
+<rectangle x1="1.481" y1="-2.3533" x2="1.989" y2="-2.2263" layer="21"/>
+<rectangle x1="1.481" y1="-3.509" x2="1.989" y2="-2.0358" layer="51"/>
+<rectangle x1="2.751" y1="-2.3533" x2="3.259" y2="-2.2263" layer="21"/>
+<rectangle x1="2.751" y1="-3.509" x2="3.259" y2="-2.0358" layer="51"/>
+<rectangle x1="4.021" y1="-2.3533" x2="4.529" y2="-2.2263" layer="21"/>
+<rectangle x1="4.021" y1="-3.509" x2="4.529" y2="-2.0358" layer="51"/>
+<rectangle x1="-3.599" y1="2.0663" x2="-3.091" y2="2.1933" layer="21"/>
+<rectangle x1="-3.599" y1="2.0663" x2="-3.091" y2="2.1933" layer="21"/>
+<rectangle x1="-3.599" y1="2.1933" x2="-3.091" y2="3.6665" layer="51"/>
+<rectangle x1="-2.329" y1="2.0663" x2="-1.821" y2="2.1933" layer="21"/>
+<rectangle x1="-2.329" y1="2.1933" x2="-1.821" y2="3.6665" layer="51"/>
+<rectangle x1="-1.059" y1="2.0663" x2="-0.551" y2="2.1933" layer="21"/>
+<rectangle x1="-1.059" y1="2.1933" x2="-0.551" y2="3.6665" layer="51"/>
+<rectangle x1="0.211" y1="2.0663" x2="0.719" y2="2.1933" layer="21"/>
+<rectangle x1="0.211" y1="2.1933" x2="0.719" y2="3.6665" layer="51"/>
+<rectangle x1="1.481" y1="2.0663" x2="1.989" y2="2.1933" layer="21"/>
+<rectangle x1="1.481" y1="2.1933" x2="1.989" y2="3.6665" layer="51"/>
+<rectangle x1="2.751" y1="2.0663" x2="3.259" y2="2.1933" layer="21"/>
+<rectangle x1="2.751" y1="2.1933" x2="3.259" y2="3.6665" layer="51"/>
+<rectangle x1="4.021" y1="2.0663" x2="4.529" y2="2.1933" layer="21"/>
+<rectangle x1="4.021" y1="2.1933" x2="4.529" y2="3.6665" layer="51"/>
+<text x="-2.6835" y="-0.592" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+</package>
 </packages>
 <symbols>
 <symbol name="PCF8584">
@@ -1162,6 +1259,23 @@ Free to reuse and modify.&lt;/p&gt;</description>
 <pin name="P$6" x="7.62" y="-2.54" length="middle" rot="R180"/>
 <pin name="P$7" x="7.62" y="-5.08" length="middle" rot="R180"/>
 </symbol>
+<symbol name="RTC4543">
+<wire x1="-10.16" y1="17.78" x2="10.16" y2="17.78" width="0.254" layer="94"/>
+<wire x1="10.16" y1="17.78" x2="10.16" y2="-17.78" width="0.254" layer="94"/>
+<wire x1="10.16" y1="-17.78" x2="-10.16" y2="-17.78" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-17.78" x2="-10.16" y2="17.78" width="0.254" layer="94"/>
+<pin name="GND" x="15.24" y="15.24" length="middle" rot="R180"/>
+<pin name="VCC" x="15.24" y="10.16" length="middle" rot="R180"/>
+<pin name="CE" x="-15.24" y="15.24" length="middle"/>
+<pin name="FSEL" x="-15.24" y="10.16" length="middle"/>
+<pin name="WR" x="-15.24" y="5.08" length="middle"/>
+<pin name="FOE" x="-15.24" y="0" length="middle"/>
+<pin name="FOUT" x="-15.24" y="-5.08" length="middle"/>
+<pin name="DATA" x="-15.24" y="-10.16" length="middle"/>
+<pin name="CLOCK" x="-15.24" y="-15.24" length="middle"/>
+<text x="-9.906" y="18.542" size="1.27" layer="95">&gt;NAME</text>
+<text x="-10.16" y="-20.32" size="1.27" layer="95">&gt;VALUE</text>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="DS3231">
@@ -1442,6 +1556,29 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 <connect gate="G$1" pin="P$5" pad="P$5"/>
 <connect gate="G$1" pin="P$6" pad="P$6"/>
 <connect gate="G$1" pin="P$7" pad="P$7"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="RTC4543-SA">
+<gates>
+<gate name="G$1" symbol="RTC4543" x="0" y="2.54"/>
+</gates>
+<devices>
+<device name="" package="SOP14">
+<connects>
+<connect gate="G$1" pin="CE" pad="3"/>
+<connect gate="G$1" pin="CLOCK" pad="10"/>
+<connect gate="G$1" pin="DATA" pad="11"/>
+<connect gate="G$1" pin="FOE" pad="6"/>
+<connect gate="G$1" pin="FOUT" pad="14"/>
+<connect gate="G$1" pin="FSEL" pad="4"/>
+<connect gate="G$1" pin="GND" pad="1"/>
+<connect gate="G$1" pin="VCC" pad="9"/>
+<connect gate="G$1" pin="WR" pad="5"/>
 </connects>
 <technologies>
 <technology name=""/>
