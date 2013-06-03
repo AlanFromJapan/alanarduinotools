@@ -21318,7 +21318,7 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 <instance part="U$6" gate="G$1" x="233.68" y="121.92"/>
 <instance part="U$8" gate="G$1" x="218.44" y="121.92"/>
 <instance part="U$9" gate="G$1" x="210.82" y="121.92"/>
-<instance part="U$10" gate="G$1" x="203.2" y="121.92"/>
+<instance part="U$10" gate="G$1" x="190.5" y="121.92"/>
 <instance part="C6" gate="G$1" x="43.18" y="-12.7"/>
 <instance part="JP2" gate="G$1" x="-50.8" y="5.08"/>
 <instance part="JP10" gate="G$1" x="-60.96" y="5.08"/>
@@ -21491,6 +21491,15 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 <pinref part="T1" gate="G$1" pin="E"/>
 <wire x1="38.1" y1="127" x2="38.1" y2="124.46" width="0.1524" layer="91"/>
 <label x="35.56" y="121.92" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U$8" gate="G$1" pin="P$1"/>
+<pinref part="U$8" gate="G$1" pin="P$2"/>
+<wire x1="226.06" y1="132.08" x2="226.06" y2="129.54" width="0.1524" layer="91"/>
+<pinref part="U$8" gate="G$1" pin="P$3"/>
+<wire x1="226.06" y1="129.54" x2="226.06" y2="127" width="0.1524" layer="91"/>
+<pinref part="U$8" gate="G$1" pin="P$4"/>
+<wire x1="226.06" y1="127" x2="226.06" y2="124.46" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$30" class="0">
@@ -21777,6 +21786,17 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 <pinref part="U$2" gate="G$1" pin="FOE"/>
 <wire x1="129.54" y1="142.24" x2="76.2" y2="142.24" width="0.1524" layer="91"/>
 <wire x1="76.2" y1="142.24" x2="76.2" y2="152.4" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$8" gate="G$1" pin="P$5"/>
+<pinref part="U$8" gate="G$1" pin="P$6"/>
+<wire x1="226.06" y1="121.92" x2="226.06" y2="119.38" width="0.1524" layer="91"/>
+<pinref part="U$8" gate="G$1" pin="P$7"/>
+<wire x1="226.06" y1="119.38" x2="226.06" y2="116.84" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$10" gate="G$1" pin="P$1"/>
+<wire x1="198.12" y1="132.08" x2="200.66" y2="132.08" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="VIN" class="0">
