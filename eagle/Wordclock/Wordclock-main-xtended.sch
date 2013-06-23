@@ -21253,6 +21253,9 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 <part name="U$12" library="SparkFun-Connectors" deviceset="USB-MINIB" device="-5PIN"/>
 <part name="H1" library="holes" deviceset="MOUNT-HOLE" device="2.8"/>
 <part name="H2" library="holes" deviceset="MOUNT-HOLE" device="2.8"/>
+<part name="H3" library="holes" deviceset="MOUNT-HOLE" device="2.8"/>
+<part name="U$7" library="SparkFun-Connectors" deviceset="USB-MINIB" device="-5PIN"/>
+<part name="H4" library="holes" deviceset="MOUNT-HOLE" device="2.8"/>
 </parts>
 <sheets>
 <sheet>
@@ -21307,7 +21310,7 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 <instance part="U$2" gate="G$1" x="144.78" y="142.24"/>
 <instance part="D1" gate="G$1" x="160.02" y="129.54" rot="R90"/>
 <instance part="C5" gate="G$1" x="165.1" y="157.48"/>
-<instance part="CLK4543_RAW" gate="G$1" x="50.8" y="152.4"/>
+<instance part="CLK4543_RAW" gate="G$1" x="58.42" y="160.02" rot="R270"/>
 <instance part="T1" gate="G$1" x="40.64" y="132.08" rot="MR0"/>
 <instance part="R1" gate="G$1" x="50.8" y="132.08"/>
 <instance part="CLK4543_POW" gate="G$1" x="38.1" y="160.02" rot="R270"/>
@@ -21323,10 +21326,13 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 <instance part="JP2" gate="G$1" x="-50.8" y="5.08"/>
 <instance part="JP10" gate="G$1" x="-60.96" y="5.08"/>
 <instance part="JP11" gate="G$1" x="-71.12" y="5.08"/>
-<instance part="U$11" gate="G$1" x="-91.44" y="-5.08"/>
-<instance part="U$12" gate="G$1" x="-106.68" y="-5.08"/>
+<instance part="U$11" gate="G$1" x="-73.66" y="-15.24"/>
+<instance part="U$12" gate="G$1" x="-88.9" y="-15.24"/>
 <instance part="H1" gate="G$1" x="-91.44" y="147.32"/>
 <instance part="H2" gate="G$1" x="-91.44" y="139.7"/>
+<instance part="H3" gate="G$1" x="-91.44" y="132.08"/>
+<instance part="U$7" gate="G$1" x="-104.14" y="-15.24"/>
+<instance part="H4" gate="G$1" x="-91.44" y="124.46"/>
 </instances>
 <busses>
 </busses>
@@ -21344,12 +21350,14 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 <pinref part="JP11" gate="G$1" pin="1"/>
 <wire x1="-63.5" y1="5.08" x2="-53.34" y2="5.08" width="0.1524" layer="91"/>
 <pinref part="U$11" gate="G$1" pin="GND"/>
-<wire x1="-93.98" y1="-5.08" x2="-96.52" y2="-5.08" width="0.1524" layer="91"/>
-<wire x1="-96.52" y1="-5.08" x2="-96.52" y2="-15.24" width="0.1524" layer="91"/>
-<wire x1="-96.52" y1="-15.24" x2="-63.5" y2="-15.24" width="0.1524" layer="91"/>
-<wire x1="-63.5" y1="-15.24" x2="-63.5" y2="5.08" width="0.1524" layer="91"/>
+<wire x1="-76.2" y1="-15.24" x2="-78.74" y2="-15.24" width="0.1524" layer="91"/>
+<wire x1="-78.74" y1="-15.24" x2="-78.74" y2="-22.86" width="0.1524" layer="91"/>
+<wire x1="-78.74" y1="-22.86" x2="-63.5" y2="-22.86" width="0.1524" layer="91"/>
+<wire x1="-63.5" y1="-22.86" x2="-63.5" y2="5.08" width="0.1524" layer="91"/>
 <pinref part="U$12" gate="G$1" pin="GND"/>
-<wire x1="-109.22" y1="-5.08" x2="-96.52" y2="-5.08" width="0.1524" layer="91"/>
+<wire x1="-91.44" y1="-15.24" x2="-78.74" y2="-15.24" width="0.1524" layer="91"/>
+<pinref part="U$7" gate="G$1" pin="GND"/>
+<wire x1="-91.44" y1="-15.24" x2="-106.68" y2="-15.24" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="U$1" gate="G$1" pin="GND"/>
@@ -21720,13 +21728,15 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 <pinref part="JP11" gate="G$1" pin="2"/>
 <wire x1="-63.5" y1="7.62" x2="-53.34" y2="7.62" width="0.1524" layer="91"/>
 <pinref part="U$11" gate="G$1" pin="VBUS"/>
-<wire x1="-93.98" y1="5.08" x2="-96.52" y2="5.08" width="0.1524" layer="91"/>
-<wire x1="-96.52" y1="5.08" x2="-96.52" y2="15.24" width="0.1524" layer="91"/>
-<wire x1="-96.52" y1="15.24" x2="-76.2" y2="15.24" width="0.1524" layer="91"/>
-<wire x1="-76.2" y1="15.24" x2="-76.2" y2="7.62" width="0.1524" layer="91"/>
+<wire x1="-76.2" y1="-5.08" x2="-78.74" y2="-5.08" width="0.1524" layer="91"/>
+<wire x1="-78.74" y1="-5.08" x2="-78.74" y2="-2.54" width="0.1524" layer="91"/>
+<wire x1="-78.74" y1="-2.54" x2="-76.2" y2="-2.54" width="0.1524" layer="91"/>
+<wire x1="-76.2" y1="-2.54" x2="-76.2" y2="7.62" width="0.1524" layer="91"/>
 <wire x1="-76.2" y1="7.62" x2="-63.5" y2="7.62" width="0.1524" layer="91"/>
 <pinref part="U$12" gate="G$1" pin="VBUS"/>
-<wire x1="-109.22" y1="5.08" x2="-96.52" y2="5.08" width="0.1524" layer="91"/>
+<wire x1="-91.44" y1="-5.08" x2="-78.74" y2="-5.08" width="0.1524" layer="91"/>
+<pinref part="U$7" gate="G$1" pin="VBUS"/>
+<wire x1="-91.44" y1="-5.08" x2="-106.68" y2="-5.08" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="PUSCL" gate="G$1" pin="2"/>
