@@ -58,6 +58,6 @@ typedef struct ds1302_struct
 
 void setupDS1302();
 void DS1302_clock_burst_read( uint8_t *p);
-
+void DS1302_clock_burst_write( uint8_t *p);
 
 #endif /* DS1302_H_ */

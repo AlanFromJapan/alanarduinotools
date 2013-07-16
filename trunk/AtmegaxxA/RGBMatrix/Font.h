@@ -228,7 +228,7 @@ void ShowSlidingDigits (uint16_t pValue, int8_t pPos){
 			vLine = DIGITS[vVal][i];
 		
 			paintDigit(pPos,vLine,mGreenMatrix,i,vNthDigit);
-			paintDigit(pPos,vLine,mRedMatrix,i,vNthDigit);
+			paintDigit(pPos,vLine,mBlueMatrix,i,vNthDigit);
 		}
 		vNthDigit++;
 
@@ -240,7 +240,7 @@ void ShowSlidingDigits (uint16_t pValue, int8_t pPos){
 			vLine = DIGITS[vVal][i];
 		
 			paintDigit(pPos,vLine,mGreenMatrix,i,vNthDigit);
-			paintDigit(pPos,vLine,mRedMatrix,i,vNthDigit);
+			paintDigit(pPos,vLine,mBlueMatrix,i,vNthDigit);
 		}
 		vNthDigit++;
 			
