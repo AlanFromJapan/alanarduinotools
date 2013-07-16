@@ -30,10 +30,22 @@
 #define MODE_DIGITS 1
 #define MODE_SLIDE 0
 
+#define MODE_SETTIME 99
+
+
+#define BUTTON_INPUT	PINB
+#define BUTTON_DIR		DDRB
+#define BUTTON_PORT		PORTB
+#define BUTTON_X		PINB0
+#define BUTTON_Z		PINB1
+
+
 volatile uint8_t mShowMode = MODE_TIME_RND;
 volatile ds1302_struct rtc;
 volatile uint8_t mSubModeSwitched = 0;
 volatile uint8_t mSubModeAnimId = 0;
+
+volatile uint8_t mSubModeSetTimeStep = 0;
 
 /************************************************************************/
 /* TIMER 2 interrupt code : calls the drawing method                    */
@@ -88,7 +100,7 @@ ISR(TIMER2_OVF_vect){
 					mSubModeSwitched = 1;
 					matrixClearAll();
 					
-					mSubModeAnimId = rand() % 2;
+					mSubModeAnimId = rand() % 3;
 				}
 				//Otherwise it's nexus or worm
 				switch(mShowMode){
@@ -107,10 +119,20 @@ ISR(TIMER2_OVF_vect){
 							case 1 :
 							NexusLike();
 							break;
+							case 2:
+							RandomColors();
+							break;
 						}
 						break;
 				}	
 			}
+			break;
+		case MODE_SETTIME:
+			//Hidden mode: set time
+			
+			SlidingTime(rtc.h24.Hour10 * 1000 + rtc.h24.Hour * 100 + rtc.Minutes10 * 10 + rtc.Minutes);
+			
+			
 			break;
 	}
 
@@ -170,6 +192,10 @@ void init_timer0_OVF() {
 	sei();
 }
 
+/************************************************************************/
+/* Main entry point                                                     */
+/* Fuses : you must UNCHECK "CompMode" and choose 8MHz oscillator       */
+/************************************************************************/
 int main(void)
 {
 	//PORTS A,C,E,D are dedicated to matrix display
@@ -179,9 +205,9 @@ int main(void)
 	DDRC = 0xFF;
 	
 	//G port is for input
-	DDRG = 0x00;
+	BUTTON_DIR = 0x00;
 	//pullups for everyone
-	PORTG = 0xff;
+	BUTTON_PORT = 0xff;
 	//just make sure pullups are NOT disabled
 	MCUCR |= (0 << PUD);
 	
@@ -202,12 +228,68 @@ int main(void)
 		//refresh display
 		showMatrix();
 		
-		//check if PING3 is pressed (back board button)
-		if ((~PING & (1 << PING3)) != 0){
-			matrixClearAll();
-			mShowMode = (mShowMode + 1) % MODE_COUNT;
-			_delay_ms(500);
+		if (mShowMode != MODE_SETTIME){
+			//check if BUTTON_X is pressed (back board button)
+			if ((~BUTTON_INPUT & (1 << BUTTON_X)) != 0){
+				matrixClearAll();
+				mShowMode = (mShowMode + 1) % MODE_COUNT;
+				//debounce
+				_delay_ms(500);
+			}
+
+			//Z : go set time
+			if ((~BUTTON_INPUT & (1 << BUTTON_Z)) != 0){
+				mShowMode = MODE_SETTIME;
+				mSubModeSetTimeStep = 0;
+				//debounce
+				_delay_ms(500);
+			}
+		}		
+		else {
+			//mode set time
+
+			//X : hour or minute +1
+			if ((~BUTTON_INPUT & (1 << BUTTON_X)) != 0){
+				if (mSubModeSetTimeStep == 0){
+					//hours +=1
+					uint8_t vHours = rtc.h24.Hour10 * 10 + rtc.h24.Hour;
+					vHours = (vHours +1) % 24;
+					rtc.h24.Hour10 = vHours / 10;
+					rtc.h24.Hour = vHours % 10;
+					
+					//write and read just after to see the result
+					DS1302_clock_burst_write((uint8_t *) &rtc);
+					DS1302_clock_burst_read( (uint8_t *) &rtc);
+				}
+				if (mSubModeSetTimeStep == 1){
+					//minutes +=1
+					uint8_t vMin = rtc.Minutes10 * 10 + rtc.Minutes;
+					vMin = (vMin +1) % 60;
+					rtc.Minutes10 = vMin / 10;
+					rtc.Minutes = vMin % 10;
+					
+					//write and read just after to see the result
+					DS1302_clock_burst_write((uint8_t *) &rtc);
+					DS1302_clock_burst_read( (uint8_t *) &rtc);			
+				}
+				//debounce
+				_delay_ms(500);
+			}
+
+			//Z : go set time
+			if ((~BUTTON_INPUT & (1 << BUTTON_Z)) != 0){
+				mSubModeSetTimeStep++;
+				if (mSubModeSetTimeStep > 1){
+					//finished
+					matrixClearAll();
+					mShowMode = MODE_TIME_RND;
+					mSubModeAnimId = rand() % 3;
+				}
+				//debounce
+				_delay_ms(500);
+			}
 		}
+
 	}
 	
 }

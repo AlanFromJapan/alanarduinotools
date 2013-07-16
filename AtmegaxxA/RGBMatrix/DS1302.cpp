@@ -473,7 +473,7 @@ void setupDS1302()
 
 	// Remove the next define,
 	// after the right date and time are set.
-#define SET_DATE_TIME_JUST_ONCE
+//#define SET_DATE_TIME_JUST_ONCE
 #ifdef SET_DATE_TIME_JUST_ONCE
 
 	// Fill these variables with the date and time.
@@ -523,7 +523,6 @@ void setupDS1302()
 	// Write all clock data at once (burst mode).
 	DS1302_clock_burst_write( (uint8_t *) &vRtc);
 #endif
-/*
 #ifndef SET_DATE_TIME_JUST_ONCE
 	DS1302_clock_burst_read( (uint8_t *) &vRtc);
 	
@@ -534,5 +533,4 @@ void setupDS1302()
 	// any unused bits zero
 	memset ((char *) &vRtc, 0, sizeof(vRtc));
 #endif
-*/
 }

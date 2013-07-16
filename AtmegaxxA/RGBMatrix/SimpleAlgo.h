@@ -18,10 +18,18 @@ volatile int8_t mLineStart = -1;
 volatile int8_t mLineEnd = -1;
 
 
+volatile uint16_t mTimingDivider = 10;
+
 void NexusLike()
 {
-	if (mTiming >= 10) {
+	if (mTiming >= mTimingDivider) {
 		mTiming = 0;
+		
+		mTimingDivider = mTimingDivider -1 + (rand()% 3);
+		if (mTimingDivider <= 1){
+			mTimingDivider = 1;
+		}
+		
 		volatile uint8_t* vMx;
 		volatile uint8_t* vMx2;
 		
