@@ -20,7 +20,7 @@
     <OverrideVtor>false</OverrideVtor>
     <OverrideVtorValue />
     <eraseonlaunchrule>0</eraseonlaunchrule>
-    <AsfVersion>3.5.1</AsfVersion>
+    <AsfVersion>2.11.1</AsfVersion>
     <avrtool />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">

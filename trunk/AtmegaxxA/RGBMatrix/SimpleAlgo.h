@@ -9,6 +9,11 @@
 #ifndef SIMPLEALGO_H_
 #define SIMPLEALGO_H_
 
+#define MAX_NEXUS_TIMING_DIV 40
+#define MIN_NEXUS_TIMING_DIV 1
+
+#define MAX_RANDOMCOLORS_TIMING_DIV 300
+#define MIN_RANDOMCOLORS_TIMING_DIV 30
 
 volatile uint8_t mCount = 0;
 volatile uint8_t mCompo	= 0;
@@ -26,8 +31,11 @@ void NexusLike()
 		mTiming = 0;
 		
 		mTimingDivider = mTimingDivider -1 + (rand()% 3);
-		if (mTimingDivider <= 1){
-			mTimingDivider = 1;
+		if (mTimingDivider <= MIN_NEXUS_TIMING_DIV){
+			mTimingDivider = MIN_NEXUS_TIMING_DIV;
+		}
+		if (mTimingDivider >= MAX_NEXUS_TIMING_DIV){
+			mTimingDivider = MAX_NEXUS_TIMING_DIV;
 		}
 		
 		volatile uint8_t* vMx;
@@ -144,8 +152,17 @@ void RandomColors()
 {
 	mCount++;
 	
-	if (mCount >= 100) {
+	if (mCount >= 150) {
 		mCount = 0;
+
+		//mTimingDivider = mTimingDivider -10 + (rand()% 30);
+		//if (mTimingDivider <= MIN_RANDOMCOLORS_TIMING_DIV){
+			//mTimingDivider = MIN_RANDOMCOLORS_TIMING_DIV;
+		//}
+		//if (mTimingDivider >= MAX_RANDOMCOLORS_TIMING_DIV){
+			//mTimingDivider = MAX_RANDOMCOLORS_TIMING_DIV;
+		//}
+
 		mGreenMatrix[rand()%8] = (uint8_t)rand();
 		mRedMatrix[rand()%8] = (uint8_t)rand();
 		mBlueMatrix[rand()%8] = (uint8_t)rand();
