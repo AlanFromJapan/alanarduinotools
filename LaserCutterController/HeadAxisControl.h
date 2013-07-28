@@ -18,21 +18,21 @@ volatile boolean mHeadLeftRight = true;
 
 void setupPositionControl(){
 
-  DDRC &= 0xFC;     // Clear the PC0 and c1 pin
+  DDRC &= 0xFE;     // Clear the PC0 and c1 pin
   // PB0 (PCINT0 pin) is now an input
   
-  PORTC |= 0x03;    // turn On the Pull-up
+  PORTC = 0x01;    // turn On the Pull-up
   // PB0 is now an input with pull-up enabled
   
   
   PCICR = (1 << PCIE1);    // set PCIE0 to enable PCMSK0 scan
-  PCMSK1 = (1 << PCINT8) | (1 << PCINT9) ;  // set PCINT0 to trigger an interrupt on state change 
+  PCMSK1 = (1 << PCINT8)  ;  // set PCINT0 to trigger an interrupt on state change 
 
 }
 
 
 
-byte toggleDirection (){
+byte toggleHeadDirection (){
   //first stop
   analogWrite(PWM_PIN_LEFT, 0);
   analogWrite(PWM_PIN_RIGHT, 0);
@@ -49,7 +49,7 @@ byte toggleDirection (){
   }  
 }
 
-void moveByAmount (int pDistance){
+void moveHeadByAmount (int pDistance){
 #ifdef USE_SERIAL  
   Serial.print("start moveByAmount(");Serial.print(pDistance);Serial.print(");POS=");Serial.println(mHeadPos);
 #endif //USE_SERIAL
@@ -84,7 +84,7 @@ void moveByAmount (int pDistance){
 #endif //USE_SERIAL
 
     //in case we moved too far, get back just a little
-    vPin = toggleDirection();
+    vPin = toggleHeadDirection();
     //change speed
     analogWrite(vPin, PMWSPEED_ADJUST); 
     while (vCurrentDistance > vTargetDistance) {
@@ -104,11 +104,11 @@ void moveByAmount (int pDistance){
 }
 
 
-void moveToPosition (int pTargetPosition){
-  moveByAmount (pTargetPosition - mHeadPos);
+void moveHeadToPosition (int pTargetPosition){
+  moveHeadByAmount (pTargetPosition - mHeadPos);
 }
 
-//Handle the pin status change on the ADC0-1
+//Handle the pin status change on the ADC0
 ISR (PCINT1_vect)
 {
     if (mHeadLeftRight)
@@ -116,5 +116,7 @@ ISR (PCINT1_vect)
     else 
       mHeadPos -=1;
 }
+
+
 
 #endif //__HeadAxiControl_h__
