@@ -3,18 +3,10 @@
 #ifndef __HeadAxiControl_h__
 #define __HeadAxiControl_h__
 
+#include "HeadGlobals.h"
+
 #define USE_SERIAL
 
-#define PWM_PIN_LEFT  3
-#define PWM_PIN_RIGHT 9
-
-#define PMWSPEED          50
-#define PMWSPEED_ADJUST   20
-#define PWMSTEP           30
-#define PWMSTEPSMALL      5
-
-volatile int mHeadPos = 0;
-volatile boolean mHeadLeftRight = true;
 
 void setupPositionControl(){
 
@@ -34,8 +26,7 @@ void setupPositionControl(){
 
 byte toggleHeadDirection (){
   //first stop
-  analogWrite(PWM_PIN_LEFT, 0);
-  analogWrite(PWM_PIN_RIGHT, 0);
+  stopHead();
 
   //reverse
   mHeadLeftRight = !mHeadLeftRight;
@@ -49,16 +40,42 @@ byte toggleHeadDirection (){
   }  
 }
 
+//is the head on the stopper ? (read the pin directly)
+boolean isHeaderStopper(){
+  return ((PIND & 0x04) == 0x00);
+}
+
 void moveHeadByAmount (int pDistance){
 #ifdef USE_SERIAL  
   Serial.print("start moveByAmount(");Serial.print(pDistance);Serial.print(");POS=");Serial.println(mHeadPos);
 #endif //USE_SERIAL
 
-  mHeadLeftRight = (pDistance > 0 ? true : false);
+  //we're already at the leftmost position, can't go further
+  if ((isHeaderStopper() || mHeadStopper) && pDistance < 0){
+#ifdef USE_SERIAL
+    Serial.print("  Already leftmost, cancelled movement ! POS=");Serial.println(mHeadPos);
+#endif //USE_SERIAL  
+
+    return;
+  }
+
+  //we're already at the rightmost position, can't go further
+  if (mHeadPos >= HEAD_MAX_DISTANCE && pDistance > 0){
+#ifdef USE_SERIAL
+    Serial.print("  Already rightmost, cancelled movement ! POS=");Serial.println(mHeadPos);
+#endif //USE_SERIAL  
+
+    return;
+  }
+  
+  mHeadLeftRight = (pDistance < 0 ? true : false);
   unsigned int vCurrentDistance = 0;
   unsigned int vTargetDistance = abs(pDistance);
   int vStartPos = mHeadPos;
   byte vPin = 0;
+  
+  //reset : will be set back in case of the move
+  mHeadStopper = false;
   
   // change the analog out value:
   if (mHeadLeftRight){
@@ -71,14 +88,14 @@ void moveHeadByAmount (int pDistance){
   analogWrite(vPin, PMWSPEED);       
   
   //move
-  while (vCurrentDistance < vTargetDistance) {
-    delay(PWMSTEPSMALL);
+  while (vCurrentDistance < vTargetDistance && !mHeadStopper && mHeadPos <= HEAD_MAX_DISTANCE) {
+//    delay(1);
     vCurrentDistance = abs(vStartPos - mHeadPos);
 
-    //Serial.print("vCurrentDistance");Serial.println(mHeadPos);
+    if (mHeadStopper) break;
   }
   
-  if (vCurrentDistance > vTargetDistance) {
+  if (vCurrentDistance > vTargetDistance && !mHeadStopper && mHeadPos <= HEAD_MAX_DISTANCE) {
 #ifdef USE_SERIAL
     Serial.print("  Too far ! POS=");Serial.println(mHeadPos);
 #endif //USE_SERIAL
@@ -87,16 +104,16 @@ void moveHeadByAmount (int pDistance){
     vPin = toggleHeadDirection();
     //change speed
     analogWrite(vPin, PMWSPEED_ADJUST); 
-    while (vCurrentDistance > vTargetDistance) {
-      delay(1);
+    while (vCurrentDistance > vTargetDistance && !mHeadStopper && mHeadPos <= HEAD_MAX_DISTANCE) {
+//      delay(1);
       vCurrentDistance = abs(vStartPos - mHeadPos);
 
-      //Serial.print("  Too far ! POS=");Serial.println(mHeadPos);
+      if (mHeadStopper) break;
     }
   }
   
   //stop
-  analogWrite(vPin, 0);       
+  stopHead();      
 
 #ifdef USE_SERIAL
   Serial.print("finish moveByAmount(");Serial.print(pDistance);Serial.print(");POS=");Serial.println(mHeadPos);
@@ -108,15 +125,43 @@ void moveHeadToPosition (int pTargetPosition){
   moveHeadByAmount (pTargetPosition - mHeadPos);
 }
 
+void setHeadLeftmost(){
+  moveHeadByAmount(-HEAD_MAX_DISTANCE -1000);
+}
+
+void setupHeadStopperInterrupt(){
+  //D2 is input
+  DDRD &= ~(1 << 2);
+  //pullup on D2
+  PORTD |= (1 << 2);
+  
+  //interrupt on falling hedge of INT0
+  EICRA |= (1 << ISC01);
+  //INT0 enabled
+  EIMSK |= (1 << INT0);
+}
+
+
+
 //Handle the pin status change on the ADC0
 ISR (PCINT1_vect)
 {
     if (mHeadLeftRight)
-      mHeadPos +=1;
-    else 
       mHeadPos -=1;
+    else 
+      mHeadPos +=1;
 }
 
+//handler for INT0 : head hits leftmost stopper
+ISR (INT0_vect) {
+  
+  stopHead();
+  mHeadPos = 0;
+  mHeadStopper = true;
 
+#ifdef USE_SERIAL  
+  Serial.println("Stoooooooop ! We hit the stopper.");
+#endif //USE_SERIAL  
+}
 
 #endif //__HeadAxiControl_h__
