@@ -1,13 +1,16 @@
 #include "HeadAxisControl.h"
 #include "Test_Head.h"
+#include "HeadGlobals.h"
 
 // the setup routine runs once when you press reset:
 void setup() {
   Serial.begin(9600);
   
   setupPositionControl();
-
-delay(3000);
+  setupHeadStopperInterrupt();
+  setHeadLeftmost();
+  
+//delay(3000);
 //moveHeadByAmount(+4000);
 
 }
@@ -38,13 +41,20 @@ void loop() {
     byte vChar = Serial.read();
     
     switch (vChar){
-      case 'L':
       case 'l':
-        moveHeadByAmount(-100);
+        moveHeadByAmount(-300);
+        break;
+      case 'r':
+        moveHeadByAmount(300);
+        break;
+      case 'L':
+        moveHeadByAmount(-1000);
         break;
       case 'R':
-      case 'r':
-        moveHeadByAmount(100);
+        moveHeadByAmount(1000);
+        break;
+      case 'M':
+        moveHeadByAmount(4000);
         break;
     }
   }
