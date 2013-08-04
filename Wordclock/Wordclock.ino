@@ -22,13 +22,15 @@
 //#define USE_DISPLAY_WINDMILL
 
 //Uncomment one of the two to indicate which RTC you use
-#define RTC_DS3231
+//#define RTC_DS3231
 //#define RTC_DS3234
+#define RTC_RTC4543
 
 
 //List of includes
 #include "DS3234.h"
 #include "DS3231.h"
+#include "RTC4543.h"
 #include "WordclockShared.h"
 #include "WordclockLeds.h"
 #include "WordclockLayouts.h"
@@ -54,6 +56,9 @@ void setup() {
    setupDS3234(true);
 #endif //RTC_DS3234
 
+#ifdef RTC_RTC4543
+   setupRTC4543();
+#endif //RTC_RTC4543
    
    //do this init just once, to make sure there is something "coherent" in the RTC
     if (EEPROM.read(1) != 1) {
@@ -67,9 +72,12 @@ void setup() {
    SetTimeDate(25,05,2013,18,14,00);
 #endif //RTC_DS3234
 
+#ifdef RTC_RTC4543
+    setDate4543();
+#endif //RTC_RTC4543
+
     EEPROM.write(1, 1); 
     }
-
 
 }
 
@@ -85,6 +93,9 @@ void readTimeArray(Date& pTime){
     ReadTime(pTime);
 #endif //RTC_DS3234
 
+#ifdef RTC_RTC4543
+    ReadTime4543(pTime);
+#endif //RTC_RTC4543
 }
 
 //second,minute,hour,null,day,month,year
@@ -94,10 +105,15 @@ void setTimeArray (Date& pTime){
 
    setDateDS3231(pTime);
 #endif //RTC_DS3231
+
 #ifdef RTC_DS3234
 
    SetTimeDate(pTime.dayOfMonth, pTime.month, pTime.year, pTime.hour, pTime.minute, pTime.second);
 #endif //RTC_DS3234
+
+#ifdef RTC_RTC4543
+    WriteTime4543(pTime);
+#endif //RTC_RTC4543
 
 }
 
@@ -105,14 +121,14 @@ void setTimeArray (Date& pTime){
 //second,minute,hour,null,day,month,year
 void loop() { 
    //if button is pushed, go to some subroutine and change time
-   checkButtonTimeSet();
+   //checkButtonTimeSet();
 
    //second,minute,hour,null,day,month,year
    Date vD;
    readTimeArray(vD);
 
    //Uncomment the following line for a demo mode with fast time
-   //readTimeArray_Fake(vD, 100);
+   //readTimeArray_Fake(vD, 1);
 
    //Draw the in-memory matrix (change constant at the top of the file)
    MAP_MATRIX_MFUNC(vD);
