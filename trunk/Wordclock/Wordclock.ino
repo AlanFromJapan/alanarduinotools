@@ -26,6 +26,9 @@
 //#define RTC_DS3234
 #define RTC_RTC4543
 
+//Buttons
+//#define USE_BUTTONS_ANALOG
+#define USE_BUTTONS_XTENDED
 
 //List of includes
 #include "DS3234.h"
@@ -35,6 +38,7 @@
 #include "WordclockLeds.h"
 #include "WordclockLayouts.h"
 #include "WordclockTinyNumitron.h"
+#include "WordclockButtons.h"
 #include "EEPROM.h"
 
 //DS3234.h requires this to be in the main .ino file.
@@ -121,7 +125,7 @@ void setTimeArray (Date& pTime){
 //second,minute,hour,null,day,month,year
 void loop() { 
    //if button is pushed, go to some subroutine and change time
-   //checkButtonTimeSet();
+   checkButtonTimeSet();
 
    //second,minute,hour,null,day,month,year
    Date vD;
@@ -158,7 +162,7 @@ void readTimeArray_Fake(Date& pD, int SpeedFactor){
 void checkButtonTimeSet(){ 
    Date vD;
 
-   if (readButtonPressed(1024, 20)){
+   if (BUTTON_STATUS_A){
       //debouncing on the cheap
       delay (300);
 
@@ -166,7 +170,7 @@ void checkButtonTimeSet(){
       int vStage = 0; 
       while (vStage < 2){
          //pressed the + button?
-         if (readButtonPressed(512, 20)){
+         if (BUTTON_STATUS_B){
             //debouncing on the cheap
             delay (150);
 
@@ -187,7 +191,7 @@ void checkButtonTimeSet(){
          }
 
          //pressed the set button
-         if (readButtonPressed(1024, 20)){      
+         if (BUTTON_STATUS_A){      
             //debouncing on the cheap
             delay (300);
 
@@ -210,12 +214,7 @@ void checkButtonTimeSet(){
    }
 }
 
-boolean readButtonPressed (int pMidValue, int pTolerance){
-   int vVal = analogRead(BUTTON_ANALOG_PIN);
 
-   return vVal <= pMidValue + pTolerance 
-      && vVal >= pMidValue - pTolerance;
-}
 
 
 
