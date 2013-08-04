@@ -4,7 +4,6 @@
 #define __WordclockTinyNumitron_h__
 
 #ifdef  USE_DISPLAY_NUMITRON
-#define BUTTON_ANALOG_PIN 2
 #define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_TinyNumitronIV16(p)
 #define DRAW_MATRIX_FUNC() drawLedMatrix_TinyNumitron7seg()
 #define SETUP_MATRIX() setupTinyNumitron7seg()

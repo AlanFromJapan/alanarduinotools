@@ -164,7 +164,7 @@ void setDate4543()
   d.hour = 22;
   d.dayOfMonth = 4;
   d.month = 8;
-  d.year = 2013;
+  d.year = 13;
   
   WriteTime4543(d);
 }

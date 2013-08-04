@@ -7,7 +7,6 @@
 
 
 #ifdef  USE_DISPLAY_BCD1
-  #define BUTTON_ANALOG_PIN 2
   #define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_BCD1(p)
   #define DRAW_MATRIX_FUNC() drawLedMatrix()
   #define SETUP_MATRIX() setupLedMatrix()
@@ -56,7 +55,6 @@ void MapTimeInLedMatrix_BCD1(Date& pD){
 
 
 #ifdef  USE_DISPLAY_THEORIGINAL
-  #define BUTTON_ANALOG_PIN 2
   #define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_TheOriginal(p)
   #define DRAW_MATRIX_FUNC() drawLedMatrix()
   #define SETUP_MATRIX() setupLedMatrix()
@@ -103,7 +101,6 @@ void MapTimeInLedMatrix_TheOriginal(Date& pD){
 
 
 #ifdef  USE_DISPLAY_JAPANESE1
-  #define BUTTON_ANALOG_PIN 2
   #define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_Japanese1(p)
   #define DRAW_MATRIX_FUNC() drawLedMatrix()
   #define SETUP_MATRIX() setupLedMatrix()
@@ -164,7 +161,6 @@ void MapTimeInLedMatrix_Japanese1(Date& pD){
 
 
 #ifdef  USE_DISPLAY_LAFRANCE1
-  #define BUTTON_ANALOG_PIN 2
   #define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_LaFrance(p)
   #define DRAW_MATRIX_FUNC() drawLedMatrix2x1()
   #define SETUP_MATRIX() setupLedMatrix2x1()
@@ -365,7 +361,6 @@ French display
 
 
 #ifdef  USE_DISPLAY_KOREA3
-  #define BUTTON_ANALOG_PIN 2
   #define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_Korea3(p)
   #define DRAW_MATRIX_FUNC() drawLedMatrix()
   #define SETUP_MATRIX() setupLedMatrix()
@@ -515,7 +510,6 @@ void MapTimeInLedMatrix_Korea3(Date& pD){
 
 
 #ifdef  USE_DISPLAY_WINDMILL
-  #define BUTTON_ANALOG_PIN 2
   #define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_Windmill(p)
   #define DRAW_MATRIX_FUNC() ;
   #define SETUP_MATRIX() setupLedMatrix_Windmill()
