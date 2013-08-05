@@ -42,7 +42,7 @@ uint8_t DIGITS[] = {
 
 //animation requires fast update
 boolean mFastPace = false;
-unsigned int mAnimationCounter = 0;
+uint8_t mAnimationCounter = 0;
 uint8_t mNumitronEditStatus = 0x00;
 
 void setupTinyNumitron7seg() {
@@ -90,7 +90,7 @@ void numitronSetEdit(uint8_t pMode){
 void drawLedMatrix_TinyNumitron7seg() {
    //basically override the "default version". do nothing for some time and the refresh
    if (mFastPace){
-      delay (max((int)100 - (int)mAnimationCounter, (int)5));
+      delay (max((uint8_t)100 - (uint8_t)mAnimationCounter, (uint8_t)5));
    }
    else {
       delay(500);
@@ -103,7 +103,7 @@ void drawLedMatrix_TinyNumitron7seg() {
 void MapTimeInLedMatrix_TinyNumitronIV16X(Date& pD){
 
    //every hour and half-hour, animation for 10 seconds   
-   if ((pD.minute == 0 || pD.minute == 30) && pD.second < 10) {
+   if ((pD.minute == 0 || pD.minute == 30) && pD.second < 7) {
       //   if (pTimeArray[0] < 10 || (pTimeArray[0] > 30 && pTimeArray[0] < 40)) {
       if (!mFastPace){
          mFastPace = true;
