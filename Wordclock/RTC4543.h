@@ -159,9 +159,9 @@ void WriteTime4543(Date& TimeDate){
 void setDate4543()                
 {
   Date d;
-  d.second = 0;
-  d.minute = 48;
-  d.hour = 22;
+  d.second = 50;
+  d.minute = 59;
+  d.hour = 23;
   d.dayOfMonth = 4;
   d.month = 8;
   d.year = 13;
