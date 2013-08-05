@@ -63,7 +63,12 @@ void setup() {
 #ifdef RTC_RTC4543
    setupRTC4543();
 #endif //RTC_RTC4543
-   
+
+
+  //setup the buttons
+  BUTTON_SETUP;
+  
+
    //do this init just once, to make sure there is something "coherent" in the RTC
     if (EEPROM.read(1) != 1) {
 
@@ -168,6 +173,7 @@ void checkButtonTimeSet(){
 
       //stage=0 hour,stage 1 = minutes
       int vStage = 0; 
+      SET_EDIT_HOURS();
       while (vStage < 2){
          //pressed the + button?
          if (BUTTON_STATUS_B){
@@ -194,6 +200,7 @@ void checkButtonTimeSet(){
          if (BUTTON_STATUS_A){      
             //debouncing on the cheap
             delay (300);
+            SET_EDIT_MINUTES();
 
             vStage++;
          }
@@ -211,6 +218,8 @@ void checkButtonTimeSet(){
          //a little rest longer than usual that will "blink"
          delay(50);
       }
+      
+      SET_EDIT_FINISH();
    }
 }
 
