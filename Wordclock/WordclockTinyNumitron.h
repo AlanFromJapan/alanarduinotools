@@ -4,10 +4,10 @@
 #define __WordclockTinyNumitron_h__
 
 #ifdef  USE_DISPLAY_NUMITRON
-	#define MAP_MATRIX_MFUNC(p) 	MapTimeInLedMatrix_TinyNumitronIV16(p)
+	#define MAP_MATRIX_MFUNC(p) 	MapTimeInLedMatrix_TinyNumitronIV16X(p)
 	#define DRAW_MATRIX_FUNC() 		drawLedMatrix_TinyNumitron7seg()
 	#define SETUP_MATRIX() 			setupTinyNumitron7seg()
-	#define SET_EDIT_HOURS() 		;
+	#define SET_EDIT_HOURS() 		numitronSetEdit(1)
 	#define SET_EDIT_MINUTES() 		numitronSetEdit(2)
 	#define SET_EDIT_FINISH() 		numitronSetEdit(0)
 #endif
@@ -58,31 +58,24 @@ uint8_t SHIFTBITS[] = {
 
 //a faster version of shiftout, will work only with current pinout. In case you want to reuse, make sure you use correct pins.
 void shiftOutX (uint8_t pVal){
-   //8 = PB0 = data
-   //6 = PD6 = clock
-   //7 = PD7 = latch
-
-
-
    for (int8_t i = 7; i >= 0; i--)  {
-      //digitalWrite(NUMITRON_PIN_DATA, !!(val & (1 << (7 - i))));
       if ((pVal & SHIFTBITS[i]) == 0){
-         PORTB &= 0b11111110;
+         PORTB &= ~0x01;
       }
       else {
-         PORTB |= 0b00000001;         
+         PORTB |= 0x01;         
       }
 
       //Clock up-down
       //digitalWrite(NUMITRON_PIN_CLOCK, HIGH);
-      PORTD |= 0b01000000; // ~PD6
+      PORTD |= (1 << NUMITRON_PIN_CLOCK); // ~PD6
 
       //just a little time to make sure the registers have time to read
       //asm volatile("nop\n\t"::);
       //-> not needed, just need a few ns according datasheet, at 16MHz the CPU match the requirement even without temporization
 
       //digitalWrite(NUMITRON_PIN_CLOCK, LOW);  
-      PORTD &= 0b10111111; // ~PD6          
+      PORTD &= ~(1 << NUMITRON_PIN_CLOCK); // ~PD6          
    }
 
  
@@ -104,54 +97,13 @@ void drawLedMatrix_TinyNumitron7seg() {
    }
 }
 
+
 //Expects second,minute,hour,null,day,month,year
 //This version is the "Tiny Numitron IV16 x4 hh mm" layout
-void MapTimeInLedMatrix_TinyNumitronIV16(Date& pD){
+void MapTimeInLedMatrix_TinyNumitronIV16X(Date& pD){
 
    //every hour and half-hour, animation for 10 seconds   
    if ((pD.minute == 0 || pD.minute == 30) && pD.second < 10) {
-      //   if (pTimeArray[0] < 10 || (pTimeArray[0] > 30 && pTimeArray[0] < 40)) {
-      if (!mFastPace){
-         mFastPace = true;
-         mAnimationCounter = 0;
-      }
-   }  
-   else {
-      mFastPace = false;
-   }
-
-   int vSeconds = mAnimationCounter++;//pTimeArray[0];
-
-   digitalWrite(NUMITRON_PIN_LATCH, LOW);
-
-   //Minutes
-   //units
-   shiftOut(NUMITRON_PIN_DATA, NUMITRON_PIN_CLOCK, MSBFIRST, DIGITS[pD.minute % 10] | ((mNumitronEditStatus == 2) || (mFastPace && vSeconds % 4 == 0)? LED_MASK_ON : LED_MASK_OFF));
-   //tens
-   shiftOut(NUMITRON_PIN_DATA, NUMITRON_PIN_CLOCK, MSBFIRST, DIGITS[pD.minute / 10] | ((mNumitronEditStatus == 2) || (mFastPace && vSeconds % 4 == 1)? LED_MASK_ON : LED_MASK_OFF));
-
-   //Hours
-   //units
-   shiftOut(NUMITRON_PIN_DATA, NUMITRON_PIN_CLOCK, MSBFIRST, DIGITS[pD.hour % 10] | ((mNumitronEditStatus == 1) || (mFastPace && vSeconds % 4 == 2)? LED_MASK_ON : LED_MASK_OFF));
-   //tens
-   //if less than 10 turn the tens digit off for hours
-   if (pD.hour < 10){
-      shiftOut(NUMITRON_PIN_DATA, NUMITRON_PIN_CLOCK, MSBFIRST, DIGIT_OFF | ((mNumitronEditStatus == 1) || (mFastPace && vSeconds % 4 == 3)? LED_MASK_ON : LED_MASK_OFF));
-   }
-   else {
-      shiftOut(NUMITRON_PIN_DATA, NUMITRON_PIN_CLOCK, MSBFIRST, DIGITS[pD.hour / 10] | ((mNumitronEditStatus == 1) || (mFastPace && vSeconds % 4 == 3)? LED_MASK_ON : LED_MASK_OFF));
-   }
-
-
-   digitalWrite(NUMITRON_PIN_LATCH, HIGH);
-}
-
-//Expects second,minute,hour,null,day,month,year
-//This version is the "Tiny Numitron IV16 x4 hh mm" layout
-void MapTimeInLedMatrix_TinyNumitronIV16X(int pTimeArray[]){
-
-   //every hour and half-hour, animation for 10 seconds   
-   if ((pTimeArray[1] == 0 || pTimeArray[1] == 30) && pTimeArray[0] < 10) {
       //   if (pTimeArray[0] < 10 || (pTimeArray[0] > 30 && pTimeArray[0] < 40)) {
       if (!mFastPace){
          mFastPace = true;
@@ -169,20 +121,20 @@ void MapTimeInLedMatrix_TinyNumitronIV16X(int pTimeArray[]){
    
    //Minutes
    //units
-   shiftOutX(DIGITS[pTimeArray[1] % 10] | (mFastPace && vSeconds % 4 == 0? LED_MASK_ON : LED_MASK_OFF));
+   shiftOutX(DIGITS[pD.minute % 10] | ((mNumitronEditStatus == 2) || (mFastPace && vSeconds % 4 == 0)? LED_MASK_ON : LED_MASK_OFF));
    //tens
-   shiftOutX(DIGITS[pTimeArray[1] / 10] | (mFastPace && vSeconds % 4 == 1? LED_MASK_ON : LED_MASK_OFF));
+   shiftOutX(DIGITS[pD.minute / 10] | ((mNumitronEditStatus == 2) || (mFastPace && vSeconds % 4 == 1)? LED_MASK_ON : LED_MASK_OFF));
 
    //Hours
    //units
-   shiftOutX(DIGITS[pTimeArray[2] % 10] | (mFastPace && vSeconds % 4 == 2? LED_MASK_ON : LED_MASK_OFF));
+   shiftOutX(DIGITS[pD.hour % 10] | ((mNumitronEditStatus == 1) || (mFastPace && vSeconds % 4 == 2)? LED_MASK_ON : LED_MASK_OFF));
    //tens
    //if less than 10 turn the tens digit off for hours
-   if (pTimeArray[2] < 10){
-      shiftOutX(DIGIT_OFF | (mFastPace && vSeconds % 4 == 3? LED_MASK_ON : LED_MASK_OFF));
+   if (pD.hour < 10){
+      shiftOutX(DIGIT_OFF | ((mNumitronEditStatus == 1) || (mFastPace && vSeconds % 4 == 3)? LED_MASK_ON : LED_MASK_OFF));
    }
    else {
-      shiftOutX(DIGITS[pTimeArray[2] / 10] | (mFastPace && vSeconds % 4 == 3? LED_MASK_ON : LED_MASK_OFF));
+      shiftOutX(DIGITS[pD.hour / 10] | ((mNumitronEditStatus == 1) || (mFastPace && vSeconds % 4 == 3)? LED_MASK_ON : LED_MASK_OFF));
    }
 
    //digitalWrite(NUMITRON_PIN_LATCH, HIGH);
