@@ -481,7 +481,7 @@ void setupDS1302()
 
 	// Example for april 15, 2013, 10:08, monday is 2nd day of Week.
 	// Set your own time and date in these variables.
-	seconds    = 21;
+	seconds    = 55;
 	minutes    = 40;
 	hours      = 22;
 	dayofweek  = 2;  // Day of week, any day can be first, counts 1...7
@@ -523,7 +523,7 @@ void setupDS1302()
 	// Write all clock data at once (burst mode).
 	DS1302_clock_burst_write( (uint8_t *) &vRtc);
 #endif
-#ifndef SET_DATE_TIME_JUST_ONCE
+//#ifndef SET_DATE_TIME_JUST_ONCE
 	DS1302_clock_burst_read( (uint8_t *) &vRtc);
 	
 	vRtc.CH         = 0;      // 1 for Clock Halt, 0 to run;
@@ -532,5 +532,5 @@ void setupDS1302()
 	// Fill the structure with zeros to make
 	// any unused bits zero
 	memset ((char *) &vRtc, 0, sizeof(vRtc));
-#endif
+//#endif
 }
