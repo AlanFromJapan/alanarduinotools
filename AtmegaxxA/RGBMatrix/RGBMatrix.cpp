@@ -38,6 +38,7 @@
 #define BUTTON_PORT		PORTB
 #define BUTTON_X		PINB0
 #define BUTTON_Z		PINB1
+#define BUTTON_TRT5000	PINB2
 
 
 volatile uint8_t mShowMode = MODE_TIME_RND;
@@ -87,7 +88,11 @@ ISR(TIMER2_OVF_vect){
 		case MODE_WORM_TIME:
 		case MODE_NEXUS_TIME:
 		case MODE_TIME_RND:
-			if (rtc.Seconds10 * 10 + rtc.Seconds <= 5) {
+			//Show time for a few secs every minutes OR when hover the detector (goes low)
+			if (
+				((~BUTTON_INPUT & (1 << BUTTON_TRT5000)) != 0) 
+				|| rtc.Seconds10 * 10 + rtc.Seconds <= 6
+				) {
 				//the 5 first seconds of the minute (show time)
 				if (mSubModeSwitched == 1){
 					mSubModeSwitched = 0;
@@ -204,10 +209,10 @@ int main(void)
 	DDRA = 0xFF;
 	DDRC = 0xFF;
 	
-	//G port is for input
+	//button port is for input
 	BUTTON_DIR = 0x00;
-	//pullups for everyone
-	BUTTON_PORT = 0xff;
+	//pullups for PINB0 and PINB1 (button X and Z)
+	BUTTON_PORT = 0x03;
 	//just make sure pullups are NOT disabled
 	MCUCR |= (0 << PUD);
 	
