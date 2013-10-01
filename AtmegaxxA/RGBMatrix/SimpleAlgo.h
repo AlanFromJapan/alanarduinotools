@@ -178,17 +178,17 @@ void Waves1()
 {
 	uint8_t vCount = mCount;
 	if (mCount < 64) {
-		setMatrix('G', vCount / 8, vCount % 8, 1);
+		setMatrix(COLOR_GREEN, vCount / 8, vCount % 8, 1);
 	}
 	else {
 		vCount -= 64;
 		if (mCount < 128) {
-			setMatrix('R', vCount / 8, vCount % 8, 1);
+			setMatrix(COLOR_RED, vCount / 8, vCount % 8, 1);
 		}
 		else {
 			vCount -= 64;
 			if (mCount < 196) {
-				setMatrix('B', vCount / 8, vCount % 8, 1);
+				setMatrix(COLOR_BLUE, vCount / 8, vCount % 8, 1);
 			}
 			
 		}
@@ -348,4 +348,109 @@ void wormRandom(uint8_t pBounce) {
 	}	
 }
 	
+	
+	
+struct RainDrop {
+	uint8_t column;
+	uint8_t top;
+	uint8_t bottom;
+	uint8_t status;
+	uint8_t speed;
+	int8_t speedDelta;
+	uint8_t maxBounceHeight;
+	
+};
+volatile RainDrop mTheDrop;
+void rainInit(){
+	mTheDrop.bottom = 0;
+	mTheDrop.top = 0;
+	mTheDrop.column = 0;
+	mTheDrop.status = 0;
+	mTheDrop.speed = 15;
+	mTheDrop.maxBounceHeight = 4;
+	mTheDrop.speedDelta = 0;
+}
+void rainMode() {
+	mCount++;
+
+	//temporization
+	if (mCount >= mTheDrop.speed - mTheDrop.speedDelta) {
+		mCount = 0;
+
+		//erase all
+		matrixClearAll();
+		
+		if (mTheDrop.status == 0){
+			//first fall
+			if (mTheDrop.top < 7) {
+				mTheDrop.top += 1;
+			}
+			else {
+				if (mTheDrop.bottom < 7){
+					mTheDrop.bottom += 1;
+				}	
+				else {
+					//bounce
+					mTheDrop.status = 1;
+				}			
+			}
+			
+		}
+
+
+		if (mTheDrop.status == 1){
+			mTheDrop.speed = 25 - mTheDrop.speedDelta;
+			
+			//rebound
+			if (mTheDrop.bottom > mTheDrop.maxBounceHeight) {
+				mTheDrop.bottom -= 1;
+			}
+			else {
+				//fall again
+				mTheDrop.status = 2;
+			}
+			
+		}
+		
+		
+		if (mTheDrop.status == 2){
+			mTheDrop.speed = 15 - mTheDrop.speedDelta;
+
+			//second fall
+			if (mTheDrop.top < 7) {
+				mTheDrop.top += 1;
+			}
+			else {
+				if (mTheDrop.bottom < 7){
+					mTheDrop.bottom += 1;
+				}
+				else {
+					//reset
+					rainInit();
+					//erase all
+					matrixClearAll();
+					
+					//randomize a few values
+					mTheDrop.column = rand() % 8;
+					mTheDrop.maxBounceHeight = 7 - rand() % 4;
+					mTheDrop.speedDelta = rand() % 15 - 10;
+					
+					//sleep a little until next drop
+					uint8_t mCount = rand() % 15;
+					while(mCount > 0){
+						_delay_ms(100);
+						mCount--;
+					}					
+				}
+			}
+					
+		}
+		
+				
+		//draw
+		for (int i= mTheDrop.bottom; i <= mTheDrop.top; i++){
+			setMatrix(COLOR_CYAN, mTheDrop.column, i, 1);
+		}
+	}		
+}	
 #endif /* SIMPLEALGO_H_ */
