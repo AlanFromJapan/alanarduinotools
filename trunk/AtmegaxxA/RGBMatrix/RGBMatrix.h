@@ -16,6 +16,14 @@
 #define POV_ON_US 40
 #define POV_OFF_US 200
 
+#define COLOR_RED		'R'
+#define COLOR_GREEN		'G'
+#define COLOR_BLUE		'B'
+#define COLOR_YELLOW	'Y'
+#define COLOR_PURPLE	'P'
+#define COLOR_CYAN		'C'
+#define COLOR_WHITE		'W'
+
 
 volatile uint8_t mBlueMatrix	[8];
 volatile uint8_t mRedMatrix		[8];
@@ -53,25 +61,25 @@ uint8_t idToRGB( uint8_t pColorIntId )
 {
 	switch(pColorIntId){
 		case 0:
-		pColorIntId = 'R';
+		pColorIntId = COLOR_RED;
 		break;
 		case 1:
-		pColorIntId = 'G';
+		pColorIntId = COLOR_GREEN;
 		break;
 		case 2:
-		pColorIntId = 'B';
+		pColorIntId = COLOR_BLUE;
 		break;
 		case 3:
-		pColorIntId = 'Y';
+		pColorIntId = COLOR_YELLOW;
 		break;
 		case 4:
-		pColorIntId = 'P';
+		pColorIntId = COLOR_PURPLE;
 		break;
 		case 5:
-		pColorIntId = 'C';
+		pColorIntId = COLOR_CYAN;
 		break;
 		case 6:
-		pColorIntId = 'W';
+		pColorIntId = COLOR_WHITE;
 		break;
 	}
 	return pColorIntId;
@@ -92,13 +100,13 @@ void matrixClearAll(){
 }
 
 void setMatrix(uint8_t pRGB, uint8_t pX, uint8_t pY, uint8_t pValue){
-	if (pRGB == 'B' || pRGB == 'P' || pRGB == 'C' || pRGB == 'W') {
+	if (pRGB == COLOR_BLUE || pRGB == COLOR_PURPLE || pRGB == COLOR_CYAN || pRGB == COLOR_WHITE) {
 		mBlueMatrix[pY] = (pValue == 0 ? mBlueMatrix[pY] & ~(1 << pX) : mBlueMatrix[pY] | (1 << pX));
 	}
-	if (pRGB == 'R' || pRGB == 'Y' || pRGB == 'P' || pRGB == 'W') {
+	if (pRGB == COLOR_RED || pRGB == COLOR_YELLOW || pRGB == COLOR_PURPLE || pRGB == COLOR_WHITE) {
 		mRedMatrix[pY] = (pValue == 0 ? mRedMatrix[pY] & ~(1 << pX) : mRedMatrix[pY] | (1 << pX));
 	}
-	if (pRGB == 'G' || pRGB == 'Y' || pRGB == 'C' || pRGB == 'W') {
+	if (pRGB == COLOR_GREEN || pRGB == COLOR_YELLOW || pRGB == COLOR_CYAN || pRGB == COLOR_WHITE) {
 		mGreenMatrix[pY] = (pValue == 0 ? mGreenMatrix[pY] & ~(1 << pX) : mGreenMatrix[pY] | (1 << pX));
 	}
 }

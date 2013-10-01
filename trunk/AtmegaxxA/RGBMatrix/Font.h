@@ -128,13 +128,13 @@ uint8_t DIGIT_SEMICOLON[] = {
 
 void copyToBuffer(uint8_t pRGB, uint8_t pX, uint8_t pSource[]){
 	volatile uint8_t* vMx;
-	if (pRGB == 'R') {
+	if (pRGB == COLOR_RED) {
 		vMx = mRedMatrix;
 	}
-	if (pRGB == 'G') {
+	if (pRGB == COLOR_GREEN) {
 		vMx = mGreenMatrix;
 	}
-	if (pRGB == 'B') {
+	if (pRGB == COLOR_BLUE) {
 		vMx = mBlueMatrix;
 	}
 	

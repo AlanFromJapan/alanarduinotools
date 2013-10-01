@@ -18,9 +18,13 @@
 #include "DS1302.h"
 
 
-#define MODE_COUNT 9
+#define SHOW_TIME_DURATION_SEC 6
 
-#define MODE_TIME_RND 8
+#define MODE_COUNT 10
+#define RANDOM_ANIM_COUNT 4
+
+#define MODE_TIME_RND 9
+#define MODE_RAIN 8
 #define MODE_WORM_TIME 7
 #define MODE_WORM 6
 #define MODE_SEA 5
@@ -88,12 +92,13 @@ ISR(TIMER2_OVF_vect){
 		case MODE_WORM_TIME:
 		case MODE_NEXUS_TIME:
 		case MODE_TIME_RND:
+		case MODE_RAIN:
 			//Show time for a few secs every minutes OR when hover the detector (goes low)
 			if (
 				((~BUTTON_INPUT & (1 << BUTTON_TRT5000)) != 0) 
-				|| rtc.Seconds10 * 10 + rtc.Seconds <= 6
+				|| rtc.Seconds10 * 10 + rtc.Seconds <= SHOW_TIME_DURATION_SEC
 				) {
-				//the 5 first seconds of the minute (show time)
+				//the SHOW_TIME_DURATION_SEC first seconds of the minute (show time)
 				if (mSubModeSwitched == 1){
 					mSubModeSwitched = 0;
 					matrixClearAll();
@@ -105,7 +110,7 @@ ISR(TIMER2_OVF_vect){
 					mSubModeSwitched = 1;
 					matrixClearAll();
 					
-					mSubModeAnimId = rand() % 3;
+					mSubModeAnimId = rand() % RANDOM_ANIM_COUNT;
 				}
 				//Otherwise it's nexus or worm
 				switch(mShowMode){
@@ -115,8 +120,11 @@ ISR(TIMER2_OVF_vect){
 					case MODE_NEXUS_TIME:
 						NexusLike();
 						break;
+					case MODE_RAIN:
+						rainMode();
+						break;
 					case MODE_TIME_RND:
-						//animation is random
+						//animation is random (0 <= mShowMode < RANDOM_ANIM_COUNT)
 						switch (mSubModeAnimId){
 							case 0 : 
 							wormRandom(WORM_BOUNCING);
@@ -126,6 +134,9 @@ ISR(TIMER2_OVF_vect){
 							break;
 							case 2:
 							RandomColors();
+							break;
+							case 3:
+							rainMode();
 							break;
 						}
 						break;
@@ -228,6 +239,7 @@ int main(void)
 	setupDS1302();
 			
 	wormInit();
+	rainInit();
 	
 	while (1){
 		//refresh display
