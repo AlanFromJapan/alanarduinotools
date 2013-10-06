@@ -48,10 +48,14 @@ void loop() {
         moveHeadByAmount(300);
         break;
       case 'L':
+  setHeadSpeed(PWMSPEED_FAST);
         moveHeadByAmount(-1000);
+  setHeadSpeed(PWMSPEED);      
         break;
       case 'R':
+  setHeadSpeed(PWMSPEED_FAST);
         moveHeadByAmount(1000);
+  setHeadSpeed(PWMSPEED);      
         break;
       case 'M':
         moveHeadByAmount(4000);

@@ -85,7 +85,7 @@ void moveHeadByAmount (int pDistance){
     vPin = PWM_PIN_RIGHT;    
   }
   //start moving
-  analogWrite(vPin, PMWSPEED);       
+  analogWrite(vPin, mHeadSpeed);       
   
   //move
   while (vCurrentDistance < vTargetDistance && !mHeadStopper && mHeadPos <= HEAD_MAX_DISTANCE) {
@@ -103,7 +103,7 @@ void moveHeadByAmount (int pDistance){
     //in case we moved too far, get back just a little
     vPin = toggleHeadDirection();
     //change speed
-    analogWrite(vPin, PMWSPEED_ADJUST); 
+    analogWrite(vPin, PWMSPEED_ADJUST); 
     while (vCurrentDistance > vTargetDistance && !mHeadStopper && mHeadPos <= HEAD_MAX_DISTANCE) {
 //      delay(1);
       vCurrentDistance = abs(vStartPos - mHeadPos);
@@ -126,7 +126,9 @@ void moveHeadToPosition (int pTargetPosition){
 }
 
 void setHeadLeftmost(){
+  setHeadSpeed(PWMSPEED_FAST);
   moveHeadByAmount(-HEAD_MAX_DISTANCE -1000);
+  setHeadSpeed(PWMSPEED);
 }
 
 void setupHeadStopperInterrupt(){
