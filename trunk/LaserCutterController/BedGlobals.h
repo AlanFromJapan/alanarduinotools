@@ -15,6 +15,10 @@
 #define DELAY_COIL_MS_FAST  12
 #define ONE_TURN         144
 
+//how many steps to do a 1mm
+#define MILLI_BED_STEPS  6
+#define CENTI_BED_STEPS  60
+
 int mBedCurrentSpeed = DELAY_COIL_MS;
 
 #endif //__BedGlobals_h__
