@@ -6,12 +6,13 @@
 
 void TestHead_FindBoundaries() {
   //Go left...
-  moveHeadByAmount(-1000);
+  moveHeadByAmount(-1000, PWMSPEED);
   //reset the position
   mHeadPos=0;
   //...and go all the way right
-  moveHeadByAmount(+2000);
+  moveHeadByAmount(+2000, PWMSPEED);
   
 }
+
 
 #endif //__TestHead_h__
