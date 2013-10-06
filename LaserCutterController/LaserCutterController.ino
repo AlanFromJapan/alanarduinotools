@@ -73,6 +73,12 @@ void loop() {
         break;
       case 'S':
         moveBedSouth(100);
+        break;        
+      case '6':
+        moveBedNorth(6);
+        break;        
+      case '7':
+        moveBedNorth(3);
         break;
         
       case'1':
@@ -114,20 +120,20 @@ void testMove (){
 */
 
 void testMakeSquare(){
-  moveBedNorth(100);  
-  moveHeadByAmount(500, PWMSPEED);
+  //moveBedNorth(100);  
+  moveHeadByAmount(700+143, PWMSPEED_FAST);
   
   delay(5000);
-  moveHeadByAmount(1000, PWMSPEED);
+  moveHeadByAmount(143, PWMSPEED);
  
   delay(1000);
-  moveBedSouth(200);  
+  moveBedSouth(60);  
 
   delay(1000);
-  moveHeadByAmount(-1000, PWMSPEED);
+  moveHeadByAmount(-143, PWMSPEED);
   
   delay(1000);
-  moveBedNorth(200);  
+  moveBedNorth(60);  
 }
 
 

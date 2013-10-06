@@ -14,6 +14,11 @@
 
 volatile uint8_t mHeadSpeed = PWMSPEED_FAST;
 
+//how many steps to do a 1mm
+#define MILLI_HEAD_STEPS  14
+#define CENTI_HEAD_STEPS  143
+
+
 //position of the head
 volatile int mHeadPos = 0;
 //going left ?
