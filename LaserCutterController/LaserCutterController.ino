@@ -1,6 +1,8 @@
 #include "HeadAxisControl.h"
 #include "Test_Head.h"
 #include "HeadGlobals.h"
+#include "BedGlobals.h"
+#include "BedControl.h"
 
 // the setup routine runs once when you press reset:
 void setup() {
@@ -9,10 +11,12 @@ void setup() {
   setupPositionControl();
   setupHeadStopperInterrupt();
   setHeadLeftmost();
+  resetBedToStopper();
   
 //delay(3000);
 //moveHeadByAmount(+4000);
 
+//testMakeSquare();
 }
 
 // the loop routine runs over and over again forever:
@@ -42,23 +46,41 @@ void loop() {
     
     switch (vChar){
       case 'l':
-        moveHeadByAmount(-300);
+        moveHeadByAmount(-300, PWMSPEED);
         break;
       case 'r':
-        moveHeadByAmount(300);
+        moveHeadByAmount(300, PWMSPEED);
         break;
       case 'L':
-  setHeadSpeed(PWMSPEED_FAST);
-        moveHeadByAmount(-1000);
-  setHeadSpeed(PWMSPEED);      
+        moveHeadByAmount(-1000, PWMSPEED_FAST);
         break;
       case 'R':
-  setHeadSpeed(PWMSPEED_FAST);
-        moveHeadByAmount(1000);
-  setHeadSpeed(PWMSPEED);      
+        moveHeadByAmount(1000, PWMSPEED_FAST);
         break;
       case 'M':
-        moveHeadByAmount(4000);
+        moveHeadByAmount(4000, PWMSPEED_FAST);
+        break;
+        
+        
+      case 'n':
+        moveBedNorth(15);
+        break;
+      case 's':
+        moveBedSouth(15);
+        break;        
+      case 'N':
+        moveBedNorth(100);
+        break;
+      case 'S':
+        moveBedSouth(100);
+        break;
+        
+      case'1':
+        testMakeSquare();
+        break;
+      case '0':
+        setHeadLeftmost();
+        resetBedToStopper();      
         break;
     }
   }
@@ -90,6 +112,23 @@ void testMove (){
   }  
 }
 */
+
+void testMakeSquare(){
+  moveBedNorth(100);  
+  moveHeadByAmount(500, PWMSPEED);
+  
+  delay(5000);
+  moveHeadByAmount(1000, PWMSPEED);
+ 
+  delay(1000);
+  moveBedSouth(200);  
+
+  delay(1000);
+  moveHeadByAmount(-1000, PWMSPEED);
+  
+  delay(1000);
+  moveBedNorth(200);  
+}
 
 
 

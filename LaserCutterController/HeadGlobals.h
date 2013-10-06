@@ -12,7 +12,7 @@
 
 #define HEAD_MAX_DISTANCE 4000
 
-volatile uint8_t mHeadSpeed = PWMSPEED;
+volatile uint8_t mHeadSpeed = PWMSPEED_FAST;
 
 //position of the head
 volatile int mHeadPos = 0;

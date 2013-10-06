@@ -45,7 +45,9 @@ boolean isHeaderStopper(){
   return ((PIND & 0x04) == 0x00);
 }
 
-void moveHeadByAmount (int pDistance){
+void moveHeadByAmount (int pDistance, int pSpeed){
+  setHeadSpeed(pSpeed);
+  
 #ifdef USE_SERIAL  
   Serial.print("start moveByAmount(");Serial.print(pDistance);Serial.print(");POS=");Serial.println(mHeadPos);
 #endif //USE_SERIAL
@@ -122,12 +124,12 @@ void moveHeadByAmount (int pDistance){
 
 
 void moveHeadToPosition (int pTargetPosition){
-  moveHeadByAmount (pTargetPosition - mHeadPos);
+  moveHeadByAmount (pTargetPosition - mHeadPos, PWMSPEED);
 }
 
 void setHeadLeftmost(){
   setHeadSpeed(PWMSPEED_FAST);
-  moveHeadByAmount(-HEAD_MAX_DISTANCE -1000);
+  moveHeadByAmount(-HEAD_MAX_DISTANCE -1000, PWMSPEED);
   setHeadSpeed(PWMSPEED);
 }
 
