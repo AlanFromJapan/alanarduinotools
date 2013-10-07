@@ -21,4 +21,6 @@
 
 int mBedCurrentSpeed = DELAY_COIL_MS;
 
+int mBedPos = 0;
+
 #endif //__BedGlobals_h__

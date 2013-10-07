@@ -84,6 +84,12 @@ void loop() {
       case'1':
         testMakeSquare();
         break;
+      case'3':
+        testMakeTriangle();
+        break;
+      case'4':
+        testMakeStar();
+        break;
       case '0':
         setHeadLeftmost();
         resetBedToStopper();      
@@ -92,32 +98,6 @@ void loop() {
   }
 }
 
-/*
-void testMove (){
-   while (1) {
-    // change the analog out value:
-    if (vLeftRight){
-      analogWrite(3, PMWSPEED);           
-    }
-    else {
-      analogWrite(PWM_PIN_LEFT, PMWSPEED);           
-    }
-    
-    while (mPos < abs(200)) {
-      delay(PWMSTEP);
-    }
-    
-    //stop
-    analogWrite(3, 0);           
-    analogWrite(PWM_PIN_LEFT, 0);   
-      
-    vLeftRight = !vLeftRight;
-
-    Serial.print("POS=");Serial.println(mPos);
-    delay(1000);  
-  }  
-}
-*/
 
 void testMakeSquare(){
   //moveBedNorth(100);  
@@ -136,6 +116,72 @@ void testMakeSquare(){
   moveBedNorth(60);  
 }
 
+void testMakeTriangle(){
+    moveBedToPosition(0);
+    moveHeadToPosition(800);  
+    
+  delay(5000);
+  
+    line(mBedPos, mHeadPos, 120, 1100);
+    line(mBedPos, mHeadPos, 120, 800);
+    line(mBedPos, mHeadPos, 0, 800);
+}
 
+void testMakeStar(){
+    moveBedToPosition(-100);
+    moveHeadToPosition(800);  
+    
+  delay(5000);
+
+setHeadSpeed(PWMSPEED_ADJUST);
+
+    lintTo(-200, 2000);
+    lintTo(-300, 800);
+    lintTo(-100, 1700);
+    lintTo(-300, 1700);
+    lintTo(-100, 800);
+}
+
+void lintTo (int tox, int toy){
+  line(mBedPos, mHeadPos, tox, toy);
+}
+
+//Bresenham algorithm
+// Thank you wikipedia http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+void line (int fromx, int fromy, int tox, int toy){
+  int dx = abs(tox - fromx);
+  int dy = abs(toy - fromy);
+  int sy, sx, err, err2;
+  
+  if (fromx < tox) sx = 1; else sx = -1;
+  if (fromy < toy) sy = 1; else sy = -1;
+  
+  err = dx-dy;
+  
+  while (1){
+    //X is the bed, Y is the head
+    moveBedToPosition(fromx);
+    moveHeadToPosition(fromy);
+    
+    if (fromx == tox && fromy == toy) break;
+      
+    err2 = err * 2;
+    if (err2 > -dy){
+      err = err - dy;
+      fromx = fromx + sx;
+    }
+
+    if (fromx == tox && fromy == toy) {
+      moveBedToPosition(fromx);
+      moveHeadToPosition(fromy);
+      break;
+    }
+    
+    if (err2 < dx){
+      err = err + dx;
+      fromy = fromy + sy;
+    }
+  }
+}
 
 
