@@ -5,8 +5,9 @@
 
 #include "HeadGlobals.h"
 
-#define USE_SERIAL
+//#define USE_SERIAL
 
+//#define USE_HEAD_ADJUSTMENT
 
 void setupPositionControl(){
 
@@ -45,7 +46,7 @@ boolean isHeaderStopper(){
   return ((PIND & 0x04) == 0x00);
 }
 
-void moveHeadByAmount (int pDistance, int pSpeed){
+void moveHeadByAmount (int pDistance, uint8_t pSpeed){
   setHeadSpeed(pSpeed);
   
 #ifdef USE_SERIAL  
@@ -97,6 +98,7 @@ void moveHeadByAmount (int pDistance, int pSpeed){
     if (mHeadStopper) break;
   }
   
+#ifdef USE_HEAD_ADJUSTMENT  
   if (vCurrentDistance > vTargetDistance && !mHeadStopper && mHeadPos <= HEAD_MAX_DISTANCE) {
 #ifdef USE_SERIAL
     Serial.print("  Too far ! POS=");Serial.println(mHeadPos);
@@ -113,7 +115,8 @@ void moveHeadByAmount (int pDistance, int pSpeed){
       if (mHeadStopper) break;
     }
   }
-  
+#endif //USE_HEAD_ADJUSTMENT
+
   //stop
   stopHead();      
 
@@ -124,12 +127,12 @@ void moveHeadByAmount (int pDistance, int pSpeed){
 
 
 void moveHeadToPosition (int pTargetPosition){
-  moveHeadByAmount (pTargetPosition - mHeadPos, PWMSPEED);
+  moveHeadByAmount (pTargetPosition - mHeadPos, mHeadSpeed);
 }
 
 void setHeadLeftmost(){
   setHeadSpeed(PWMSPEED_FAST);
-  moveHeadByAmount(-HEAD_MAX_DISTANCE -1000, PWMSPEED);
+  moveHeadByAmount(-HEAD_MAX_DISTANCE -1000, PWMSPEED_FAST);
   setHeadSpeed(PWMSPEED);
 }
 

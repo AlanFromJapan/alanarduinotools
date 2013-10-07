@@ -71,11 +71,15 @@ void resetBedToStopper(){
   }
   
   setBedSpeed(DELAY_COIL_MS);
+  
+  mBedPos = 0;
 }
+
 
 void moveBedNorth(int pSteps){
   for (; pSteps > 0 ; pSteps--){
     moveForward();
+    mBedPos++;
   }
 }
 
@@ -83,6 +87,17 @@ void moveBedNorth(int pSteps){
 void moveBedSouth(int pSteps){
   for (; pSteps > 0 ; pSteps--){
     moveBackward();
+    mBedPos--;
   }
 }
+
+void moveBedToPosition (int pPosition){
+  if (pPosition - mBedPos > 0) {
+    moveBedNorth(abs(pPosition - mBedPos));
+  }
+  else{
+    moveBedSouth(abs(pPosition - mBedPos));    
+  }
+}
+
 #endif //__BedControl_h__
