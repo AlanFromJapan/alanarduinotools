@@ -8,6 +8,8 @@ Project("{18226A42-8477-4023-8AD2-40C49DA407C9}") = "AsmSNESPad", "AsmSNESPad\As
 EndProject
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "GuitarRodOfCommand", "GuitarRodOfCommand\GuitarRodOfCommand.cproj", "{9A148C8B-ECEA-451B-ACBB-EC6BD73DA8DE}"
 EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "LaserCutterDisplayController", "LaserCutterDisplayController\LaserCutterDisplayController.cproj", "{045AC15F-D158-4FB3-96CC-00B55AB6920E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -30,6 +32,10 @@ Global
 		{9A148C8B-ECEA-451B-ACBB-EC6BD73DA8DE}.Debug|AVR.Build.0 = Debug|AVR
 		{9A148C8B-ECEA-451B-ACBB-EC6BD73DA8DE}.Release|AVR.ActiveCfg = Release|AVR
 		{9A148C8B-ECEA-451B-ACBB-EC6BD73DA8DE}.Release|AVR.Build.0 = Release|AVR
+		{045AC15F-D158-4FB3-96CC-00B55AB6920E}.Debug|AVR.ActiveCfg = Debug|AVR
+		{045AC15F-D158-4FB3-96CC-00B55AB6920E}.Debug|AVR.Build.0 = Debug|AVR
+		{045AC15F-D158-4FB3-96CC-00B55AB6920E}.Release|AVR.ActiveCfg = Release|AVR
+		{045AC15F-D158-4FB3-96CC-00B55AB6920E}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
