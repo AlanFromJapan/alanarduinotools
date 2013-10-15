@@ -3,11 +3,13 @@
 #include "HeadGlobals.h"
 #include "BedGlobals.h"
 #include "BedControl.h"
+#include "Joystick.h"
 
 // the setup routine runs once when you press reset:
 void setup() {
   Serial.begin(9600);
-  
+
+ 
   setupPositionControl();
   setupHeadStopperInterrupt();
   setHeadLeftmost();
@@ -17,6 +19,8 @@ void setup() {
 //moveHeadByAmount(+4000);
 
 //testMakeSquare();
+
+  
 }
 
 // the loop routine runs over and over again forever:
