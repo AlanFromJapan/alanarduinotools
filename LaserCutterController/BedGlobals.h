@@ -19,6 +19,10 @@
 #define MILLI_BED_STEPS  6
 #define CENTI_BED_STEPS  60
 
+//north max dist is 85mm minus a little safety
+#define MAX_DIST_NORTH (85 -2)
+#define MAX_STEPS_NORTH (MAX_DIST_NORTH * MILLI_BED_STEPS) 
+
 int mBedCurrentSpeed = DELAY_COIL_MS;
 
 int mBedPos = 0;
