@@ -14,6 +14,7 @@ void setup() {
   setupHeadStopperInterrupt();
   setHeadLeftmost();
   resetBedToStopper();
+  initHeadPositionJoystick();
   
 //delay(3000);
 //moveHeadByAmount(+4000);
@@ -185,6 +186,23 @@ void line (int fromx, int fromy, int tox, int toy){
       err = err + dx;
       fromy = fromy + sy;
     }
+  }
+}
+
+//moves the head following joystick
+void initHeadPositionJoystick(){
+  while (1 /*change condition later*/ ){
+    int8_t x, y;
+    readJoystick (&x, &y);
+
+    if (x != 0){
+      moveHeadByAmount(x * MILLI_HEAD_STEPS, PWMSPEED_ADJUST);
+    }    
+    
+    if (y != 0){
+      moveBedToPosition(mBedPos + y * MILLI_BED_STEPS);
+    }    
+
   }
 }
 
