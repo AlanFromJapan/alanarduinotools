@@ -23,8 +23,6 @@ volatile uint8_t mHeadSpeed = PWMSPEED_FAST;
 volatile int mHeadPos = 0;
 //going left ?
 volatile boolean mHeadLeftRight = true;
-//is in the stopper position
-volatile boolean mHeadStopper = false;
 
 inline void stopHead() {
   //first stop

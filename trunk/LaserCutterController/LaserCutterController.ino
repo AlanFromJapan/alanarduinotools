@@ -1,3 +1,7 @@
+
+#define USE_SERIAL
+
+
 #include "HeadAxisControl.h"
 #include "Test_Head.h"
 #include "HeadGlobals.h"
@@ -7,45 +11,34 @@
 
 // the setup routine runs once when you press reset:
 void setup() {
-  Serial.begin(9600);
+#ifdef USE_SERIAL  
+  Serial.begin(115200);
+#endif //USE_SERIAL
 
- 
-  setupPositionControl();
+  setupHeadPositionControl();
   setupHeadStopperInterrupt();
+
   setHeadLeftmost();
   resetBedToStopper();
+
+#ifdef USE_SERIAL
+
+  Serial.println("==========================================================");
+  Serial.print("HEAD POS=");Serial.println(mHeadPos);
+  Serial.print("BED POS=");Serial.println(mBedPos);
+  Serial.println("");
+
+
+#endif //USE_SERIAL
+
   initHeadPositionJoystick();
-  
-//delay(3000);
-//moveHeadByAmount(+4000);
 
-//testMakeSquare();
-
-  
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
-/*
-  moveHeadByAmount(200);
-  delay(500);
 
-  moveHeadByAmount(-500);
-  delay(500);
-
-  moveHeadByAmount(600);
-  delay(500);
-
-  moveHeadByAmount(-300);
-  delay(500);
-  
-  moveHeadToPosition(0);
-  Serial.println("==========================================================");
-  Serial.print("Reset ot origin ;POS=");Serial.println(mHeadPos);
-  Serial.println("");
-  
-  delay(5000);
-*/
+#ifdef USE_SERIAL
   if (Serial.available()){
     byte vChar = Serial.read();
     
@@ -101,6 +94,7 @@ void loop() {
         break;
     }
   }
+#endif //USE_SERIAL  
 }
 
 
@@ -191,7 +185,12 @@ void line (int fromx, int fromy, int tox, int toy){
 
 //moves the head following joystick
 void initHeadPositionJoystick(){
-  while (1 /*change condition later*/ ){
+  while (
+    1 /*change condition later*/ 
+#ifdef USE_SERIAL    
+    && !Serial.available()
+#endif //USE_SERIAL    
+  ){
     int8_t x, y;
     readJoystick (&x, &y);
 
