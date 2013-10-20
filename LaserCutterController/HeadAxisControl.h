@@ -5,19 +5,20 @@
 
 #include "HeadGlobals.h"
 
-//#define USE_SERIAL
-
 //#define USE_HEAD_ADJUSTMENT
 
-void setupPositionControl(){
+
+//is the head on the stopper ? (read the pin directly)
+#define isHeaderStopper() ((PIND & 0x04) == 0x00)
+
+
+void setupHeadPositionControl(){
 
   DDRC &= 0xFE;     // Clear the PC0 and c1 pin
-  // PB0 (PCINT0 pin) is now an input
+  // PC0 (PCINT0 pin) is now an input
   
   PORTC = 0x01;    // turn On the Pull-up
-  // PB0 is now an input with pull-up enabled
-  
-  
+    
   PCICR = (1 << PCIE1);    // set PCIE0 to enable PCMSK0 scan
   PCMSK1 = (1 << PCINT8)  ;  // set PCINT0 to trigger an interrupt on state change 
 
@@ -41,10 +42,7 @@ byte toggleHeadDirection (){
   }  
 }
 
-//is the head on the stopper ? (read the pin directly)
-boolean isHeaderStopper(){
-  return ((PIND & 0x04) == 0x00);
-}
+
 
 void moveHeadByAmount (int pDistance, uint8_t pSpeed){
   setHeadSpeed(pSpeed);
@@ -54,7 +52,9 @@ void moveHeadByAmount (int pDistance, uint8_t pSpeed){
 #endif //USE_SERIAL
 
   //we're already at the leftmost position, can't go further
-  if ((isHeaderStopper() || mHeadStopper) && pDistance < 0){
+  if ((isHeaderStopper()) && pDistance < 0){
+    mHeadPos = 0;
+    
 #ifdef USE_SERIAL
     Serial.print("  Already leftmost, cancelled movement ! POS=");Serial.println(mHeadPos);
 #endif //USE_SERIAL  
@@ -77,9 +77,7 @@ void moveHeadByAmount (int pDistance, uint8_t pSpeed){
   int vStartPos = mHeadPos;
   byte vPin = 0;
   
-  //reset : will be set back in case of the move
-  mHeadStopper = false;
-  
+ 
   // change the analog out value:
   if (mHeadLeftRight){
     vPin = PWM_PIN_LEFT;
@@ -91,15 +89,20 @@ void moveHeadByAmount (int pDistance, uint8_t pSpeed){
   analogWrite(vPin, mHeadSpeed);       
   
   //move
-  while (vCurrentDistance < vTargetDistance && !mHeadStopper && mHeadPos <= HEAD_MAX_DISTANCE) {
+  do {
 //    delay(1);
     vCurrentDistance = abs(vStartPos - mHeadPos);
-
-    if (mHeadStopper) break;
-  }
+    
+//    Serial.print("  moving ... POS=");Serial.println(mHeadPos);
+    
+  } while (
+    !(mHeadLeftRight && isHeaderStopper())  
+    && vCurrentDistance < vTargetDistance 
+    && !(!mHeadLeftRight && mHeadPos >= HEAD_MAX_DISTANCE)
+    );
   
 #ifdef USE_HEAD_ADJUSTMENT  
-  if (vCurrentDistance > vTargetDistance && !mHeadStopper && mHeadPos <= HEAD_MAX_DISTANCE) {
+  if (vCurrentDistance > vTargetDistance && !isHeaderStopper() && mHeadPos <= HEAD_MAX_DISTANCE) {
 #ifdef USE_SERIAL
     Serial.print("  Too far ! POS=");Serial.println(mHeadPos);
 #endif //USE_SERIAL
@@ -108,11 +111,11 @@ void moveHeadByAmount (int pDistance, uint8_t pSpeed){
     vPin = toggleHeadDirection();
     //change speed
     analogWrite(vPin, PWMSPEED_ADJUST); 
-    while (vCurrentDistance > vTargetDistance && !mHeadStopper && mHeadPos <= HEAD_MAX_DISTANCE) {
+    while (vCurrentDistance > vTargetDistance && !isHeaderStopper() && mHeadPos <= HEAD_MAX_DISTANCE) {
 //      delay(1);
       vCurrentDistance = abs(vStartPos - mHeadPos);
 
-      if (mHeadStopper) break;
+      if (isHeaderStopper()) break;
     }
   }
 #endif //USE_HEAD_ADJUSTMENT
@@ -131,6 +134,9 @@ void moveHeadToPosition (int pTargetPosition){
 }
 
 void setHeadLeftmost(){
+  //reset position to far right so we'll go max left, hit the stopper, know where is the 0
+  mHeadPos = HEAD_MAX_DISTANCE;
+  
   setHeadSpeed(PWMSPEED_FAST);
   moveHeadByAmount(-HEAD_MAX_DISTANCE -1000, PWMSPEED_FAST);
   setHeadSpeed(PWMSPEED);
@@ -161,10 +167,13 @@ ISR (PCINT1_vect)
 
 //handler for INT0 : head hits leftmost stopper
 ISR (INT0_vect) {
-  
+
+  //ignore if going right
+  if (!mHeadLeftRight)
+    return;
+    
   stopHead();
   mHeadPos = 0;
-  mHeadStopper = true;
 
 #ifdef USE_SERIAL  
   Serial.println("Stoooooooop ! We hit the stopper.");

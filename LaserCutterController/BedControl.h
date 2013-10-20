@@ -77,10 +77,14 @@ void resetBedToStopper(){
 
 
 void moveBedNorth(int pSteps){
-  for (; pSteps > 0 ; pSteps--){
+  for (; pSteps > 0 && mBedPos <= MAX_STEPS_NORTH ; pSteps--){
     moveForward();
     mBedPos++;
   }
+  
+#ifdef USE_SERIAL
+  Serial.print("BED POS=");Serial.println(mBedPos);
+#endif //USE_SERIAL
 }
 
 
@@ -89,6 +93,10 @@ void moveBedSouth(int pSteps){
     moveBackward();
     mBedPos--;
   }
+
+#ifdef USE_SERIAL
+  Serial.print("BED POS=");Serial.println(mBedPos);
+#endif //USE_SERIAL
 }
 
 void moveBedToPosition (int pPosition){
