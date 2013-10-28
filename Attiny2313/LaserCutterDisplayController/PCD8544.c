@@ -18,6 +18,8 @@
 #include "PCD8544.h"
 #include "charset.h"
 
+#define LCD_GLYPHBUFFER_LEN 5
+
 void LcdSetup(){
 	
 	//in my case they are all on PORTD
@@ -138,17 +140,15 @@ void LcdWrite(uint8_t *line){
 	
 	for (int i = 0; i < LCD_MAXCHAR_PER_LINE; i++){
 		uint8_t chr = line[i];
-		uint8_t buffer[5];//one char is 5 rows +1 row for space
+		uint8_t buffer[LCD_GLYPHBUFFER_LEN];//one char is 5 rows +1 row for space
 		
 		if (chr == 0)
 			break;
 		if (chr >= 0x80)
 			continue;
 		
-		if (chr >= ' ') {
-			// Regular ASCII characters are kept in flash to save RAM...
-			memcpy_P(buffer, &charset[chr - ' '], sizeof(buffer));
-		}
+		// Regular ASCII characters are kept in flash to save RAM...
+		memcpy_P(buffer, &charset[chr - ' '], LCD_GLYPHBUFFER_LEN);
 		
 		// Output one column at a time...
 		for (uint8_t j = 0; j < 5; j++) {
@@ -156,8 +156,7 @@ void LcdWrite(uint8_t *line){
 		}
 		
 		// One column between characters...
-		LcdSend(PCD8544_DATA, 0x00);
-			
+		LcdSend(PCD8544_DATA, 0x00);			
 	}
 	
 }
