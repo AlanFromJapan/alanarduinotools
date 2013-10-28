@@ -68,34 +68,36 @@ void testTwiLoop(){
 		//_delay_ms(100);
 	}	
 }
+
+void testTwiString(){
+	while(1)
+	{
+		uint8_t vReceived = 0;
+		if (usiTwiDataInReceiveBuffer()){
+			//data are ready
+			vReceived = usiTwiReceiveByte();
+			
+			//led on
+			PORTA = (1 << vReceived);
+		}
+		
+		//_delay_ms(100);
+	}
+}
 	
 int main(void)
 {
-//	test_leds();
-
 	LcdSetup();
-	
 	LcdSetPower(1);
-	
-	//LcdSetInverse(1);
 	
 	LcdClear();
 	
-  //for (uint8_t i = 0; i < 8; i++){
-	  //LcdSetCursor(i,0);
-	  //LcdSend(PCD8544_DATA, 1 << i);
-  //}
-  for (uint8_t i = 0; i < 8; i++){
-	  LcdSetCursor(8+i,1);
-	  LcdSend(PCD8544_DATA, 1 << i);
-  }
-  	
-	  LcdWrite("hello");
+	//setupTwiSlave(); testTwiLoop();
 	  
-	  LcdSetCursor(0,0);
-	  LcdWrite("bonjour");
-	  
-setupTwiSlave(); testTwiLoop();
-	  
-	while(1) {}
+	while(1) {
+		LcdSetCursor(6*(rand() % 5), rand()% 6);
+		LcdWrite("Bonjour !");
+		_delay_ms(1000);
+		LcdClear();
+	}
 }
