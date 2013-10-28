@@ -35,7 +35,7 @@ void LcdSetup(){
 
 	//Send lcd params
 	LcdSend(PCD8544_CMD, 0x21); // extended instruction set control (H=1), power on, horizontal addressing
-	LcdSend(PCD8544_CMD, 0x13); // bias system (1:48)
+	LcdSend(PCD8544_CMD, 0x14); // bias system (1:40/1:34)
 
     
 	LcdSend(PCD8544_CMD, 0xC2);// default Vop (3.06 + 66 * 0.06 = 7V)	
@@ -106,8 +106,10 @@ void LcdClear()
 {
 	LcdSetCursor(0, 0);
 
-	for (uint8_t i = 0; i < LCD_WIDTH * (LCD_HEIGHT/8); i++) {
-		LcdSend(PCD8544_DATA, 0x00);
+	for (uint8_t i = 0; i < LCD_WIDTH ; i++) {
+		for (uint8_t j =0; j <LCD_HEIGHT/8; j++){
+			LcdSend(PCD8544_DATA, 0x00);
+		}		
 	}
 
 	LcdSetCursor(0, 0);

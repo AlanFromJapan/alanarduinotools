@@ -79,12 +79,12 @@ int main(void)
 	
 	//LcdSetInverse(1);
 	
-	//LcdClear();
+	LcdClear();
 	
-  for (uint8_t i = 0; i < 8; i++){
-	  LcdSetCursor(i,0);
-	  LcdSend(PCD8544_DATA, 1 << i);
-  }
+  //for (uint8_t i = 0; i < 8; i++){
+	  //LcdSetCursor(i,0);
+	  //LcdSend(PCD8544_DATA, 1 << i);
+  //}
   for (uint8_t i = 0; i < 8; i++){
 	  LcdSetCursor(8+i,1);
 	  LcdSend(PCD8544_DATA, 1 << i);
