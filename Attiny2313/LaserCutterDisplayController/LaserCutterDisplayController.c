@@ -70,15 +70,28 @@ void testTwiLoop(){
 }
 
 void testTwiString(){
+	uint8_t vBuff[LCD_MAXCHAR_PER_LINE];
+	LcdSetCursor(0,0);
+	
 	while(1)
 	{
 		uint8_t vReceived = 0;
+		uint8_t vPos = 0;
+		
 		if (usiTwiDataInReceiveBuffer()){
-			//data are ready
-			vReceived = usiTwiReceiveByte();
+			vReceived = 0xff;
 			
-			//led on
-			PORTA = (1 << vReceived);
+			do {
+				if (usiTwiDataInReceiveBuffer()){
+					//data are ready
+					vReceived = usiTwiReceiveByte();
+					vBuff[vPos] = vReceived;
+					vPos++;
+				}
+			} while (vReceived != 0 && vPos < LCD_MAXCHAR_PER_LINE);
+			
+			LcdClear();
+			LcdWrite(vBuff);
 		}
 		
 		//_delay_ms(100);
@@ -92,12 +105,7 @@ int main(void)
 	
 	LcdClear();
 	
-	//setupTwiSlave(); testTwiLoop();
+	setupTwiSlave(); 
 	  
-	while(1) {
-		LcdSetCursor(6*(rand() % 5), rand()% 6);
-		LcdWrite("Bonjour !");
-		_delay_ms(1000);
-		LcdClear();
-	}
+	testTwiString();
 }
