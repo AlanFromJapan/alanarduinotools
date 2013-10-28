@@ -95,5 +95,7 @@ int main(void)
 	  LcdSetCursor(0,0);
 	  LcdWrite("bonjour");
 	  
+setupTwiSlave(); testTwiLoop();
+	  
 	while(1) {}
 }
