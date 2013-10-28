@@ -90,5 +90,10 @@ int main(void)
 	  LcdSend(PCD8544_DATA, 1 << i);
   }
   	
+	  LcdWrite("hello");
+	  
+	  LcdSetCursor(0,0);
+	  LcdWrite("bonjour");
+	  
 	while(1) {}
 }

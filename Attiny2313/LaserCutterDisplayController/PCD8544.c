@@ -14,9 +14,9 @@
 //#include <avr/pgmspace.h>
 #include <avr/delay.h>
 #include <avr/io.h>
+#include <avr/pgmspace.h>
 #include "PCD8544.h"
-
-
+#include "charset.h"
 
 void LcdSetup(){
 	
@@ -132,4 +132,32 @@ void LcdSetPower(uint8_t on)
 void LcdSetInverse(uint8_t inverse)
 {
 	LcdSend(PCD8544_CMD, inverse != 0 ? 0x0d : 0x0c);
+}
+
+void LcdWrite(uint8_t *line){
+	
+	for (int i = 0; i < LCD_MAXCHAR_PER_LINE; i++){
+		uint8_t chr = line[i];
+		uint8_t buffer[5];//one char is 5 rows +1 row for space
+		
+		if (chr == 0)
+			break;
+		if (chr >= 0x80)
+			continue;
+		
+		if (chr >= ' ') {
+			// Regular ASCII characters are kept in flash to save RAM...
+			memcpy_P(buffer, &charset[chr - ' '], sizeof(buffer));
+		}
+		
+		// Output one column at a time...
+		for (uint8_t j = 0; j < 5; j++) {
+			LcdSend(PCD8544_DATA, buffer[j]);
+		}
+		
+		// One column between characters...
+		LcdSend(PCD8544_DATA, 0x00);
+			
+	}
+	
 }
