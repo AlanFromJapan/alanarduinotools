@@ -19,6 +19,8 @@
 #define LCD_WIDTH	84
 #define LCD_HEIGHT	48
 
+#define LCD_MAXCHAR_PER_LINE	14
+
 #define PCD8544_CMD  0
 #define PCD8544_DATA 1
 
@@ -35,5 +37,6 @@ void LcdClear();
 void LcdSetCursor(uint8_t column, uint8_t line);
 void LcdSetPower(uint8_t on);
 void LcdSetInverse(uint8_t inverse);
+void LcdWrite(uint8_t *line);
 
 #endif /* PCD8544_H_ */
