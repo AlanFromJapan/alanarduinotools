@@ -27,10 +27,6 @@
 #define LCD_PORT	PORTD
 #define LCD_DIR		DDRD
 
-uint8_t mLcdColumn;
-uint8_t mLcdLine;
-
-
 void LcdSetup();
 void LcdSend (uint8_t pType, uint8_t pData);
 void LcdClear();
