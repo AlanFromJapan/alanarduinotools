@@ -56,7 +56,7 @@ void LcdSetup(){
 	// Activate LCD...
 	LcdSend(PCD8544_CMD, 0x08);  // display blank
 	LcdSend(PCD8544_CMD, 0x0c);  // normal mode (0x0d = inverse mode)
-	_delay_ms(100);
+	_delay_ms(10);
 	
     // Place the cursor at the origin...
     LcdSetCursor(0, 0);	
@@ -92,8 +92,8 @@ void LcdSend (uint8_t pType, uint8_t pData){
 		
 		//go up so READ		
 		LCD_PORT |= (1 << LCD_CLK);
-		//no wait
-		//_delay_us(100);
+		//just a little wait helps
+		_delay_us(15);
 
 		//shift left the data
 		pData = pData << 1;
@@ -119,11 +119,8 @@ void LcdClear()
 
 void LcdSetCursor(uint8_t column, uint8_t line)
 {
-	mLcdColumn = (column % LCD_WIDTH);
-	mLcdLine = (line % (LCD_HEIGHT/8));
-
-	LcdSend(PCD8544_CMD, 0x80 | mLcdColumn);
-	LcdSend(PCD8544_CMD, 0x40 | mLcdLine);
+	LcdSend(PCD8544_CMD, 0x80 | (column % LCD_WIDTH));
+	LcdSend(PCD8544_CMD, 0x40 | (line % (LCD_HEIGHT/8)));
 }
 
 void LcdSetPower(uint8_t on)
@@ -151,9 +148,17 @@ void LcdWrite(uint8_t *line){
 		memcpy_P(buffer, &charset[chr - ' '], LCD_GLYPHBUFFER_LEN);
 		
 		// Output one column at a time...
-		for (uint8_t j = 0; j < 5; j++) {
-			LcdSend(PCD8544_DATA, buffer[j]);
-		}
+		//for (uint8_t j = 0; j < LCD_GLYPHBUFFER_LEN; j++) {
+			//LcdSend(PCD8544_DATA, buffer[j]);
+		//}
+
+		//equivalent to the output here above but uses less code space (about 20 bytes less)
+		//called "unrolling the loop" usually improves speed over size, but in my case it improves both
+		LcdSend(PCD8544_DATA, buffer[0]);
+		LcdSend(PCD8544_DATA, buffer[1]);
+		LcdSend(PCD8544_DATA, buffer[2]);
+		LcdSend(PCD8544_DATA, buffer[3]);
+		LcdSend(PCD8544_DATA, buffer[4]);
 		
 		// One column between characters...
 		LcdSend(PCD8544_DATA, 0x00);			
