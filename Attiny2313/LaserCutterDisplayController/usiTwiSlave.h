@@ -76,7 +76,7 @@ bool    usiTwiDataInReceiveBuffer( void );
 
 // permitted TX buffer sizes: 1, 2, 4, 8, 16, 32, 64, 128 or 256
 
-#define TWI_TX_BUFFER_SIZE ( 32 ) // jjg was 16
+#define TWI_TX_BUFFER_SIZE ( 8 ) // jjg was 16
 #define TWI_TX_BUFFER_MASK ( TWI_TX_BUFFER_SIZE - 1 )
 
 #if ( TWI_TX_BUFFER_SIZE & TWI_TX_BUFFER_MASK )
