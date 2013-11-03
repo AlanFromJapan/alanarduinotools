@@ -17,7 +17,7 @@ void setupHeadPositionControl(){
   DDRC &= 0xFE;     // Clear the PC0 and c1 pin
   // PC0 (PCINT0 pin) is now an input
   
-  PORTC = 0x01;    // turn On the Pull-up
+  PORTC |= 0x01;    // turn On the Pull-up
     
   PCICR = (1 << PCIE1);    // set PCIE0 to enable PCMSK0 scan
   PCMSK1 = (1 << PCINT8)  ;  // set PCINT0 to trigger an interrupt on state change 
