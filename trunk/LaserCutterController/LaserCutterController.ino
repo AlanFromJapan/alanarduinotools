@@ -1,6 +1,8 @@
 
 #define USE_SERIAL
 
+//Wire.h needed for the LcdDisplay, must be declared here
+#include <Wire.h>
 
 #include "HeadAxisControl.h"
 #include "Test_Head.h"
@@ -8,6 +10,8 @@
 #include "BedGlobals.h"
 #include "BedControl.h"
 #include "Joystick.h"
+#include "LcdDisplay.h"
+
 
 // the setup routine runs once when you press reset:
 void setup() {
@@ -15,6 +19,14 @@ void setup() {
   Serial.begin(115200);
 #endif //USE_SERIAL
 
+  setupLcdDisplay();
+  
+  
+  lcdShowStartupScreen();
+  delay(3000);
+  lcdClear();
+  lcdShowPositionAdjustScreen();
+  
   setupHeadPositionControl();
   setupHeadStopperInterrupt();
 
