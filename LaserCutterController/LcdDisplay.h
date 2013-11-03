@@ -21,7 +21,7 @@ void lcdClear(){
   delay(LCD_I2C_TEMPORISATION);
 }
 
-void lcdWriteLine (uint8_t pLine, uint8_t* pText){
+void lcdWriteLine (const uint8_t pLine, const char* pText){
   Wire.beginTransmission(LCD_I2C_ADDRESS);
   Wire.write(pLine);
   Wire.write(pText);
@@ -31,32 +31,32 @@ void lcdWriteLine (uint8_t pLine, uint8_t* pText){
   delay(LCD_I2C_TEMPORISATION);
 }
 
+void lcdShowStartupScreen2(){
+  lcdClear();
+  
+  lcdWriteLine(0, "  * Startup *");
+  lcdWriteLine(2, "Resetting pos");
+  lcdWriteLine(3, "of bed and");
+  lcdWriteLine(4, "head.");
+  //lcdWriteLine(5, "Please wait.");
+}
+
 void lcdShowStartupScreen(){
   lcdClear();
   
-  Wire.beginTransmission(LCD_I2C_ADDRESS);
-  Wire.write(1);Wire.write("  * Startup *");Wire.write(0);delay(LCD_I2C_TEMPORISATION);
-  Wire.endTransmission();delay(LCD_I2C_TEMPORISATION);Wire.beginTransmission(LCD_I2C_ADDRESS);
-  Wire.write(3);Wire.write(" Laser cutter");Wire.write(0);delay(LCD_I2C_TEMPORISATION);
-  Wire.endTransmission();delay(LCD_I2C_TEMPORISATION);Wire.beginTransmission(LCD_I2C_ADDRESS);
-  Wire.write(4);Wire.write("     by");Wire.write(0);delay(LCD_I2C_TEMPORISATION);
-  Wire.endTransmission();delay(LCD_I2C_TEMPORISATION);Wire.beginTransmission(LCD_I2C_ADDRESS);
-  Wire.write(5);Wire.write("AlanFromJapan");Wire.write(0);delay(LCD_I2C_TEMPORISATION);
-  Wire.endTransmission();
+  lcdWriteLine(0, "  * Startup *");
+  lcdWriteLine(3, " Laser cutter");
+  lcdWriteLine(4, "     by");
+  lcdWriteLine(5, "AlanFromJapan");
 }
 
 void lcdShowPositionAdjustScreen(){
   lcdClear();
   
-  Wire.beginTransmission(LCD_I2C_ADDRESS);
-  Wire.write(1);Wire.write("  * Adjust *");Wire.write(0);delay(LCD_I2C_TEMPORISATION);
-  Wire.endTransmission();delay(LCD_I2C_TEMPORISATION);Wire.beginTransmission(LCD_I2C_ADDRESS);
-  Wire.write(3);Wire.write(" Move laser");Wire.write(0);delay(LCD_I2C_TEMPORISATION);
-  Wire.endTransmission();delay(LCD_I2C_TEMPORISATION);Wire.beginTransmission(LCD_I2C_ADDRESS);
-  Wire.write(4);Wire.write(" head using");Wire.write(0);delay(LCD_I2C_TEMPORISATION);
-  Wire.endTransmission();delay(LCD_I2C_TEMPORISATION);Wire.beginTransmission(LCD_I2C_ADDRESS);
-  Wire.write(5);Wire.write(" joystick.");Wire.write(0);delay(LCD_I2C_TEMPORISATION);
-  Wire.endTransmission();
+  lcdWriteLine(1, "  * Adjust *");
+  lcdWriteLine(3, " Move laser");
+  lcdWriteLine(4, " head using");
+  lcdWriteLine(5, " joystick.");
 }
 
 void setupLcdDisplay(){

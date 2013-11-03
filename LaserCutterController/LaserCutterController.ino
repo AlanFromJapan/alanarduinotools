@@ -23,9 +23,9 @@ void setup() {
   
   
   lcdShowStartupScreen();
-  delay(3000);
-  lcdClear();
-  lcdShowPositionAdjustScreen();
+  delay(1000);
+  
+  lcdShowStartupScreen2();
   
   setupHeadPositionControl();
   setupHeadStopperInterrupt();
@@ -33,6 +33,8 @@ void setup() {
   setHeadLeftmost();
   resetBedToStopper();
 
+  lcdShowPositionAdjustScreen();
+  
 #ifdef USE_SERIAL
 
   Serial.println("==========================================================");
