@@ -20,6 +20,7 @@
 #define LCD_HEIGHT	48
 
 #define LCD_MAXCHAR_PER_LINE	14
+#define LCD_MAXLINES			6
 
 #define PCD8544_CMD  0
 #define PCD8544_DATA 1

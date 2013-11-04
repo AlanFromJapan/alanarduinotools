@@ -15,6 +15,7 @@
 #define I2C_SLAVE_ADDR  0x26            // i2c slave address (38)
 
 #define LCD_COMMAND_CLS		99
+#define LCD_COMMAND_COLOR	98
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -24,22 +25,6 @@
 #include "usiTwiSlave.h"
 #include "PCD8544.h"
 
-
-
-void test_leds(){
-	DDRA = 0x03;
-	
-	uint8_t v = 0;
-	while (1){
-		PORTA = (1 << v);
-		
-		_delay_ms(1000);
-		
-		v += 1;
-		v = v % 2;
-	}	
-	
-}
 
 void setupTwiSlave() {
 	//PA0 and PA1 are output, the rest is input
@@ -55,51 +40,11 @@ void setupTwiSlave() {
 	sei();	
 }
 
-void testTwiLoop(){
-	while(1)
-	{
-		uint8_t vReceived = 0;
-		if (usiTwiDataInReceiveBuffer()){
-			//data are ready
-			vReceived = usiTwiReceiveByte();
-			
-			//led on
-			PORTA = (1 << vReceived);
-		}
-		
-		//_delay_ms(100);
-	}	
+void setupLeds(){
+	DDRD |= 0x03;
+	//DDRB |= 0x01;
 }
-
-void testTwiString(){
-	uint8_t vBuff[LCD_MAXCHAR_PER_LINE];
-	LcdSetCursor(0,0);
 	
-	while(1)
-	{
-		uint8_t vReceived = 0;
-		uint8_t vPos = 0;
-		
-		if (usiTwiDataInReceiveBuffer()){
-			vReceived = 0xff;
-			
-			do {
-				if (usiTwiDataInReceiveBuffer()){
-					//data are ready
-					vReceived = usiTwiReceiveByte();
-					vBuff[vPos] = vReceived;
-					vPos++;
-				}
-			} while (vReceived != 0 && vPos < LCD_MAXCHAR_PER_LINE);
-			
-			LcdClear();
-			LcdWrite(vBuff);
-		}
-		
-		//_delay_ms(100);
-	}
-}
-
 
 static uint8_t mBuff[LCD_MAXCHAR_PER_LINE+1];
 
@@ -114,9 +59,26 @@ void loopTwiString(){
 		if (usiTwiDataInReceiveBuffer()){
 			vReceived = usiTwiReceiveByte();
 			
-			if (vReceived == LCD_COMMAND_CLS){
-				//clear screen
-				LcdClear();
+			if (vReceived >= LCD_MAXLINES){
+				switch (vReceived)
+				{
+					case LCD_COMMAND_CLS:
+						//clear screen
+						LcdClear();
+					break;
+					case LCD_COMMAND_COLOR:
+						//set color
+						while(1) {
+							if (usiTwiDataInReceiveBuffer()){
+								//data are ready
+								vReceived = usiTwiReceiveByte();
+								//set led port to off
+								PORTD = ((0xfc & PORTD) | vReceived);
+								break;
+							}
+						} 
+					break;
+				}
 			}
 			else {
 				//other, write text
@@ -145,57 +107,17 @@ void loopTwiString(){
 	}
 }
 	
-	/*
-void testLines(){
-	LcdSetCursor(0,0);
-	
-	LcdSetCursor(0, 0);
-	strncpy(mBuff, "******zero", LCD_MAXCHAR_PER_LINE);
-	mBuff[LCD_MAXCHAR_PER_LINE] = 0;
-	LcdWrite(mBuff);
 
-
-	LcdSetCursor(0, 1);
-	strncpy(mBuff, " un", LCD_MAXCHAR_PER_LINE);
-	mBuff[LCD_MAXCHAR_PER_LINE] = 0;
-	LcdWrite(mBuff);
-
-
-	LcdSetCursor(0, 2);
-	strncpy(mBuff, "    deux", LCD_MAXCHAR_PER_LINE);
-	mBuff[LCD_MAXCHAR_PER_LINE] = 0;
-	LcdWrite(mBuff);
-
-
-	LcdSetCursor(0, 3);
-	strncpy(mBuff, "   trois", LCD_MAXCHAR_PER_LINE);
-	mBuff[LCD_MAXCHAR_PER_LINE] = 0;
-	LcdWrite(mBuff);
-
-//
-	//LcdSetCursor(0, 4);
-	//strncpy(mBuff, "quatre*", LCD_MAXCHAR_PER_LINE);
-	//mBuff[LCD_MAXCHAR_PER_LINE] = 0;
-	//LcdWrite(mBuff);
-
-
-	LcdSetCursor(0, 5);
-	strncpy(mBuff, "  cinq", LCD_MAXCHAR_PER_LINE);
-	mBuff[LCD_MAXCHAR_PER_LINE] = 0;
-	LcdWrite(mBuff);
-
-
-}
-		*/
 int main(void)
 {
+	setupLeds();
+	
 	setupTwiSlave();
 	
 	LcdSetup();
 	LcdSetPower(1);
 	
 	LcdClear();
-	
-	  
+		  
 	loopTwiString();	
 }
