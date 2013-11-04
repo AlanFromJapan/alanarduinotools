@@ -5,6 +5,12 @@
 
 #define LCD_I2C_ADDRESS   0x26
 #define LCD_COMMAND_CLS   99
+#define LCD_COMMAND_COLOR 98
+
+#define LCD_COLOR_RED 0x01
+#define LCD_COLOR_BLUE 0x02
+#define LCD_COLOR_PURPLE 0x03
+#define LCD_COLOR_OFF 0x00
 
 #define LCD_I2C_TEMPORISATION 10
 
@@ -26,6 +32,15 @@ void lcdWriteLine (const uint8_t pLine, const char* pText){
   Wire.write(pLine);
   Wire.write(pText);
   Wire.write(0);
+  delay(LCD_I2C_TEMPORISATION);
+  Wire.endTransmission();
+  delay(LCD_I2C_TEMPORISATION);
+}
+
+void lcdSetColor (const uint8_t pColor){
+  Wire.beginTransmission(LCD_I2C_ADDRESS);
+  Wire.write(LCD_COMMAND_COLOR);
+  Wire.write(pColor);
   delay(LCD_I2C_TEMPORISATION);
   Wire.endTransmission();
   delay(LCD_I2C_TEMPORISATION);

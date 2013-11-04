@@ -21,9 +21,10 @@ void setup() {
 
   setupLcdDisplay();
   
-  
+  lcdSetColor(LCD_COLOR_BLUE);
   lcdShowStartupScreen();
   delay(1000);
+  lcdSetColor(LCD_COLOR_PURPLE);
   
   lcdShowStartupScreen2();
   
@@ -45,6 +46,7 @@ void setup() {
 
 #endif //USE_SERIAL
 
+  lcdSetColor(LCD_COLOR_BLUE);
   initHeadPositionJoystick();
 
 }
