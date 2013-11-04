@@ -49,11 +49,13 @@ void setup() {
   lcdSetColor(LCD_COLOR_BLUE);
   initHeadPositionJoystick();
 
+  lcdSetColor(LCD_COLOR_PURPLE);
+  lcdShowNowDrawing();
 }
 
 // the loop routine runs over and over again forever:
 void loop() {
-
+  
 #ifdef USE_SERIAL
   if (Serial.available()){
     byte vChar = Serial.read();

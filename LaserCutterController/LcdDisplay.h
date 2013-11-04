@@ -59,7 +59,9 @@ void lcdShowStartupScreen2(){
 void lcdShowStartupScreen(){
   lcdClear();
   
-  lcdWriteLine(0, "  * Startup *");
+  lcdWriteLine(0, "  ***********");
+  lcdWriteLine(1, "  * Startup *");
+  lcdWriteLine(2, "  ***********");
   lcdWriteLine(3, " Laser cutter");
   lcdWriteLine(4, "     by");
   lcdWriteLine(5, "AlanFromJapan");
@@ -68,10 +70,22 @@ void lcdShowStartupScreen(){
 void lcdShowPositionAdjustScreen(){
   lcdClear();
   
+  lcdWriteLine(0, "  **********");
   lcdWriteLine(1, "  * Adjust *");
+  lcdWriteLine(2, "  **********");
   lcdWriteLine(3, " Move laser");
   lcdWriteLine(4, " head using");
   lcdWriteLine(5, " joystick.");
+}
+
+void lcdShowNowDrawing(){
+  lcdClear();
+  
+  lcdWriteLine(0, "*************");
+  lcdWriteLine(1, "*Now drawing*");
+  lcdWriteLine(2, "*************");
+  lcdWriteLine(3, "Drawing in");
+  lcdWriteLine(4, "progress...");
 }
 
 void setupLcdDisplay(){
