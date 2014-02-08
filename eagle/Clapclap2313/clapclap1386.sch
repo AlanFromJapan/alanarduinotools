@@ -23989,6 +23989,7 @@ Wickmann</description>
 <part name="REVERSE_PROTECT" library="diode" deviceset="1N4148" device="DO35-7"/>
 <part name="ZNR_5V" library="diode" deviceset="ZENER-DIODE" device="ZD-2.5" value="5V"/>
 <part name="F1" library="fuse" deviceset="TE5" device=""/>
+<part name="JP4" library="SparkFun-Passives" deviceset="JUMPER-2" device="SMD-NO"/>
 </parts>
 <sheets>
 <sheet>
@@ -24031,6 +24032,7 @@ Wickmann</description>
 <instance part="REVERSE_PROTECT" gate="G$1" x="-40.64" y="76.2" rot="R180"/>
 <instance part="ZNR_5V" gate="G$1" x="-17.78" y="76.2" rot="R90"/>
 <instance part="F1" gate="1" x="152.4" y="60.96"/>
+<instance part="JP4" gate="A" x="-27.94" y="38.1" rot="R180"/>
 </instances>
 <busses>
 </busses>
@@ -24043,6 +24045,9 @@ Wickmann</description>
 <pinref part="AMP_VOL" gate="1" pin="S"/>
 <pinref part="C1" gate="G$1" pin="1"/>
 <pinref part="M1" gate="G$1" pin="1"/>
+<wire x1="-30.48" y1="40.64" x2="-33.02" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="-33.02" y1="40.64" x2="-33.02" y2="45.72" width="0.1524" layer="91"/>
+<pinref part="JP4" gate="A" pin="2"/>
 </segment>
 </net>
 <net name="N$10" class="0">
@@ -24304,6 +24309,9 @@ Wickmann</description>
 <pinref part="C1" gate="G$1" pin="2"/>
 <pinref part="U1" gate="G$1" pin="+IN"/>
 <wire x1="-25.4" y1="45.72" x2="-20.32" y2="45.72" width="0.1524" layer="91"/>
+<wire x1="-25.4" y1="45.72" x2="-25.4" y2="40.64" width="0.1524" layer="91"/>
+<pinref part="JP4" gate="A" pin="1"/>
+<wire x1="-25.4" y1="40.64" x2="-27.94" y2="40.64" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$14" class="0">
