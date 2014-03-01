@@ -8,6 +8,8 @@ Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "ManualPWM", "ManualPWM\Manu
 EndProject
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "DrVetinaryClock", "DrVetinaryClock\DrVetinaryClock.cproj", "{A527D008-9A64-415B-9BEC-DDDF28616D9B}"
 EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "Clapclap1386", "Clapclap1386\Clapclap1386.cproj", "{02C2B4A1-5603-4999-AF2B-FFB3986CBDE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -30,6 +32,10 @@ Global
 		{A527D008-9A64-415B-9BEC-DDDF28616D9B}.Debug|AVR.Build.0 = Debug|AVR
 		{A527D008-9A64-415B-9BEC-DDDF28616D9B}.Release|AVR.ActiveCfg = Release|AVR
 		{A527D008-9A64-415B-9BEC-DDDF28616D9B}.Release|AVR.Build.0 = Release|AVR
+		{02C2B4A1-5603-4999-AF2B-FFB3986CBDE2}.Debug|AVR.ActiveCfg = Debug|AVR
+		{02C2B4A1-5603-4999-AF2B-FFB3986CBDE2}.Debug|AVR.Build.0 = Debug|AVR
+		{02C2B4A1-5603-4999-AF2B-FFB3986CBDE2}.Release|AVR.ActiveCfg = Release|AVR
+		{02C2B4A1-5603-4999-AF2B-FFB3986CBDE2}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
