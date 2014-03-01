@@ -9,11 +9,11 @@
 
 #define F_CPU 4800000L
 
-#define CLAP_GAP_IN_MS 350
-#define CLAP_GAP_TOLERANCE 200
+#define CLAP_GAP_IN 65
+#define CLAP_GAP_TOLERANCE 40
 
-#define CLAP_GAP_MIN (CLAP_GAP_IN_MS - CLAP_GAP_TOLERANCE)
-#define CLAP_GAP_MAX (CLAP_GAP_IN_MS + CLAP_GAP_TOLERANCE)
+#define CLAP_GAP_MIN (CLAP_GAP_IN - CLAP_GAP_TOLERANCE)
+#define CLAP_GAP_MAX (CLAP_GAP_IN + CLAP_GAP_TOLERANCE)
 
 #define PORT_LED_CLAP PORTB3
 #define PORT_LED_STATUS PORTB4
@@ -31,7 +31,8 @@
 #include <avr/delay.h>
 #include <avr/interrupt.h>
 
-volatile uint32_t mTimeCounterMSec = 0;
+//mTimeCounter is in hundredth of second
+volatile uint32_t mTimeCounter = 0;
 volatile uint32_t mTimeLastClap = 0;
 volatile uint8_t mTimerOverflowCounter = 0;
 
@@ -85,7 +86,7 @@ ISR(ANA_COMP_vect) {
 		
 		blink_clap();
 		
-		volatile uint32_t vNow = mTimeCounterMSec;
+		volatile uint32_t vNow = mTimeCounter;
 		volatile uint32_t vGap = vNow - mTimeLastClap;
 		
 		if (
@@ -111,7 +112,7 @@ ISR(TIM0_OVF_vect){
 		mTimerOverflowCounter=0;
 		
 		//do the job: count the time (don't care if it roll-over to 0)
-		mTimeCounterMSec++;
+		mTimeCounter++;
 	}	
 }
 
