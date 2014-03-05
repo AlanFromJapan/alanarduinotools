@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Atmel Studio Solution File, Format Version 11.00
-Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "Blink", "Blink\Blink.cproj", "{35ABFC48-88AE-4017-9687-94D3954D3A67}"
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "Blink", "Atmegaxx8\Blink.cproj", "{35ABFC48-88AE-4017-9687-94D3954D3A67}"
 EndProject
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "BalconyMeter", "BalconyMeter\BalconyMeter.cproj", "{D88046A8-F000-46AC-BA3F-6191B06C11C6}"
 EndProject
@@ -9,6 +9,8 @@ EndProject
 Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "WhatAWatt", "WhatAWatt\WhatAWatt.cppproj", "{986904D2-7EA1-41A0-A831-295E6DF38990}"
 EndProject
 Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "IronTimer", "IronTimer\IronTimer.cppproj", "{C17A5970-C341-4F68-9797-2A108959E78F}"
+EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "CirclezDemo", "CirclezDemo\CirclezDemo.cproj", "{60C130D7-BE42-4BFD-934E-6384D10BCC00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,10 @@ Global
 		{C17A5970-C341-4F68-9797-2A108959E78F}.Debug|AVR.Build.0 = Debug|AVR
 		{C17A5970-C341-4F68-9797-2A108959E78F}.Release|AVR.ActiveCfg = Release|AVR
 		{C17A5970-C341-4F68-9797-2A108959E78F}.Release|AVR.Build.0 = Release|AVR
+		{60C130D7-BE42-4BFD-934E-6384D10BCC00}.Debug|AVR.ActiveCfg = Debug|AVR
+		{60C130D7-BE42-4BFD-934E-6384D10BCC00}.Debug|AVR.Build.0 = Debug|AVR
+		{60C130D7-BE42-4BFD-934E-6384D10BCC00}.Release|AVR.ActiveCfg = Release|AVR
+		{60C130D7-BE42-4BFD-934E-6384D10BCC00}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
