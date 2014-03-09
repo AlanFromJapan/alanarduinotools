@@ -139,9 +139,62 @@ void rotateArray(int8_t pDirection){
 		mLedVal[LED_COUNT-1] = vTemp;
 	}
 }
+
+
+volatile uint8_t mRotateCounter = 0;
+
+/************************************************************************/
+/* TIMER 0 interrupt code : calls the drawing method                    */
+/************************************************************************/
+ISR(TIMER0_OVF_vect){
+	for (uint8_t i = 0; i < LED_COUNT; i++){
+		if (mLedVal[i] != 0){
+			setLed(i+1);
+			delay_1us((mLedVal[i] * DELAY_POV) / 256);
+		}
+		//with this code the display becomes roughly time constant, meaning
+		//that disregarding the number of lit led they will have the same quantum of lighting time.
+		//by disabling that the leds are brighter and you wont see the difference if less than 10 leds
+		//are on.
+		//else{
+			//delay_1us(DELAY_POV);
+		//}
+		LED_OFF;
+	}
+			
+	mRotateCounter++;
+	if (mRotateCounter >60){
+		mRotateCounter=0;
+		rotateArray(-1);
+	}
+}	
 	
+/************************************************************************/
+/*inits timer 0 to do interrupt on overflow (calls ISR(TIMER2_OVF_vect))*/
+/************************************************************************/
+void init_timer0_OVF() {
+	// Prescaler = FCPU/256
+	// 8MHz / 8 / 256bits => overflow about every 0.25ms
+	TCCR0B |= (1<<CS01);
+
+	
+	//overflow of timer 0
+	TIMSK0 |= (1 << TOIE0);
+	
+	//reset counter to zero
+	TCNT0 = 0x00;
+	
+	//sets the interruptions to enabled
+	sei();
+}
+
 int main(void)
 {
+	//factory settings is to divide internal clock 8MHz by 8.
+	//don't, and just run at 8 MHz (set the clock divider to 1 so no effect)
+	CLKPR = (1<<CLKPCE);
+	CLKPR = 0; // Divide by 1
+		
 	for (uint8_t i = 0; i < LED_COUNT; i++){
 		mLedVal[1] = 0;	
 	}
@@ -150,33 +203,16 @@ int main(void)
 	mLedVal[1] = 192;
 	mLedVal[2] = 128;
 	mLedVal[3] = 64;
-	mLedVal[4] = 20;
-	mLedVal[5] = 10;
-	mLedVal[6] = 5;
+	mLedVal[4] = 32;
+	mLedVal[5] = 16;
+	mLedVal[6] = 8;
 
-	uint16_t vCounter = 0;
-		
+	//setup TIMER0 : 8 byte timer
+	init_timer0_OVF();
+
+	//main loop
 	while(1){
-		for (uint8_t i = 0; i < LED_COUNT; i++){
-			if (mLedVal[i] != 0){
-				setLed(i+1);
-				delay_1us((mLedVal[i] * DELAY_POV) / 256);
-			}
-			//with this code the display becomes roughly time constant, meaning
-			//that disregarding the number of lit led they will have the same quantum of lighting time.
-			//by disabling that the leds are brighter and you wont see the difference if less than 10 leds
-			//are on.
-			//else{
-				//delay_1us(DELAY_POV);
-			//}
-			LED_OFF;
-		}		
-		
-		vCounter++;
-		if (vCounter >80){
-			vCounter=0;
-			rotateArray(-1);
-		}
+
 		
 	}
 }	
