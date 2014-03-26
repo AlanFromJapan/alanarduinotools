@@ -103,16 +103,16 @@
 </layers>
 <board>
 <plain>
-<wire x1="0" y1="0" x2="50" y2="0" width="0" layer="20"/>
-<wire x1="50" y1="0" x2="50" y2="50" width="0" layer="20"/>
-<wire x1="50" y1="50" x2="0" y2="50" width="0" layer="20"/>
-<wire x1="0" y1="50" x2="0" y2="0" width="0" layer="20"/>
+<wire x1="1.6" y1="24.630575" x2="24.630575" y2="1.6" width="0" layer="20" curve="90"/>
+<wire x1="24.630575" y1="1.6" x2="47.6" y2="24.569425" width="0" layer="20" curve="90"/>
+<wire x1="47.6" y1="24.569425" x2="24.569425" y2="47.6" width="0" layer="20" curve="90"/>
+<wire x1="24.569425" y1="47.6" x2="1.6" y2="24.630575" width="0" layer="20" curve="90"/>
 <circle x="24.6" y="24.6" radius="23" width="0.4064" layer="48"/>
 <text x="21.59" y="21.59" size="0.8128" layer="48" font="vector">ATmega8a</text>
 <text x="29.21" y="10.16" size="1.4224" layer="52" font="vector" rot="MR0">ISP</text>
 <rectangle x1="25.4" y1="12.065" x2="27.94" y2="15.24" layer="52"/>
 <text x="44.45" y="26.035" size="1.27" layer="52" font="vector" rot="MR0">http://kalshagar.wikispaces.com/Circlez</text>
-<text x="36.83" y="29.21" size="1.4224" layer="52" font="vector" rot="MR0">Circlez - v2.0 March2014</text>
+<text x="38.1" y="29.21" size="1.4224" layer="52" font="vector" rot="MR0">Circlez - v2.0 March2014</text>
 <hole x="37.465" y="20.955" drill="2"/>
 <hole x="12.065" y="29.21" drill="2"/>
 <text x="30.1625" y="23.8125" size="0.8128" layer="52" font="vector" rot="MR0">ADC7</text>
