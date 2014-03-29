@@ -10,8 +10,8 @@
 #include <avr/delay.h>
 #include <avr/interrupt.h>
 #include <avr/io.h>
+#include "CirclezDisplayModes.h"
 
-#define LED_COUNT 24
 
 #define LED_OFF { PORTC = PORTC & 0xC0; PORTD = PORTD & 0xC0; }
 	
@@ -44,13 +44,12 @@
 #define LED24 { DDRD = 0b00110000;	PORTD = 0b00010000; DDRC = 0x00; }	
 	
 #define DELAY_SLEEP 25
-#define DELAY_POV 110
+#define DELAY_POV 80
 
-#define DELAY_SLEEP_MIN 10
-#define DELAY_SLEEP_MAX 100
-#define DELAY_SLEEP_DELTA 10
+#define TIMER_COUNTER 80
 
-uint8_t mLedVal[LED_COUNT];
+
+
 
 void setLed(uint8_t pLed){
 	switch(pLed){
@@ -81,65 +80,11 @@ void setLed(uint8_t pLed){
 	}
 }
 
-void endlessCircle() {
-	 while(1)
-	 {
-		 setLed(1);_delay_ms(DELAY_SLEEP);
-		 setLed(2);_delay_ms(DELAY_SLEEP);
-		 setLed(3);_delay_ms(DELAY_SLEEP);
-		 setLed(4);_delay_ms(DELAY_SLEEP);
-		 setLed(5);_delay_ms(DELAY_SLEEP);
-		 setLed(6);_delay_ms(DELAY_SLEEP);
-		 setLed(7);_delay_ms(DELAY_SLEEP);
-		 setLed(8);_delay_ms(DELAY_SLEEP);
-		 setLed(9);_delay_ms(DELAY_SLEEP);
-		 setLed(10);_delay_ms(DELAY_SLEEP);
-		 setLed(11);_delay_ms(DELAY_SLEEP);
-		 setLed(12);_delay_ms(DELAY_SLEEP);
-		 setLed(13);_delay_ms(DELAY_SLEEP);
-		 setLed(14);_delay_ms(DELAY_SLEEP);
-		 setLed(15);_delay_ms(DELAY_SLEEP);
-		 setLed(16);_delay_ms(DELAY_SLEEP);
-		 setLed(17);_delay_ms(DELAY_SLEEP);
-		 setLed(18);_delay_ms(DELAY_SLEEP);
-		 setLed(19);_delay_ms(DELAY_SLEEP);
-		 setLed(20);_delay_ms(DELAY_SLEEP);
-		 setLed(21);_delay_ms(DELAY_SLEEP);
-		 setLed(22);_delay_ms(DELAY_SLEEP);
-		 setLed(23);_delay_ms(DELAY_SLEEP);
-		 setLed(24);_delay_ms(DELAY_SLEEP);
-		 
-	 }
-}
 
 void delay_1us(uint16_t us) {
 	for(uint16_t i=0;i<us;i++) _delay_us(1);
 }
 	
-void rotateArray(int8_t pDirection){
-	if (pDirection > 0){
-		uint8_t vTemp = mLedVal[LED_COUNT-1];
-		uint8_t i = LED_COUNT-2; 
-		do 
-		{
-			mLedVal[i+1] = mLedVal[i];
-			i--;
-		} while (i > 0);
-		mLedVal[1] = mLedVal[0];
-		mLedVal[0] = vTemp;
-	}
-	else{
-		uint8_t vTemp = mLedVal[0];
-		uint8_t i = 1;
-		do
-		{
-			mLedVal[i-1] = mLedVal[i];
-			i++;
-		} while (i < LED_COUNT);
-		mLedVal[LED_COUNT-1] = vTemp;
-	}
-}
-
 
 volatile uint8_t mRotateCounter = 0;
 
@@ -148,9 +93,15 @@ volatile uint8_t mRotateCounter = 0;
 /************************************************************************/
 ISR(TIMER0_OVF_vect){
 	for (uint8_t i = 0; i < LED_COUNT; i++){
-		if (mLedVal[i] != 0){
+		uint16_t vDuration = mLedVal[i] + mLedVal2[i];
+		if (vDuration > 0xff)
+			vDuration = 0xff;
+			
+		if (vDuration != 0){
 			setLed(i+1);
-			delay_1us((mLedVal[i] * DELAY_POV) / 256);
+			
+			//ratio of the illumination duration 
+			delay_1us((vDuration * DELAY_POV) / 256);
 		}
 		//with this code the display becomes roughly time constant, meaning
 		//that disregarding the number of lit led they will have the same quantum of lighting time.
@@ -162,10 +113,12 @@ ISR(TIMER0_OVF_vect){
 		LED_OFF;
 	}
 			
+	//soft divider so that the data update (rotation) does not occur at each interrupt (unlike the display)
 	mRotateCounter++;
-	if (mRotateCounter >60){
+	if (mRotateCounter > TIMER_COUNTER){
 		mRotateCounter=0;
-		rotateArray(-1);
+		
+		updateArrays();
 	}
 }	
 	
@@ -174,9 +127,8 @@ ISR(TIMER0_OVF_vect){
 /************************************************************************/
 void init_timer0_OVF() {
 	// Prescaler = FCPU/256
-	// 8MHz / 8 / 256bits => overflow about every 0.25ms
+	// 8MHz / 8 bits counter / 256 divider => overflow about every 0.25ms
 	TCCR0B |= (1<<CS01);
-
 	
 	//overflow of timer 0
 	TIMSK0 |= (1 << TOIE0);
@@ -188,6 +140,13 @@ void init_timer0_OVF() {
 	sei();
 }
 
+//puts all values of the array to 0
+void zeroArray (uint8_t* pArray){
+	for (uint8_t i = 0; i < LED_COUNT; i++){
+		pArray[i] = 0;
+	}
+}
+	
 int main(void)
 {
 	//factory settings is to divide internal clock 8MHz by 8.
@@ -195,18 +154,9 @@ int main(void)
 	CLKPR = (1<<CLKPCE);
 	CLKPR = 0; // Divide by 1
 		
-	for (uint8_t i = 0; i < LED_COUNT; i++){
-		mLedVal[1] = 0;	
-	}
+	mCurrentMode = MODE_TWO_STRIP_CHASING;
+	initArrays();
 	
-	mLedVal[0] = 255;
-	mLedVal[1] = 192;
-	mLedVal[2] = 128;
-	mLedVal[3] = 64;
-	mLedVal[4] = 32;
-	mLedVal[5] = 16;
-	mLedVal[6] = 8;
-
 	//setup TIMER0 : 8 byte timer
 	init_timer0_OVF();
 
