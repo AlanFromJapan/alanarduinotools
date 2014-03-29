@@ -148,15 +148,34 @@ int main(void)
 	CLKPR = (1<<CLKPCE);
 	CLKPR = 0; // Divide by 1
 		
-	mCurrentMode = MODE_N_STRIP_CHASING2;
+	mCurrentMode = MODE_TWO_STRIP_CHASING;
 	initArrays();
 	
 	//setup TIMER0 : 8 byte timer
 	init_timer0_OVF();
 
+
+	//button input
+	//PB0 in
+	DDRB = 0x00;
+	//Pullup on PB0 
+	PORTB = (1 << PORTB0);
+	//just make sure pullups are NOT disabled
+	MCUCR |= (0 << PUD);
+		
 	//main loop
 	while(1){
-
-		
+		//check for button press : PB0 -> change mode
+		if ((~PINB & (1 << PINB0)) != 0){
+			cli();
+			mCurrentMode = (mCurrentMode + 1) % MODE_COUNT;
+			initArrays();
+			sei();
+			
+			//cheap debouncing
+			//wait while pressed and wait again 1/2 sec (debouncing)
+			while ((~PINB & (1 << PINB0)) != 0);		
+			_delay_ms(500);
+		}					
 	}
 }	
