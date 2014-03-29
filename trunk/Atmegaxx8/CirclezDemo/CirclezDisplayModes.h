@@ -11,18 +11,18 @@
 
 
 #define LED_COUNT 24
-uint8_t mLedVal[LED_COUNT];
-uint8_t mLedVal2[LED_COUNT];
+volatile uint8_t mLedVal[LED_COUNT];
+volatile uint8_t mLedVal2[LED_COUNT];
 
 
-
+#define MODE_COUNT				6
 #define MODE_ONE_STRIP			0
 #define MODE_TWO_STRIP_COLLIDE	1
 #define MODE_TWO_STRIP_CHASING	2
 #define MODE_3_STRIP_CHASING	3
 #define MODE_N_STRIP_CHASING	4
 #define MODE_N_STRIP_CHASING2	5
-uint8_t mCurrentMode = MODE_ONE_STRIP;
+volatile uint8_t mCurrentMode = MODE_ONE_STRIP;
 
 
 
