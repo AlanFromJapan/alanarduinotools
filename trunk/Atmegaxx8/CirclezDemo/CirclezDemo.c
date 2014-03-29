@@ -140,12 +140,6 @@ void init_timer0_OVF() {
 	sei();
 }
 
-//puts all values of the array to 0
-void zeroArray (uint8_t* pArray){
-	for (uint8_t i = 0; i < LED_COUNT; i++){
-		pArray[i] = 0;
-	}
-}
 	
 int main(void)
 {
@@ -154,7 +148,7 @@ int main(void)
 	CLKPR = (1<<CLKPCE);
 	CLKPR = 0; // Divide by 1
 		
-	mCurrentMode = MODE_TWO_STRIP_CHASING;
+	mCurrentMode = MODE_N_STRIP_CHASING2;
 	initArrays();
 	
 	//setup TIMER0 : 8 byte timer
