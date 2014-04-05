@@ -148,7 +148,7 @@ int main(void)
 	CLKPR = (1<<CLKPCE);
 	CLKPR = 0; // Divide by 1
 		
-	mCurrentMode = MODE_TWO_STRIP_CHASING;
+	mCurrentMode = MODE_TWO_STRIP_COLLIDE;
 	initArrays();
 	
 	//setup TIMER0 : 8 byte timer
@@ -173,9 +173,11 @@ int main(void)
 			sei();
 			
 			//cheap debouncing
-			//wait while pressed and wait again 1/2 sec (debouncing)
-			while ((~PINB & (1 << PINB0)) != 0);		
-			_delay_ms(500);
+			//wait while pressed 
+			while ((~PINB & (1 << PINB0)) != 0);
+			
+			//for an unknown reason this _delay works the first time and then seems to becomne infinite. No idea...		
+			//_delay_ms(200);
 		}					
 	}
 }	

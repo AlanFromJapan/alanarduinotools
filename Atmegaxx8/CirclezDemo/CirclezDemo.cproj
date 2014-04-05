@@ -16,7 +16,7 @@
     <Name>CirclezDemo</Name>
     <RootNamespace>CirclezDemo</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <AsfVersion>3.5.1</AsfVersion>
+    <AsfVersion>2.11.1</AsfVersion>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <OverrideVtorValue />
