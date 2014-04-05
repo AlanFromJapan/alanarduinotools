@@ -27,13 +27,13 @@ volatile uint8_t mCurrentMode = MODE_ONE_STRIP;
 
 
 //puts all values of the array to 0
-void zeroArray (uint8_t* pArray){
+void zeroArray (volatile uint8_t* pArray){
 	for (uint8_t i = 0; i < LED_COUNT; i++){
 		pArray[i] = 0;
 	}
 }
 
-void rotateArray(uint8_t* pArray, int8_t pDirection){
+void rotateArray(volatile uint8_t* pArray, int8_t pDirection){
 	if (pDirection > 0){
 		uint8_t vTemp = pArray[LED_COUNT-1];
 		uint8_t i = LED_COUNT-2;
@@ -151,10 +151,10 @@ inline void initArrays(){
 		
 		case MODE_N_STRIP_CHASING:
 		for (uint8_t i = 0; i < LED_COUNT; ){
-			mLedVal[i] = 32;
+			mLedVal[i] = 16;
 			mLedVal[i+1] = 192;
-			mLedVal[i+2] = 32;
-			i+= 3;
+			mLedVal[i+2] = 16;
+			i+= 4;
 		}		
 		
 		break;
