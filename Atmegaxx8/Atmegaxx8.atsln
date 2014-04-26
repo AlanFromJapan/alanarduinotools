@@ -12,6 +12,8 @@ Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "IronTimer", "IronTimer\Iron
 EndProject
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "CirclezDemo", "CirclezDemo\CirclezDemo.cproj", "{60C130D7-BE42-4BFD-934E-6384D10BCC00}"
 EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "CirclezDemo2", "CirclezDemo2\CirclezDemo2.cproj", "{95661484-1031-4B48-A756-C5A469B803DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -42,6 +44,10 @@ Global
 		{60C130D7-BE42-4BFD-934E-6384D10BCC00}.Debug|AVR.Build.0 = Debug|AVR
 		{60C130D7-BE42-4BFD-934E-6384D10BCC00}.Release|AVR.ActiveCfg = Release|AVR
 		{60C130D7-BE42-4BFD-934E-6384D10BCC00}.Release|AVR.Build.0 = Release|AVR
+		{95661484-1031-4B48-A756-C5A469B803DD}.Debug|AVR.ActiveCfg = Debug|AVR
+		{95661484-1031-4B48-A756-C5A469B803DD}.Debug|AVR.Build.0 = Debug|AVR
+		{95661484-1031-4B48-A756-C5A469B803DD}.Release|AVR.ActiveCfg = Release|AVR
+		{95661484-1031-4B48-A756-C5A469B803DD}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
