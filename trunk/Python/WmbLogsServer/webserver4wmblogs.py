@@ -26,60 +26,13 @@ dictWellKnownBipCodeStyles = dict(BIP2153I="prioHigh", BIP2176S="prioLow")
 ###########################################
 ##  Process requests
 ###########################################
-def handleGETContents_Sample(s):
-    '''s is the HttpRequestHandler parameter.
-    This method returns the content of the file.'''
-    fin = file(name=r"D:\temp\wmbmessages.log.20140811byAVI\wmbmessages.log.20140811byAVI", mode="r")
-    
-    s.do_HEAD()
-
-    s.wfile.write("""<html><head><title>Title goes here.</title>""")
-    s.wfile.write("""<link rel="stylesheet" type="text/css" href="Styles.css">""")
-    s.wfile.write("""</head>""")
-    s.wfile.write("<body><p>This is a test.</p>")
-    # If someone went to "http://something.somewhere.net/foo/bar/",
-    # then s.path equals "/foo/bar/".
-    s.wfile.write("<p>You accessed path: %s</p>" % s.path)
-
-    s.wfile.write("<pre>")
-    i = 0
-    for line in fin:
-        #s.wfile.write(line)
-        match = reLine.match(line)
-        if match != None:
-            bipcode=match.group('bipcode')
-            if bipcode != None:
-                if bipcode in dictErrors:
-                    dictErrors[bipcode] = (bipcode, dictErrors[bipcode][1] + 1)
-                else:
-                    dictErrors[bipcode] = (bipcode, 1)
-            
-            s.wfile.write(LINE_OUT_FORMAT.format(
-                time=match.group('time'),
-                bipcode=match.group('bipcode'),
-                msgTitle=match.group('msgTitle'),
-                bipcount=str(dictErrors[bipcode][1]),
-                prioStyle=("prioDefault" if not bipcode in dictWellKnownBipCodeStyles else dictWellKnownBipCodeStyles[bipcode])
-                ))
-        else:
-            s.wfile.write("Unknown format line:" + line)
-
-        s.wfile.write('<span style="color:grey;">' + line + r"</span>")
-        
-        i += 1
-        if i > 100:
-            break
-    
-    s.wfile.write("</pre>")
-    
-    s.wfile.write("</body></html>")
-    fin.close()
-
 
 def handle_getContentAsXML(s):
     '''s is the HttpRequestHandler parameter.
     This method returns the content of the file.'''
     fin = file(name=r"D:\temp\wmbmessages.log.20140811byAVI\wmbmessages.log.20140811byAVI", mode="r")
+
+    dictErrors.clear()
     
     s.do_HEAD()
 
@@ -160,11 +113,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         """Respond to a GET request."""
 
         #First: triage of the request
-        if s.path == "/sample.html":
-            #just for the test, not loose the previous code.
-            #TODO remove later
-            handleGETContents_Sample(s)
-        elif s.path == "/XXX.xml":
+        if s.path == "/XXX.xml":
             handle_getContentAsXML (s)
         elif s.path == "/Styles.css":
             handle_getFile (s, s.path[1:])

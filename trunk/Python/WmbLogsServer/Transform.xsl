@@ -11,7 +11,7 @@
     <table border="1">
       <tr bgcolor="#9acd32">
         <th style="text-align:left">Time</th>
-        <th style="text-align:left">Bip (<i>running count</i>)</th>
+        <th style="text-align:left">Bip <i>(running count)</i></th>
         <th style="text-align:left">Title</th>
       </tr>
       <xsl:for-each select="logItems/logItem">
@@ -21,7 +21,7 @@
 		</xsl:attribute>
   
         <td><xsl:value-of select="time"/></td>
-        <td><xsl:value-of select="bipcode"/> (<i><xsl:value-of select="bipcount"/></i>)</td>
+        <td><xsl:value-of select="bipcode"/> <i style="font-size:smaller;">(<xsl:value-of select="bipcount"/>)</i></td>
         <td><xsl:value-of select="msgTitle"/></td>
       </tr>	
 	  <tr>
