@@ -1,0 +1,20 @@
+.prioDefault {
+	color: black;
+}
+
+.prioHigh  {
+	color: red;
+	font-size: bigger;
+	font-weight: bold;
+}
+
+
+.prioLow {
+	color: green;
+}
+
+.rawContent {
+	color:grey;
+	font-size:smaller;
+	font-family: monospace;
+}
