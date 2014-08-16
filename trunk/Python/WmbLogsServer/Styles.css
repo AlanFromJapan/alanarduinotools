@@ -17,4 +17,6 @@
 	color:grey;
 	font-size:smaller;
 	font-family: monospace;
+    white-space: pre-wrap;
+	overflow: auto;
 }

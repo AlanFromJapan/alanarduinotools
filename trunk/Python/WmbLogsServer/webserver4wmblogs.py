@@ -3,12 +3,14 @@ import BaseHTTPServer
 import re
 import urllib
 import shutil
+#local custom scripts
+import wmbErrorParser
 
 HOST_NAME = ''
 PORT_NUMBER = 8001 # Maybe set this to 9000.
 
 
-LINE_IN_FORMAT = r"^(?P<time>\w+\s\d+\s\d+:\d+:\d+)[^]]+\][^]]+\](?P<bipcode>\w+):(?P<msgTitle>[^:]+):"
+LINE_IN_FORMAT = r"^(?P<time>\w+\s\d+\s\d+:\d+:\d+)[^]]+\][^]]+\](?P<bipcode>\w+):(?P<msgTitle>[^:]+):(?P<theRest>.*)"
 LINE_OUT_FORMATXML = r"""<logItem>
     <time>{time}</time>
     <bipcode>{bipcode}</bipcode>
@@ -51,14 +53,14 @@ def handle_getContentAsXML(s):
                     dictErrors[bipcode] = (bipcode, dictErrors[bipcode][1] + 1)
                 else:
                     dictErrors[bipcode] = (bipcode, 1)
-            
+                    
             s.wfile.write(LINE_OUT_FORMATXML.format(
                 time=match.group('time'),
-                bipcode=match.group('bipcode'),
+                bipcode=bipcode,
                 msgTitle=match.group('msgTitle'),
                 bipcount=str(dictErrors[bipcode][1]),
                 prioStyle=("prioDefault" if not bipcode in dictWellKnownBipCodeStyles else dictWellKnownBipCodeStyles[bipcode]),
-                rawContent=line, #rawContent=urllib.quote(line),
+                rawContent=(line if bipcode != "BIP3051E" else wmbErrorParser.parseFormatWmbError(match.group("theRest"))), 
                 ))
         else:
             s.wfile.write("Unknown format line:" + line)
