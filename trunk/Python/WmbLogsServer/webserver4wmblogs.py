@@ -9,7 +9,6 @@ PORT_NUMBER = 8001 # Maybe set this to 9000.
 
 
 LINE_IN_FORMAT = r"^(?P<time>\w+\s\d+\s\d+:\d+:\d+)[^]]+\][^]]+\](?P<bipcode>\w+):(?P<msgTitle>[^:]+):"
-LINE_OUT_FORMAT = r"""<span class="{prioStyle}"><i>{time}</i> <b>{bipcode} ({bipcount})</b></span> {msgTitle}<br/>"""
 LINE_OUT_FORMATXML = r"""<logItem>
     <time>{time}</time>
     <bipcode>{bipcode}</bipcode>
@@ -28,7 +27,7 @@ dictWellKnownBipCodeStyles = dict(BIP2153I="prioHigh", BIP2176S="prioLow")
 ###########################################
 
 def handle_getContentAsXML(s):
-    '''s is the HttpRequestHandler parameter.
+    '''s is the HttpRequestHandler 'self'.
     This method returns the content of the file.'''
     fin = file(name=r"D:\temp\wmbmessages.log.20140811byAVI\wmbmessages.log.20140811byAVI", mode="r")
 
@@ -100,7 +99,6 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         if len(s.path) > 4 and s.path[-3:] == "xml":
             s.send_header("Content-type", "text/xml")
         elif len(s.path) > 4 and s.path[-3:] == "css":
-            print("send as css!")
             s.send_header("Content-type", "text/css")
         elif len(s.path) > 5 and s.path[-4:] == "logs":
             s.send_header("Content-type", "text/html")
