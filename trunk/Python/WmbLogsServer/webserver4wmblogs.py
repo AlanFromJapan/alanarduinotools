@@ -13,12 +13,11 @@ import wmbErrorParser
 ###########################################
 
 HOST_NAME = ''
-PORT_NUMBER = 8001 # Maybe set this to 9000.
+PORT_NUMBER = 8001 # overriden inn the .ini file.
 ROOT_WEBFOLDER = """D:\\Subversion\\Python\\WmbLogsServer\\"""
-ROOT_LOGFOLDER = """D:\\temp\\wmbmessages.log.20140811byAVI\\"""
 
-LINE_IN_FORMAT = r"^(?P<time>\w+\s+\d+\s+\d+:\d+:\d+)[^]]+\][^]]+\](?P<bipcode>\w+):(?P<msgTitle>[^:]+):(?P<theRest>.*)"
-LINE_OUT_FORMATXML = r"""<logItem>
+DEFAULT_XSLFILE = 'Transform.xsl'
+DEFAULT_LINE_OUT_FORMATXML = r"""<logItem>
     <line>{lineNumber}</line>
     <time>{time}</time>
     <bipcode>{bipcode}</bipcode>
@@ -30,10 +29,6 @@ LINE_OUT_FORMATXML = r"""<logItem>
 </logItem>
 """
 
-#THE regex for line input
-reLine = re.compile(LINE_IN_FORMAT, re.IGNORECASE)
-
-
 ###########################################
 ##  Subclass for xml pages
 ###########################################
@@ -44,6 +39,9 @@ class XmlLogPage:
         self.lineIn = lineIn
         self.lineOut = lineOut
         self.xslFile= xslFile
+        
+        self.regex = re.compile(self.lineIn, re.IGNORECASE)
+        
     def __str__(self):
         return """URL = %s
     filePath = %s
@@ -89,14 +87,13 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 return wke
         return None
     
-    def handle_getContentAsXML(s):
+    def handle_getContentAsXML(s, page):
         '''s is the HttpRequestHandler 'self'.
         This method returns the content of the file.'''
-
         startTime = datetime.now()
         fin = None
         try:
-            fin = file(name=ROOT_LOGFOLDER + r"wmbmessages.log.20140811byAVI", mode="r")
+            fin = file(name=page.filePath, mode="r")
             
             #Keeps track of errors while parsing to provide running count
             dictErrors = dict()
@@ -105,14 +102,14 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
             s.wfile.write(
 """<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="Transform.xsl"?>
-""")
+<?xml-stylesheet type="text/xsl" href="{xslFile}"?>
+""".format (xslFile=page.xslFile))
             s.wfile.write("<logfileExport>\n")
             s.wfile.write("<logItems>\n")
             i = 1
             for line in fin:
                 #s.wfile.write(line)
-                match = reLine.match(line)
+                match = page.regex.match(line)
                 if match != None:
                     bipcode=match.group('bipcode')
                     rawContent=match.group("theRest")
@@ -128,7 +125,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                     wke = s.getWellknownErrorDetails(bipcode,rawContent)
 
                     #final output to the XML file
-                    s.wfile.write(LINE_OUT_FORMATXML.format(
+                    s.wfile.write(page.lineOut.format(
                         lineNumber=i,
                         time=match.group('time'),
                         bipcode=bipcode,
@@ -140,7 +137,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                         ))
                 else:
                     #weird, line was unmatched : export it AS IS
-                    s.wfile.write(LINE_OUT_FORMATXML.format(
+                    s.wfile.write(page.lineOut.format(
                         lineNumber=i,
                         time="",
                         bipcode="",
@@ -216,8 +213,8 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         #First: triage of the request, ONLY AUTHORIZED FILE *NAMES*
         #Check the FULL PATH of the request, you can get only files that you authorize here (avoid hacking by URL ../../../secretFile)
-        if s.path == "/XXX.xml":
-            s.handle_getContentAsXML ()
+        if s.path[1:] in dictXmlLogPages:
+            s.handle_getContentAsXML (dictXmlLogPages[s.path[1:]])
         elif s.path == "/Styles.css":
             s.handle_getFile (s.path[1:])
         elif s.path == "/Transform.xsl":
@@ -238,16 +235,25 @@ def loadConfig(config):
         print ("Loading config for " + sec)
         logfile = config.get(sec, 'logfile')
         lineIn = config.get(sec, 'lineInFormat')
+
         lineOut = None
         if config.has_option(sec, 'lineOutFormat'):
             lineOut = config.get(sec, 'lineOutFormat')
+        else:
+            lineOut = DEFAULT_LINE_OUT_FORMATXML
 
+        xslFile = None
+        if config.has_option(sec, 'xslFile'):
+            xslFile = config.get(sec, 'xslFile')
+        else:
+            xslFile = DEFAULT_XSLFILE
+        
         page = XmlLogPage(
             url = sec,
             filePath = logfile,
             lineIn = lineIn,
             lineOut = lineOut,
-            xslFile = None)
+            xslFile = xslFile)
         
         dictXmlLogPages[sec] = page
         
