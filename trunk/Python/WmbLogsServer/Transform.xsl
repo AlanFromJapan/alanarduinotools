@@ -22,7 +22,13 @@
   
         <td><xsl:value-of select="time"/></td>
         <td><xsl:value-of select="bipcode"/> <i style="font-size:smaller;">(<xsl:value-of select="bipcount"/>)</i></td>
-        <td><xsl:value-of select="msgTitle"/></td>
+        <td>
+			<xsl:value-of select="msgTitle"/>
+			<xsl:if test="wellKnownErrorLabel != ''">
+				<br/>
+				<span class="hintStyle"><xsl:value-of select="wellKnownErrorLabel"/></span>
+			</xsl:if>
+		</td>
       </tr>	
 	  <tr>
 		<td colspan="3" class="rawContent"><xsl:value-of select="rawContent"/></td>
