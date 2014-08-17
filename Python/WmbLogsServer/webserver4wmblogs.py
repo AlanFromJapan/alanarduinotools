@@ -6,38 +6,48 @@ import shutil
 #local custom scripts
 import wmbErrorParser
 
+###########################################
+##  CONSTANTS
+###########################################
+
 HOST_NAME = ''
 PORT_NUMBER = 8001 # Maybe set this to 9000.
 
 
 LINE_IN_FORMAT = r"^(?P<time>\w+\s\d+\s\d+:\d+:\d+)[^]]+\][^]]+\](?P<bipcode>\w+):(?P<msgTitle>[^:]+):(?P<theRest>.*)"
 LINE_OUT_FORMATXML = r"""<logItem>
+    <line>{lineNumber}</line>
     <time>{time}</time>
     <bipcode>{bipcode}</bipcode>
     <bipcount>{bipcount}</bipcount>
     <msgTitle>{msgTitle}</msgTitle>
-    <prioStyle>{prioStyle}</prioStyle>
     <rawContent>{rawContent}</rawContent>
     <wellKnownErrorPriority>{wkePrio}</wellKnownErrorPriority>
     <wellKnownErrorLabel>{wkeLabel}</wellKnownErrorLabel>
 </logItem>"""
 
+#THE regex for line input
 reLine = re.compile(LINE_IN_FORMAT, re.IGNORECASE)
+#Keeps track of errors while parsing to provide running count
 dictErrors = dict()
-dictWellKnownBipCodeStyles = dict(BIP2153I="prioHigh", BIP2176S="prioLow")
 
-
-
+###########################################
+##  Subclass for Well Known Errors 
+###########################################
 class WellKnownError:
-    def __init__(self, bipCode, messageContains,errorPriority,errorLabel):
+    def __init__(self, bipCode, messageContains,errorPriority="PrioDefault",errorLabel=None,parseErrorMessage=False):
         self.bipCode=bipCode
         self.messageContains =  messageContains
         self.errorPriority = errorPriority
         self.errorLabel = errorLabel
+        self.parseErrorMessage = parseErrorMessage
         
 listWellKnownErrors = [
-WellKnownError(bipCode=None, messageContains=r"FAXECMServiceSFDCMainFlow#FCMComposite_1_8.CreateFormImageSFDCSubFlow#FCMComposite_1_3", errorPriority=1, errorLabel="Timeout on FormServer report generation. Ignore unless user complains.")
-    ]
+    WellKnownError(bipCode=None, messageContains=r"FAXECMServiceSFDCMainFlow#FCMComposite_1_8.CreateFormImageSFDCSubFlow#FCMComposite_1_3", errorPriority="prioLow", errorLabel="Timeout on FormServer report generation. Ignore unless user complains.", parseErrorMessage=True),
+    WellKnownError(bipCode="BIP2153I", messageContains=None, errorPriority="prioHigh"),
+    WellKnownError(bipCode="BIP2176S", messageContains=None, errorPriority="prioLow"),
+    WellKnownError(bipCode="BIP3051E", messageContains=None, parseErrorMessage=True),
+]
 
 
 
@@ -71,14 +81,15 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 """)
 
         s.wfile.write("<logItems>")
-        i = 0
+        i = 1
         for line in fin:
             #s.wfile.write(line)
             match = reLine.match(line)
             if match != None:
                 bipcode=match.group('bipcode')
                 rawContent=match.group("theRest")
-                
+
+                #running count of errors
                 if bipcode != None:
                     if bipcode in dictErrors:
                         dictErrors[bipcode] = (bipcode, dictErrors[bipcode][1] + 1)
@@ -90,26 +101,25 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
                 #final output to the XML file
                 s.wfile.write(LINE_OUT_FORMATXML.format(
+                    lineNumber=i,
                     time=match.group('time'),
                     bipcode=bipcode,
                     msgTitle=match.group('msgTitle'),
                     bipcount=str(dictErrors[bipcode][1]),
-                    prioStyle=("prioDefault" if not bipcode in dictWellKnownBipCodeStyles else dictWellKnownBipCodeStyles[bipcode]),
-                    rawContent=(rawContent if bipcode != "BIP3051E" else wmbErrorParser.parseFormatWmbError(rawContent)),
-                    wkePrio=('' if wke == None else wke.errorPriority),
-                    wkeLabel=('' if wke == None else wke.errorLabel),
+                    rawContent=(rawContent if wke == None or not wke.parseErrorMessage else wmbErrorParser.parseFormatWmbError(rawContent)),
+                    wkePrio=('prioDefault' if wke == None else wke.errorPriority),
+                    wkeLabel=('' if wke == None or wke.errorLabel == None else wke.errorLabel),
                     ))
             else:
                 #weird, line was unmatched : export it AS IS
-                #s.wfile.write("Unknown format line:" + line)
                 s.wfile.write(LINE_OUT_FORMATXML.format(
+                    lineNumber=i,
                     time="",
                     bipcode="",
                     msgTitle="UNREADABLE MESSAGE!",
                     bipcount=-1,
-                    prioStyle="prioHigh",
                     rawContent=line, 
-                    wkePrio=-1,
+                    wkePrio="prioHigh",
                     wkeLabel='',
                     ))
 

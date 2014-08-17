@@ -1,3 +1,26 @@
+
+/* **************************** Default style  **************************** */
+TABLE {
+	border: 1px solid black;
+	margin:0px;padding:0px;
+	border-collapse: collapse;
+}
+
+TABLE TR {
+	border: 1px solid lightgrey;
+}
+
+TABLE TR:nth-child(even) {
+	background-color:whitesmoke;
+}
+
+TABLE TR:hover {
+	border: 2px solid darkgrey;
+}
+
+/* **************************** /Default style  **************************** */
+
+/* **************************** Classes style  **************************** */
 .prioDefault {
 	color: black;
 }
@@ -21,7 +44,23 @@
 	overflow: auto;
 }
 
+.lineNumberStyle{
+	font-size:smaller;
+}
+/* **************************** /Classes style  **************************** */
+
+
+/* **************************** Hint styles **************************** */
+/* Default style, will be shared by ALL hints*/
 .hintStyle {
 	background-color:yellow;
 	color:purple;
+	font-style:italic;
 }
+
+/* Override for low priority hints */
+.prioLow .hintStyle{
+	background-color:Transparent
+}
+
+/* **************************** /Hint styles **************************** */
