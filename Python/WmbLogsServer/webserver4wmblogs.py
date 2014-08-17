@@ -18,6 +18,8 @@ LINE_OUT_FORMATXML = r"""<logItem>
     <msgTitle>{msgTitle}</msgTitle>
     <prioStyle>{prioStyle}</prioStyle>
     <rawContent>{rawContent}</rawContent>
+    <wellKnownErrorPriority>{wkePrio}</wellKnownErrorPriority>
+    <wellKnownErrorLabel>{wkeLabel}</wellKnownErrorLabel>
 </logItem>"""
 
 reLine = re.compile(LINE_IN_FORMAT, re.IGNORECASE)
@@ -82,17 +84,34 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                         dictErrors[bipcode] = (bipcode, dictErrors[bipcode][1] + 1)
                     else:
                         dictErrors[bipcode] = (bipcode, 1)
-                        
+
+                #get details about the error if already known
+                wke = s.getWellknownErrorDetails(bipcode,rawContent)
+
+                #final output to the XML file
                 s.wfile.write(LINE_OUT_FORMATXML.format(
                     time=match.group('time'),
                     bipcode=bipcode,
                     msgTitle=match.group('msgTitle'),
                     bipcount=str(dictErrors[bipcode][1]),
                     prioStyle=("prioDefault" if not bipcode in dictWellKnownBipCodeStyles else dictWellKnownBipCodeStyles[bipcode]),
-                    rawContent=(rawContent if bipcode != "BIP3051E" else wmbErrorParser.parseFormatWmbError(rawContent)), 
+                    rawContent=(rawContent if bipcode != "BIP3051E" else wmbErrorParser.parseFormatWmbError(rawContent)),
+                    wkePrio=('' if wke == None else wke.errorPriority),
+                    wkeLabel=('' if wke == None else wke.errorLabel),
                     ))
             else:
-                s.wfile.write("Unknown format line:" + line)
+                #weird, line was unmatched : export it AS IS
+                #s.wfile.write("Unknown format line:" + line)
+                s.wfile.write(LINE_OUT_FORMATXML.format(
+                    time="",
+                    bipcode="",
+                    msgTitle="UNREADABLE MESSAGE!",
+                    bipcount=-1,
+                    prioStyle="prioHigh",
+                    rawContent=line, 
+                    wkePrio=-1,
+                    wkeLabel='',
+                    ))
 
             #dummy limit to 100 for test
             i += 1

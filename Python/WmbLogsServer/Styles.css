@@ -20,3 +20,8 @@
     white-space: pre-wrap;
 	overflow: auto;
 }
+
+.hintStyle {
+	background-color:yellow;
+	color:purple;
+}
