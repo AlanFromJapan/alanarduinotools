@@ -29,7 +29,7 @@
 			<xsl:value-of select="msgTitle"/>
 			<xsl:if test="wellKnownErrorLabel != ''">
 				<br/>
-				<span class="hintStyle"><img src="hint.gif"/><xsl:value-of select="wellKnownErrorLabel"/></span>
+				<div class="hintStyle"><img src="hint.gif"/><xsl:value-of select="wellKnownErrorLabel"/></div>
 			</xsl:if>
 		</td>
       </tr>	

@@ -33,7 +33,7 @@ DEFAULT_LINE_OUT_FORMATXML = r"""<logItem>
 ##  Subclass for xml pages
 ###########################################
 class XmlLogPage:
-    def __init__(self, url, filePath, lineIn, lineOut=LINE_OUT_FORMATXML, xslFile="Transform.xsl"):
+    def __init__(self, url, filePath, lineIn, lineOut=DEFAULT_LINE_OUT_FORMATXML, xslFile=DEFAULT_XSLFILE):
         self.URL = url
         self.filePath = filePath
         self.lineIn = lineIn
@@ -41,7 +41,9 @@ class XmlLogPage:
         self.xslFile= xslFile
         
         self.regex = re.compile(self.lineIn, re.IGNORECASE)
-        
+
+        self.wkes = []
+            
     def __str__(self):
         return """URL = %s
     filePath = %s
@@ -81,7 +83,10 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     ###########################################
     ##  Process requests
     ###########################################
-    def getWellknownErrorDetails (s, bipCode, rawContent):
+    def getWellknownErrorDetails (s, bipCode, rawContent, page):
+        for wke in page.wkes:
+            if (wke.bipCode != None and wke.bipCode == bipCode) or (wke.messageContains != None and rawContent != None and wke.messageContains in rawContent):
+                return wke
         for wke in listWellKnownErrors:
             if (wke.bipCode != None and wke.bipCode == bipCode) or (wke.messageContains != None and rawContent != None and wke.messageContains in rawContent):
                 return wke
@@ -122,7 +127,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                             dictErrors[bipcode] = (bipcode, 1)
 
                     #get details about the error if already known
-                    wke = s.getWellknownErrorDetails(bipcode,rawContent)
+                    wke = s.getWellknownErrorDetails(bipcode,rawContent, page)
 
                     #final output to the XML file
                     s.wfile.write(page.lineOut.format(
@@ -201,8 +206,6 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             s.send_header("Content-type", "text/xml")
         elif len(s.path) > 4 and s.path[-3:] == "css":
             s.send_header("Content-type", "text/css")
-        elif len(s.path) > 5 and s.path[-4:] == "logs":
-            s.send_header("Content-type", "text/html")
         else:
             s.send_header("Content-type", 'application/octet-stream')
         s.end_headers()
@@ -228,6 +231,12 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 ###########################################
 ##  Reading configuration
 ###########################################
+def emptyIsDefault(val, default):
+    if val== None or val == '':
+        return default
+    else:
+        return val
+
 def loadConfig(config):
     for sec in config.sections():
         if not (len(sec) > 5 and sec[-4:] == ".xml"):
@@ -256,7 +265,20 @@ def loadConfig(config):
             xslFile = xslFile)
         
         dictXmlLogPages[sec] = page
-        
+
+        i = 1
+        while True:
+            if not config.has_option(sec, 'WKE_bipCode' + str(i)):
+                break
+            bipcode =  emptyIsDefault(config.get(sec, 'WKE_bipCode' + str(i)), None)
+            messageContains=  emptyIsDefault(config.get(sec, 'WKE_messageContains' + str(i)), None)
+            errorPriority =  emptyIsDefault(config.get(sec, 'WKE_errorPriority' + str(i)), "prioDefault")
+            errorLabel =  config.get(sec, 'WKE_errorLabel' + str(i))
+            parseErrorMessage =  emptyIsDefault(config.getboolean(sec, 'WKE_parseErrorMessage' + str(i)), False)
+
+            wke = WellKnownError(bipcode, messageContains, errorPriority, errorLabel, parseErrorMessage)
+            page.wkes.append(wke)
+            i += 1
         print (page)
             
 ###########################################
