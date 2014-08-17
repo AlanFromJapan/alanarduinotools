@@ -8,8 +8,9 @@
 	</head>
   <body>
   <h2>Errors list</h2>
-    <table border="1">
+    <table>
       <tr bgcolor="#9acd32">
+        <th style="text-align:left">#</th>
         <th style="text-align:left">Time</th>
         <th style="text-align:left">Bip <i>(running count)</i></th>
         <th style="text-align:left">Title</th>
@@ -17,9 +18,10 @@
       <xsl:for-each select="logItems/logItem">
       <tr>
 		<xsl:attribute name="class">
-			<xsl:value-of select="prioStyle" />
+			<xsl:value-of select="wellKnownErrorPriority" />
 		</xsl:attribute>
   
+		<td rowspan="2" class="lineNumberStyle"><xsl:value-of select="line"/></td>
         <td><xsl:value-of select="time"/></td>
         <td><xsl:value-of select="bipcode"/> <i style="font-size:smaller;">(<xsl:value-of select="bipcount"/>)</i></td>
         <td>
