@@ -1,21 +1,21 @@
 
 /* **************************** Default style  **************************** */
-TABLE {
+TABLE.mainTable {
 	border: 1px solid black;
 	margin:0px;padding:0px;
 	border-collapse: collapse;
 }
 
-TABLE TR {
+TABLE.mainTable TR {
 	border: 1px solid lightgrey;
 }
 
-TABLE TR:nth-child(even) {
+TABLE.mainTable TR:nth-child(even) {
 	background-color:whitesmoke;
 }
 
-TABLE TR:hover {
-	border: 2px solid darkgrey;
+TABLE.mainTable TR:hover {
+	/*border: 3px solid black;*/
 }
 
 /* **************************** /Default style  **************************** */
@@ -45,6 +45,15 @@ TABLE TR:hover {
 }
 
 .lineNumberStyle{
+	font-size:smaller;
+}
+
+.generationDetails {
+	color:gainsboro;
+	font-size:smaller;
+}
+
+.timeStyle {
 	font-size:smaller;
 }
 /* **************************** /Classes style  **************************** */
