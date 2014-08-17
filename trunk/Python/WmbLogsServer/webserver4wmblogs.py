@@ -84,6 +84,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     ##  Process requests
     ###########################################
     def getWellknownErrorDetails (s, bipCode, rawContent, page):
+        '''Returns the WKE based on bip code and error message'''
         for wke in page.wkes:
             if (wke.bipCode != None and wke.bipCode == bipCode) or (wke.messageContains != None and rawContent != None and wke.messageContains in rawContent):
                 return wke
@@ -266,6 +267,7 @@ def loadConfig(config):
         
         dictXmlLogPages[sec] = page
 
+        #load the well known errors specific to this page
         i = 1
         while True:
             if not config.has_option(sec, 'WKE_bipCode' + str(i)):
@@ -290,6 +292,7 @@ if __name__ == '__main__':
     config = ConfigParser.ConfigParser()
     config.read('wmblogsserver.ini')
     PORT_NUMBER = int(config.get('Global', 'port'))
+    ROOT_WEBFOLDER = config.get('Global', 'root_path')
     loadConfig(config)
     
     server_class = BaseHTTPServer.HTTPServer
