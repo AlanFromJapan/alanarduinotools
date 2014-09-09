@@ -9929,7 +9929,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="508" y1="43.18" x2="508" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$9" class="0">
+<net name="N$27" class="0">
 <segment>
 <pinref part="R3" gate="G$1" pin="2"/>
 <wire x1="187.96" y1="40.64" x2="205.74" y2="40.64" width="0.1524" layer="91"/>
