@@ -49,7 +49,7 @@
 #define LED30 { DDRD = 0x21;		PORTD = 0x20; }	
 	
 
-
+//bellow are hours
 #define LED31 { DDRD = 0x60;		PORTD = 0x20; }
 #define LED32 { DDRD = 0x60;		PORTD = 0x40; }	
 #define LED33 { DDRD = 0x50;		PORTD = 0x10; }
@@ -192,7 +192,7 @@ int main(void)
 	initArrays();
 	
 	//setup TIMER0 : 8 byte timer
-	//init_timer0_OVF();
+	init_timer0_OVF();
 
 
 	//button input
@@ -203,15 +203,15 @@ int main(void)
 	//just make sure pullups are NOT disabled
 	MCUCR |= (0 << PUD);
 		
-	uint8_t x = 1;
-	while (1){
-		setLed(x);
-		_delay_ms(100);
-		
-		x++;
-		if (x > 42)
-			x =1;
-	}
+	//uint8_t x = 1;
+	//while (1){
+		//setLed(x);
+		//_delay_us(5);
+		//
+		//x++;
+		//if (x > 42)
+			//x =1;
+	//}
 	//LED23;
 	//LED32;
 		

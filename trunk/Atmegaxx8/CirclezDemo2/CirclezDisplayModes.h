@@ -10,7 +10,7 @@
 #define CIRCLEZDISPLAYMODES_H_
 
 
-#define LED_COUNT 24
+#define LED_COUNT 30
 volatile uint8_t mLedVal[LED_COUNT];
 volatile uint8_t mLedVal2[LED_COUNT];
 
