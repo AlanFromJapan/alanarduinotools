@@ -4,23 +4,23 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>6.0</ProjectVersion>
     <ToolchainName>com.Atmel.AVRAssembler</ToolchainName>
-    <ProjectGuid>{7f8c0d54-76a4-48cd-aa5f-5e0dc756978b}</ProjectGuid>
+    <ProjectGuid>{751f808e-71c0-4ddc-8fe2-ffaef2a2afa0}</ProjectGuid>
     <avrdeviceseries>none</avrdeviceseries>
     <avrdevice>ATtiny10</avrdevice>
     <OutputFileName>$(MSBuildProjectName)</OutputFileName>
     <OutputFileExtension>.obj</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
     <Language>ASSEMBLY</Language>
-    <AssemblyName>Blink_tiny10</AssemblyName>
-    <Name>Blink_tiny10</Name>
-    <RootNamespace>Blink_tiny10</RootNamespace>
-    <EntryFile>$(MSBuildProjectDirectory)\Blink_tiny10.asm</EntryFile>
+    <AssemblyName>Fade_tiny10</AssemblyName>
+    <Name>Fade_tiny10</Name>
+    <RootNamespace>Fade_tiny10</RootNamespace>
+    <EntryFile>$(MSBuildProjectDirectory)\Fade_tiny10.asm</EntryFile>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <AsfVersion>3.5.1</AsfVersion>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <OverrideVtorValue />
     <eraseonlaunchrule>0</eraseonlaunchrule>
+    <AsfVersion>3.5.1</AsfVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
@@ -28,7 +28,6 @@
   <avrasm.assembler.general.IncludeFile>($IncludeFile)</avrasm.assembler.general.IncludeFile>
 </AvrAssembler>
     </ToolchainSettings>
-    <OutputType>Executable</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -38,7 +37,7 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Blink_tiny10.asm">
+    <Compile Include="Fade_tiny10.asm">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

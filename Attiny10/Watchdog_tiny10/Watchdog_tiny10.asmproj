@@ -4,23 +4,37 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>6.0</ProjectVersion>
     <ToolchainName>com.Atmel.AVRAssembler</ToolchainName>
-    <ProjectGuid>{7f8c0d54-76a4-48cd-aa5f-5e0dc756978b}</ProjectGuid>
+    <ProjectGuid>{3278a9bf-9dcf-49e8-8fea-98e2f7cdcb2b}</ProjectGuid>
     <avrdeviceseries>none</avrdeviceseries>
     <avrdevice>ATtiny10</avrdevice>
     <OutputFileName>$(MSBuildProjectName)</OutputFileName>
     <OutputFileExtension>.obj</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
     <Language>ASSEMBLY</Language>
-    <AssemblyName>Blink_tiny10</AssemblyName>
-    <Name>Blink_tiny10</Name>
-    <RootNamespace>Blink_tiny10</RootNamespace>
-    <EntryFile>$(MSBuildProjectDirectory)\Blink_tiny10.asm</EntryFile>
+    <AssemblyName>Watchdog_tiny10</AssemblyName>
+    <Name>Watchdog_tiny10</Name>
+    <RootNamespace>Watchdog_tiny10</RootNamespace>
+    <EntryFile>$(MSBuildProjectDirectory)\Watchdog_tiny10.asm</EntryFile>
     <ToolchainFlavour>Native</ToolchainFlavour>
     <AsfVersion>3.5.1</AsfVersion>
+    <avrtoolinterface />
+    <avrtool>com.atmel.avrdbg.tool.simulator</avrtool>
+    <com_atmel_avrdbg_tool_simulator>
+      <ToolType xmlns="">com.atmel.avrdbg.tool.simulator</ToolType>
+      <ToolName xmlns="">AVR Simulator</ToolName>
+      <ToolNumber xmlns="">
+      </ToolNumber>
+      <KeepTimersRunning xmlns="">true</KeepTimersRunning>
+      <OverrideVtor xmlns="">false</OverrideVtor>
+      <OverrideVtorValue xmlns="">
+      </OverrideVtorValue>
+      <Channel xmlns="">
+        <host>127.0.0.1</host>
+        <port>49302</port>
+        <ssl>False</ssl>
+      </Channel>
+    </com_atmel_avrdbg_tool_simulator>
     <KeepTimersRunning>true</KeepTimersRunning>
-    <OverrideVtor>false</OverrideVtor>
-    <OverrideVtorValue />
-    <eraseonlaunchrule>0</eraseonlaunchrule>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
@@ -38,7 +52,7 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Blink_tiny10.asm">
+    <Compile Include="Watchdog_tiny10.asm">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
