@@ -5,7 +5,7 @@
  *   Author: Alan
  */ 
 
-.EQU led_mask = 0xff
+.EQU led_mask = (1 << PB2)
 
 .CSEG
 .ORG 0x0000
@@ -41,38 +41,49 @@ main:
 	ldi r16, led_mask ; sets PB2 to output
 	out DDRB, r16 ; data direction
 
-	ldi r16, 0xff
+	ldi r16, 0x00
 	out PORTB, r16
 	
-
+	;----------- Watchdog setup start ----------------------------------------
 	;Set the watchdog as interrupt mode
-	;cbi WDTCSR, WDE			; clear bit
-	;sbi WDTCSR, WDIE		; set watchdog enabled
-	;WDP2 | WDP1 => every second
-	sei
-	ldi r16, 0xD8
-	out ccp, r16
-	ldi r16, (1 << WDIE | 1 << WDP2 | 1 << WDP1)
-	out WDTCSR, r16
+	cli
 
-	;enable watchdog
-	wdr
+	;no reset on watchdog! (clear bit WDRF in RSTFLR)
+	in r16, RSTFLR
+	andi r16, ~(1 << WDRF)
+	out RSTFLR, r16
+
+	;In addition the fuse WDTON must be UNPROGRAMMED (=not checked)
+	; WDP2 | WDP1 => every second + !WDE | WDIE => interrupt on watchdog timeout
+	ldi r17, (1 << WDIE | 1 << WDP2 | 1 << WDP1 | 0 << WDE)
+	ldi r16, 0xD8	;0xD( magic value to write in CCP, and then within 4 cycles you can update WDTCSR
+	out CCP, r16
+	out WDTCSR, r17
+	sei
+	;----------- Watchdog setup end ----------------------------------------
+
 
 loop:
 	nop
 	rjmp loop
 
+
+
+; Watchdog interrupt body
 WDT_off:
+	cli
 	push r20
 	push r21
-
+	
+	;Toggle the pin B2
 	in r20, PORTB
 	ldi r21, led_mask
 	eor r20, r21
 	out PORTB, r20
-
+	
 	pop r21
 	pop r20
+	sei
 
 	;reti because it's an interrupt
 	reti
