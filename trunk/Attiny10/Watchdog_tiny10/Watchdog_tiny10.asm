@@ -45,7 +45,9 @@ main:
 	out PORTB, r16
 	
 	;----------- Watchdog setup start ----------------------------------------
-	;Set the watchdog as interrupt mode
+	;README: the fuse WDTON must be UNPROGRAMMED (=not checked)! Otherwise behavior is reset, not interrupt.
+
+	;stop interrupts
 	cli
 
 	;no reset on watchdog! (clear bit WDRF in RSTFLR)
@@ -53,12 +55,13 @@ main:
 	andi r16, ~(1 << WDRF)
 	out RSTFLR, r16
 
-	;In addition the fuse WDTON must be UNPROGRAMMED (=not checked)
 	; WDP2 | WDP1 => every second + !WDE | WDIE => interrupt on watchdog timeout
 	ldi r17, (1 << WDIE | 1 << WDP2 | 1 << WDP1 | 0 << WDE)
 	ldi r16, 0xD8	;0xD( magic value to write in CCP, and then within 4 cycles you can update WDTCSR
 	out CCP, r16
 	out WDTCSR, r17
+
+	;start interrupts
 	sei
 	;----------- Watchdog setup end ----------------------------------------
 
