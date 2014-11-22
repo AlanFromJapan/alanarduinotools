@@ -4,23 +4,40 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>6.0</ProjectVersion>
     <ToolchainName>com.Atmel.AVRAssembler</ToolchainName>
-    <ProjectGuid>{7f8c0d54-76a4-48cd-aa5f-5e0dc756978b}</ProjectGuid>
+    <ProjectGuid>{cd853b3f-3f6a-4dc7-8e37-69200c382d43}</ProjectGuid>
     <avrdeviceseries>none</avrdeviceseries>
     <avrdevice>ATtiny10</avrdevice>
     <OutputFileName>$(MSBuildProjectName)</OutputFileName>
     <OutputFileExtension>.obj</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
     <Language>ASSEMBLY</Language>
-    <AssemblyName>Blink_tiny10</AssemblyName>
-    <Name>Blink_tiny10</Name>
-    <RootNamespace>Blink_tiny10</RootNamespace>
-    <EntryFile>$(MSBuildProjectDirectory)\Blink_tiny10.asm</EntryFile>
+    <AssemblyName>FakeFlame_tiny10</AssemblyName>
+    <Name>FakeFlame_tiny10</Name>
+    <RootNamespace>FakeFlame_tiny10</RootNamespace>
+    <EntryFile>$(MSBuildProjectDirectory)\FakeFlame_tiny10.asm</EntryFile>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <AsfVersion>3.5.1</AsfVersion>
+    <avrtoolinterface />
+    <avrtool>com.atmel.avrdbg.tool.simulator</avrtool>
+    <com_atmel_avrdbg_tool_simulator>
+      <ToolType xmlns="">com.atmel.avrdbg.tool.simulator</ToolType>
+      <ToolName xmlns="">AVR Simulator</ToolName>
+      <ToolNumber xmlns="">
+      </ToolNumber>
+      <KeepTimersRunning xmlns="">true</KeepTimersRunning>
+      <OverrideVtor xmlns="">false</OverrideVtor>
+      <OverrideVtorValue xmlns="">
+      </OverrideVtorValue>
+      <Channel xmlns="">
+        <host>127.0.0.1</host>
+        <port>53711</port>
+        <ssl>False</ssl>
+      </Channel>
+    </com_atmel_avrdbg_tool_simulator>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <OverrideVtorValue />
     <eraseonlaunchrule>0</eraseonlaunchrule>
+    <AsfVersion>3.5.1</AsfVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
@@ -28,7 +45,6 @@
   <avrasm.assembler.general.IncludeFile>($IncludeFile)</avrasm.assembler.general.IncludeFile>
 </AvrAssembler>
     </ToolchainSettings>
-    <OutputType>Executable</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -38,7 +54,7 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Blink_tiny10.asm">
+    <Compile Include="FakeFlame_tiny10.asm">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
