@@ -86,45 +86,18 @@ int main(void) {
 	
 	Date vLastDate;
 
-	uint8_t i = 0;	
 	resetLedMatrix();
 	setupLedMatrix();
-	
-	
-	setCell(i,i,1);i++;
-	setCell(i,i,1);i++;
-	setCell(i,i,1);i++;
-	setCell(i,i,1);i++;
-	setCell(i,i,1);i++;
-	
-	//setCell(0, 2, 1);
-	//setCell(0, 4, 1);
-	//
-	setCell(3, 4, 1);
 
-	setCell(4, 3, 1);
-	setCell(4, 0, 1);
 	
     while(1) {
        mainReadTime(&vLastDate);
 		
-		//MapTimeInLedMatrix_BCD1(&vLastDate); //MAP_MATRIX_MFUNC(&vLastDate);
+		MapTimeInLedMatrix_BCD1(&vLastDate); //MAP_MATRIX_MFUNC(&vLastDate);
 		
 		drawLedMatrix(); //DRAW_MATRIX_FUNC();
+			
 		
-		
-		//PORTB = 0x03; //=B1 digitalWrite(r + WCLK_ROWA, HIGH);
-		//PORTD = 0xe4; //digitalWrite(WCLK_COL1- c, LOW); //minus because reverse order
-//
-		//PORTD &= ~(1 << 7);
-		////POV
-		//_delay_us(WCLK_POV_DURATION); // delayMicroseconds(WCLK_POV_DURATION);
-//
-		////reverse the pins HIGH/LOW status to turn it off
-		//PORTB = 0xff; //=B1 digitalWrite(r + WCLK_ROWA, LOW);
-		//PORTD = 0xff; //digitalWrite(WCLK_COL1- c, HIGH); //minus because reverse order
-		
-		
-		_delay_ms(50);
+		_delay_ms(5);
     }
 }

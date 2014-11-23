@@ -13,14 +13,15 @@
 #define RTC_FAKE
 
 uint32_t mRtcFakeSecondCounter = 0L;
-uint32_t mRtcFakeSpeedFactor = 1000L;
+uint32_t mRtcFakeSpeedFactor = 1L;
+uint32_t mRtcFakeSpeedDivider = 10L;
 
 void ReadTime(Date* pTimeDate){
 	mRtcFakeSecondCounter += mRtcFakeSpeedFactor;
 	
 	(*pTimeDate).second = 0;
-	(*pTimeDate).minute = (uint8_t)(mRtcFakeSecondCounter % 60);
-	(*pTimeDate).hour = (uint8_t)(mRtcFakeSecondCounter / 60);
+	(*pTimeDate).minute = (uint8_t)((mRtcFakeSecondCounter / mRtcFakeSpeedDivider) % 60);
+	(*pTimeDate).hour = (uint8_t)((mRtcFakeSecondCounter / mRtcFakeSpeedDivider) / 60);
 	//ignore the rest...
 }	
 
