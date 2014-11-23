@@ -14,6 +14,8 @@ Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "CirclezDemo", "CirclezDemo\
 EndProject
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "CirclezDemo2", "CirclezDemo2\CirclezDemo2.cproj", "{95661484-1031-4B48-A756-C5A469B803DD}"
 EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "MultiClockManager", "MultiClockManager\MultiClockManager.cproj", "{AA5926F1-79EE-4DC6-A232-745D272597A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -48,6 +50,10 @@ Global
 		{95661484-1031-4B48-A756-C5A469B803DD}.Debug|AVR.Build.0 = Debug|AVR
 		{95661484-1031-4B48-A756-C5A469B803DD}.Release|AVR.ActiveCfg = Release|AVR
 		{95661484-1031-4B48-A756-C5A469B803DD}.Release|AVR.Build.0 = Release|AVR
+		{AA5926F1-79EE-4DC6-A232-745D272597A7}.Debug|AVR.ActiveCfg = Debug|AVR
+		{AA5926F1-79EE-4DC6-A232-745D272597A7}.Debug|AVR.Build.0 = Debug|AVR
+		{AA5926F1-79EE-4DC6-A232-745D272597A7}.Release|AVR.ActiveCfg = Release|AVR
+		{AA5926F1-79EE-4DC6-A232-745D272597A7}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
