@@ -11,11 +11,12 @@
  * Migration Status:
  *   RTC:
  *     x DS3231
- *     x DS3234
+ *     O DS3234
  *     x EPSON RTC 4543 SA/SB
  *   Display:
  *     x Numitron
  *     x Voltmeter
+ *     O BCD v1 (5x5 led matrix)
  * 
  */ 
 
@@ -29,13 +30,13 @@
 #include "MCMShared.h"
 
 //Choose what RTC to use
-//#include "DS3234.h"
-#include "RTCFake.h"
+#include "DS3234.h"
+//#include "RTCFake.h"
 
-//Choose the display to use
+//Choose the display to use (put the define BEFORE the includes!)
+#define USE_DISPLAY_BCD1
 #include "MCMLedMatrix.h"
 #include "WordclockLayouts.h"
-#define USE_DISPLAY_BCD1
 
 
 /************************************************************************/
@@ -48,7 +49,7 @@ void mainReadTime(Date* pTime){
 	#endif //RTC_DS3231
 
 	#ifdef RTC_DS3234
-	ReadTime(pTime);
+	ReadTime3234(pTime);
 	#endif //RTC_DS3234
 
 	#ifdef RTC_RTC4543
@@ -56,24 +57,24 @@ void mainReadTime(Date* pTime){
 	#endif //RTC_RTC4543
 	
 	#ifdef RTC_FAKE
-	ReadTime(pTime);
+	ReadTimeFake(pTime);
 	#endif //RTC_FAKE
 }
 
 /************************************************************************/
 /* Setup                                                                */
 /************************************************************************/
-void setup() {
+void mainSetup() {
 
 #ifdef RTC_DS3234
 	setupDS3234(1);
 	
 	//README TODO REMOVE ME : just for the testing purpose now
-	SetTimeDate(25,05,2013,18,14,00);
+	//SetTimeDate3234(25,05,2013,18,14,00);
 #endif //RTC_DS3234	
 
-//TODO: surround with #ifdef
-setupLedMatrix(); //SETUP_MATRIX();
+	//macro to be redefined by each display
+	SETUP_DISPLAY(); 
 }
 
 
@@ -82,22 +83,20 @@ setupLedMatrix(); //SETUP_MATRIX();
 /* Main                                                                 */
 /************************************************************************/
 int main(void) {
-	setup();
+	mainSetup();
 	
 	Date vLastDate;
 
-	resetLedMatrix();
-	setupLedMatrix();
-
-	
     while(1) {
        mainReadTime(&vLastDate);
 		
-		MapTimeInLedMatrix_BCD1(&vLastDate); //MAP_MATRIX_MFUNC(&vLastDate);
+		//macro to be redefined by each display
+		MAP_DATE_TO_DISPLAY(&vLastDate); 
 		
-		drawLedMatrix(); //DRAW_MATRIX_FUNC();
+		//macro to be redefined by each display
+		DRAW_DISPLAY(); 
 			
-		
+		//small delay
 		_delay_ms(5);
     }
 }

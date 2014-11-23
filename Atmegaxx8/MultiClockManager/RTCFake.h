@@ -16,7 +16,7 @@ uint32_t mRtcFakeSecondCounter = 0L;
 uint32_t mRtcFakeSpeedFactor = 1L;
 uint32_t mRtcFakeSpeedDivider = 10L;
 
-void ReadTime(Date* pTimeDate){
+void ReadTimeFake(Date* pTimeDate){
 	mRtcFakeSecondCounter += mRtcFakeSpeedFactor;
 	
 	(*pTimeDate).second = 0;
