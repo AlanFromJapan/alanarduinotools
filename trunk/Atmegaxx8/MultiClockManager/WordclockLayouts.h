@@ -13,9 +13,9 @@
 
 
 #ifdef  USE_DISPLAY_BCD1
-	#define MAP_MATRIX_MFUNC(p) MapTimeInLedMatrix_BCD1(p)
-	#define DRAW_MATRIX_FUNC() drawLedMatrix()
-	#define SETUP_MATRIX() setupLedMatrix()
+	#define MAP_DATE_TO_DISPLAY(p) MapTimeInLedMatrix_BCD1(p)
+	#define DRAW_DISPLAY() drawLedMatrix()
+	#define SETUP_DISPLAY() { setupLedMatrix(); resetLedMatrix(); }
 
 	#define SET_EDIT_HOURS() 		;
 	#define SET_EDIT_MINUTES() 		;
