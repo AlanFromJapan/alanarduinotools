@@ -40,7 +40,7 @@ void setupLedMatrix() {
 	
 	//Rows : mix of PORTD and PORTB ...
 	DDRB |= 0x03; //B0-B1
-	DDRD |= 0xD0; //D5-D7
+	DDRD |= 0xe0; //D5-D7
 
 	//Columns : simple, it's D0-D4
 	DDRD |= 0x1f;
