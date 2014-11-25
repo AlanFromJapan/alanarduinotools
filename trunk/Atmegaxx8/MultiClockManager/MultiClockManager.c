@@ -25,19 +25,22 @@
 
 //System includes
 #include <avr/io.h>
+#include <util/delay.h>
 
 //Program includes
 #include "MCMShared.h"
 
 //Choose what RTC to use
-#include "DS3234.h"
-//#include "RTCFake.h"
+//#include "DS3234.h"
+#include "RTCFake.h"
 
 //Choose the display to use (put the define BEFORE the includes!)
+/*
 #define USE_DISPLAY_BCD1
 #include "MCMLedMatrix.h"
 #include "WordclockLayouts.h"
-
+*/
+#include "VoltmeterDisplay.h"
 
 /************************************************************************/
 /* Read time functions                                                  */

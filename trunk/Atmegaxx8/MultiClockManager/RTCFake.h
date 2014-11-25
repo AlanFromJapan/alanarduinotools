@@ -14,7 +14,7 @@
 
 uint32_t mRtcFakeSecondCounter = 0L;
 uint32_t mRtcFakeSpeedFactor = 1L;
-uint32_t mRtcFakeSpeedDivider = 10L;
+uint32_t mRtcFakeSpeedDivider = 20L;
 
 void ReadTimeFake(Date* pTimeDate){
 	mRtcFakeSecondCounter += mRtcFakeSpeedFactor;
