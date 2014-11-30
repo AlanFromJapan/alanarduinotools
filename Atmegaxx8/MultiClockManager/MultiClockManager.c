@@ -10,12 +10,13 @@
  *
  * Migration Status:
  *   RTC:
+ *     O Fake
  *     x DS3231
  *     O DS3234
  *     x EPSON RTC 4543 SA/SB
  *   Display:
  *     x Numitron
- *     x Voltmeter
+ *     O Voltmeter
  *     O BCD v1 (5x5 led matrix)
  * 
  */ 
