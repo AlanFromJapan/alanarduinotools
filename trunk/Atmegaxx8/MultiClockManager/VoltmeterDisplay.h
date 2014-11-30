@@ -29,31 +29,37 @@
 #define EE_HOURS_COUNT 12
 uint8_t EEMEM EE_HOURS_CALIBRATION[EE_HOURS_COUNT];
 
+//Contains the calibration for the minutes
+#define EE_MINUTES_COUNT 7
+uint8_t EEMEM EE_MINUTES_CALIBRATION[EE_MINUTES_COUNT];
+
 //Store the latest date received
 Date mLatestDate;
 
-#define VOLTMETER_PWM_PIN_HOURS 0x40 /*= pin D6 */
+#define VOLTMETER_PWM_PIN_HOURS 0x20  /*= pin D5 */
+#define VOLTMETER_PWM_PIN_MINUTES 0x40  /*= pin D6 */
 
 /************************************************************************/
 /* Setup for the PWM outputs                                            */
 /************************************************************************/
 void voltmeterSetupPWM(){
 	
-	DDRD |= 0xff;// VOLTMETER_PWM_PIN_HOURS;
+	DDRD |= (VOLTMETER_PWM_PIN_HOURS | VOLTMETER_PWM_PIN_MINUTES);
 	// PD6 is now an output
 
 	OCR0A = 0;
+	OCR0B = 0;
 	// set PWM for 0% duty cycle
 
 
-	TCCR0A |= (1 << COM0A1);
+	TCCR0A |= (1 << COM0A1) | (1 << COM0B1);
 	// set none-inverting mode
 
 	TCCR0A |= (1 << WGM01) | (1 << WGM00);
 	// set fast PWM Mode
 
-	TCCR0B |= (1 << CS01);
-	// set prescaler to 8 and starts PWM
+	TCCR0B |= (1 << CS00);
+	// NO PRESCALER (or the coil of the voltmeter will doing horrible high pitched sound) and starts PWM
 
 
 }
@@ -63,6 +69,7 @@ void voltmeterSetupPWM(){
 /************************************************************************/
 void voltmeterSetup() {	
 	uint8_t vHours[EE_HOURS_COUNT];
+	uint8_t vMinutes[EE_MINUTES_COUNT];
 	
 	voltmeterSetupPWM();
 	
@@ -70,7 +77,7 @@ void voltmeterSetup() {
 	
 	//will program ONCE if last value = 0, otherwise leave what is there (unprogrammed eeprom block read 0xff)
 	if (0xff == vHours[0]){
-		//my results with a 1kOhm resistor and my hours voltmeter, barely unused
+		//my results with a 1kOhm resistor and my hours voltmeter, barely used
 		uint8_t i = 0;
 		vHours[i++] = 0;
 		vHours[i++] = 15;
@@ -87,6 +94,24 @@ void voltmeterSetup() {
 		
 		eeprom_update_block((const void*)vHours, (void*)EE_HOURS_CALIBRATION, EE_HOURS_COUNT);
 	}
+
+
+	eeprom_read_block((void*)vMinutes, (const void*)EE_MINUTES_CALIBRATION, EE_MINUTES_COUNT);
+	
+	//will program ONCE if last value = 0, otherwise leave what is there (unprogrammed eeprom block read 0xff)
+	if (0xff == vMinutes[0]){
+		//my results with a 750 Ohm resistor and my minutes voltmeter, barely used
+		vMinutes[0] = 0;	//00 min
+		vMinutes[1] = 30;	//10 min
+		vMinutes[2] = 55;	//20 "
+		vMinutes[3] = 82;	//30 "
+		vMinutes[4] = 120;	//40 "
+		vMinutes[5] = 175;	//50 "
+		vMinutes[6] = 255;	//60 " (trick so that there's always a x < minutes < x+1
+		
+		eeprom_update_block((const void*)vMinutes, (void*)EE_MINUTES_CALIBRATION, EE_MINUTES_COUNT);
+	}
+
 }
 
 /************************************************************************/
@@ -105,13 +130,23 @@ void voltmeterMapDate(Date* pDate){
 /************************************************************************/
 void voltmeterDrawDisplay(){
 	uint8_t vHours[EE_HOURS_COUNT];
-	uint8_t h = 0;
+	uint8_t vMinutes[EE_MINUTES_COUNT];
+	uint8_t vBase = 0, vDifference = 0;
 	
+	//read array, get the stored pwm value and set the PWM
 	eeprom_read_block((void*)vHours, (const void*)EE_HOURS_CALIBRATION, EE_HOURS_COUNT);
-
-	h = mLatestDate.hour % 12;
-	OCR0A = vHours[h];
-	// set PWM for 0% duty cycle	
+	OCR0B = vHours[mLatestDate.hour % 12];
+	
+	
+	//little more subtle: read the array, put it proportionally to the past minute, and then affect
+	eeprom_read_block((void*)vMinutes, (const void*)EE_MINUTES_CALIBRATION, EE_MINUTES_COUNT);			
+	vBase = vMinutes[mLatestDate.minute /10];
+	vDifference = vMinutes[1 + (mLatestDate.minute /10)] - vBase;
+	//lost of precision but works with uint8_t
+	vDifference = (vDifference / 10) * (mLatestDate.minute % 10);
+	vBase += vDifference;
+	OCR0A = vBase;
+	
 }
 	
 #endif /* VOLTMETERDISPLAY_H_ */
