@@ -3,6 +3,13 @@
  *
  *  Created: 2014/11/22 15:36:15
  *   Author: Alan
+
+
+              +-\/-+
+ Flame    PB0 |o   | PB3  
+          GND |    | VCC
+ Led pin  PB1 |____| PB2  Led pin
+
  */ 
 
 .DEVICE ATtiny10
@@ -12,7 +19,7 @@
 .EQU delayMult2 = 0x3f
 
 .EQU flame_min = 96
-.EQU led_mask = (1 << PB2)
+.EQU led_mask = ((1 << PB2) | (1 << PB1))
 .EQU pwm_mask = (1 << PB0)
 
 .CSEG
@@ -112,7 +119,9 @@ main:
 	in r20, DDRB
 	ori r20, pwm_mask ; sets pin 1 (PB0) to putput
 	out DDRB, r20 ; data direction
-
+	; set initial value of the pins B1&B2
+	ldi r20, 0x02
+	out PORTB, r20
 
 init_vars_rnd:
 	; init the value so it can be randomized
@@ -201,7 +210,7 @@ WDT_off:
 	push r20
 	push r21
 	
-	;Toggle the pin B2
+	;Toggle the pin B1 & B2
 	in r20, PORTB
 	ldi r21, led_mask
 	eor r20, r21
