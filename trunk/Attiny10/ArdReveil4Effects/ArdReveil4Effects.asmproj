@@ -16,6 +16,7 @@
     <RootNamespace>ArdReveil4Effects</RootNamespace>
     <EntryFile>$(MSBuildProjectDirectory)\ArdReveil4Effects.asm</EntryFile>
     <ToolchainFlavour>Native</ToolchainFlavour>
+    <AsfVersion>3.5.1</AsfVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
