@@ -72,7 +72,7 @@ main:
 
 	; WDP2 | WDP1 => every second + !WDE | WDIE => interrupt on watchdog timeout
 	ldi r17, (1 << WDIE | 1 << WDP2 | 1 << WDP1 | 0 << WDE)
-	ldi r16, 0xD8	;0xD( magic value to write in CCP, and then within 4 cycles you can update WDTCSR
+	ldi r16, 0xD8	;0xD8 magic value to write in CCP, and then within 4 cycles you can update WDTCSR
 	out CCP, r16
 	out WDTCSR, r17
 
