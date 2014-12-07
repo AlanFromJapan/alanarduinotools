@@ -32,8 +32,8 @@
 #include "MCMShared.h"
 
 //Choose what RTC to use
-//#include "DS3234.h"
-#include "RTCFake.h"
+#include "DS3234.h"
+//#include "RTCFake.h"
 
 //Choose the display to use (put the define BEFORE the includes!)
 /*
@@ -74,7 +74,7 @@ void mainSetup() {
 	setupDS3234(1);
 	
 	//README TODO REMOVE ME : just for the testing purpose now
-	//SetTimeDate3234(25,05,2013,18,14,00);
+	//SetTimeDate3234(07,12,2014,14,03,00);
 #endif //RTC_DS3234	
 
 	//macro to be redefined by each display
