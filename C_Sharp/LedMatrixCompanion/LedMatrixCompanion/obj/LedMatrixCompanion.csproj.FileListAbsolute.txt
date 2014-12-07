@@ -1,2 +1,0 @@
-D:\C#Work\LedMatrixCompanion\LedMatrixCompanion\obj\Debug\LedMatrixCompanion.exe
-D:\C#Work\LedMatrixCompanion\LedMatrixCompanion\obj\Debug\LedMatrixCompanion.pdb
