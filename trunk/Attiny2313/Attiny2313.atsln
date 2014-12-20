@@ -10,6 +10,10 @@ Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "GuitarRodOfCommand", "Guita
 EndProject
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "LaserCutterDisplayController", "LaserCutterDisplayController\LaserCutterDisplayController.cproj", "{045AC15F-D158-4FB3-96CC-00B55AB6920E}"
 EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "TricolorUsbSignal", "TricolorUsbSignal\TricolorUsbSignal.cproj", "{E31B2F30-3658-475D-90FF-F9039B4CD920}"
+EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "UsbTest1", "UsbTest1\UsbTest1.cproj", "{08622302-988F-4152-B981-996F328FB4AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -36,6 +40,14 @@ Global
 		{045AC15F-D158-4FB3-96CC-00B55AB6920E}.Debug|AVR.Build.0 = Debug|AVR
 		{045AC15F-D158-4FB3-96CC-00B55AB6920E}.Release|AVR.ActiveCfg = Release|AVR
 		{045AC15F-D158-4FB3-96CC-00B55AB6920E}.Release|AVR.Build.0 = Release|AVR
+		{E31B2F30-3658-475D-90FF-F9039B4CD920}.Debug|AVR.ActiveCfg = Debug|AVR
+		{E31B2F30-3658-475D-90FF-F9039B4CD920}.Debug|AVR.Build.0 = Debug|AVR
+		{E31B2F30-3658-475D-90FF-F9039B4CD920}.Release|AVR.ActiveCfg = Release|AVR
+		{E31B2F30-3658-475D-90FF-F9039B4CD920}.Release|AVR.Build.0 = Release|AVR
+		{08622302-988F-4152-B981-996F328FB4AA}.Debug|AVR.ActiveCfg = Debug|AVR
+		{08622302-988F-4152-B981-996F328FB4AA}.Debug|AVR.Build.0 = Debug|AVR
+		{08622302-988F-4152-B981-996F328FB4AA}.Release|AVR.ActiveCfg = Release|AVR
+		{08622302-988F-4152-B981-996F328FB4AA}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
