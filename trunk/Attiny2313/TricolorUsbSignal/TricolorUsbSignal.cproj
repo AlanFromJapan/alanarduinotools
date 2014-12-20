@@ -81,9 +81,6 @@
     <Compile Include="oddebug.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="usbconfig-prototype.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="usbconfig.h">
       <SubType>compile</SubType>
     </Compile>
@@ -97,6 +94,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="usbportability.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="vusb-config.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
