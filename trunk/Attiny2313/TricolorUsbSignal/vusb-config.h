@@ -52,35 +52,38 @@ const PROGMEM char usbHidReportDescriptor[35] = {   /* USB report descriptor */
 
 
 /* The following function returns an index for the first key pressed. It
- * returns 0 if no key is pressed.
- */
-uint8_t    keyPressed(void)
-{
+* returns 0 if no key is pressed.
+*/
+uint8_t    keyPressed(void) {
 	//input is pulled up, just one button so really don't care where it's pushed.
 	//take the PINB input register, mask to keep the input pins and invert: should be 0x00 if unpressed
 	return ~(0xe0 | (PINB & 0x1f));
 }
 
 
-uint8_t	usbFunctionSetup(uint8_t data[8])
-{
+uint8_t	usbFunctionSetup(uint8_t data[8]){
 	usbRequest_t    *rq = (void *)data;
 
 	usbMsgPtr = reportBuffer;
 	if((rq->bmRequestType & USBRQ_TYPE_MASK) == USBRQ_TYPE_CLASS){    /* class request type */
-	if(rq->bRequest == USBRQ_HID_GET_REPORT){  /* wValue: ReportType (highbyte), ReportID (lowbyte) */
-	/* we only have one report type, so don't look at wValue */
-	buildReport(keyPressed());
-	return sizeof(reportBuffer);
-}else if(rq->bRequest == USBRQ_HID_GET_IDLE){
-	usbMsgPtr = &idleRate;
-	return 1;
-}else if(rq->bRequest == USBRQ_HID_SET_IDLE){
-	idleRate = rq->wValue.bytes[1];
-}
-    }else{
-        /* no vendor specific requests implemented */
-    }
+		if(rq->bRequest == USBRQ_HID_GET_REPORT){  /* wValue: ReportType (highbyte), ReportID (lowbyte) */
+			/* we only have one report type, so don't look at wValue */
+			buildReport(0);
+			return sizeof(reportBuffer);
+		}
+		else 
+		if(rq->bRequest == USBRQ_HID_GET_IDLE){
+			usbMsgPtr = &idleRate;
+			return 1;
+		}
+		else 
+		if(rq->bRequest == USBRQ_HID_SET_IDLE){
+			idleRate = rq->wValue.bytes[1];
+		}
+	}
+	else{
+		/* no vendor specific requests implemented */
+	}
 	return 0;
 }
 
