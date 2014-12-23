@@ -85,6 +85,7 @@ the newest features and options.
  * communicates power requirements in units of 2 mA.]
  */
 #define USB_CFG_IMPLEMENT_FN_WRITE      0
+//Alan: YES ! We need to set this to RECEIVE data from the HOST (so we know what LED to light up)
 /* Set this to 1 if you want usbFunctionWrite() to be called for control-out
  * transfers. Set it to 0 if you don't need it and want to save a couple of
  * bytes.
