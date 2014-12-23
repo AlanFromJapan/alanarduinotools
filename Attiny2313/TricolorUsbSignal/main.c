@@ -82,27 +82,10 @@ uint8_t mTextPos = 0;
 
 void buildReport2(char key)
 {
-	if (key == 0){
-		reportBuffer[0] = 0;
-		reportBuffer[1] = 0;
-	}
-	
-	uint16_t vWord = 0x0000;
-	for (uint8_t i= 0; i < 4; i++){
-		vWord = pgm_read_word(&(mMappingCharKeys[i]));
-		//vWord = mMappingCharKeys[i];
-		
-		//if the key is good, return the key
-		if ((vWord >> 8) == key){
-			reportBuffer[0] = 0;
-			reportBuffer[1] = (uint8_t)vWord;			
-			return;
-		}
-	}
 
 	//if you arrive here, char was not found
 	reportBuffer[0] = 0;
-	reportBuffer[1] = 0;
+	reportBuffer[1] = KEY_C;
 
 }
 

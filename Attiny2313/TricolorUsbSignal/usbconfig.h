@@ -86,7 +86,7 @@ the newest features and options.
  */
 #define USB_CFG_IMPLEMENT_FN_WRITE      1
 //[Receive USB: you need this!]
-//Alan: YES ! We need to set this to RECEIVE data from the HOST (so we know what LED to light up)
+//YES ! We need to set this to RECEIVE data from the HOST (so we know what LED to light up)
 /* Set this to 1 if you want usbFunctionWrite() to be called for control-out
  * transfers. Set it to 0 if you don't need it and want to save a couple of
  * bytes.
@@ -166,7 +166,9 @@ the newest features and options.
 /* See USB specification if you want to conform to an existing device class or
  * protocol.
  */
-#define USB_CFG_HID_REPORT_DESCRIPTOR_LENGTH    35  /* total length of report descriptor */
+#define USB_CFG_HID_REPORT_DESCRIPTOR_LENGTH    63  /* total length of report descriptor */
+//[Receive USB: you need this!]
+//I changed the size because I regenerated a valid keyboard HID taht covers output *and input* using the official USB.org tool (http://www.usb.org/developers/hidpage#HID%20Descriptor%20Tool)
 /* Define this to the length of the HID report descriptor, if you implement
  * an HID device. Otherwise don't define it or define it to 0.
  */
