@@ -79,22 +79,8 @@ const PROGMEM uint16_t mMappingCharKeys[] = {
 char mText[] = "aadbc";
 uint8_t mTextPos = 0;
 
-void buildReport(uchar key)
-{
-/* This (not so elegant) cast saves us 10 bytes of program memory */
-//    *(int *)reportBuffer = pgm_read_word(keyReport[key]);
 
-	if (key != 0){
-		reportBuffer[0] = 0;
-		reportBuffer[1] = KEY_B;
-	}
-	else {
-		reportBuffer[0] = 0;
-		reportBuffer[1] = 0;
-	}
-}
-
- static void buildReport2(char key)
+void buildReport2(char key)
 {
 	if (key == 0){
 		reportBuffer[0] = 0;
