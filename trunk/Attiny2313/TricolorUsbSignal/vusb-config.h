@@ -68,7 +68,7 @@ uint8_t	usbFunctionSetup(uint8_t data[8]){
 	if((rq->bmRequestType & USBRQ_TYPE_MASK) == USBRQ_TYPE_CLASS){    /* class request type */
 		if(rq->bRequest == USBRQ_HID_GET_REPORT){  /* wValue: ReportType (highbyte), ReportID (lowbyte) */
 			/* we only have one report type, so don't look at wValue */
-			buildReport(0);
+			buildReport2(0);
 			return sizeof(reportBuffer);
 		}
 		else 
