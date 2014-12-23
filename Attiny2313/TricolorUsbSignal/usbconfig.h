@@ -84,7 +84,8 @@ the newest features and options.
  * The value is in milliamperes. [It will be divided by two since USB
  * communicates power requirements in units of 2 mA.]
  */
-#define USB_CFG_IMPLEMENT_FN_WRITE      0
+#define USB_CFG_IMPLEMENT_FN_WRITE      1
+//[Receive USB: you need this!]
 //Alan: YES ! We need to set this to RECEIVE data from the HOST (so we know what LED to light up)
 /* Set this to 1 if you want usbFunctionWrite() to be called for control-out
  * transfers. Set it to 0 if you don't need it and want to save a couple of

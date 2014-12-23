@@ -80,11 +80,27 @@ uint8_t	usbFunctionSetup(uint8_t data[8]){
 		if(rq->bRequest == USBRQ_HID_SET_IDLE){
 			idleRate = rq->wValue.bytes[1];
 		}
+		
+		//[Receive USB: you need this!]
+		else if(rq->bRequest == USBRQ_HID_SET_REPORT){
+			if (rq->wLength.word == 1) { // We expect one byte reports 
+				return 0xFF; // Call usbFunctionWrite with data 
+			}
+		}
 	}
 	else{
 		/* no vendor specific requests implemented */
 	}
 	return 0;
+}
+
+//[Receive USB: you need this!]
+//This method is in charge of handling the SET REPORT coming from the host
+uint8_t usbFunctionWrite(uint8_t *data, uint8_t len) {
+	
+	PORTB ^= 0xe0;
+	
+	return 0x01;	
 }
 
 #endif /* VUSBCONFIG_H_ */
