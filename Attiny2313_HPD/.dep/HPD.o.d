@@ -1,1 +1,0 @@
-HPD.o: HPD.c
