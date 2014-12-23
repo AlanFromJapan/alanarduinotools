@@ -1,11 +1,8 @@
 /* Name: main.c
- * Project: HID-Test
- * Author: Christian Starkjohann
- * Creation Date: 2006-02-02
- * Tabsize: 4
- * Copyright: (c) 2006 by OBJECTIVE DEVELOPMENT Software GmbH
- * License: GNU GPL v2 (see License.txt) or proprietary (CommercialLicense.txt)
- * This Revision: $Id$
+ * Project: TricolorUsbSignal http://kalshagar.wikispaces.com/Tricolor+USB+alert
+ * Author: AlanFromJapan (Dec 2014)
+ * Source Project: HID-Test by Christian Starkjohann
+ * License: no license, enjoy.
  */
 
 #define F_CPU 12000000
@@ -44,7 +41,7 @@ PD6	Key 16
 
 static void hardwareInit(void)
 {
-uchar	i, j;
+uint8_t	i, j;
 
     PORTB = 0x1f;   /* activate all pull-ups EXCEPT on leds */
     DDRB = 0xe0;       /* all pins input EXCEPT on leds that are outputs */
@@ -63,82 +60,33 @@ uchar	i, j;
 
 /* ------------------------------------------------------------------------- */
 
-#define NUM_KEYS    17
 
-
-
-
-const PROGMEM uint16_t mMappingCharKeys[] = {
-	('a' << 8) | KEY_A,
-	('b' << 8) | KEY_B,
-	('c' << 8) | KEY_C,
-	('d' << 8) | KEY_D,
-	
-	};
-	
-char mText[] = "aadbc";
-uint8_t mTextPos = 0;
-
-
-void buildReport2(char key)
+//Methods that returns the key pressed to the host
+inline void buildReportEmpty()
 {
-
-	//if you arrive here, char was not found
+	//always answers "no character pressed"
 	reportBuffer[0] = 0;
-	reportBuffer[1] = KEY_C;
+	reportBuffer[1] = 0;
 
 }
 
 /* ------------------------------------------------------------------------- */
 
-int	main(void)
-{
-uchar   key, lastKey = 0, keyDidChange = 0;
-uchar   idleCounter = 0;
-
-//uint8_t vKars[] = {KEY_W, KEY_X, KEY_Y, KEY_Z}; uint8_t vKarPos = 0;
-
-
-
+void main(void) {
 	wdt_enable(WDTO_2S);
-    hardwareInit();
-//	odDebugInit();
+	
+	hardwareInit();
 	usbInit();
 	sei();
-   // DBG1(0x00, 0, 0);
-	for(;;){	/* main event loop */
-		wdt_reset();
-		usbPoll();
-        key = keyPressed();
-        if(lastKey != key){
-            lastKey = key;
-            keyDidChange = 1;
-        }
-        if(TIFR & (1<<TOV0)){   /* 22 ms timer */
-            TIFR = 1<<TOV0;
-            if(idleRate != 0){
-                if(idleCounter > 4){
-                    idleCounter -= 5;   /* 22 ms in units of 4 ms */
-                }else{
-                    idleCounter = idleRate;
-                    keyDidChange = 1;
-                }
-            }
-        }
-        if(keyDidChange && usbInterruptIsReady()){
-            keyDidChange = 0;
-            /* use last key and not current key status in order to avoid lost
-               changes in key status. */
-            //buildReport(lastKey);
-			
-			buildReport2((lastKey == 0 ? lastKey : mText[mTextPos++])); if (mTextPos >= sizeof(mText)) mTextPos = 0;
-			
-			//reportBuffer[1] = vKars[vKarPos++]; if (vKarPos >= sizeof(vKars)) vKarPos = 0;
-			
-            usbSetInterrupt(reportBuffer, sizeof(reportBuffer));
-        }
-	}
-	return 0;
-}
 
-/* ------------------------------------------------------------------------- */
+	while (1) {	// main event loop
+		//dirty popular trick to avoid being shot by the watchdog
+		wdt_reset();
+		
+		//process USB events
+		usbPoll();
+		
+		//Never send anything: reception (HOST -> current device) is done in the usbFunctionSetup() and usbFunctionWrite()
+	}
+	
+}
