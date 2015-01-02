@@ -8,13 +8,27 @@ using System.Text;
 using System.Windows.Forms;
 using ThingM.Blink1;
 using System.Threading;
+using System.IO.Pipes;
+using System.IO;
 
 namespace TricolorUsbSignalManager {
     public partial class Form1 : Form, IDisposable {
 
         #region attributes
+        //The tricolor USB device
         protected Blink1 mTricolorUsbSignal = new Blink1();
+
+        //Blinking status memory
+        private bool mRedBlinkStatus = false;
+
+        //Communication pipe
+        private NamedPipeServerStream mPipeIn = null;
+        //Listener thread
+        private Thread mThreadPipeListener = null;
+        private bool mThreadMustRun = true;
         #endregion
+
+
 
         public Form1() {
             InitializeComponent();
@@ -22,21 +36,63 @@ namespace TricolorUsbSignalManager {
 
 
         private void Form1_Load(object sender, EventArgs e) {
-            Console.WriteLine("Pass 1: Opening the first Blink(1) found.");
-            mTricolorUsbSignal.Open(Constants.VENDOR_ID, Constants.PRODUCT_ID);
+            mThreadPipeListener = new Thread(new ThreadStart(ThreadPipeServer));
+            mThreadPipeListener.Start();
 
+            try {
+                Console.WriteLine("Pass 1: Opening the first Blink(1) found.");
+                mTricolorUsbSignal.Open(Constants.VENDOR_ID, Constants.PRODUCT_ID);
+            }
+            catch (Exception ex) {
+                //MessageBox.Show("Error on connection: " + ex.Message);
+            }
             //int versionNumber = blink1.GetVersion();
             //Console.WriteLine("Pass 1: Blink(1) device is at version: {0}.", versionNumber.ToString());
 
 
+        }
 
+        //Body of the listener thread
+        //http://jonathonreinhart.blogspot.jp/2012/12/named-pipes-between-c-and-python.html
+        protected void ThreadPipeServer() {
+            mPipeIn = new NamedPipeServerStream(Constants.NAMED_PIPE_INPUT);
+            LogLine( "Named pipe opened " + Constants.NAMED_PIPE_INPUT);
+
+            LogLine("Waiting for connection...");
+            mPipeIn.WaitForConnection();
+            LogLine("Got a customer, start serving");
+
+            using (StreamReader vSR = new StreamReader(mPipeIn)) {
+                while (mThreadMustRun) {
+                    try {
+                        string vLine = vSR.ReadLine();
+                        if (vLine == null) {
+                            Thread.Sleep(100);
+                            continue;
+                        }
+
+                        LogLine(vLine);
+                    }
+                    catch (EndOfStreamException) { 
+                        //user deconnection
+                        MessageBox.Show("Lost user");
+                    }
+                }
+            }
         }
 
 
-
         void IDisposable.Dispose() {
+            mThreadMustRun = false;
+
+            mPipeIn.Close();
+            mPipeIn.Dispose();
+
             Console.WriteLine("Pass 1: Closing Blink(1) connection.");
-            mTricolorUsbSignal.Close();  
+            try {
+                mTricolorUsbSignal.Close();
+            }
+            catch { /* don't care */ }
         }
 
         private void btnCircle_Click(object sender, EventArgs e) {
@@ -71,7 +127,6 @@ namespace TricolorUsbSignalManager {
             SendChar(0x80);
         }
 
-        private bool mRedBlinkStatus = false;
         private void timBlink_Tick(object sender, EventArgs e) {
             if (mRedBlinkStatus) {
                 //off
@@ -83,6 +138,20 @@ namespace TricolorUsbSignalManager {
             }
 
             mRedBlinkStatus = !mRedBlinkStatus;
+        }
+
+
+        private void LogLine(string pLine) {
+
+            ThreadSafe(() => txbPipeOutput.Text += string.Format("{0:HH:mm:ss} ", DateTime.Now) + pLine + "\r\n");
+
+        }
+
+        private void ThreadSafe(MethodInvoker method) {
+            if (InvokeRequired)
+                Invoke(method);
+            else
+                method();
         }
     }
 }

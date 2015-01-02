@@ -30,6 +30,7 @@
             this.btnCircle = new System.Windows.Forms.Button();
             this.ckbRedBlink = new System.Windows.Forms.CheckBox();
             this.timBlink = new System.Windows.Forms.Timer(this.components);
+            this.txbPipeOutput = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnRed
@@ -92,11 +93,24 @@
             this.timBlink.Interval = 1000;
             this.timBlink.Tick += new System.EventHandler(this.timBlink_Tick);
             // 
+            // txbPipeOutput
+            // 
+            this.txbPipeOutput.Dock = System.Windows.Forms.DockStyle.Right;
+            this.txbPipeOutput.Font = new System.Drawing.Font("Courier New", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.txbPipeOutput.Location = new System.Drawing.Point(184, 0);
+            this.txbPipeOutput.Multiline = true;
+            this.txbPipeOutput.Name = "txbPipeOutput";
+            this.txbPipeOutput.ReadOnly = true;
+            this.txbPipeOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txbPipeOutput.Size = new System.Drawing.Size(337, 338);
+            this.txbPipeOutput.TabIndex = 5;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(239, 338);
+            this.ClientSize = new System.Drawing.Size(521, 338);
+            this.Controls.Add(this.txbPipeOutput);
             this.Controls.Add(this.ckbRedBlink);
             this.Controls.Add(this.btnCircle);
             this.Controls.Add(this.btnNoProblem);
@@ -120,6 +134,7 @@
         private System.Windows.Forms.Button btnCircle;
         private System.Windows.Forms.CheckBox ckbRedBlink;
         private System.Windows.Forms.Timer timBlink;
+        private System.Windows.Forms.TextBox txbPipeOutput;
 
     }
 }
