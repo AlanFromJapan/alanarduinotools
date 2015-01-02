@@ -14,6 +14,8 @@ Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "TricolorUsbSignal", "Tricol
 EndProject
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "UsbTest1", "UsbTest1\UsbTest1.cproj", "{08622302-988F-4152-B981-996F328FB4AA}"
 EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "ThingM.Blink", "ThingM.Blink\ThingM.Blink.cproj", "{8DEE99C5-49B0-412D-BC02-E3FE0941F89B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -48,6 +50,10 @@ Global
 		{08622302-988F-4152-B981-996F328FB4AA}.Debug|AVR.Build.0 = Debug|AVR
 		{08622302-988F-4152-B981-996F328FB4AA}.Release|AVR.ActiveCfg = Release|AVR
 		{08622302-988F-4152-B981-996F328FB4AA}.Release|AVR.Build.0 = Release|AVR
+		{8DEE99C5-49B0-412D-BC02-E3FE0941F89B}.Debug|AVR.ActiveCfg = Debug|AVR
+		{8DEE99C5-49B0-412D-BC02-E3FE0941F89B}.Debug|AVR.Build.0 = Debug|AVR
+		{8DEE99C5-49B0-412D-BC02-E3FE0941F89B}.Release|AVR.ActiveCfg = Release|AVR
+		{8DEE99C5-49B0-412D-BC02-E3FE0941F89B}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
