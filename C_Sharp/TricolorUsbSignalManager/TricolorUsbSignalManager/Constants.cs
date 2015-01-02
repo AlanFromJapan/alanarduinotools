@@ -11,5 +11,7 @@ namespace TricolorUsbSignalManager {
 
         //Don't ask me why, you have to send that 0x01 as the first byte of the packet, otherwise sending fails... too lazy to check why now.
         public const byte PACKET_ID = 0x01;
+
+        public const string NAMED_PIPE_INPUT = "TricolorUsbSignalManagerIn";
     }
 }
