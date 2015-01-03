@@ -338,15 +338,14 @@ UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-mas
 UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Resistors.lbr"
 UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-RF.lbr"
 UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/SparkFun-Eagle-Libraries-master/SparkFun-Sensors.lbr"
-UsedLibrary="D:/Subversion/eagle/LBR/kalshagar.lbr"
 
 [Win_1]
 Type="Schematic Editor"
-Loc="422 0 1365 749"
+Loc="-8 -8 591 391"
 State=1
 Number=1
-File="D:/Subversion/eagle/Rapide2313/Rapide2313.sch"
-View="-24.4038 -30.6839 250.913 101.431"
+File="RapideUSB.sch"
+View="-2.02842 -26.4066 247.942 113.305"
 WireWidths=" 0 0.3048 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0.4064 0.1524"
 PadDiameters=" 0.254 0.3048 0.4064 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0"
 PadDrills=" 0.5 0.6 0.7 0.9 1 1.1 1.2 1.3 1.4 1.5 1.6 2 2.2 2.8 3.2 0.8"
@@ -378,28 +377,28 @@ ArcDirection=0
 AddLevel=2
 PadsSameType=0
 Layer=91
-Views=" 1: -24.4038 -30.6839 250.913 101.431"
+Views=" 1: -2.02842 -26.4066 247.942 113.305"
 Sheet=1
 
 [Win_2]
 Type="Board Editor"
-Loc="375 165 974 564"
+Loc="652 321 1251 720"
 State=1
 Number=2
-File="D:/Subversion/eagle/Rapide2313/Rapide2313.brd"
-View="-2.45364 -2.08974 52.4916 51.5435"
-WireWidths=" 0 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0.254 0.4064 0.1524"
+File="RapideUSB.brd"
+View="21.8045 2.27493 46.922 26.1255"
+WireWidths=" 0 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0.4064 0.6096 0.254 0.1524"
 PadDiameters=" 0.254 0.3048 0.4064 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0"
 PadDrills=" 0.5 0.6 0.7 0.9 1 1.1 1.2 1.3 1.4 1.5 1.6 2 2.2 2.8 3.2 0.8"
 ViaDiameters=" 0.254 0.3048 0.4064 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0"
 ViaDrills=" 0.7 0.8 0.9 1 1.1 1.2 1.3 1.4 1.5 1.6 2 2.2 2.8 3.2 0.6 0.5"
-HoleDrills=" 0.5 0.7 0.8 0.9 1 1.1 1.2 1.3 1.4 1.5 1.6 2.2 2.8 3.2 0.6 2"
-TextSizes=" 0.254 0.3048 0.4064 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.9304 2.1844 2.54 3.81 5.08 6.4516 1.778"
+HoleDrills=" 0.5 0.7 0.8 0.9 1 1.1 1.2 1.3 1.4 1.5 1.6 2 2.2 2.8 3.2 0.6"
+TextSizes=" 0.254 0.3048 0.4064 0.8128 1.016 1.4224 1.9304 2.1844 2.54 3.81 5.08 6.4516 1.778 1.6764 0.6096 1.27"
 PolygonSpacings=" 0.254 0.3048 0.4064 0.6096 0.8128 1.016 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 5.08 6.4516 1.27"
 PolygonIsolates=" 0.254 0.3048 0.4064 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0"
 MiterRadiuss=" 0.254 0.3175 0.635 1.27 2.54 1 2 2.5 5 7.5 10 0"
 SmdSizes=" 0.3048 0.1524 0.4064 0.2032 0.6096 0.3048 0.8128 0.4064 1.016 0.508 1.27 0.6604 1.4224 0.7112 1.6764 0.8128 1.778 0.9144 1.9304 0.9652 2.1844 1.0668 2.54 1.27 3.81 1.9304 5.08 2.54 6.4516 3.2512 1.27 0.635"
-WireBend=0
+WireBend=2
 WireBendSet=0
 WireCap=1
 MiterStyle=0
@@ -418,16 +417,16 @@ SwapLevel=0
 ArcDirection=0
 AddLevel=2
 PadsSameType=0
-Layer=16
+Layer=150
 
 [Win_3]
 Type="Control Panel"
-Loc="128 29 1288 600"
+Loc="220 208 912 887"
 State=2
 Number=0
 
 [Desktop]
-Screen="1366 768"
+Screen="1920 1080"
 Window="Win_1"
 Window="Win_2"
 Window="Win_3"
