@@ -90,7 +90,7 @@
             // 
             // timBlink
             // 
-            this.timBlink.Interval = 1000;
+            this.timBlink.Interval = 666;
             this.timBlink.Tick += new System.EventHandler(this.timBlink_Tick);
             // 
             // txbPipeOutput

@@ -13,5 +13,10 @@ namespace TricolorUsbSignalManager {
         public const byte PACKET_ID = 0x01;
 
         public const string NAMED_PIPE_INPUT = "TricolorUsbSignalManagerIn";
+
+        public const byte LED_RED = 0x10;
+        public const byte LED_ORANGE = 0x08;
+        public const byte LED_GREEN = 0x02;
+
     }
 }

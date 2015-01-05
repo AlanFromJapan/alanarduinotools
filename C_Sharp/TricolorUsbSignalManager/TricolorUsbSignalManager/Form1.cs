@@ -37,7 +37,7 @@ namespace TricolorUsbSignalManager {
 
         private void Form1_Load(object sender, EventArgs e) {
             mThreadPipeListener = new Thread(new ThreadStart(ThreadPipeServer));
-            mThreadPipeListener.Start();
+            //mThreadPipeListener.Start();
 
             try {
                 Console.WriteLine("Pass 1: Opening the first Blink(1) found.");
@@ -105,7 +105,7 @@ namespace TricolorUsbSignalManager {
 
         private void btnRed_Click(object sender, EventArgs e) {
             ckbRedBlink.Checked = true;
-            SendChar(0x80);
+            SendChar(Constants.LED_RED);
         }
 
         private void SendChar(byte pValue) {
@@ -114,17 +114,17 @@ namespace TricolorUsbSignalManager {
 
         private void btnYellow_Click(object sender, EventArgs e) {
             ckbRedBlink.Checked = false;
-            SendChar(0x40);
+            SendChar(Constants.LED_ORANGE);
         }
 
         private void btnNoProblem_Click(object sender, EventArgs e) {
             ckbRedBlink.Checked = false;
-            SendChar(0x20);
+            SendChar(Constants.LED_GREEN);
         }
 
         private void ckbRedBlink_CheckedChanged(object sender, EventArgs e) {
             timBlink.Enabled = ckbRedBlink.Checked;
-            SendChar(0x80);
+            SendChar(Constants.LED_RED);
         }
 
         private void timBlink_Tick(object sender, EventArgs e) {
@@ -134,7 +134,7 @@ namespace TricolorUsbSignalManager {
             }
             else { 
                 //on
-                SendChar(0x80);
+                SendChar(Constants.LED_RED);
             }
 
             mRedBlinkStatus = !mRedBlinkStatus;
