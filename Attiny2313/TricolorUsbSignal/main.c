@@ -55,8 +55,8 @@ static void hardwareInit(void)
 {
 	uint8_t	i, j;
 
-	PORTB = 0x1f;   /* activate all pull-ups EXCEPT on leds */
-	DDRB = 0xe0;       /* all pins input EXCEPT on leds that are outputs */
+	PORTB = 0x00;   //no pullups
+	DDRB = 0xff;    //all outputs
 
 	PORTD = 0xfa;   /* 1111 1010 bin: activate pull-ups except on USB lines */
 	DDRD = 0x07;    /* 0000 0111 bin: all pins input except USB (-> USB reset) */
