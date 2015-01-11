@@ -18,6 +18,9 @@ namespace TricolorUsbSignalManager {
         //The tricolor USB device
         protected Blink1 mTricolorUsbSignal = new Blink1();
 
+        //Current status 
+        private NagiosChecker.NagiosEventState mCurrentStatus = NagiosChecker.NagiosEventState.UNKNOWN;
+
         //Blinking status memory
         private bool mRedBlinkStatus = false;
 
@@ -28,7 +31,18 @@ namespace TricolorUsbSignalManager {
         private bool mThreadMustRun = true;
         #endregion
 
+        #region events
 
+
+        private void DoLogLine(string pLine) {
+            ThreadSafe(() => { 
+                if ((float)txbPipeOutput.Text.Length >= 0.9 * (float)txbPipeOutput.MaxLength) {
+                    txbPipeOutput.Clear();
+                }
+                txbPipeOutput.Text += string.Format("{0:HH:mm:ss} ", DateTime.Now) + pLine + "\r\n";
+            });
+        }
+        #endregion
 
         public Form1() {
             InitializeComponent();
@@ -49,18 +63,18 @@ namespace TricolorUsbSignalManager {
             //int versionNumber = blink1.GetVersion();
             //Console.WriteLine("Pass 1: Blink(1) device is at version: {0}.", versionNumber.ToString());
 
-
+            CheckStatusAndUpdateLeds();
         }
 
         //Body of the listener thread
         //http://jonathonreinhart.blogspot.jp/2012/12/named-pipes-between-c-and-python.html
         protected void ThreadPipeServer() {
             mPipeIn = new NamedPipeServerStream(Constants.NAMED_PIPE_INPUT);
-            LogLine( "Named pipe opened " + Constants.NAMED_PIPE_INPUT);
+            DoLogLine( "Named pipe opened " + Constants.NAMED_PIPE_INPUT);
 
-            LogLine("Waiting for connection...");
+            DoLogLine("Waiting for connection...");
             mPipeIn.WaitForConnection();
-            LogLine("Got a customer, start serving");
+            DoLogLine("Got a customer, start serving");
 
             using (StreamReader vSR = new StreamReader(mPipeIn)) {
                 while (mThreadMustRun) {
@@ -71,7 +85,7 @@ namespace TricolorUsbSignalManager {
                             continue;
                         }
 
-                        LogLine(vLine);
+                        DoLogLine(vLine);
                     }
                     catch (EndOfStreamException) { 
                         //user deconnection
@@ -96,11 +110,26 @@ namespace TricolorUsbSignalManager {
         }
 
         private void btnCircle_Click(object sender, EventArgs e) {
-            for (int i = 0; i < 256; i++) {
-                Console.WriteLine(string.Format("Pass 1: Send arbitrary data {0:X2} and answer is ", i) + mTricolorUsbSignal.SendRawBuffer(new byte[] { Constants.PACKET_ID, (byte)i }));
-                Thread.Sleep(100);
+            //for (int i = 0; i < 256; i++) {
+            //    Console.WriteLine(string.Format("Pass 1: Send arbitrary data {0:X2} and answer is ", i) + mTricolorUsbSignal.SendRawBuffer(new byte[] { Constants.PACKET_ID, (byte)i }));
+            //    Thread.Sleep(100);
+            //}
+
+            int vDelay = 500;
+            int vDeltaPcnt = 15;
+
+            while (vDelay > 5) {
+                SendChar(Constants.LED_GREEN);
+                Thread.Sleep(vDelay);
+                SendChar(Constants.LED_ORANGE);
+                Thread.Sleep(vDelay);
+                SendChar(Constants.LED_RED);
+                Thread.Sleep(vDelay);
+
+                vDelay = (int)((double)vDelay * (1.0 - (double)vDeltaPcnt / 100.0));
             }
 
+            SendChar(Constants.LED_ALL_OFF);
         }
 
         private void btnRed_Click(object sender, EventArgs e) {
@@ -130,7 +159,7 @@ namespace TricolorUsbSignalManager {
         private void timBlink_Tick(object sender, EventArgs e) {
             if (mRedBlinkStatus) {
                 //off
-                SendChar(0x00);
+                SendChar(Constants.LED_ALL_OFF);
             }
             else { 
                 //on
@@ -141,17 +170,73 @@ namespace TricolorUsbSignalManager {
         }
 
 
-        private void LogLine(string pLine) {
 
-            ThreadSafe(() => txbPipeOutput.Text += string.Format("{0:HH:mm:ss} ", DateTime.Now) + pLine + "\r\n");
-
-        }
 
         private void ThreadSafe(MethodInvoker method) {
             if (InvokeRequired)
                 Invoke(method);
             else
                 method();
+        }
+
+        private void timChecker_Tick(object sender, EventArgs e) {
+            CheckStatusAndUpdateLeds();
+        }
+
+        private void BlinkStatus(byte pStatus, int pDurationMs, int pBlinkCount) { 
+            //just to avoid stucking the main thread, do this by a worker thread
+            ThreadPool.QueueUserWorkItem(
+                delegate(object o) {
+                    SendChar(pStatus);
+                    for (int i = 0; i < pBlinkCount; i++) {
+                        Thread.Sleep(pDurationMs);
+                        SendChar(Constants.LED_ALL_OFF);
+                        Thread.Sleep(pDurationMs);
+                        SendChar(pStatus);
+                    }
+                }
+             );
+        }
+
+        private void CheckStatusAndUpdateLeds() {
+            try {
+                NagiosChecker vChecker = new NagiosChecker(this.DoLogLine);
+                NagiosChecker.NagiosEventState vStatus = vChecker.CheckStatus();
+
+                if (mCurrentStatus != vStatus) {
+                    mCurrentStatus = vStatus;
+
+                    switch (vStatus) {
+                        case NagiosChecker.NagiosEventState.OK:
+                            ckbRedBlink.Checked = false;
+                            BlinkStatus(Constants.LED_GREEN, 100, 5);
+                            break;
+                        case NagiosChecker.NagiosEventState.WARNING:
+                            ckbRedBlink.Checked = false;
+                            BlinkStatus(Constants.LED_ORANGE, 100, 10);
+                            break;
+                        case NagiosChecker.NagiosEventState.CRITICAL:
+                            ckbRedBlink.Checked = true;
+                            BlinkStatus(Constants.LED_RED, 100, 20);
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex) {
+                //mute for now
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e) {
+            BlinkStatus(Constants.LED_GREEN, 100, 5);
+        }
+
+        private void button2_Click(object sender, EventArgs e) {
+            BlinkStatus(Constants.LED_ORANGE, 100, 10);
+        }
+
+        private void button3_Click(object sender, EventArgs e) {
+            BlinkStatus(Constants.LED_RED, 100, 20);
         }
     }
 }
