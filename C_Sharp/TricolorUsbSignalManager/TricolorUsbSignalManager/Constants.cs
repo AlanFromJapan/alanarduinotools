@@ -17,6 +17,7 @@ namespace TricolorUsbSignalManager {
         public const byte LED_RED = 0x10;
         public const byte LED_ORANGE = 0x08;
         public const byte LED_GREEN = 0x02;
+        public const byte LED_ALL_OFF = 0x00;
 
     }
 }
