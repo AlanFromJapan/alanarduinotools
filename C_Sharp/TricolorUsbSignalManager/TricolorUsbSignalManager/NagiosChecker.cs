@@ -11,11 +11,9 @@ namespace TricolorUsbSignalManager {
     class NagiosChecker {
 
         public delegate void LogLineDelegate(string pMessage);
-        private  LogLineDelegate mLogLineCallback;
+        private LogLineDelegate mLogLineCallback;
+        private DateTime mIgnoreBefore = DateTime.MinValue;
 
-        public const string REPORT_URL = "http://dlabaswssrdbs01/nagios/cgi-bin/summary.cgi?report=1&displaytype=1&timeperiod=last7days&smon=1&sday=1&syear=2015&shour=0&smin=0&ssec=0&emon=1&eday=8&eyear=2015&ehour=24&emin=0&esec=0&hostgroup=all&servicegroup=all&host=all&alerttypes=3&statetypes=2&hoststates=7&servicestates=120&limit=50";
-        private const string NAGIOS_LOGIN = "guest";
-        private const string NAGIOS_PWD = "bienvenue";
 
         private static readonly Regex REGEX_EVENT_LINE = new Regex(
             //get the tr and the date
@@ -33,6 +31,10 @@ namespace TricolorUsbSignalManager {
         private const string TABLE_START = @"<TABLE BORDER=0 CLASS='data'>";
         private const string TABLE_END = @"</TABLE>";
 
+        private string mNagiosURL = null;
+        private string mNagiosLogin = null;
+        private string mNagiosPassword = null;
+
         public enum NagiosEventState { OK, WARNING, CRITICAL, UNKNOWN}
 
         class NagEvent {
@@ -43,7 +45,7 @@ namespace TricolorUsbSignalManager {
             internal NagiosEventState mState;
             internal bool mFixed = false;
 
-            internal static NagEvent Parse(string pLine) {
+            internal static NagEvent Parse(string pLine, DateTime pIgnoreBefore) {
                 if (!REGEX_EVENT_LINE.IsMatch(pLine))
                     return null;
 
@@ -55,7 +57,12 @@ namespace TricolorUsbSignalManager {
                 vEvent.mService = vM.Groups["service"].Value;
                 vEvent.mState = (NagiosEventState)Enum.Parse(typeof(NagiosEventState), vM.Groups["state"].Value, true);
                 vEvent.mFixed = vEvent.mState == NagiosEventState.OK || vEvent.mState == NagiosEventState.UNKNOWN;
-                
+
+                //consider events BEFORE the limit to be all fixed anyway
+                if (vEvent.mTime < pIgnoreBefore) {
+                    vEvent.mFixed = true;
+                }
+
                 return vEvent;
             }
 
@@ -64,8 +71,18 @@ namespace TricolorUsbSignalManager {
             }
         }
 
-        public NagiosChecker(LogLineDelegate pLogger) {
+        public NagiosChecker(LogLineDelegate pLogger, string pURL, string pLogin, string pPassword)
+            : this(pLogger, DateTime.MinValue, pURL, pLogin, pPassword) {
+            
+        }
+
+        public NagiosChecker(LogLineDelegate pLogger, DateTime pIgnoreBefore, string pURL, string pLogin, string pPassword) {
             this.mLogLineCallback = pLogger;
+            this.mIgnoreBefore = pIgnoreBefore;
+
+            this.mNagiosURL = pURL;
+            this.mNagiosLogin = pLogin;
+            this.mNagiosPassword = pPassword; 
         }
 
         /// <summary>
@@ -74,8 +91,8 @@ namespace TricolorUsbSignalManager {
         /// <returns></returns>
         public NagiosEventState CheckStatus() {
             try {
-                HttpWebRequest vRequest = (HttpWebRequest)WebRequest.Create(REPORT_URL);
-                vRequest.Credentials = new NetworkCredential(NAGIOS_LOGIN, NAGIOS_PWD);
+                HttpWebRequest vRequest = (HttpWebRequest)WebRequest.Create(this.mNagiosURL);
+                vRequest.Credentials = new NetworkCredential(this.mNagiosLogin, this.mNagiosPassword);
                 vRequest.PreAuthenticate = true;
 
                 using (WebResponse vResponse = vRequest.GetResponse()) {
@@ -102,7 +119,7 @@ namespace TricolorUsbSignalManager {
                                 throw new Exception("Unexpected EOF from Nagios");
                             }
 
-                            NagEvent vEvt = NagEvent.Parse(vLine);
+                            NagEvent vEvt = NagEvent.Parse(vLine, this.mIgnoreBefore);
                             if (vEvt != null) {
                                 vEvt.UID = vEventUIDCount--;
                                 vEventList.Add(vEvt.UID, vEvt);

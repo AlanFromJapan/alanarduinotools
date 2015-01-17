@@ -10,13 +10,18 @@ using ThingM.Blink1;
 using System.Threading;
 using System.IO.Pipes;
 using System.IO;
+using TricolorUsbSignalManager.Properties;
+using System.Configuration;
 
 namespace TricolorUsbSignalManager {
     public partial class Form1 : Form, IDisposable {
+        #region Constants
+        #endregion
+
 
         #region attributes
         //The tricolor USB device
-        protected Blink1 mTricolorUsbSignal = new Blink1();
+        protected Blink1 mTricolorUsbSignal = null;
 
         //Current status 
         private NagiosChecker.NagiosEventState mCurrentStatus = NagiosChecker.NagiosEventState.UNKNOWN;
@@ -29,11 +34,58 @@ namespace TricolorUsbSignalManager {
         //Listener thread
         private Thread mThreadPipeListener = null;
         private bool mThreadMustRun = true;
+
+        //to detect disconnection and avoid drowning user with messages
+        private bool mLastSendCharWasError = false;
+        private readonly object mSync = new object();
+
+        //the icon in the taskbar
+        private NotifyIcon mSystrayIcon = null;
         #endregion
 
-        #region events
+        #region Properties
+
+        /// <summary>
+        /// Gets the device and init if needed (threadsafe)
+        /// </summary>
+        protected Blink1 TricolorUsbSignal {
+            get {
+                lock (mSync) {
+                    if (mTricolorUsbSignal == null) {
+                        mTricolorUsbSignal = new Blink1();
+
+                        try {
+                            mTricolorUsbSignal.Open(Constants.VENDOR_ID, Constants.PRODUCT_ID);
+
+                            if (mLastSendCharWasError) {
+                                DoLogLine("SUCCESS connecting to Blink");
+                                this.mSystrayIcon.ShowBalloonTip(2000, "Tricolor USB Signal", "Connected to USB signal.", ToolTipIcon.Info);
+                            }
+                            mLastSendCharWasError = false;
+                        }
+                        catch (Exception ex) {
+                            if (!mLastSendCharWasError) {
+                                DoLogLine("ERROR while connecting to Blink!");
+                                this.mSystrayIcon.ShowBalloonTip(2000, "Tricolor USB Signal", "Connection lost to USB signal!", ToolTipIcon.Error);
+                            }
+                            mLastSendCharWasError = true;
+                            
+                            Console.WriteLine("ERROR TricolorUsbSignal.get(): " + ex.Message);
+                            mTricolorUsbSignal = null;
+                        }
+                    }
+                }
+                return mTricolorUsbSignal;
+            }
+        }
+
+        #endregion
 
 
+        /// <summary>
+        /// Threadsafe logging to the text zone
+        /// </summary>
+        /// <param name="pLine"></param>
         private void DoLogLine(string pLine) {
             ThreadSafe(() => { 
                 if ((float)txbPipeOutput.Text.Length >= 0.9 * (float)txbPipeOutput.MaxLength) {
@@ -42,26 +94,47 @@ namespace TricolorUsbSignalManager {
                 txbPipeOutput.Text += string.Format("{0:HH:mm:ss} ", DateTime.Now) + pLine + "\r\n";
             });
         }
-        #endregion
+        
 
         public Form1() {
             InitializeComponent();
+
+            mSystrayIcon = new NotifyIcon(this.components);
+            mSystrayIcon.Icon = new Icon(this.GetType(), "Fatcow-Farm-Fresh-Traffic-lights.ico");
+            mSystrayIcon.DoubleClick += mSystrayIcon_DoubleClick;
+            mSystrayIcon.Visible = true;
+            mSystrayIcon.Text = "Tricolor USB Signal (double click to show)";
+            this.Resize += Form_Resize;
         }
+
+        private void Form_Resize(object sender, EventArgs e) {
+            if (this.WindowState == FormWindowState.Minimized) {
+                this.ShowInTaskbar = false;
+            }
+        }
+
+        void mSystrayIcon_DoubleClick(object sender, EventArgs e) {
+            if (this.WindowState == FormWindowState.Minimized) {
+                this.WindowState = FormWindowState.Normal;
+                this.ShowInTaskbar = true;
+            }
+        }
+
 
 
         private void Form1_Load(object sender, EventArgs e) {
             mThreadPipeListener = new Thread(new ThreadStart(ThreadPipeServer));
             //mThreadPipeListener.Start();
 
-            try {
-                Console.WriteLine("Pass 1: Opening the first Blink(1) found.");
-                mTricolorUsbSignal.Open(Constants.VENDOR_ID, Constants.PRODUCT_ID);
-            }
-            catch (Exception ex) {
-                //MessageBox.Show("Error on connection: " + ex.Message);
-            }
+
             //int versionNumber = blink1.GetVersion();
             //Console.WriteLine("Pass 1: Blink(1) device is at version: {0}.", versionNumber.ToString());
+
+            if (Settings.Default.IGNORE_DATE == default(DateTime)) {
+                Settings.Default.IGNORE_DATE = DateTime.ParseExact("2001/01/01", "yyyy/MM/dd", null);
+                Settings.Default.Save();
+            }
+            dtpIgnoreBefore.Value = Settings.Default.IGNORE_DATE;
 
             CheckStatusAndUpdateLeds();
         }
@@ -104,9 +177,13 @@ namespace TricolorUsbSignalManager {
 
             Console.WriteLine("Pass 1: Closing Blink(1) connection.");
             try {
-                mTricolorUsbSignal.Close();
+                TricolorUsbSignal.Close();
             }
             catch { /* don't care */ }
+
+            this.mSystrayIcon.Visible = false;
+            this.mSystrayIcon.Dispose();
+            this.mSystrayIcon = null;
         }
 
         private void btnCircle_Click(object sender, EventArgs e) {
@@ -119,51 +196,49 @@ namespace TricolorUsbSignalManager {
             int vDeltaPcnt = 15;
 
             while (vDelay > 5) {
-                SendChar(Constants.LED_GREEN);
+                SetStatus(Constants.LED_GREEN);
                 Thread.Sleep(vDelay);
-                SendChar(Constants.LED_ORANGE);
+                SetStatus(Constants.LED_ORANGE);
                 Thread.Sleep(vDelay);
-                SendChar(Constants.LED_RED);
+                SetStatus(Constants.LED_RED);
                 Thread.Sleep(vDelay);
 
                 vDelay = (int)((double)vDelay * (1.0 - (double)vDeltaPcnt / 100.0));
             }
 
-            SendChar(Constants.LED_ALL_OFF);
+            SetStatus(Constants.LED_ALL_OFF);
         }
 
         private void btnRed_Click(object sender, EventArgs e) {
             ckbRedBlink.Checked = true;
-            SendChar(Constants.LED_RED);
+            SetStatus(Constants.LED_RED);
         }
 
-        private void SendChar(byte pValue) {
-            Console.WriteLine(string.Format("Send arbitrary data {0:X2} and answer is ", pValue) + mTricolorUsbSignal.SendRawBuffer(new byte[] { Constants.PACKET_ID, pValue }));
-        }
+
 
         private void btnYellow_Click(object sender, EventArgs e) {
             ckbRedBlink.Checked = false;
-            SendChar(Constants.LED_ORANGE);
+            SetStatus(Constants.LED_ORANGE);
         }
 
         private void btnNoProblem_Click(object sender, EventArgs e) {
             ckbRedBlink.Checked = false;
-            SendChar(Constants.LED_GREEN);
+            SetStatus(Constants.LED_GREEN);
         }
 
         private void ckbRedBlink_CheckedChanged(object sender, EventArgs e) {
             timBlink.Enabled = ckbRedBlink.Checked;
-            SendChar(Constants.LED_RED);
+            SetStatus(Constants.LED_RED);
         }
 
         private void timBlink_Tick(object sender, EventArgs e) {
             if (mRedBlinkStatus) {
                 //off
-                SendChar(Constants.LED_ALL_OFF);
+                SetStatus(Constants.LED_ALL_OFF);
             }
             else { 
                 //on
-                SendChar(Constants.LED_RED);
+                SetStatus(Constants.LED_RED);
             }
 
             mRedBlinkStatus = !mRedBlinkStatus;
@@ -183,44 +258,110 @@ namespace TricolorUsbSignalManager {
             CheckStatusAndUpdateLeds();
         }
 
+        /// <summary>
+        /// Sets the led status (just set, no blink)
+        /// </summary>
+        /// <param name="pValue"></param>
+        private void SetStatus(byte pValue) {
+            try {
+                Console.WriteLine(string.Format("Send arbitrary data {0:X2} and answer is ", pValue) + TricolorUsbSignal.SendRawBuffer(new byte[] { Constants.PACKET_ID, pValue }));
+
+                if (mLastSendCharWasError) {
+                    DoLogLine("SUCCESS while sending data to Blink. Reconnected?");
+                    this.mSystrayIcon.ShowBalloonTip(2000, "Tricolor USB Signal", "Connected to USB signal.", ToolTipIcon.Info);
+                }
+                mLastSendCharWasError = false;
+            }
+            catch (Exception ex) {
+                if (!mLastSendCharWasError) {
+                    DoLogLine("ERROR while sending data to Blink. Disconnected?");
+                    this.mSystrayIcon.ShowBalloonTip(2000, "Tricolor USB Signal", "Connection lost to USB signal!", ToolTipIcon.Error);
+
+                    try {
+                        TricolorUsbSignal.Close();
+                    }
+                    catch (Exception ex2) {
+                        DoLogLine("ERROR while closing connection to Blink. Ignore and release.");
+                        Console.WriteLine("ERROR SendChar() - Close(): " + ex.Message);
+                    }
+                    finally {
+                        mTricolorUsbSignal.Dispose();
+                        mTricolorUsbSignal = null;
+                    }
+                }
+                mLastSendCharWasError = true;
+
+                Console.WriteLine("ERROR SendChar(): " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Sets the status and do some bling bling
+        /// </summary>
+        /// <param name="pStatus"></param>
+        /// <param name="pDurationMs"></param>
+        /// <param name="pBlinkCount"></param>
         private void BlinkStatus(byte pStatus, int pDurationMs, int pBlinkCount) { 
             //just to avoid stucking the main thread, do this by a worker thread
             ThreadPool.QueueUserWorkItem(
                 delegate(object o) {
-                    SendChar(pStatus);
+                    SetStatus(pStatus);
                     for (int i = 0; i < pBlinkCount; i++) {
                         Thread.Sleep(pDurationMs);
-                        SendChar(Constants.LED_ALL_OFF);
+                        SetStatus(Constants.LED_ALL_OFF);
                         Thread.Sleep(pDurationMs);
-                        SendChar(pStatus);
+                        SetStatus(pStatus);
                     }
                 }
              );
         }
 
+        /// <summary>
+        /// Sets or blinks the status
+        /// </summary>
+        /// <param name="pSet"></param>
+        /// <param name="pStatus"></param>
+        /// <param name="pDurationMs"></param>
+        /// <param name="pBlinkCount"></param>
+        private void SetOrBlinkStatus(bool pSet, byte pStatus, int pDurationMs, int pBlinkCount) {
+            if (pSet) {
+                SetStatus(pStatus);
+            }
+            else {
+                BlinkStatus(pStatus, pDurationMs, pBlinkCount);
+            }
+
+        }
+
         private void CheckStatusAndUpdateLeds() {
             try {
-                NagiosChecker vChecker = new NagiosChecker(this.DoLogLine);
+                NagiosChecker vChecker = new NagiosChecker(
+                    this.DoLogLine, 
+                    Settings.Default.IGNORE_DATE,
+                    ConfigurationManager.AppSettings["NagiosURL"],
+                    ConfigurationManager.AppSettings["NagiosLogin"],
+                    ConfigurationManager.AppSettings["NagiosPassword"]);
+
                 NagiosChecker.NagiosEventState vStatus = vChecker.CheckStatus();
 
-                if (mCurrentStatus != vStatus) {
-                    mCurrentStatus = vStatus;
-
-                    switch (vStatus) {
-                        case NagiosChecker.NagiosEventState.OK:
-                            ckbRedBlink.Checked = false;
-                            BlinkStatus(Constants.LED_GREEN, 100, 5);
-                            break;
-                        case NagiosChecker.NagiosEventState.WARNING:
-                            ckbRedBlink.Checked = false;
-                            BlinkStatus(Constants.LED_ORANGE, 100, 10);
-                            break;
-                        case NagiosChecker.NagiosEventState.CRITICAL:
-                            ckbRedBlink.Checked = true;
-                            BlinkStatus(Constants.LED_RED, 100, 20);
-                            break;
-                    }
+                switch (vStatus) {
+                    case NagiosChecker.NagiosEventState.OK:
+                        ckbRedBlink.Checked = false;
+                        SetOrBlinkStatus(vStatus == mCurrentStatus, Constants.LED_GREEN, 100, 5);
+                        break;
+                    case NagiosChecker.NagiosEventState.WARNING:
+                        ckbRedBlink.Checked = false;
+                        SetOrBlinkStatus(vStatus == mCurrentStatus, Constants.LED_ORANGE, 100, 10);
+                        break;
+                    case NagiosChecker.NagiosEventState.CRITICAL:
+                        ckbRedBlink.Checked = true;
+                        SetOrBlinkStatus(vStatus == mCurrentStatus, Constants.LED_RED, 100, 20);
+                        break;
                 }
+
+
+                mCurrentStatus = vStatus;
+                
             }
             catch (Exception ex) {
                 //mute for now
@@ -238,5 +379,18 @@ namespace TricolorUsbSignalManager {
         private void button3_Click(object sender, EventArgs e) {
             BlinkStatus(Constants.LED_RED, 100, 20);
         }
+
+        private void dtpIgnoreBefore_ValueChanged(object sender, EventArgs e) {
+            if (Settings.Default.IGNORE_DATE != dtpIgnoreBefore.Value) {
+                Settings.Default.IGNORE_DATE = dtpIgnoreBefore.Value;
+
+                //save
+                Settings.Default.Save();
+                Settings.Default.Upgrade();
+
+                DoLogLine(string.Format("Changed 'ignore before' time to {0:yyyy/MM/dd HH:mm:ss}.", Settings.Default.IGNORE_DATE));
+            }
+        }
+
     }
 }
