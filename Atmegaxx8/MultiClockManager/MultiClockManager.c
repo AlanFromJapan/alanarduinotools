@@ -32,51 +32,27 @@
 #include "MCMShared.h"
 
 //Choose what RTC to use
-#include "DS3234.h"
-//#include "RTCFake.h"
+//#include "DS3234.h"
+#include "RTCFake.h"
+
 
 //Choose the display to use (put the define BEFORE the includes!)
-/*
 #define USE_DISPLAY_BCD1
 #include "MCMLedMatrix.h"
 #include "WordclockLayouts.h"
-*/
-#include "VoltmeterDisplay.h"
 
-/************************************************************************/
-/* Read time functions                                                  */
-/************************************************************************/
-void mainReadTime(Date* pTime){
-	
-	#ifdef RTC_DS3231
-	getDateDS3231(pTime);
-	#endif //RTC_DS3231
+//#include "VoltmeterDisplay.h"
 
-	#ifdef RTC_DS3234
-	ReadTime3234(pTime);
-	#endif //RTC_DS3234
 
-	#ifdef RTC_RTC4543
-	ReadTime4543(pTime);
-	#endif //RTC_RTC4543
-	
-	#ifdef RTC_FAKE
-	ReadTimeFake(pTime);
-	#endif //RTC_FAKE
-}
 
 /************************************************************************/
 /* Setup                                                                */
 /************************************************************************/
 void mainSetup() {
 
-#ifdef RTC_DS3234
-	setupDS3234(1);
+	//macro to be redefined by each RTC
+	RTC_INIT();
 	
-	//README TODO REMOVE ME : just for the testing purpose now
-	//SetTimeDate3234(07,12,2014,14,03,00);
-#endif //RTC_DS3234	
-
 	//macro to be redefined by each display
 	SETUP_DISPLAY(); 
 }
@@ -92,7 +68,8 @@ int main(void) {
 	Date vLastDate;
 
     while(1) {
-       mainReadTime(&vLastDate);
+	    //macro to be redefined by each RTC
+       RTC_READ_TIME(&vLastDate);
 		
 		//macro to be redefined by each display
 		MAP_DATE_TO_DISPLAY(&vLastDate); 

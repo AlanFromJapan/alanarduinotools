@@ -6,14 +6,21 @@
 #include "SPI.h"
 #include "MCMShared.h"
 
+#include <util/delay.h>
+
+
+
 #define RTC_DS3234
 
-#include <util/delay.h>
+#ifdef RTC_DS3234
+	#define RTC_READ_TIME(p)	ReadTime3234(p)
+	#define RTC_INIT()			setupDS3234(1)
+	#define RTC_SET_TIME(p)		SetTimeDate3234_2(p)
+#endif
+
 
 //Chip select pin. You must use this, front detection is necessary
 //#define DS3234_PIN_CS 10  --> SPI_PIN_SS = PIN B2
-
-
 
 
 //=====================================
@@ -39,8 +46,20 @@ uint8_t setupDS3234(uint8_t pSetRegisters){
 }
 
 
+
+uint8_t SetTimeDate3234_2(Date* pDateTime){
+	SetTimeDate3234(
+		(*pDateTime).dayOfMonth,
+		(*pDateTime).month,
+		(*pDateTime).year,
+		(*pDateTime).hour,
+		(*pDateTime).minute,
+		(*pDateTime).second
+	);
+}
+	
 //=====================================
-//Taken from Sparfun sample (as is)
+//Taken from Sparkfun sample (as is)
 uint8_t SetTimeDate3234(uint8_t d, uint8_t mo, uint16_t y, uint16_t h, uint16_t mi, uint16_t s){ 
    uint16_t TimeDate [7]={
       s,mi,h,0,d,mo,y               };
@@ -72,7 +91,7 @@ uint8_t SetTimeDate3234(uint8_t d, uint8_t mo, uint16_t y, uint16_t h, uint16_t 
 //=====================================
 //Taken from Sparfun sample (amended to return values and not a string)
 //Parameter you pass must be a correctly initialized 7 or more uint8_t array
-void ReadTime3234(Date* TimeDate){
+void ReadTime3234(Date* pTimeDate){
    //uint8_t TimeDate [7]; //second,minute,hour,null,day,month,year		
    for(uint8_t i=0; i<=6;i++){
       if(i==3)
@@ -88,28 +107,28 @@ void ReadTime3234(Date* TimeDate){
             b=20;        
          else if(b==0b00000001)
             b=10;
-         (*TimeDate).hour=a+b;
+         (*pTimeDate).hour=a+b;
       }
       else if(i==4){
          uint16_t b=(n & 0b00110000)>>4;
-         (*TimeDate).dayOfMonth=a+b*10;
+         (*pTimeDate).dayOfMonth=a+b*10;
       }
       else if(i==5){
          uint16_t b=(n & 0b00010000)>>4;
-         (*TimeDate).month=a+b*10;
+         (*pTimeDate).month=a+b*10;
       }
       else if(i==6){
          uint16_t b=(n & 0b11110000)>>4;
-         (*TimeDate).year=a+b*10;
+         (*pTimeDate).year=a+b*10;
       }
       else{ 
          if (i == 0) {
             uint16_t b=(n & 0b01110000)>>4;
-            (*TimeDate).second = a+b*10;	
+            (*pTimeDate).second = a+b*10;	
          }	
          if (i == 1) {
             uint16_t b=(n & 0b01110000)>>4;
-            (*TimeDate).minute = a+b*10;	
+            (*pTimeDate).minute = a+b*10;	
          }	
 
       }

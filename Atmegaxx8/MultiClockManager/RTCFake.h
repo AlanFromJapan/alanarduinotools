@@ -12,8 +12,15 @@
 
 #define RTC_FAKE
 
+#ifdef RTC_FAKE
+	#define RTC_READ_TIME(p)	ReadTimeFake(p)
+	#define RTC_INIT()			;
+	#define RTC_SET_TIME(p)		;	
+#endif
+
+
 uint32_t mRtcFakeSecondCounter = 0L;
-uint32_t mRtcFakeSpeedFactor = 1L;
+uint32_t mRtcFakeSpeedFactor = 10L;
 uint32_t mRtcFakeSpeedDivider = 200L;
 
 void ReadTimeFake(Date* pTimeDate){
