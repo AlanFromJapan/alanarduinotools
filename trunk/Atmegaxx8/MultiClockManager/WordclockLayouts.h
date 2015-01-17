@@ -3,6 +3,19 @@
  *
  * Created: 2014/11/23 13:16:22
  *  Author: Alan
+ *
+ *
+ * README:
+ * Display is chosen by #defining a USE_DISPLAY_XXX before the #include "WordClockLayouts.h" in your main.c.
+ * Then, each display layout must define in a #ifdef USE_DISPLAY_XXX block the mapping of the following calls:
+ * - MAP_DATE_TO_DISPLAY(p) where p is a Date*: do the "logic" part of decomposing time into something you will display
+ *            i.e. If you use the standard 5x5 matrix you will update the in-memory representation of the time
+ * - DRAW_DISPLAY(): how to map the in-memory matrix to your display
+ * - SETUP_DISPLAY(): what to do at startup
+ * - SET_EDIT_HOURS(): what to do visually when changing hours?
+ * - SET_EDIT_MINUTES(): what to do visually when changing minutes?
+ * - SET_EDIT_FINISH(): what to do visually when changing time is finished?
+ *
  */ 
 
 
@@ -25,7 +38,7 @@ void MapTimeInLedMatrix_BCD1(Date* pD){
   resetLedMatrix();
 
   /*
-   BCD : Binary coded decimal for the geeks among hte geeks ... 
+   BCD : Binary coded decimal for the geeks among the geeks ... 
    I'm not in this group but making it is a nice POC.
    xx xx xx xx xx
    xx h3 xx xx m3
