@@ -50,7 +50,7 @@ void setup() {
   initHeadPositionJoystick();
 
   lcdSetColor(LCD_COLOR_PURPLE);
-  lcdShowNowDrawing();
+  lcdShowPositionAdjustScreen(1, mHeadPos, mBedPos);
 }
 
 // the loop routine runs over and over again forever:
@@ -59,6 +59,7 @@ void loop() {
 #ifdef USE_SERIAL
   if (Serial.available()){
     byte vChar = Serial.read();
+    lcdSetColor(LCD_COLOR_PURPLE); 
     
     switch (vChar){
       case 'l':
@@ -108,9 +109,12 @@ void loop() {
         break;
       case '0':
         setHeadLeftmost();
-        resetBedToStopper();      
+        resetBedToStopper();     
+        lcdSetColor(LCD_COLOR_BLUE); 
         break;
     }
+        
+    lcdShowPositionAdjustScreen(1, mHeadPos, mBedPos);
   }
 #endif //USE_SERIAL  
 }
@@ -214,10 +218,14 @@ void initHeadPositionJoystick(){
 
     if (x != 0){
       moveHeadByAmount(x * MILLI_HEAD_STEPS, PWMSPEED_ADJUST);
+      
+      lcdShowPositionAdjustScreen(0, mHeadPos, mBedPos);
     }    
     
     if (y != 0){
       moveBedToPosition(mBedPos + y * MILLI_BED_STEPS);
+      
+      lcdShowPositionAdjustScreen(0, mHeadPos, mBedPos);
     }    
 
   }
