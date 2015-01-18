@@ -9400,6 +9400,10 @@ high speed (Philips)</description>
 <part name="ROE_PDOWN" library="resistor" deviceset="R-EU_" device="R1206"/>
 <part name="JCE_CS" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NO" device="" value=""/>
 <part name="JOE_RD" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NO" device="" value=""/>
+<part name="PEN1" library="SparkFun-Passives" deviceset="TEST-POINT" device="3X5"/>
+<part name="PEN2" library="SparkFun-Passives" deviceset="TEST-POINT" device="3X5"/>
+<part name="PEN3" library="SparkFun-Passives" deviceset="TEST-POINT" device="3X5"/>
+<part name="PEN4" library="SparkFun-Passives" deviceset="TEST-POINT" device="3X5"/>
 </parts>
 <sheets>
 <sheet>
@@ -9459,6 +9463,10 @@ USB-Serial adapters.</text>
 <instance part="ROE_PDOWN" gate="G$1" x="226.06" y="177.8" rot="R90"/>
 <instance part="JCE_CS" gate="G$1" x="185.42" y="162.56" rot="R90"/>
 <instance part="JOE_RD" gate="G$1" x="193.04" y="152.4" rot="R90"/>
+<instance part="PEN1" gate="G$1" x="-27.94" y="256.54" rot="R180"/>
+<instance part="PEN2" gate="G$1" x="-27.94" y="251.46" rot="R180"/>
+<instance part="PEN3" gate="G$1" x="-27.94" y="271.78" rot="R180"/>
+<instance part="PEN4" gate="G$1" x="-27.94" y="269.24" rot="R180"/>
 </instances>
 <busses>
 <bus name="ADDRESS[0..17]">
@@ -9637,6 +9645,11 @@ USB-Serial adapters.</text>
 <pinref part="C3" gate="G$1" pin="2"/>
 <wire x1="-17.78" y1="259.08" x2="-17.78" y2="254" width="0.1524" layer="91"/>
 <label x="-17.78" y="254" size="1.778" layer="95"/>
+<pinref part="PEN1" gate="G$1" pin="1"/>
+<wire x1="-17.78" y1="254" x2="-27.94" y2="254" width="0.1524" layer="91"/>
+<wire x1="-27.94" y1="254" x2="-27.94" y2="256.54" width="0.1524" layer="91"/>
+<pinref part="PEN2" gate="G$1" pin="1"/>
+<wire x1="-27.94" y1="256.54" x2="-27.94" y2="251.46" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="RCE_PDOWN" gate="G$1" pin="1"/>
@@ -9801,6 +9814,10 @@ USB-Serial adapters.</text>
 <pinref part="C3" gate="G$1" pin="1"/>
 <wire x1="-17.78" y1="266.7" x2="-17.78" y2="271.78" width="0.1524" layer="91"/>
 <label x="-17.78" y="271.78" size="1.778" layer="95"/>
+<pinref part="PEN3" gate="G$1" pin="1"/>
+<wire x1="-17.78" y1="271.78" x2="-27.94" y2="271.78" width="0.1524" layer="91"/>
+<pinref part="PEN4" gate="G$1" pin="1"/>
+<wire x1="-27.94" y1="271.78" x2="-27.94" y2="269.24" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="D1" gate="G$1" pin="C"/>
