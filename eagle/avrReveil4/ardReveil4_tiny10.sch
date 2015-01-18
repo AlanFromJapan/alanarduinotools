@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
@@ -3238,12 +3238,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <packages>
 </packages>
 <symbols>
-<symbol name="5V">
-<wire x1="0.762" y1="1.27" x2="0" y2="2.54" width="0.254" layer="94"/>
-<wire x1="0" y1="2.54" x2="-0.762" y2="1.27" width="0.254" layer="94"/>
-<text x="-1.016" y="3.556" size="1.778" layer="96">&gt;VALUE</text>
-<pin name="5V" x="0" y="0" visible="off" length="short" direction="sup" rot="R90"/>
-</symbol>
 <symbol name="DGND">
 <wire x1="-1.905" y1="0" x2="1.905" y2="0" width="0.254" layer="94"/>
 <text x="-2.54" y="-2.54" size="1.778" layer="96">&gt;VALUE</text>
@@ -3251,19 +3245,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="5V" prefix="SUPPLY">
-<description>5V supply symbol</description>
-<gates>
-<gate name="G$1" symbol="5V" x="0" y="0"/>
-</gates>
-<devices>
-<device name="">
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
 <deviceset name="DGND" prefix="GND">
 <description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
 <gates>
@@ -3289,15 +3270,13 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </class>
 </classes>
 <parts>
-<part name="LED1" library="led" deviceset="TLLY4400" device="" value=""/>
 <part name="LED2" library="led" deviceset="TLLY4400" device="" value=""/>
 <part name="R1" library="resistor" deviceset="R-EU_" device="0204/7" value="1k"/>
 <part name="R2" library="resistor" deviceset="R-EU_" device="0204/7" value="1k"/>
-<part name="SUPPLY1" library="SparkFun-Aesthetics" deviceset="5V" device=""/>
-<part name="GND1" library="SparkFun-Aesthetics" deviceset="DGND" device=""/>
 <part name="LED_FLAME" library="led" deviceset="TLLY4400" device="" value=""/>
-<part name="R3" library="resistor" deviceset="R-EU_" device="0204/7" value="200+"/>
+<part name="R3" library="resistor" deviceset="R-EU_" device="0204/7" value="470"/>
 <part name="GND2" library="SparkFun-Aesthetics" deviceset="DGND" device=""/>
+<part name="LED3" library="led" deviceset="TLLY4400" device="" value=""/>
 </parts>
 <sheets>
 <sheet>
@@ -3309,26 +3288,26 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <text x="48.26" y="78.74" size="1.778" layer="94">Attiny10</text>
 <text x="53.34" y="76.2" size="1.27" layer="91">PB2</text>
 <text x="48.26" y="68.58" size="1.27" layer="91">PB0 (PWM)</text>
+<text x="53.34" y="73.66" size="1.27" layer="91">PB1</text>
 </plain>
 <instances>
-<instance part="LED1" gate="G$1" x="83.82" y="81.28"/>
 <instance part="LED2" gate="G$1" x="83.82" y="73.66"/>
 <instance part="R1" gate="G$1" x="83.82" y="63.5" rot="R90"/>
-<instance part="R2" gate="G$1" x="83.82" y="88.9" rot="R90"/>
-<instance part="SUPPLY1" gate="G$1" x="83.82" y="93.98"/>
-<instance part="GND1" gate="G$1" x="83.82" y="55.88"/>
+<instance part="R2" gate="G$1" x="93.98" y="63.5" rot="R270"/>
 <instance part="LED_FLAME" gate="G$1" x="66.04" y="66.04"/>
 <instance part="R3" gate="G$1" x="66.04" y="55.88" rot="R90"/>
 <instance part="GND2" gate="G$1" x="66.04" y="48.26"/>
+<instance part="LED3" gate="G$1" x="93.98" y="71.12" rot="R180"/>
 </instances>
 <busses>
 </busses>
 <nets>
 <net name="N$1" class="0">
 <segment>
-<pinref part="LED1" gate="G$1" pin="C"/>
 <pinref part="LED2" gate="G$1" pin="A"/>
 <wire x1="83.82" y1="76.2" x2="58.42" y2="76.2" width="0.1524" layer="91"/>
+<pinref part="LED3" gate="G$1" pin="C"/>
+<wire x1="83.82" y1="76.2" x2="93.98" y2="76.2" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$2" class="0">
@@ -3337,23 +3316,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="R1" gate="G$1" pin="2"/>
 </segment>
 </net>
-<net name="N$3" class="0">
-<segment>
-<pinref part="LED1" gate="G$1" pin="A"/>
-<pinref part="R2" gate="G$1" pin="1"/>
-</segment>
-</net>
-<net name="5V" class="0">
-<segment>
-<pinref part="R2" gate="G$1" pin="2"/>
-<pinref part="SUPPLY1" gate="G$1" pin="5V"/>
-</segment>
-</net>
 <net name="GND" class="0">
-<segment>
-<pinref part="R1" gate="G$1" pin="1"/>
-<pinref part="GND1" gate="G$1" pin="GND"/>
-</segment>
 <segment>
 <pinref part="R3" gate="G$1" pin="1"/>
 <pinref part="GND2" gate="G$1" pin="GND"/>
@@ -3369,6 +3332,22 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <segment>
 <pinref part="LED_FLAME" gate="G$1" pin="C"/>
 <pinref part="R3" gate="G$1" pin="2"/>
+</segment>
+</net>
+<net name="N$3" class="0">
+<segment>
+<pinref part="LED3" gate="G$1" pin="A"/>
+<pinref part="R2" gate="G$1" pin="1"/>
+</segment>
+</net>
+<net name="N$6" class="0">
+<segment>
+<pinref part="R2" gate="G$1" pin="2"/>
+<pinref part="R1" gate="G$1" pin="1"/>
+<wire x1="93.98" y1="58.42" x2="83.82" y2="58.42" width="0.1524" layer="91"/>
+<wire x1="58.42" y1="73.66" x2="78.74" y2="73.66" width="0.1524" layer="91"/>
+<wire x1="78.74" y1="73.66" x2="78.74" y2="58.42" width="0.1524" layer="91"/>
+<wire x1="78.74" y1="58.42" x2="83.82" y2="58.42" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
