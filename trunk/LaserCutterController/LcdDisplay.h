@@ -1,4 +1,5 @@
 #include "Arduino.h"
+#include <stdio.h>
 
 #ifndef __LCDDISPLAY_H__
 #define __LCDDISPLAY_H__
@@ -12,7 +13,7 @@
 #define LCD_COLOR_PURPLE 0x03
 #define LCD_COLOR_OFF 0x00
 
-#define LCD_I2C_TEMPORISATION 10
+#define LCD_I2C_TEMPORISATION 5
 
 /***************************
 **
@@ -78,14 +79,28 @@ void lcdShowPositionAdjustScreen(){
   lcdWriteLine(5, " joystick.");
 }
 
-void lcdShowNowDrawing(){
+void lcdShowPositionAdjustScreen(const uint8_t pMode, const int pX, const int pY){
   lcdClear();
   
-  lcdWriteLine(0, "*************");
-  lcdWriteLine(1, "*Now drawing*");
-  lcdWriteLine(2, "*************");
-  lcdWriteLine(3, "Drawing in");
-  lcdWriteLine(4, "progress...");
+  char buff[14];
+  
+  if (pMode == 0){
+    lcdWriteLine(0, "  **********");
+    lcdWriteLine(1, "  * Adjust *");
+    lcdWriteLine(2, "  **********");
+  }
+  else {
+    lcdWriteLine(0, "*************");
+    lcdWriteLine(1, "*Now drawing*");
+    lcdWriteLine(2, "*************");  
+  }
+  
+  sprintf(buff, " X=%d", pX);
+  lcdWriteLine(4, buff);
+
+  sprintf(buff, " Y=%d", pY);
+  lcdWriteLine(5, buff);
+  
 }
 
 void setupLcdDisplay(){
