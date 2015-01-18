@@ -13,12 +13,6 @@
 #define DS3231_I2C_ADDRESS B01101000  // This is the I2C address 7bits
 
 
-Date mLatestReadDate;
-
-
-
-
-
 // Gets the Date3231 and time from the ds1307 and prints result
 void getDateDS3231(Date& pD)
 {
@@ -40,9 +34,6 @@ void getDateDS3231(Date& pD)
   pD.dayOfMonth = bcdToDec(Wire.read() & 0x3f);
   pD.month      = bcdToDec(Wire.read() & 0x1f);
   pD.year       = bcdToDec(Wire.read());
-
-  //save
-  mLatestReadDate = pD;
 
   Wire.endTransmission();
 }
