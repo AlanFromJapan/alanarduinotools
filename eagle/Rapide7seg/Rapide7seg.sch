@@ -71,6 +71,7 @@
 <layer number="125" name="_tNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="144" name="Drill_legend" color="7" fill="1" visible="no" active="yes"/>
 <layer number="151" name="HeatSink" color="7" fill="1" visible="no" active="yes"/>
+<layer number="199" name="Contour" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="200" name="200bmp" color="1" fill="10" visible="no" active="yes"/>
 <layer number="201" name="201bmp" color="2" fill="10" visible="no" active="yes"/>
 <layer number="202" name="202bmp" color="3" fill="10" visible="no" active="yes"/>
@@ -13487,6 +13488,60 @@ Source: avr.lbr</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="kalshagar">
+<description>&lt;b&gt;Kalshagar.wikispaces.com&lt;/b&gt;
+&lt;p&gt;Additional components by AlanFromJapan for Kalshagar.wikispaces.com.
+Free to reuse and modify.&lt;/p&gt;</description>
+<packages>
+<package name="M7_NOSILK">
+<pad name="P$1" x="0" y="0" drill="0.9" diameter="1.778"/>
+<pad name="P$2" x="2.54" y="0" drill="0.9" diameter="1.778"/>
+<pad name="P$3" x="5.08" y="0" drill="0.9" diameter="1.778"/>
+<pad name="P$4" x="7.62" y="0" drill="0.9" diameter="1.778"/>
+<pad name="P$5" x="10.16" y="0" drill="0.9" diameter="1.778"/>
+<pad name="P$6" x="12.7" y="0" drill="0.9" diameter="1.778"/>
+<pad name="P$7" x="15.24" y="0" drill="0.9" diameter="1.778"/>
+</package>
+</packages>
+<symbols>
+<symbol name="M7_NOSILK">
+<wire x1="-5.08" y1="12.7" x2="2.54" y2="12.7" width="0.254" layer="94"/>
+<wire x1="2.54" y1="12.7" x2="2.54" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-7.62" x2="-5.08" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="-7.62" x2="-5.08" y2="12.7" width="0.254" layer="94"/>
+<pin name="P$1" x="7.62" y="10.16" length="middle" rot="R180"/>
+<pin name="P$2" x="7.62" y="7.62" length="middle" rot="R180"/>
+<pin name="P$3" x="7.62" y="5.08" length="middle" rot="R180"/>
+<pin name="P$4" x="7.62" y="2.54" length="middle" rot="R180"/>
+<pin name="P$5" x="7.62" y="0" length="middle" rot="R180"/>
+<pin name="P$6" x="7.62" y="-2.54" length="middle" rot="R180"/>
+<pin name="P$7" x="7.62" y="-5.08" length="middle" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="M7_NOSILK">
+<gates>
+<gate name="G$1" symbol="M7_NOSILK" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="M7_NOSILK">
+<connects>
+<connect gate="G$1" pin="P$1" pad="P$1"/>
+<connect gate="G$1" pin="P$2" pad="P$2"/>
+<connect gate="G$1" pin="P$3" pad="P$3"/>
+<connect gate="G$1" pin="P$4" pad="P$4"/>
+<connect gate="G$1" pin="P$5" pad="P$5"/>
+<connect gate="G$1" pin="P$6" pad="P$6"/>
+<connect gate="G$1" pin="P$7" pad="P$7"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -13544,6 +13599,14 @@ Source: avr.lbr</description>
 <part name="JPGND" library="SparkFun" deviceset="M02" device="PTH"/>
 <part name="JPVCC" library="SparkFun" deviceset="M02" device="PTH"/>
 <part name="C3" library="resistor" deviceset="CPOL-EU" device="E1.8-4"/>
+<part name="U$1" library="kalshagar" deviceset="M7_NOSILK" device=""/>
+<part name="U$2" library="kalshagar" deviceset="M7_NOSILK" device=""/>
+<part name="U$3" library="kalshagar" deviceset="M7_NOSILK" device=""/>
+<part name="U$4" library="kalshagar" deviceset="M7_NOSILK" device=""/>
+<part name="U$5" library="kalshagar" deviceset="M7_NOSILK" device=""/>
+<part name="U$6" library="kalshagar" deviceset="M7_NOSILK" device=""/>
+<part name="U$7" library="kalshagar" deviceset="M7_NOSILK" device=""/>
+<part name="U$8" library="kalshagar" deviceset="M7_NOSILK" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -13597,6 +13660,14 @@ Source: avr.lbr</description>
 <instance part="JPGND" gate="G$1" x="-185.42" y="7.62"/>
 <instance part="JPVCC" gate="G$1" x="-195.58" y="0"/>
 <instance part="C3" gate="G$1" x="-162.56" y="27.94"/>
+<instance part="U$1" gate="G$1" x="-121.92" y="-17.78"/>
+<instance part="U$2" gate="G$1" x="-121.92" y="-40.64"/>
+<instance part="U$3" gate="G$1" x="-106.68" y="-17.78"/>
+<instance part="U$4" gate="G$1" x="-106.68" y="-40.64"/>
+<instance part="U$5" gate="G$1" x="-86.36" y="-17.78"/>
+<instance part="U$6" gate="G$1" x="-86.36" y="-40.64"/>
+<instance part="U$7" gate="G$1" x="-68.58" y="-17.78"/>
+<instance part="U$8" gate="G$1" x="-68.58" y="-40.64"/>
 </instances>
 <busses>
 </busses>
