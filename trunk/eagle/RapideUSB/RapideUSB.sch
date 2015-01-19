@@ -16408,8 +16408,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="GND3" library="SparkFun-Aesthetics" deviceset="DGND" device=""/>
 <part name="C3" library="resistor" deviceset="C-EU" device="025-024X044" value="1uF"/>
 <part name="C4" library="resistor" deviceset="CPOL-EU" device="E2-5" value="10uF+"/>
-<part name="RAIL+" library="SparkFun-Connectors" deviceset="M17" device="KIT"/>
-<part name="RAIL-" library="SparkFun-Connectors" deviceset="M17" device="KIT"/>
+<part name="RAIL+" library="SparkFun-Connectors" deviceset="M17" device="NOSILK" value="M17NOSILK"/>
+<part name="RAIL-" library="SparkFun-Connectors" deviceset="M17" device="NOSILK" value="M17NOSILK"/>
 <part name="U$2" library="SparkFun-Connectors" deviceset="M19" device="1X19_NO_SILK"/>
 <part name="U$3" library="SparkFun-Connectors" deviceset="M19" device="1X19_NO_SILK"/>
 <part name="U$4" library="SparkFun-Connectors" deviceset="M19" device="1X19_NO_SILK"/>
