@@ -9399,7 +9399,6 @@ high speed (Philips)</description>
 <part name="RRESET_PUP" library="resistor" deviceset="R-EU_" device="R1206"/>
 <part name="ROE_PDOWN" library="resistor" deviceset="R-EU_" device="R1206"/>
 <part name="JCE_CS" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NO" device="" value=""/>
-<part name="JOE_RD" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NO" device="" value=""/>
 <part name="PEN1" library="SparkFun-Passives" deviceset="TEST-POINT" device="3X5"/>
 <part name="PEN2" library="SparkFun-Passives" deviceset="TEST-POINT" device="3X5"/>
 <part name="PEN3" library="SparkFun-Passives" deviceset="TEST-POINT" device="3X5"/>
@@ -9462,7 +9461,6 @@ USB-Serial adapters.</text>
 <instance part="RRESET_PUP" gate="G$1" x="251.46" y="182.88" rot="R90"/>
 <instance part="ROE_PDOWN" gate="G$1" x="226.06" y="177.8" rot="R90"/>
 <instance part="JCE_CS" gate="G$1" x="185.42" y="162.56" rot="R90"/>
-<instance part="JOE_RD" gate="G$1" x="193.04" y="152.4" rot="R90"/>
 <instance part="PEN1" gate="G$1" x="-27.94" y="256.54" rot="R180"/>
 <instance part="PEN2" gate="G$1" x="-27.94" y="251.46" rot="R180"/>
 <instance part="PEN3" gate="G$1" x="-27.94" y="271.78" rot="R180"/>
@@ -9740,11 +9738,6 @@ USB-Serial adapters.</text>
 <pinref part="JOE" gate="G$1" pin="3"/>
 <wire x1="208.28" y1="215.9" x2="213.36" y2="215.9" width="0.1524" layer="91"/>
 <label x="213.36" y="215.9" size="1.27" layer="95"/>
-</segment>
-<segment>
-<pinref part="JOE_RD" gate="G$1" pin="1"/>
-<wire x1="193.04" y1="147.32" x2="193.04" y2="142.24" width="0.1524" layer="91"/>
-<label x="193.04" y="134.62" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 <net name="!WE" class="0">
@@ -10220,7 +10213,7 @@ USB-Serial adapters.</text>
 <label x="88.9" y="160.02" size="1.27" layer="95"/>
 </segment>
 </net>
-<net name="N$1" class="0">
+<net name="SDA" class="0">
 <segment>
 <pinref part="IC2" gate="G$1" pin="(SDA/INT1)PD1"/>
 <wire x1="68.58" y1="147.32" x2="86.36" y2="147.32" width="0.1524" layer="91"/>
@@ -10229,7 +10222,7 @@ USB-Serial adapters.</text>
 <wire x1="88.9" y1="149.86" x2="91.44" y2="149.86" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$5" class="0">
+<net name="SCL" class="0">
 <segment>
 <pinref part="IC2" gate="G$1" pin="(SCL/INT0)PD0"/>
 <wire x1="68.58" y1="144.78" x2="88.9" y2="144.78" width="0.1524" layer="91"/>
@@ -10241,18 +10234,14 @@ USB-Serial adapters.</text>
 <segment>
 <pinref part="U$2" gate="G$1" pin="!OE"/>
 <pinref part="TP2" gate="G$1" pin="1"/>
-<wire x1="177.8" y1="182.88" x2="193.04" y2="182.88" width="0.1524" layer="91"/>
+<wire x1="177.8" y1="182.88" x2="203.2" y2="182.88" width="0.1524" layer="91"/>
 <label x="195.58" y="182.88" size="1.27" layer="95"/>
 <pinref part="JOE" gate="G$1" pin="2"/>
-<wire x1="193.04" y1="182.88" x2="203.2" y2="182.88" width="0.1524" layer="91"/>
 <wire x1="203.2" y1="182.88" x2="210.82" y2="182.88" width="0.1524" layer="91"/>
 <wire x1="203.2" y1="210.82" x2="203.2" y2="182.88" width="0.1524" layer="91"/>
 <junction x="203.2" y="182.88"/>
 <pinref part="ROE_PDOWN" gate="G$1" pin="2"/>
 <wire x1="210.82" y1="182.88" x2="226.06" y2="182.88" width="0.1524" layer="91"/>
-<pinref part="JOE_RD" gate="G$1" pin="2"/>
-<wire x1="193.04" y1="182.88" x2="193.04" y2="157.48" width="0.1524" layer="91"/>
-<junction x="193.04" y="182.88"/>
 </segment>
 </net>
 <net name="N$7" class="0">
