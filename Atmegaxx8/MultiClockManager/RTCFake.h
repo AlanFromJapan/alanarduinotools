@@ -18,18 +18,30 @@
 	#define RTC_SET_TIME(p)		;	
 #endif
 
+#define SEC_IN_ONE_DAY (60L * 60L * 24L)
 
 uint32_t mRtcFakeSecondCounter = 0L;
 uint32_t mRtcFakeSpeedFactor = 10L;
-uint32_t mRtcFakeSpeedDivider = 200L;
+uint32_t mRtcFakeSpeedDivider = 1L;
+
+uint32_t mRtcFakeSubCounter = 0L;
 
 void ReadTimeFake(Date* pTimeDate){
-	mRtcFakeSecondCounter += mRtcFakeSpeedFactor;
+	mRtcFakeSubCounter++;
+	if (mRtcFakeSubCounter >= mRtcFakeSpeedDivider){
+		mRtcFakeSecondCounter += mRtcFakeSpeedFactor;
+		mRtcFakeSubCounter = 0;
+	}
 	
-	(*pTimeDate).second = 0;
-	(*pTimeDate).minute = (uint8_t)((mRtcFakeSecondCounter / mRtcFakeSpeedDivider) % 60);
-	(*pTimeDate).hour = (uint8_t)((mRtcFakeSecondCounter / mRtcFakeSpeedDivider) / 60);
+	if (mRtcFakeSecondCounter >= SEC_IN_ONE_DAY){
+		mRtcFakeSecondCounter = 0;
+	}
+	
+	(*pTimeDate).second = (uint8_t)((mRtcFakeSecondCounter % 60));
+	(*pTimeDate).minute = (uint8_t)((mRtcFakeSecondCounter / 60));
+	(*pTimeDate).hour = (uint8_t)((mRtcFakeSecondCounter) / 3600);
 	//ignore the rest...
+	
 }	
 
 
