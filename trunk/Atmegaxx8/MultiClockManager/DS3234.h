@@ -2,7 +2,6 @@
 #ifndef __DS3234_h__
 #define __DS3234_h__
 
-//Include also in the MAIN .ino file!
 #include "SPI.h"
 #include "MCMShared.h"
 
@@ -36,7 +35,7 @@ uint8_t setupDS3234(uint8_t pSetRegisters){
 	   //set control register 
 	   PORTB &= ~(1 << SPI_PIN_SS); //digitalWrite(DS3234_PIN_CS, LOW);  
 	   spiTransfer(0x8E);
-	   spiTransfer(0x60); //60= disable Osciallator and Battery SQ wave @1hz, temp compensation, Alarms disabled
+	   spiTransfer(0x60); //60= disable Oscillator and Battery SQ wave @1hz, temp compensation, Alarms disabled
 	   PORTB |= (1 << SPI_PIN_SS); //digitalWrite(DS3234_PIN_CS, HIGH);
    }
    
@@ -46,17 +45,6 @@ uint8_t setupDS3234(uint8_t pSetRegisters){
 }
 
 
-
-uint8_t SetTimeDate3234_2(Date* pDateTime){
-	SetTimeDate3234(
-		(*pDateTime).dayOfMonth,
-		(*pDateTime).month,
-		(*pDateTime).year,
-		(*pDateTime).hour,
-		(*pDateTime).minute,
-		(*pDateTime).second
-	);
-}
 	
 //=====================================
 //Taken from Sparkfun sample (as is)
@@ -85,6 +73,17 @@ uint8_t SetTimeDate3234(uint8_t d, uint8_t mo, uint16_t y, uint16_t h, uint16_t 
    return 0;
 }
 
+
+uint8_t SetTimeDate3234_2(Date* pDateTime){
+	return SetTimeDate3234(
+	(*pDateTime).dayOfMonth,
+	(*pDateTime).month,
+	(*pDateTime).year,
+	(*pDateTime).hour,
+	(*pDateTime).minute,
+	(*pDateTime).second
+	);
+}
 
 
 
