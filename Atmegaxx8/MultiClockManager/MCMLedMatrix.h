@@ -11,7 +11,10 @@ uint8_t WCLK_LED_MATRIX[WCLK_MATRIX_SIZE];
 //#define WCLK_COL1LEFT (WCLK_MATRIX_SIZE * 2)
 
 //duration in us of the illumination of the current led while drawing
-#define WCLK_POV_DURATION 200
+#ifndef WCLK_POV_DURATION
+	//if not overridden in includer file, set a value
+	#define WCLK_POV_DURATION 200
+#endif //WCLK_POV_DURATION
 
 //ALL Reversed -> all leds off : PORTB.PORTD = 0bxxxxxx11.11100000
 #define LEDS_ALL_OFF() 	{ PORTB |= 0x03; PORTD = 0xe0; }
