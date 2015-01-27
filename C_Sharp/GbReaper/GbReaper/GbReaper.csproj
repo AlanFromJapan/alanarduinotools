@@ -46,11 +46,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\GbProject.cs" />
+    <Compile Include="Classes\Library.cs" />
+    <Compile Include="Classes\Map.cs" />
+    <Compile Include="Classes\Palette.cs" />
+    <Compile Include="Classes\RomReader.cs" />
+    <Compile Include="Classes\Sprite.cs" />
+    <Compile Include="Controls\UcLibraryList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\UcLibraryList.Designer.cs">
+      <DependentUpon>UcLibraryList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\UcRomViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\UcRomViewer.Designer.cs">
       <DependentUpon>UcRomViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UcSpriteEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\UcSpriteEditor.Designer.cs">
+      <DependentUpon>UcSpriteEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FrmMain.cs">
       <SubType>Form</SubType>
@@ -60,8 +78,14 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controls\UcLibraryList.resx">
+      <DependentUpon>UcLibraryList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\UcRomViewer.resx">
       <DependentUpon>UcRomViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\UcSpriteEditor.resx">
+      <DependentUpon>UcSpriteEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>

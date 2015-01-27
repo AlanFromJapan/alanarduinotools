@@ -6,21 +6,17 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using GbReaper.Classes;
 
 namespace GbReaper.Controls {
     public partial class UcRomViewer : UserControl {
 
         protected Image mImage = null;
+        protected int mZoomfactor = 1;
         protected Point mMouseHover = Point.Empty;
 
-        public Image Image {
-            set { 
-                this.mImage = value;
-                this.UpdateSidebars();
-                this.Invalidate();
-            }
-        }
-
+        public delegate void RomSpriteSelectDelegate(Image pImage);
+        public event RomSpriteSelectDelegate RomSpriteSelected;
 
         public UcRomViewer() {
             InitializeComponent();
@@ -49,7 +45,13 @@ namespace GbReaper.Controls {
             e.Graphics.DrawImage(this.mImage, -hbar.Value, -vbar.Value);//, e.ClipRectangle.Width - vbar.Width, e.ClipRectangle.Height - hbar.Height);
 
             if (!this.mMouseHover.IsEmpty) {
-                e.Graphics.DrawRectangle(Pens.Red, this.mMouseHover.X, this.mMouseHover.Y, 8, 8);
+                e.Graphics.DrawRectangle(
+                    Pens.Red, 
+                    Sprite.WIDTH_PX * this.mZoomfactor * (this.mMouseHover.X /(Sprite.WIDTH_PX * this.mZoomfactor)),
+                    Sprite.HEIGHT_PX * this.mZoomfactor * (this.mMouseHover.Y / (Sprite.HEIGHT_PX * this.mZoomfactor)) - (vbar.Value % (Sprite.HEIGHT_PX * this.mZoomfactor)), 
+                    Sprite.WIDTH_PX * this.mZoomfactor,
+                    Sprite.HEIGHT_PX * this.mZoomfactor
+                    );
             }
         }
 
@@ -58,9 +60,15 @@ namespace GbReaper.Controls {
                 return;
 
             vbar.Minimum = 0;
-            vbar.Maximum = this.mImage.Height - this.Height + hbar.Height;
-            if (vbar.Value > vbar.Maximum)
-                vbar.Value = vbar.Maximum;
+            if (this.mImage.Height < this.Height) {
+                vbar.Maximum = 0;
+                vbar.Value = 0;
+            }
+            else {
+                vbar.Maximum = this.mImage.Height - this.Height + hbar.Height;
+                if (vbar.Value > vbar.Maximum)
+                    vbar.Value = vbar.Maximum;
+            }
 
             hbar.Minimum = 0;
             hbar.Maximum = this.mImage.Width - this.Width + vbar.Width;
@@ -84,5 +92,35 @@ namespace GbReaper.Controls {
             this.Invalidate();
         }
 
+
+        public void SetImage(Image pImage, int pZoomfactor) {
+            this.mImage = pImage;
+            this.mZoomfactor = pZoomfactor;
+
+            this.UpdateSidebars();
+            this.Invalidate();
+        }
+
+        protected void OnRomSpriteSelected(Image pImg) {
+            if (this.RomSpriteSelected != null) {
+                this.RomSpriteSelected(pImg);
+            }
+        }
+
+        protected override void OnDoubleClick(EventArgs e) {
+            base.OnDoubleClick(e);
+
+            if (!this.mMouseHover.IsEmpty && this.mImage != null) {
+                Rectangle vSource= new Rectangle(
+                    hbar.Value + Sprite.WIDTH_PX * this.mZoomfactor * (this.mMouseHover.X / (Sprite.WIDTH_PX * this.mZoomfactor)),
+                    vbar.Value + Sprite.HEIGHT_PX * this.mZoomfactor * (this.mMouseHover.Y / (Sprite.HEIGHT_PX * this.mZoomfactor)) - (vbar.Value % (Sprite.HEIGHT_PX * this.mZoomfactor)),
+                    Sprite.WIDTH_PX * this.mZoomfactor,
+                    Sprite.HEIGHT_PX * this.mZoomfactor
+                    );
+                Bitmap vBmpSprite = ((Bitmap)this.mImage).Clone(vSource, ((Bitmap)this.mImage).PixelFormat);
+
+                this.OnRomSpriteSelected(vBmpSprite);
+            }
+        }
     }
 }
