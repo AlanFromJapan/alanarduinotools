@@ -18,8 +18,8 @@ namespace GbReaper {
         private GbProject mProject = new GbProject();
 
         private void FrmMain_Load(object sender, EventArgs e) {
-            Image vM = RomReader.GetRomAsImageUnscaled(@"D:\Gameboy.dev\ROMS\tetris_(v1.1)\Tetris.gb");
-            ucRomViewer1.SetImage(vM, 1);
+            Image vM = RomReader.GetRomAsImage(@"D:\Gameboy.dev\ROMS\tetris_(v1.1)\Tetris.gb", 2);
+            ucRomViewer1.SetImage(vM, 2);
 
             
             Library vLib = new Library("my lib01");
@@ -49,8 +49,8 @@ namespace GbReaper {
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e) {
             if (DialogResult.OK == ofdRom.ShowDialog(this)) {
-                Image vM = RomReader.GetRomAsImageUnscaled(ofdRom.FileName);
-                ucRomViewer1.SetImage(vM, 1);
+                Image vM = RomReader.GetRomAsImage(ofdRom.FileName, 2);
+                ucRomViewer1.SetImage(vM, 2);
             }
         }
 

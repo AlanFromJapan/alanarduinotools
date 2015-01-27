@@ -46,8 +46,8 @@ namespace GbReaper.Controls {
 
             if (!this.mMouseHover.IsEmpty) {
                 e.Graphics.DrawRectangle(
-                    Pens.Red, 
-                    Sprite.WIDTH_PX * this.mZoomfactor * (this.mMouseHover.X /(Sprite.WIDTH_PX * this.mZoomfactor)),
+                    Pens.Red,
+                    Sprite.WIDTH_PX * this.mZoomfactor * (this.mMouseHover.X / (Sprite.WIDTH_PX * this.mZoomfactor)) - (hbar.Value % (Sprite.WIDTH_PX * this.mZoomfactor)),
                     Sprite.HEIGHT_PX * this.mZoomfactor * (this.mMouseHover.Y / (Sprite.HEIGHT_PX * this.mZoomfactor)) - (vbar.Value % (Sprite.HEIGHT_PX * this.mZoomfactor)), 
                     Sprite.WIDTH_PX * this.mZoomfactor,
                     Sprite.HEIGHT_PX * this.mZoomfactor
@@ -112,7 +112,7 @@ namespace GbReaper.Controls {
 
             if (!this.mMouseHover.IsEmpty && this.mImage != null) {
                 Rectangle vSource= new Rectangle(
-                    hbar.Value + Sprite.WIDTH_PX * this.mZoomfactor * (this.mMouseHover.X / (Sprite.WIDTH_PX * this.mZoomfactor)),
+                    hbar.Value + Sprite.WIDTH_PX * this.mZoomfactor * (this.mMouseHover.X / (Sprite.WIDTH_PX * this.mZoomfactor)) - (hbar.Value % (Sprite.WIDTH_PX * this.mZoomfactor)),
                     vbar.Value + Sprite.HEIGHT_PX * this.mZoomfactor * (this.mMouseHover.Y / (Sprite.HEIGHT_PX * this.mZoomfactor)) - (vbar.Value % (Sprite.HEIGHT_PX * this.mZoomfactor)),
                     Sprite.WIDTH_PX * this.mZoomfactor,
                     Sprite.HEIGHT_PX * this.mZoomfactor
