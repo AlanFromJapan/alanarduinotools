@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using System.IO;
 
 namespace GbReaper.Classes {
     public class Map {
@@ -87,6 +88,23 @@ namespace GbReaper.Classes {
             }            
             
             return vBuff;
+        }
+
+
+        internal void SaveToStream(StreamWriter pSW) {
+            pSW.WriteLine("\t\t<map name=\"" + this.Name + "\">");
+
+            for (int y = 0; y < this.Height; y++) {
+                for (int x = 0; x < this.Width; x++) {
+                    pSW.WriteLine(string.Format("\t\t\t<cell spriteID=\"{0}\" x=\"{1}\" y=\"{2}\" />",
+                        (mMatrix[x,y] == null || mMatrix[x,y].mSprite == null ? null: mMatrix[x,y].mSprite.UID.ToString()),
+                        x,
+                        y
+                        ));
+                }
+            }
+                
+            pSW.WriteLine("\t\t</map>");
         }
     }
 }

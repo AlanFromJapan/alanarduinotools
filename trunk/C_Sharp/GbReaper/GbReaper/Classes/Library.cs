@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace GbReaper.Classes {
     public class Library : IEnumerable<Sprite> {
@@ -54,6 +55,14 @@ namespace GbReaper.Classes {
             if (this.SpriteAdded != null) {
                 this.SpriteAdded(pSprite);
             }
+        }
+
+        internal void SaveToStream(StreamWriter pSW) {
+            pSW.WriteLine("\t\t<library name=\"" + this.Name + "\">");
+            foreach (Sprite vS in this.mSprites) {
+                vS.SaveToStream(pSW);
+            }
+            pSW.WriteLine("\t\t</library>");
         }
     }
 }
