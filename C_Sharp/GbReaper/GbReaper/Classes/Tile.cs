@@ -8,7 +8,7 @@ using System.IO;
 using System.Drawing.Imaging;
 
 namespace GbReaper.Classes {
-    public class Sprite {
+    public class Tile {
         public const int WIDTH_PX = 8;
         public const int HEIGHT_PX = 8;
 
@@ -18,22 +18,22 @@ namespace GbReaper.Classes {
         private Palette mPalette = Palette.DEFAULT_PALETTE;
 
         public Guid UID { get { return mUID; } }
-        public Image Image { get { return mImage; } set { mImage = value; OnSpriteChanged(); } }
+        public Image Image { get { return mImage; } set { mImage = value; OnTileChanged(); } }
         public string Name { get { return mName; } set { mName = value; } }
         public Palette Palette { get { return mPalette; } }
 
 
-        public delegate void SpriteChangeDelegate(Sprite pSprite);
-        public event SpriteChangeDelegate SpriteChanged;
+        public delegate void TileChangeDelegate(Tile pTile);
+        public event TileChangeDelegate TileChanged;
 
-        public Sprite(Guid pUID, string pName, Image pImage, Palette pPalette) {
+        public Tile(Guid pUID, string pName, Image pImage, Palette pPalette) {
             this.mUID = pUID;
             this.mImage = pImage;
             this.mName = pName;
             this.mPalette = pPalette;
         }
 
-        public Sprite(Image pImage, Palette pPalette) : this (
+        public Tile(Image pImage, Palette pPalette) : this (
             Guid.NewGuid(),
             string.Empty,
             pImage,
@@ -46,23 +46,23 @@ namespace GbReaper.Classes {
         }
 
         /// <summary>
-        /// Raises the SpriteChanged event
+        /// Raises the TileChanged event
         /// </summary>
-        protected void OnSpriteChanged() {
-            if (this.SpriteChanged != null) {
-                this.SpriteChanged(this);
+        protected void OnTileChanged() {
+            if (this.TileChanged != null) {
+                this.TileChanged(this);
             }
         }
 
         public override bool Equals(object obj) {
-            return obj != null && obj is Sprite && this.UID == ((Sprite)obj).UID;
+            return obj != null && obj is Tile && this.UID == ((Tile)obj).UID;
         }
         public override int GetHashCode() {
             return this.mUID.GetHashCode();
         }
 
         internal void SaveToStream(System.IO.StreamWriter pSW) {
-            pSW.Write("\t\t\t<sprite id=\""+this.UID+"\" name=\"" + this.Name + "\" palette=\""+this.Palette.mName+"\">");
+            pSW.Write("\t\t\t<tile id=\""+this.UID+"\" name=\"" + this.Name + "\" palette=\""+this.Palette.mName+"\">");
 
             Bitmap vBmp = (Bitmap)this.mImage;
 
@@ -75,12 +75,12 @@ namespace GbReaper.Classes {
                 }
             }
             
-            pSW.WriteLine("</sprite>");
+            pSW.WriteLine("</tile>");
         }
 
-        internal static Sprite LoadFromXml (XmlNode pNode){
+        internal static Tile LoadFromXml (XmlNode pNode){
             try {
-                Bitmap vBmp = new Bitmap(Sprite.WIDTH_PX, Sprite.HEIGHT_PX);
+                Bitmap vBmp = new Bitmap(Tile.WIDTH_PX, Tile.HEIGHT_PX);
 
                 int x = 0;
                 int y = 0;
@@ -93,17 +93,17 @@ namespace GbReaper.Classes {
                         vBmp.SetPixel(x, y, vCol);
 
                         x++;
-                        if (x >= Sprite.WIDTH_PX) {
+                        if (x >= Tile.WIDTH_PX) {
                             x = 0;
                             y++;
-                            if (y >= Sprite.HEIGHT_PX) {
+                            if (y >= Tile.HEIGHT_PX) {
                                 break;
                             }
                         }
                     }
                 }
 
-                return new Sprite(Guid.Parse(pNode.Attributes["id"].Value),
+                return new Tile(Guid.Parse(pNode.Attributes["id"].Value),
                     pNode.Attributes["name"].Value,
                     vBmp,
                     Palette.DEFAULT_PALETTE //todo fix this one day

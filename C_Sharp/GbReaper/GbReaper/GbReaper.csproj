@@ -55,12 +55,18 @@
     <Compile Include="Classes\Map.cs" />
     <Compile Include="Classes\Palette.cs" />
     <Compile Include="Classes\RomReader.cs" />
-    <Compile Include="Classes\Sprite.cs" />
+    <Compile Include="Classes\Tile.cs" />
     <Compile Include="Controls\UcLibraryList.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\UcLibraryList.Designer.cs">
       <DependentUpon>UcLibraryList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UcMapEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\UcMapEditor.Designer.cs">
+      <DependentUpon>UcMapEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\UcRomViewer.cs">
       <SubType>UserControl</SubType>
@@ -68,11 +74,11 @@
     <Compile Include="Controls\UcRomViewer.Designer.cs">
       <DependentUpon>UcRomViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\UcSpriteEditor.cs">
+    <Compile Include="Controls\UcTileEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\UcSpriteEditor.Designer.cs">
-      <DependentUpon>UcSpriteEditor.cs</DependentUpon>
+    <Compile Include="Controls\UcTileEditor.Designer.cs">
+      <DependentUpon>UcTileEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FrmMain.cs">
       <SubType>Form</SubType>
@@ -80,19 +86,31 @@
     <Compile Include="Forms\FrmMain.Designer.cs">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FrmNewMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmNewMap.Designer.cs">
+      <DependentUpon>FrmNewMap.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Controls\UcLibraryList.resx">
       <DependentUpon>UcLibraryList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\UcMapEditor.resx">
+      <DependentUpon>UcMapEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\UcRomViewer.resx">
       <DependentUpon>UcRomViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\UcSpriteEditor.resx">
-      <DependentUpon>UcSpriteEditor.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\UcTileEditor.resx">
+      <DependentUpon>UcTileEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmNewMap.resx">
+      <DependentUpon>FrmNewMap.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -8,7 +8,7 @@ using System.IO;
 namespace GbReaper.Classes {
     public class Map {
         class MapBucket {
-            public Sprite mSprite = null;
+            public Tile mTile = null;
         }
 
         public readonly int Width;
@@ -26,33 +26,33 @@ namespace GbReaper.Classes {
             this.mMatrix = new MapBucket[this.Width, this.Height];
         }
 
-        public void SetSprite(Sprite pSprite, int pX, int pY) { 
+        public void SetTile(Tile pTile, int pX, int pY) { 
             //no check
 
             //unregister event handler of previous sprite
             if (this.mMatrix[pX, pY] != null) {
                 MapBucket vOld = this.mMatrix[pX, pY];
-                if (vOld.mSprite != null) {
-                    vOld.mSprite.SpriteChanged -= new Sprite.SpriteChangeDelegate(SpriteChangedHandler);
+                if (vOld.mTile != null) {
+                    vOld.mTile.TileChanged -= new Tile.TileChangeDelegate(TileChangedHandler);
                 }
             }
 
             MapBucket vNew = new MapBucket();
-            vNew.mSprite = pSprite;
+            vNew.mTile = pTile;
             this.mMatrix[pX, pY] = vNew;
 
-            RegisterSpriteChangeHandler(pSprite);
+            RegisterTileChangeHandler(pTile);
 
             OnMapChanged();
         }
 
-        private void RegisterSpriteChangeHandler(Sprite pSprite) {
+        private void RegisterTileChangeHandler(Tile pTile) {
             //trick to avoid multiple registration on the same instance (always ok to unregister)
-            pSprite.SpriteChanged -= new Sprite.SpriteChangeDelegate(SpriteChangedHandler);
-            pSprite.SpriteChanged += new Sprite.SpriteChangeDelegate(SpriteChangedHandler);
+            pTile.TileChanged -= new Tile.TileChangeDelegate(TileChangedHandler);
+            pTile.TileChanged += new Tile.TileChangeDelegate(TileChangedHandler);
         }
 
-        protected void SpriteChangedHandler(Sprite pSprite) {
+        protected void TileChangedHandler(Tile pTile) {
             //repaint
             this.OnMapChanged();
         }
@@ -64,7 +64,7 @@ namespace GbReaper.Classes {
         }
 
         public Image GetImage() {
-            Bitmap vBuff = new Bitmap(this.Width * Sprite.WIDTH_PX, this.Height * Sprite.HEIGHT_PX);
+            Bitmap vBuff = new Bitmap(this.Width * Tile.WIDTH_PX, this.Height * Tile.HEIGHT_PX);
             Graphics vG = Graphics.FromImage(vBuff);
 
             try {
@@ -73,8 +73,8 @@ namespace GbReaper.Classes {
                     for (int x = 0; x < this.Width; x++) {
                         if (this.mMatrix[x, y] != null) {
                             MapBucket vOld = this.mMatrix[x, y];
-                            if (vOld.mSprite != null) {
-                                vG.DrawImageUnscaled(vOld.mSprite.Image, x * Sprite.WIDTH_PX, y * Sprite.HEIGHT_PX);
+                            if (vOld.mTile != null) {
+                                vG.DrawImageUnscaled(vOld.mTile.Image, x * Tile.WIDTH_PX, y * Tile.HEIGHT_PX);
 
                             }
                         }                        
@@ -96,8 +96,8 @@ namespace GbReaper.Classes {
 
             for (int y = 0; y < this.Height; y++) {
                 for (int x = 0; x < this.Width; x++) {
-                    pSW.WriteLine(string.Format("\t\t\t<cell spriteID=\"{0}\" x=\"{1}\" y=\"{2}\" />",
-                        (mMatrix[x,y] == null || mMatrix[x,y].mSprite == null ? null: mMatrix[x,y].mSprite.UID.ToString()),
+                    pSW.WriteLine(string.Format("\t\t\t<cell tileID=\"{0}\" x=\"{1}\" y=\"{2}\" />",
+                        (mMatrix[x,y] == null || mMatrix[x,y].mTile == null ? null: mMatrix[x,y].mTile.UID.ToString()),
                         x,
                         y
                         ));

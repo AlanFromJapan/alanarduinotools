@@ -1,5 +1,5 @@
 ﻿namespace GbReaper.Controls {
-    partial class UcSpriteEditor {
+    partial class UcTileEditor {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -89,7 +89,7 @@
             this.pan128Alt.Size = new System.Drawing.Size(128, 128);
             this.pan128Alt.TabIndex = 2;
             // 
-            // UcSpriteEditor
+            // UcTileEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -101,9 +101,9 @@
             this.Controls.Add(this.pan8);
             this.Controls.Add(this.panEdit);
             this.MinimumSize = new System.Drawing.Size(0, 256);
-            this.Name = "UcSpriteEditor";
+            this.Name = "UcTileEditor";
             this.Size = new System.Drawing.Size(646, 256);
-            this.Load += new System.EventHandler(this.UcSpriteEditor_Load);
+            this.Load += new System.EventHandler(this.UcTileEditor_Load);
             this.ResumeLayout(false);
 
         }

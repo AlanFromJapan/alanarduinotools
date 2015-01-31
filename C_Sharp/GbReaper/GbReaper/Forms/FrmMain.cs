@@ -20,7 +20,7 @@ namespace GbReaper {
         private void FrmMain_Load(object sender, EventArgs e) {
             Image vM = RomReader.GetRomAsImage(@"D:\Gameboy.dev\ROMS\tetris_(v1.1)\Tetris.gb", 2);
             ucRomViewer1.SetImage(vM, 2);
-            ucRomViewer1.RomSpriteViewed += new GbReaper.Controls.UcRomViewer.RomSpriteSelectDelegate(RomViewer_RomSpriteViewed);
+            ucRomViewer1.RomTileViewed += new GbReaper.Controls.UcRomViewer.RomTileSelectDelegate(RomViewer_RomTileViewed);
 
 
             try {
@@ -34,8 +34,8 @@ namespace GbReaper {
             ucLibView.SetLibrary(mCurrentProject.mLibraries[0]);
 
 
-            this.ucRomViewer1.RomSpriteSelected += new GbReaper.Controls.UcRomViewer.RomSpriteSelectDelegate(RomViewer_RomSpriteSelected);
-            this.ucLibView.SelectedSpriteChanged += new GbReaper.Controls.UcLibraryList.SelectedSpriteChangedDelegate(LibView_SelectedSpriteChanged);
+            this.ucRomViewer1.RomTileSelected += new GbReaper.Controls.UcRomViewer.RomTileSelectDelegate(RomViewer_RomTileSelected);
+            this.ucLibView.SelectedTileChanged += new GbReaper.Controls.UcLibraryList.SelectedTileChangedDelegate(LibView_SelectedTileChanged);
 
             pan32.Paint += new PaintEventHandler(pan32_Paint);
             pan128Alt.Paint += new PaintEventHandler(pan128Alt_Paint);
@@ -59,18 +59,18 @@ namespace GbReaper {
             DrawingLogic.ScalePaintBackground(ucRomViewer1.SelectedTile, e, new Rectangle(new Point(0, 0), ((Control)sender).Size));
         }
 
-        void RomViewer_RomSpriteViewed(Image pImage) {
+        void RomViewer_RomTileViewed(Image pImage) {
             pan32.Invalidate();
             pan128Alt.Invalidate();
         }
 
 
-        void LibView_SelectedSpriteChanged(Sprite pS) {
-            ucSpriteEd.SetSprite(pS);
+        void LibView_SelectedTileChanged(Tile pS) {
+            ucTileEd.SetTile(pS);
         }
 
-        void RomViewer_RomSpriteSelected(Image pImage) {
-            mCurrentProject.mLibraries[0].AddSprite(new Sprite(pImage, Palette.DEFAULT_PALETTE));
+        void RomViewer_RomTileSelected(Image pImage) {
+            mCurrentProject.mLibraries[0].AddTile(new Tile(pImage, Palette.DEFAULT_PALETTE));
         }
 
        

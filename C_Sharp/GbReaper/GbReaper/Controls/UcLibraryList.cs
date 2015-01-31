@@ -14,8 +14,8 @@ namespace GbReaper.Controls {
     public partial class UcLibraryList : UserControl {
         private Library mCurrentLib = null;
 
-        public delegate void SelectedSpriteChangedDelegate(Sprite pS);
-        public event SelectedSpriteChangedDelegate SelectedSpriteChanged;
+        public delegate void SelectedTileChangedDelegate(Tile pS);
+        public event SelectedTileChangedDelegate SelectedTileChanged;
 
         public UcLibraryList() {
             InitializeComponent();
@@ -101,13 +101,13 @@ namespace GbReaper.Controls {
                 // Draw the background and focus rectangle for a selected item.
                 //e.Graphics.FillRectangle(Brushes.YellowGreen, e.Bounds);
 
-                SpriteViewItem vSVI = (SpriteViewItem)e.Item;
-                e.Graphics.DrawImage(vSVI.mSprite.Image, e.Bounds.Location.X, e.Bounds.Location.Y, Sprite.WIDTH_PX*2, Sprite.HEIGHT_PX*2);
+                TileViewItem vSVI = (TileViewItem)e.Item;
+                e.Graphics.DrawImage(vSVI.mTile.Image, e.Bounds.Location.X, e.Bounds.Location.Y, Tile.WIDTH_PX*2, Tile.HEIGHT_PX*2);
 
                 Rectangle vR = new Rectangle(e.Bounds.Location, e.Bounds.Size);
-                vR.Offset(vSVI.mSprite.Image.Width, 0);
+                vR.Offset(vSVI.mTile.Image.Width, 0);
                 e.Graphics.DrawString(
-                    vSVI.mSprite.UID.ToString(), 
+                    vSVI.mTile.UID.ToString(), 
                     lvLibrary.Font,
                     Brushes.Black,
                     vR, 
@@ -127,11 +127,11 @@ namespace GbReaper.Controls {
 
         }
 
-        class SpriteViewItem : ListViewItem {
-            public Sprite mSprite = null;
+        class TileViewItem : ListViewItem {
+            public Tile mTile = null;
 
-            public SpriteViewItem(Sprite pS) {
-                this.mSprite = pS;
+            public TileViewItem(Tile pS) {
+                this.mTile = pS;
             }
 
             
@@ -139,49 +139,49 @@ namespace GbReaper.Controls {
 
         public void SetLibrary(Library pLib) {
             if (this.mCurrentLib != null) {
-                this.mCurrentLib.SpriteAdded -= new Sprite.SpriteChangeDelegate(CurrentLib_SpriteAdded);
-                this.mCurrentLib.SpriteDeleted -= new Sprite.SpriteChangeDelegate(CurrentLib_SpriteDeleted);
+                this.mCurrentLib.TileAdded -= new Tile.TileChangeDelegate(CurrentLib_TileAdded);
+                this.mCurrentLib.TileDeleted -= new Tile.TileChangeDelegate(CurrentLib_TileDeleted);
             }
             this.mCurrentLib = pLib;
-            this.mCurrentLib.SpriteAdded += new Sprite.SpriteChangeDelegate(CurrentLib_SpriteAdded);
-            this.mCurrentLib.SpriteDeleted += new Sprite.SpriteChangeDelegate(CurrentLib_SpriteDeleted);
+            this.mCurrentLib.TileAdded += new Tile.TileChangeDelegate(CurrentLib_TileAdded);
+            this.mCurrentLib.TileDeleted += new Tile.TileChangeDelegate(CurrentLib_TileDeleted);
 
             //todo unbind sprite handlers before release
             lvLibrary.Clear();
 
-            foreach (Sprite s in this.mCurrentLib) {
-                lvLibrary.Items.Add(new SpriteViewItem(s));
-                s.SpriteChanged -= new Sprite.SpriteChangeDelegate(SpriteChanged);
-                s.SpriteChanged += new Sprite.SpriteChangeDelegate(SpriteChanged);
+            foreach (Tile s in this.mCurrentLib) {
+                lvLibrary.Items.Add(new TileViewItem(s));
+                s.TileChanged -= new Tile.TileChangeDelegate(TileChanged);
+                s.TileChanged += new Tile.TileChangeDelegate(TileChanged);
             }
 
 
             lvLibrary.Invalidate();
         }
 
-        void SpriteChanged(Sprite pSprite) {
+        void TileChanged(Tile pTile) {
             lvLibrary.Invalidate();
         }
 
-        void CurrentLib_SpriteDeleted(Sprite pSprite) {
+        void CurrentLib_TileDeleted(Tile pTile) {
             //TODO
             lvLibrary.Invalidate();
         }
 
-        void CurrentLib_SpriteAdded(Sprite pSprite) {
-            lvLibrary.Items.Add(new SpriteViewItem(pSprite));
-            pSprite.SpriteChanged -= new Sprite.SpriteChangeDelegate(SpriteChanged);
-            pSprite.SpriteChanged += new Sprite.SpriteChangeDelegate(SpriteChanged);
+        void CurrentLib_TileAdded(Tile pTile) {
+            lvLibrary.Items.Add(new TileViewItem(pTile));
+            pTile.TileChanged -= new Tile.TileChangeDelegate(TileChanged);
+            pTile.TileChanged += new Tile.TileChangeDelegate(TileChanged);
             lvLibrary.Invalidate();
         }
 
         private void lvLibrary_SelectedIndexChanged(object sender, EventArgs e) {
-            OnSelectedSpriteChanged();
+            OnSelectedTileChanged();
         }
 
-        protected void OnSelectedSpriteChanged() {
-            if (SelectedSpriteChanged != null && lvLibrary.SelectedItems.Count > 0) {
-                SelectedSpriteChanged(((SpriteViewItem)lvLibrary.SelectedItems[0]).mSprite);
+        protected void OnSelectedTileChanged() {
+            if (SelectedTileChanged != null && lvLibrary.SelectedItems.Count > 0) {
+                SelectedTileChanged(((TileViewItem)lvLibrary.SelectedItems[0]).mTile);
             }
         }
     }
