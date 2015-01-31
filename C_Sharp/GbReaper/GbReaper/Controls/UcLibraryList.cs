@@ -102,7 +102,7 @@ namespace GbReaper.Controls {
                 //e.Graphics.FillRectangle(Brushes.YellowGreen, e.Bounds);
 
                 SpriteViewItem vSVI = (SpriteViewItem)e.Item;
-                e.Graphics.DrawImage(vSVI.mSprite.Image, e.Bounds.Location);
+                e.Graphics.DrawImage(vSVI.mSprite.Image, e.Bounds.Location.X, e.Bounds.Location.Y, Sprite.WIDTH_PX*2, Sprite.HEIGHT_PX*2);
 
                 Rectangle vR = new Rectangle(e.Bounds.Location, e.Bounds.Size);
                 vR.Offset(vSVI.mSprite.Image.Width, 0);

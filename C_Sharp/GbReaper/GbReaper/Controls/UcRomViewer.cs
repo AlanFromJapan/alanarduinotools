@@ -14,9 +14,13 @@ namespace GbReaper.Controls {
         protected Image mImage = null;
         protected int mZoomfactor = 1;
         protected Point mMouseHover = Point.Empty;
+        protected Image mSelectedTile = null;
+
+        public Image SelectedTile { get { return this.mSelectedTile; } }
 
         public delegate void RomSpriteSelectDelegate(Image pImage);
         public event RomSpriteSelectDelegate RomSpriteSelected;
+        public event RomSpriteSelectDelegate RomSpriteViewed;
 
         public UcRomViewer() {
             InitializeComponent();
@@ -107,20 +111,58 @@ namespace GbReaper.Controls {
             }
         }
 
+        protected void OnRomSpriteViewed(Image pImg) {
+            if (this.RomSpriteViewed != null) {
+                this.RomSpriteViewed(pImg);
+            }
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e) {
+            base.OnMouseUp(e);
+
+            Bitmap vBmpSprite = GetSelectedBitmap8x8();
+            this.mSelectedTile = vBmpSprite;
+
+            OnRomSpriteViewed(vBmpSprite);
+        }
+
         protected override void OnDoubleClick(EventArgs e) {
             base.OnDoubleClick(e);
 
             if (!this.mMouseHover.IsEmpty && this.mImage != null) {
-                Rectangle vSource= new Rectangle(
-                    hbar.Value + Sprite.WIDTH_PX * this.mZoomfactor * (this.mMouseHover.X / (Sprite.WIDTH_PX * this.mZoomfactor)) - (hbar.Value % (Sprite.WIDTH_PX * this.mZoomfactor)),
-                    vbar.Value + Sprite.HEIGHT_PX * this.mZoomfactor * (this.mMouseHover.Y / (Sprite.HEIGHT_PX * this.mZoomfactor)) - (vbar.Value % (Sprite.HEIGHT_PX * this.mZoomfactor)),
-                    Sprite.WIDTH_PX * this.mZoomfactor,
-                    Sprite.HEIGHT_PX * this.mZoomfactor
-                    );
-                Bitmap vBmpSprite = ((Bitmap)this.mImage).Clone(vSource, ((Bitmap)this.mImage).PixelFormat);
+                Bitmap vBmpSprite = GetSelectedBitmap8x8();
 
                 this.OnRomSpriteSelected(vBmpSprite);
             }
         }
+
+        private Bitmap GetSelectedBitmap8x8() {
+            Rectangle vSource = new Rectangle(
+                hbar.Value + Sprite.WIDTH_PX * this.mZoomfactor * (this.mMouseHover.X / (Sprite.WIDTH_PX * this.mZoomfactor)) - (hbar.Value % (Sprite.WIDTH_PX * this.mZoomfactor)),
+                vbar.Value + Sprite.HEIGHT_PX * this.mZoomfactor * (this.mMouseHover.Y / (Sprite.HEIGHT_PX * this.mZoomfactor)) - (vbar.Value % (Sprite.HEIGHT_PX * this.mZoomfactor)),
+                Sprite.WIDTH_PX * this.mZoomfactor,
+                Sprite.HEIGHT_PX * this.mZoomfactor
+                );
+            Bitmap vBmpSpriteZoomed = ((Bitmap)this.mImage).Clone(vSource, ((Bitmap)this.mImage).PixelFormat);
+
+            if (this.mZoomfactor == 1) {
+                return vBmpSpriteZoomed;
+            }
+            else {
+                Bitmap vBmp8x8 = new Bitmap(Sprite.WIDTH_PX, Sprite.HEIGHT_PX);
+
+                using (Graphics vG = Graphics.FromImage(vBmp8x8)) {
+                    vG.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    vG.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+                    vG.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+
+                    vG.DrawImage(vBmpSpriteZoomed, 0, 0, vBmp8x8.Width, vBmp8x8.Height);
+                }
+
+                return vBmp8x8;
+            }
+
+        }
+
     }
 }

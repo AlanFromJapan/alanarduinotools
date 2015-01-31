@@ -35,21 +35,12 @@ namespace GbReaper.Controls {
         }
 
         private void ScaledAndTiledPaintBackground(PaintEventArgs e, Rectangle pR, int pRepeat) {
-            if (this.mCurrentSprite == null) {
-                e.Graphics.FillRectangle(Brushes.White, pR);
-                return;
-            }
-
-            e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-            e.Graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
-
-            int vSide = e.ClipRectangle.Width / pRepeat;
-            for (int x = 0; x < pRepeat; x++) {
-                for (int y = 0; y < pRepeat; y++) {
-                    e.Graphics.DrawImage(this.mCurrentSprite.Image, x * vSide, y * vSide, vSide, vSide);
-                }
-            }
+            DrawingLogic.ScaledAndTiledPaintBackground(
+                (this.mCurrentSprite == null ? null : this.mCurrentSprite.Image), 
+                e, 
+                pR, 
+                pRepeat
+            );
         }
 
         void pan64_Paint(object sender, PaintEventArgs e) {
@@ -70,31 +61,17 @@ namespace GbReaper.Controls {
 
         void panEdit_Paint(object sender, PaintEventArgs e) {
             ScalePaintBackground(e, new Rectangle(new Point(0,0),((Control)sender).Size));
-            DrawGrid(e, new Rectangle(new Point(0, 0), ((Control)sender).Size));
+            DrawingLogic.DrawGrid(e, new Rectangle(new Point(0, 0), ((Control)sender).Size));
         }
 
-        private void DrawGrid(PaintEventArgs e, Rectangle pR) {
-            
-            for (int x = 0; x < 7; x++) {
-                e.Graphics.DrawLine(Pens.Black, (x + 1) * pR.Width / 8, 0, (x + 1) * pR.Width / 8, pR.Height);
-            }
 
-            for (int y = 0; y < 7; y++) {
-                e.Graphics.DrawLine(Pens.Black, 0, (y + 1) * pR.Height / 8, pR.Width, (y + 1) * pR.Height / 8);
-            }
-        }
 
         private void ScalePaintBackground(PaintEventArgs e, Rectangle pR) {
-            if (this.mCurrentSprite == null) {
-                e.Graphics.FillRectangle(Brushes.White, pR);
-                return;
-            }
-            
-            e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-            e.Graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
-
-            e.Graphics.DrawImage(this.mCurrentSprite.Image, pR);
+            DrawingLogic.ScalePaintBackground(
+                (this.mCurrentSprite == null ? null : this.mCurrentSprite.Image),
+                e,
+                pR
+            );
         }
 
         public void SetSprite(Sprite pS) {
