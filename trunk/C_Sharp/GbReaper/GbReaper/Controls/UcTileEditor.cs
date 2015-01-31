@@ -9,14 +9,14 @@ using System.Windows.Forms;
 using GbReaper.Classes;
 
 namespace GbReaper.Controls {
-    public partial class UcSpriteEditor : UserControl {
-        private Sprite mCurrentSprite = null;
+    public partial class UcTileEditor : UserControl {
+        private Tile mCurrentTile = null;
 
-        public UcSpriteEditor() {
+        public UcTileEditor() {
             InitializeComponent();
         }
 
-        private void UcSpriteEditor_Load(object sender, EventArgs e) {
+        private void UcTileEditor_Load(object sender, EventArgs e) {
             panEdit.Paint += new PaintEventHandler(panEdit_Paint);
             pan8.Paint += new PaintEventHandler(pan8_Paint);
             pan16.Paint += new PaintEventHandler(pan16_Paint);
@@ -36,7 +36,7 @@ namespace GbReaper.Controls {
 
         private void ScaledAndTiledPaintBackground(PaintEventArgs e, Rectangle pR, int pRepeat) {
             DrawingLogic.ScaledAndTiledPaintBackground(
-                (this.mCurrentSprite == null ? null : this.mCurrentSprite.Image), 
+                (this.mCurrentTile == null ? null : this.mCurrentTile.Image), 
                 e, 
                 pR, 
                 pRepeat
@@ -61,25 +61,25 @@ namespace GbReaper.Controls {
 
         void panEdit_Paint(object sender, PaintEventArgs e) {
             ScalePaintBackground(e, new Rectangle(new Point(0,0),((Control)sender).Size));
-            DrawingLogic.DrawGrid(e, new Rectangle(new Point(0, 0), ((Control)sender).Size));
+            DrawingLogic.DrawGrid(e, new Rectangle(new Point(0, 0), ((Control)sender).Size), Pens.DarkGray, 8, 8);
         }
 
 
 
         private void ScalePaintBackground(PaintEventArgs e, Rectangle pR) {
             DrawingLogic.ScalePaintBackground(
-                (this.mCurrentSprite == null ? null : this.mCurrentSprite.Image),
+                (this.mCurrentTile == null ? null : this.mCurrentTile.Image),
                 e,
                 pR
             );
         }
 
-        public void SetSprite(Sprite pS) {
-            if (this.mCurrentSprite != null) { 
+        public void SetTile(Tile pS) {
+            if (this.mCurrentTile != null) { 
                 //nothing
             }
 
-            this.mCurrentSprite = pS;
+            this.mCurrentTile = pS;
             this.Refresh();
         }
 

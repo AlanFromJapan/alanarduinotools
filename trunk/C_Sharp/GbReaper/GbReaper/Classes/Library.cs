@@ -5,61 +5,61 @@ using System.Text;
 using System.IO;
 
 namespace GbReaper.Classes {
-    public class Library : IEnumerable<Sprite> {
-        private List<Sprite> mSprites = new List<Sprite>();
+    public class Library : IEnumerable<Tile> {
+        private List<Tile> mTiles = new List<Tile>();
         private string mName = null;
 
         public string Name { get { return mName; } set { mName = value; } }
 
-        public Sprite this[int i] {
+        public Tile this[int i] {
             get {
-                return this.mSprites[i];
+                return this.mTiles[i];
             }
         }
 
 
         
-        public event GbReaper.Classes.Sprite.SpriteChangeDelegate SpriteDeleted;
-        public event GbReaper.Classes.Sprite.SpriteChangeDelegate SpriteAdded;
+        public event GbReaper.Classes.Tile.TileChangeDelegate TileDeleted;
+        public event GbReaper.Classes.Tile.TileChangeDelegate TileAdded;
 
         public Library(string pName) { 
             mName = pName; 
         }
 
-        public IEnumerator<Sprite> GetEnumerator() {
-            return this.mSprites.GetEnumerator();
+        public IEnumerator<Tile> GetEnumerator() {
+            return this.mTiles.GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
-            return this.mSprites.GetEnumerator();
+            return this.mTiles.GetEnumerator();
         }
 
-        public void AddSprite(Sprite pSprite) {
-            this.mSprites.Add(pSprite);
+        public void AddTile(Tile pTile) {
+            this.mTiles.Add(pTile);
 
-            OnSpriteAdded(pSprite);
+            OnTileAdded(pTile);
         }
 
-        public void DeleteSprite(Sprite pSprite) {
-            this.mSprites.Remove(pSprite);
+        public void DeleteTile(Tile pTile) {
+            this.mTiles.Remove(pTile);
 
-            OnSpriteDeleted(pSprite);
+            OnTileDeleted(pTile);
         }
 
-        protected void OnSpriteDeleted(Sprite pSprite) {
-            if (this.SpriteDeleted != null) {
-                this.SpriteDeleted(pSprite);
+        protected void OnTileDeleted(Tile pTile) {
+            if (this.TileDeleted != null) {
+                this.TileDeleted(pTile);
             }
         }
-        protected void OnSpriteAdded(Sprite pSprite) {
-            if (this.SpriteAdded != null) {
-                this.SpriteAdded(pSprite);
+        protected void OnTileAdded(Tile pTile) {
+            if (this.TileAdded != null) {
+                this.TileAdded(pTile);
             }
         }
 
         internal void SaveToStream(StreamWriter pSW) {
             pSW.WriteLine("\t\t<library name=\"" + this.Name + "\">");
-            foreach (Sprite vS in this.mSprites) {
+            foreach (Tile vS in this.mTiles) {
                 vS.SaveToStream(pSW);
             }
             pSW.WriteLine("\t\t</library>");

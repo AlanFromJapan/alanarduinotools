@@ -44,14 +44,14 @@ namespace GbReaper.Classes {
         }
 
 
-        public static void DrawGrid(PaintEventArgs e, Rectangle pR) {
+        public static void DrawGrid(PaintEventArgs e, Rectangle pR, Pen pPen, int pDivideH, int pDivideV) {
 
-            for (int x = 0; x < 7; x++) {
-                e.Graphics.DrawLine(Pens.Black, (x + 1) * pR.Width / 8, 0, (x + 1) * pR.Width / 8, pR.Height);
+            for (int x = 0; x < pDivideH-1; x++) {
+                e.Graphics.DrawLine(pPen, pR.Left + (x + 1) * pR.Width / pDivideH, pR.Top + 0, pR.Left + (x + 1) * pR.Width / pDivideH, pR.Top + pR.Height);
             }
 
-            for (int y = 0; y < 7; y++) {
-                e.Graphics.DrawLine(Pens.Black, 0, (y + 1) * pR.Height / 8, pR.Width, (y + 1) * pR.Height / 8);
+            for (int y = 0; y < pDivideV-1; y++) {
+                e.Graphics.DrawLine(pPen, pR.Left + 0, pR.Top + (y + 1) * pR.Height / pDivideV, pR.Left + pR.Width, pR.Top + (y + 1) * pR.Height / pDivideV);
             }
         }
     }

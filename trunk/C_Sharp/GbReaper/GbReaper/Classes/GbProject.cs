@@ -44,9 +44,9 @@ namespace GbReaper.Classes {
                     foreach (XmlNode vNode in vDoc.DocumentElement.SelectNodes("/gbProject/libraries/library")) {
                         Library vLib = new Library(vNode.Attributes["name"].Value);
 
-                        foreach (XmlNode vNodeSprite in vNode.SelectNodes("./sprite")) {
-                            Sprite vS = Sprite.LoadFromXml(vNodeSprite);
-                            vLib.AddSprite(vS);
+                        foreach (XmlNode vNodeTile in vNode.SelectNodes("./tile")) {
+                            Tile vS = Tile.LoadFromXml(vNodeTile);
+                            vLib.AddTile(vS);
                         }
 
                         vResult.mLibraries.Add(vLib);
