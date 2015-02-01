@@ -7,11 +7,17 @@ using System.Drawing;
 namespace GbReaper.Classes {
     public class Palette {
         public string mName = null;
-        public static readonly Palette DEFAULT_PALETTE = new Palette();
+        public static readonly Palette DEFAULT_PALETTE2 = new Palette("Pastel", new Color[] { Color.White, Color.LightGray, Color.DarkGray, Color.Gray });
+        public static readonly Palette DEFAULT_PALETTE = new Palette("Equilibrated", new Color[] { 
+            Color.FromArgb(255,255,255), 
+            Color.FromArgb(3*255/4,3*255/4,3*255/4), 
+            Color.FromArgb(2*255/4,2*255/4,2*255/4), 
+            Color.FromArgb(255/4,255/4,255/4)
+        });
 
         public Color[] mColors;
 
-        public Palette() : this("default", new Color[] {Color.White, Color.LightGray, Color.DarkGray, Color.Gray}) {
+        public Palette() : this("Pastel", new Color[] {Color.White, Color.LightGray, Color.DarkGray, Color.Gray}) {
             
         }
 

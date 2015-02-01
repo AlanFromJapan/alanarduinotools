@@ -156,5 +156,9 @@ namespace GbReaper {
         private void btnNewMap_Click(object sender, EventArgs e) {
             CreateNewMapAndTab();
         }
+
+        public void SetStatus(string pStatusText) {
+            this.stripLabel.Text = pStatusText;
+        }
     }
 }

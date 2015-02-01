@@ -49,7 +49,15 @@ namespace GbReaper.Forms {
         }
 
         private void FrmTilizator_Load(object sender, EventArgs e) {
+            ucPaletteEditor1.CurrentPalette = Palette.DEFAULT_PALETTE;
+        }
 
+        private void undWidth_ValueChanged(object sender, EventArgs e) {
+            GeneratePreview();
+        }
+
+        private void undHeight_ValueChanged(object sender, EventArgs e) {
+            GeneratePreview();
         }
     }
 }
