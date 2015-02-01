@@ -33,22 +33,26 @@
             this.txbImage = new System.Windows.Forms.TextBox();
             this.btnOpenImage = new System.Windows.Forms.Button();
             this.ofdBitmap = new System.Windows.Forms.OpenFileDialog();
-            this.picPreview = new System.Windows.Forms.PictureBox();
+            this.picPreviewA = new System.Windows.Forms.PictureBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.undLeft = new System.Windows.Forms.NumericUpDown();
             this.undTop = new System.Windows.Forms.NumericUpDown();
+            this.picPreviewB = new System.Windows.Forms.PictureBox();
+            this.picPreviewC = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.undHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.undWidth)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picPreview)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picPreviewA)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.undLeft)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.undTop)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picPreviewB)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picPreviewC)).BeginInit();
             this.SuspendLayout();
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(330, 178);
+            this.btnCancel.Location = new System.Drawing.Point(330, 267);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 3;
@@ -58,7 +62,7 @@
             // 
             // btnCreate
             // 
-            this.btnCreate.Location = new System.Drawing.Point(249, 178);
+            this.btnCreate.Location = new System.Drawing.Point(249, 267);
             this.btnCreate.Name = "btnCreate";
             this.btnCreate.Size = new System.Drawing.Size(75, 23);
             this.btnCreate.TabIndex = 2;
@@ -75,7 +79,7 @@
             0,
             0});
             this.undHeight.Name = "undHeight";
-            this.undHeight.Size = new System.Drawing.Size(120, 19);
+            this.undHeight.Size = new System.Drawing.Size(92, 19);
             this.undHeight.TabIndex = 9;
             this.undHeight.Value = new decimal(new int[] {
             18,
@@ -92,7 +96,7 @@
             0,
             0});
             this.undWidth.Name = "undWidth";
-            this.undWidth.Size = new System.Drawing.Size(120, 19);
+            this.undWidth.Size = new System.Drawing.Size(92, 19);
             this.undWidth.TabIndex = 8;
             this.undWidth.Value = new decimal(new int[] {
             20,
@@ -149,20 +153,20 @@
             this.ofdBitmap.Filter = "Bitmap|*.png;*.bmp";
             this.ofdBitmap.Title = "Choose image to import";
             // 
-            // picPreview
+            // picPreviewA
             // 
-            this.picPreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picPreview.Location = new System.Drawing.Point(249, 37);
-            this.picPreview.Name = "picPreview";
-            this.picPreview.Size = new System.Drawing.Size(155, 125);
-            this.picPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picPreview.TabIndex = 13;
-            this.picPreview.TabStop = false;
+            this.picPreviewA.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picPreviewA.Location = new System.Drawing.Point(12, 116);
+            this.picPreviewA.Name = "picPreviewA";
+            this.picPreviewA.Size = new System.Drawing.Size(128, 128);
+            this.picPreviewA.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picPreviewA.TabIndex = 13;
+            this.picPreviewA.TabStop = false;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 116);
+            this.label4.Location = new System.Drawing.Point(218, 39);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(27, 12);
             this.label4.TabIndex = 6;
@@ -171,7 +175,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 141);
+            this.label5.Location = new System.Drawing.Point(218, 64);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(26, 12);
             this.label5.TabIndex = 7;
@@ -179,17 +183,37 @@
             // 
             // undLeft
             // 
-            this.undLeft.Location = new System.Drawing.Point(105, 114);
+            this.undLeft.Location = new System.Drawing.Point(251, 37);
             this.undLeft.Name = "undLeft";
-            this.undLeft.Size = new System.Drawing.Size(120, 19);
+            this.undLeft.Size = new System.Drawing.Size(118, 19);
             this.undLeft.TabIndex = 8;
             // 
             // undTop
             // 
-            this.undTop.Location = new System.Drawing.Point(105, 139);
+            this.undTop.Location = new System.Drawing.Point(251, 62);
             this.undTop.Name = "undTop";
-            this.undTop.Size = new System.Drawing.Size(120, 19);
+            this.undTop.Size = new System.Drawing.Size(118, 19);
             this.undTop.TabIndex = 9;
+            // 
+            // picPreviewB
+            // 
+            this.picPreviewB.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picPreviewB.Location = new System.Drawing.Point(146, 116);
+            this.picPreviewB.Name = "picPreviewB";
+            this.picPreviewB.Size = new System.Drawing.Size(128, 128);
+            this.picPreviewB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picPreviewB.TabIndex = 13;
+            this.picPreviewB.TabStop = false;
+            // 
+            // picPreviewC
+            // 
+            this.picPreviewC.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picPreviewC.Location = new System.Drawing.Point(280, 116);
+            this.picPreviewC.Name = "picPreviewC";
+            this.picPreviewC.Size = new System.Drawing.Size(128, 128);
+            this.picPreviewC.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picPreviewC.TabIndex = 13;
+            this.picPreviewC.TabStop = false;
             // 
             // FrmTilizator
             // 
@@ -197,8 +221,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(415, 208);
-            this.Controls.Add(this.picPreview);
+            this.ClientSize = new System.Drawing.Size(418, 302);
+            this.Controls.Add(this.picPreviewC);
+            this.Controls.Add(this.picPreviewB);
+            this.Controls.Add(this.picPreviewA);
             this.Controls.Add(this.btnOpenImage);
             this.Controls.Add(this.txbImage);
             this.Controls.Add(this.label3);
@@ -218,11 +244,14 @@
             this.Name = "FrmTilizator";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Tilizator";
+            this.Load += new System.EventHandler(this.FrmTilizator_Load);
             ((System.ComponentModel.ISupportInitialize)(this.undHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.undWidth)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picPreview)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picPreviewA)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.undLeft)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.undTop)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picPreviewB)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picPreviewC)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -240,10 +269,12 @@
         private System.Windows.Forms.TextBox txbImage;
         private System.Windows.Forms.Button btnOpenImage;
         private System.Windows.Forms.OpenFileDialog ofdBitmap;
-        private System.Windows.Forms.PictureBox picPreview;
+        private System.Windows.Forms.PictureBox picPreviewA;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown undLeft;
         private System.Windows.Forms.NumericUpDown undTop;
+        private System.Windows.Forms.PictureBox picPreviewB;
+        private System.Windows.Forms.PictureBox picPreviewC;
     }
 }

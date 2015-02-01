@@ -56,5 +56,25 @@ namespace GbReaper.Classes {
                 e.Graphics.DrawLine(pPen, pR.Left + 0, pR.Top + (y + 1) * pR.Height / pDivideV, pR.Left + pR.Width, pR.Top + (y + 1) * pR.Height / pDivideV);
             }
         }
+
+
+        public static Bitmap MapBitmapColorsToPalette(Bitmap pTarget, Palette pPal) {
+            for (int x = 0; x < pTarget.Width; x++) {
+                for (int y = 0; y < pTarget.Height; y++) {
+                    pTarget.SetPixel(x, y, pPal.GetNearestColor(pTarget.GetPixel(x, y)));
+                }
+            }
+
+            return pTarget;
+        }
+
+        public static Bitmap CopyAndResize(Bitmap pSource, int pTargetWidth, int pTargetHeight) {
+            Bitmap vTarget = new Bitmap(pTargetWidth, pTargetHeight);
+            using (Graphics vG = Graphics.FromImage(vTarget)) {
+                DrawingLogic.SetGraphicsNoInterpol(vG);
+                vG.DrawImage(pSource, 0, 0, vTarget.Width, vTarget.Height);
+            }
+            return vTarget;
+        }
     }
 }

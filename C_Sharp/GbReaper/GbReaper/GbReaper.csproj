@@ -54,6 +54,7 @@
     <Compile Include="Classes\Library.cs" />
     <Compile Include="Classes\Map.cs" />
     <Compile Include="Classes\Palette.cs" />
+    <Compile Include="Classes\RGBHSL.cs" />
     <Compile Include="Classes\RomReader.cs" />
     <Compile Include="Classes\Tile.cs" />
     <Compile Include="Controls\PanelX.cs">

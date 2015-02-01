@@ -189,19 +189,11 @@ namespace GbReaper.Controls {
             using (FrmTilizator vFrm = new FrmTilizator()) {
                 if (vFrm.ShowDialog(this) == DialogResult.OK) { 
                     //Start: create target bitmap with right size
-                    Bitmap vTarget = new Bitmap(Tile.WIDTH_PX * vFrm.CreateWidth, Tile.HEIGHT_PX * vFrm.CreateHeight);
-                    using (Graphics vG = Graphics.FromImage(vTarget)) {
-                        DrawingLogic.SetGraphicsNoInterpol(vG);
-                        vG.DrawImage(vFrm.CreateBmp, 0, 0, vTarget.Width, vTarget.Height);
-                    }
+                    Bitmap vTarget = DrawingLogic.CopyAndResize(vFrm.CreateBmp, Tile.WIDTH_PX * vFrm.CreateWidth, Tile.HEIGHT_PX * vFrm.CreateHeight);
 
                     //map colors
                     Palette vPal = Palette.DEFAULT_PALETTE;
-                    for (int x = 0; x < vTarget.Width; x++) { 
-                        for (int y = 0; y < vTarget.Height; y++){
-                            vTarget.SetPixel(x, y, vPal.GetNearestColor(vTarget.GetPixel(x, y)));
-                        }
-                    }
+                    DrawingLogic.MapBitmapColorsToPalette(vTarget, vPal);
 
                     //tilization
                     for (int x = 0; x < vFrm.CreateWidth; x++) {
@@ -224,6 +216,8 @@ namespace GbReaper.Controls {
                 }
             }
         }
+
+
 
     }
 }
