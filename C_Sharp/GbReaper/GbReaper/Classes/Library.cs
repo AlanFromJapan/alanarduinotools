@@ -64,5 +64,14 @@ namespace GbReaper.Classes {
             }
             pSW.WriteLine("\t\t</library>");
         }
+
+        public Tile GetTileByID(Guid pUID) {
+            foreach (Tile vT in this.mTiles) {
+                if (vT.UID == pUID) {
+                    return vT;
+                }
+            }
+            return null;
+        }
     }
 }

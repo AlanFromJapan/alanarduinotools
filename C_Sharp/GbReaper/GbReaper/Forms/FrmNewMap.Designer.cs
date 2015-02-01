@@ -29,6 +29,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.undWidth = new System.Windows.Forms.NumericUpDown();
             this.undHeight = new System.Windows.Forms.NumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txbMapname = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.undWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.undHeight)).BeginInit();
             this.SuspendLayout();
@@ -106,6 +108,22 @@
             0,
             0});
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 65);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(59, 12);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Map name:";
+            // 
+            // txbMapname
+            // 
+            this.txbMapname.Location = new System.Drawing.Point(105, 62);
+            this.txbMapname.Name = "txbMapname";
+            this.txbMapname.Size = new System.Drawing.Size(272, 19);
+            this.txbMapname.TabIndex = 7;
+            // 
             // FrmNewMap
             // 
             this.AcceptButton = this.btnCreate;
@@ -113,6 +131,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(389, 191);
+            this.Controls.Add(this.txbMapname);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.undHeight);
             this.Controls.Add(this.undWidth);
             this.Controls.Add(this.label2);
@@ -126,6 +146,7 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "NewMap";
+            this.Load += new System.EventHandler(this.FrmNewMap_Load);
             ((System.ComponentModel.ISupportInitialize)(this.undWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.undHeight)).EndInit();
             this.ResumeLayout(false);
@@ -141,5 +162,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown undWidth;
         private System.Windows.Forms.NumericUpDown undHeight;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txbMapname;
     }
 }

@@ -11,6 +11,7 @@ namespace GbReaper.Forms {
     public partial class FrmNewMap : Form {
         public int CreateWidth { get { return (int)undWidth.Value; } }
         public int CreateHeight { get { return (int)undHeight.Value; } }
+        public string CreateName { get { return txbMapname.Text; } }
 
         public FrmNewMap() {
             InitializeComponent();
@@ -22,6 +23,10 @@ namespace GbReaper.Forms {
 
         private void btnCancel_Click(object sender, EventArgs e) {
             this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+        }
+
+        private void FrmNewMap_Load(object sender, EventArgs e) {
+            txbMapname.Text = string.Format("Map_{0:yyyyMMddHHmmss}", DateTime.Now);
         }
     }
 }

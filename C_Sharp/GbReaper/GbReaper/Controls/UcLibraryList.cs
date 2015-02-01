@@ -17,6 +17,15 @@ namespace GbReaper.Controls {
         public delegate void SelectedTileChangedDelegate(Tile pS);
         public event SelectedTileChangedDelegate SelectedTileChanged;
 
+        public Tile SelectedTile {
+            get { 
+                if (lvLibrary.SelectedItems!= null && lvLibrary.SelectedItems.Count > 0){
+                    return ((TileViewItem)lvLibrary.SelectedItems[0]).mTile;
+                }
+                return null;
+            }
+        }
+
         public UcLibraryList() {
             InitializeComponent();
         }
@@ -175,6 +184,7 @@ namespace GbReaper.Controls {
             pTile.TileChanged += new Tile.TileChangeDelegate(TileChanged);
             lvLibrary.Invalidate();
 
+            //unselect all and reselect the new one
             foreach (ListViewItem vLVI in this.lvLibrary.Items) {
                 vLVI.Selected = false;
             }
