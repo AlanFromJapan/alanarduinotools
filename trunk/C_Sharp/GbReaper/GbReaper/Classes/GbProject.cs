@@ -25,7 +25,9 @@ namespace GbReaper.Classes {
                     vSW.WriteLine("\t</libraries>");
 
                     vSW.WriteLine("\t<maps>");
-
+                    foreach (Map vM in this.mMaps) {
+                        vM.SaveToStream(vSW);
+                    }    
                     vSW.WriteLine("\t</maps>");
 
                     vSW.WriteLine("</gbProject>");
@@ -41,6 +43,7 @@ namespace GbReaper.Classes {
                     XmlDocument vDoc = new XmlDocument();
                     vDoc.LoadXml(vSR.ReadToEnd());
 
+                    //First, load the library and its tiles
                     foreach (XmlNode vNode in vDoc.DocumentElement.SelectNodes("/gbProject/libraries/library")) {
                         Library vLib = new Library(vNode.Attributes["name"].Value);
 
@@ -50,6 +53,36 @@ namespace GbReaper.Classes {
                         }
 
                         vResult.mLibraries.Add(vLib);
+                    }
+
+                    //Second, load the maps
+                    foreach (XmlNode vNode in vDoc.DocumentElement.SelectNodes("/gbProject/maps/map")) {
+                        Map vMap = new Map(
+                            Convert.ToInt32(vNode.Attributes["width"].Value),
+                            Convert.ToInt32(vNode.Attributes["height"].Value)
+                            );
+                        vMap.Name = vNode.Attributes["name"].Value;
+
+                        foreach (XmlNode vNodeCell in vNode.SelectNodes("./cell")) {
+                            Guid vG = new Guid(vNodeCell.Attributes["tileID"].Value);
+                            Tile vT = null;
+
+                            foreach (Library vL in vResult.mLibraries) {
+                                vT = vL.GetTileByID(vG);
+                                if (vT != null)
+                                    break;
+                            }
+
+                            if (vT != null) {
+                                vMap.SetTile(
+                                    vT,
+                                    Convert.ToInt32(vNodeCell.Attributes["x"].Value),
+                                    Convert.ToInt32(vNodeCell.Attributes["y"].Value)
+                                );
+                            }
+                        }
+
+                        vResult.mMaps.Add(vMap);
                     }
                 }
             }

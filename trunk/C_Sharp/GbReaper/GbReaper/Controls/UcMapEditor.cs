@@ -16,8 +16,24 @@ namespace GbReaper.Controls {
         protected bool mShowGrid = true;
 
         protected Map mCurrentMap = null;
-        public Map CurrentMap { get { return this.mCurrentMap; } }
         protected Tile mCurrentTile = null;
+
+        
+        public Map CurrentMap { 
+            get { return this.mCurrentMap; } 
+            set {
+                if (this.mCurrentMap != null) {
+                    this.mCurrentMap.MapChanged -= new EventHandler(CurrentMap_MapChanged);
+                }
+
+                this.mCurrentMap = value;
+
+                this.mCurrentMap.MapChanged -= new EventHandler(CurrentMap_MapChanged);
+                this.mCurrentMap.MapChanged += new EventHandler(CurrentMap_MapChanged);
+
+                this.Invalidate(); 
+            } 
+        }
         public Tile CurrentTile {
             get { return this.mCurrentTile; }
             set { this.mCurrentTile = value; }
@@ -31,6 +47,9 @@ namespace GbReaper.Controls {
                 TILE_SIZE * this.mCurrentMap.Height);
             }
         }
+
+
+        public event EventHandler NewMap;
 
 
         public UcMapEditor() {
@@ -58,7 +77,20 @@ namespace GbReaper.Controls {
                     (e.Y - vBorders.Y) / TILE_SIZE
                     );
 
-                this.mCurrentMap.SetTile(this.mCurrentTile, vP.X, vP.Y);
+                if (e.Button == System.Windows.Forms.MouseButtons.Left) {
+                    if (this.mCurrentMap[vP.X, vP.Y] != null && this.mCurrentMap[vP.X, vP.Y].Equals(this.mCurrentTile)) {
+                        //ignore, already set
+                    }
+                    else {
+                        //set and repaint
+                        this.mCurrentMap.SetTile(this.mCurrentTile, vP.X, vP.Y);
+                    }
+                }
+                else { 
+                    //right click clears
+                    this.mCurrentMap.ClearTileAt(vP.X, vP.Y);
+                }
+                this.panMap.Invalidate();
             }
         }
 
@@ -117,22 +149,32 @@ namespace GbReaper.Controls {
         }
 
         private void btnNew_Click(object sender, EventArgs e) {
-            using (FrmNewMap vFrm = new FrmNewMap()) {
-                if (DialogResult.OK == vFrm.ShowDialog(this)) {
-                    if (this.mCurrentMap != null) {
-                        this.mCurrentMap.MapChanged -= new EventHandler(CurrentMap_MapChanged);
-                    }
+            //using (FrmNewMap vFrm = new FrmNewMap()) {
+            //    if (DialogResult.OK == vFrm.ShowDialog(this)) {
+            //        if (this.mCurrentMap != null) {
+            //            this.mCurrentMap.MapChanged -= new EventHandler(CurrentMap_MapChanged);
+            //        }
 
-                    this.mCurrentMap = new Map(vFrm.CreateWidth, vFrm.CreateHeight);
-                    this.mCurrentMap.MapChanged -= new EventHandler(CurrentMap_MapChanged);
-                    this.mCurrentMap.MapChanged += new EventHandler(CurrentMap_MapChanged);
+            //        this.mCurrentMap = new Map(vFrm.CreateWidth, vFrm.CreateHeight);
+            //        this.mCurrentMap.MapChanged -= new EventHandler(CurrentMap_MapChanged);
+            //        this.mCurrentMap.MapChanged += new EventHandler(CurrentMap_MapChanged);
+            //        this.mCurrentMap.Name = vFrm.CreateName;
                     
-                    this.Invalidate();
-                    //this.Refresh();
-                }
-            }
+            //        this.Invalidate();
+            //        //this.Refresh();
+            //    }
+            //}
+
+            OnNewMap();
+
         }
 
+        protected void OnNewMap() {
+            if (this.NewMap != null) {
+                this.NewMap(this, EventArgs.Empty);
+            }
+        }
+        
         void CurrentMap_MapChanged(object sender, EventArgs e) {
             this.Invalidate();
             //this.Refresh();
