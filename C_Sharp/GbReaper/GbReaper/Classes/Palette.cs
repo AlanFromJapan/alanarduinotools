@@ -11,7 +11,7 @@ namespace GbReaper.Classes {
 
         public Color[] mColors;
 
-        public Palette() : this("default", new Color[] {Color.White, Color.LightGray, Color.Gray, Color.DarkGray}) {
+        public Palette() : this("default", new Color[] {Color.White, Color.LightGray, Color.DarkGray, Color.Gray}) {
             
         }
 
