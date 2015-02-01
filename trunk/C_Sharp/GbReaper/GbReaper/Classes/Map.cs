@@ -15,8 +15,13 @@ namespace GbReaper.Classes {
         public readonly int Height;
         private MapBucket[,] mMatrix = null;
         private string mName = null;
+        protected GbProject mParentProject = null;
 
         public string Name { get { return mName; } set { mName = value; } }
+        public GbProject ParentProject {
+            get { return this.mParentProject; }
+            set { this.mParentProject = value; }
+        }
 
         public event EventHandler MapChanged;
 

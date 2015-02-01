@@ -185,5 +185,45 @@ namespace GbReaper.Controls {
             this.panMap.Invalidate();
         }
 
+        private void btnTilizator_Click(object sender, EventArgs e) {
+            using (FrmTilizator vFrm = new FrmTilizator()) {
+                if (vFrm.ShowDialog(this) == DialogResult.OK) { 
+                    //Start: create target bitmap with right size
+                    Bitmap vTarget = new Bitmap(Tile.WIDTH_PX * vFrm.CreateWidth, Tile.HEIGHT_PX * vFrm.CreateHeight);
+                    using (Graphics vG = Graphics.FromImage(vTarget)) {
+                        DrawingLogic.SetGraphicsNoInterpol(vG);
+                        vG.DrawImage(vFrm.CreateBmp, 0, 0, vTarget.Width, vTarget.Height);
+                    }
+
+                    //map colors
+                    Palette vPal = Palette.DEFAULT_PALETTE;
+                    for (int x = 0; x < vTarget.Width; x++) { 
+                        for (int y = 0; y < vTarget.Height; y++){
+                            vTarget.SetPixel(x, y, vPal.GetNearestColor(vTarget.GetPixel(x, y)));
+                        }
+                    }
+
+                    //tilization
+                    for (int x = 0; x < vFrm.CreateWidth; x++) {
+                        for (int y = 0; y < vFrm.CreateHeight; y++) {
+                            Rectangle vTileRect = new Rectangle(x * Tile.WIDTH_PX, y * Tile.HEIGHT_PX, Tile.WIDTH_PX, Tile.HEIGHT_PX);
+                            Bitmap vTileBmp = (Bitmap)vTarget.Clone(vTileRect, vTarget.PixelFormat);
+
+                            Tile vT = new Tile(vTileBmp, vPal);
+                            this.mCurrentMap.ParentProject.mLibraries[0].AddTile(vT);
+
+                            this.mCurrentMap.SetTile(vT, vFrm.CreateLeft + x, vFrm.CreateTop+ y);
+
+                            
+                            //Todo add tile identification to remove duplicates
+                        }
+                    }
+
+                    //refresh
+                    panMap.Invalidate();
+                }
+            }
+        }
+
     }
 }
