@@ -11,6 +11,12 @@ namespace GbReaper.Classes {
     /// </summary>
     static class DrawingLogic {
 
+        public static void SetGraphicsNoInterpol(Graphics pG) {
+            pG.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            pG.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+            pG.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+            pG.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+        }
 
         public static void ScaledAndTiledPaintBackground(Image pImg, PaintEventArgs e, Rectangle pR, int pRepeat) {
             if (pImg == null) {
@@ -18,9 +24,7 @@ namespace GbReaper.Classes {
                 return;
             }
 
-            e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-            e.Graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+            SetGraphicsNoInterpol(e.Graphics);
 
             int vSide = e.ClipRectangle.Width / pRepeat;
             for (int x = 0; x < pRepeat; x++) {
@@ -36,9 +40,7 @@ namespace GbReaper.Classes {
                 return;
             }
 
-            e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-            e.Graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+            SetGraphicsNoInterpol(e.Graphics);
 
             e.Graphics.DrawImage(pImg, pR);
         }

@@ -67,6 +67,7 @@ namespace GbReaper {
 
         void LibView_SelectedTileChanged(Tile pS) {
             ucTileEd.SetTile(pS);
+            ucMapEditor1.CurrentTile = pS;
         }
 
         void RomViewer_RomTileSelected(Image pImage) {

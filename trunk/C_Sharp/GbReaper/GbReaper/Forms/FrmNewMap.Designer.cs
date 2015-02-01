@@ -84,7 +84,7 @@
             this.undWidth.Size = new System.Drawing.Size(120, 19);
             this.undWidth.TabIndex = 4;
             this.undWidth.Value = new decimal(new int[] {
-            10,
+            20,
             0,
             0,
             0});
@@ -101,7 +101,7 @@
             this.undHeight.Size = new System.Drawing.Size(120, 19);
             this.undHeight.TabIndex = 5;
             this.undHeight.Value = new decimal(new int[] {
-            10,
+            18,
             0,
             0,
             0});

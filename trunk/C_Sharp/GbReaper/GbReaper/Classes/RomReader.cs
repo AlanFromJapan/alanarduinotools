@@ -17,10 +17,7 @@ namespace GbReaper.Classes {
 
             Bitmap vResult = new Bitmap(vBmp.Width * pZoomFactor, vBmp.Height * pZoomFactor);
             Graphics vGraphx = Graphics.FromImage(vResult);
-            vGraphx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            vGraphx.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-            vGraphx.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
-            vGraphx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+            DrawingLogic.SetGraphicsNoInterpol(vGraphx);
 
             vGraphx.DrawImage(vBmp, 0, 0, vResult.Width, vResult.Height);
 
@@ -40,10 +37,7 @@ namespace GbReaper.Classes {
 
                 Bitmap vBitOutput = new Bitmap(8 *  vTileH, 8 *  (1 + ((vFileLength / (2 * 8)) * 8 ) / (8 * vTileH)));
                 Graphics vGraphx = Graphics.FromImage(vBitOutput);
-                vGraphx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                vGraphx.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-                vGraphx.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
-                vGraphx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+                DrawingLogic.SetGraphicsNoInterpol(vGraphx);
 
 
                 Bitmap vBitBuff = new Bitmap(8, 8);
@@ -81,18 +75,7 @@ namespace GbReaper.Classes {
         }
 
         private static Color GetColorFromPalette(int pVal) {
-            switch (pVal) {
-                case 1:
-                    return Color.LightGray;
-                case 2:
-                    return Color.Gray;
-                case 3:
-                    return Color.DarkGray;
-                default:
-                    break;
-            }
-
-            return Color.White;
+            return Palette.DEFAULT_PALETTE.mColors[pVal];
         }
     }
 }

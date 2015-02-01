@@ -43,9 +43,9 @@ namespace GbReaper.Controls {
             if (mImage == null)
                 return;
 
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            
-            e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+
+            DrawingLogic.SetGraphicsNoInterpol(e.Graphics);
+
             e.Graphics.DrawImage(this.mImage, -hbar.Value, -vbar.Value);//, e.ClipRectangle.Width - vbar.Width, e.ClipRectangle.Height - hbar.Height);
 
             if (!this.mMouseHover.IsEmpty) {
@@ -152,9 +152,8 @@ namespace GbReaper.Controls {
                 Bitmap vBmp8x8 = new Bitmap(Tile.WIDTH_PX, Tile.HEIGHT_PX);
 
                 using (Graphics vG = Graphics.FromImage(vBmp8x8)) {
-                    vG.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                    vG.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
-                    vG.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
+                    DrawingLogic.SetGraphicsNoInterpol(vG);
+
 
                     vG.DrawImage(vBmpTileZoomed, 0, 0, vBmp8x8.Width, vBmp8x8.Height);
                 }

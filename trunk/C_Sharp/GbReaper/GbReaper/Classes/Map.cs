@@ -20,6 +20,14 @@ namespace GbReaper.Classes {
 
         public event EventHandler MapChanged;
 
+        public Tile this[int x, int y] {
+            get {
+                return (this.mMatrix[x, y] == null ?
+                    null :
+                    this.mMatrix[x, y].mTile);
+            }
+        }
+
         public Map(int pW, int pH) {
             this.Width = pW;
             this.Height = pH;

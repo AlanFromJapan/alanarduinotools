@@ -169,10 +169,17 @@ namespace GbReaper.Controls {
         }
 
         void CurrentLib_TileAdded(Tile pTile) {
-            lvLibrary.Items.Add(new TileViewItem(pTile));
+            TileViewItem vTVI = new TileViewItem(pTile);
+            lvLibrary.Items.Add(vTVI);
             pTile.TileChanged -= new Tile.TileChangeDelegate(TileChanged);
             pTile.TileChanged += new Tile.TileChangeDelegate(TileChanged);
             lvLibrary.Invalidate();
+
+            foreach (ListViewItem vLVI in this.lvLibrary.Items) {
+                vLVI.Selected = false;
+            }
+            vTVI.Selected = true;
+            
         }
 
         private void lvLibrary_SelectedIndexChanged(object sender, EventArgs e) {

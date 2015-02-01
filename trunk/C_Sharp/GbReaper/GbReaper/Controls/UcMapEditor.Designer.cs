@@ -23,9 +23,11 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.panMap = new System.Windows.Forms.Panel();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UcMapEditor));
+            this.panMap = new GbReaper.Controls.PanelX();
             this.panTools = new System.Windows.Forms.Panel();
             this.btnNew = new System.Windows.Forms.Button();
+            this.btnGrid = new System.Windows.Forms.Button();
             this.panTools.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -40,6 +42,7 @@
             // panTools
             // 
             this.panTools.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.panTools.Controls.Add(this.btnGrid);
             this.panTools.Controls.Add(this.btnNew);
             this.panTools.Dock = System.Windows.Forms.DockStyle.Left;
             this.panTools.Location = new System.Drawing.Point(0, 0);
@@ -59,6 +62,18 @@
             this.btnNew.UseVisualStyleBackColor = true;
             this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
             // 
+            // btnGrid
+            // 
+            this.btnGrid.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnGrid.Font = new System.Drawing.Font("MS UI Gothic", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.btnGrid.Image = ((System.Drawing.Image)(resources.GetObject("btnGrid.Image")));
+            this.btnGrid.Location = new System.Drawing.Point(0, 32);
+            this.btnGrid.Name = "btnGrid";
+            this.btnGrid.Size = new System.Drawing.Size(32, 32);
+            this.btnGrid.TabIndex = 1;
+            this.btnGrid.UseVisualStyleBackColor = true;
+            this.btnGrid.Click += new System.EventHandler(this.btnGrid_Click);
+            // 
             // UcMapEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -75,8 +90,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel panMap;
         private System.Windows.Forms.Panel panTools;
         private System.Windows.Forms.Button btnNew;
+        private System.Windows.Forms.Button btnGrid;
+        private PanelX panMap;
     }
 }
