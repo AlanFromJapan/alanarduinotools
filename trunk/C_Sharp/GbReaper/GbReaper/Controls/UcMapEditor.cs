@@ -80,13 +80,25 @@ namespace GbReaper.Controls {
                     );
 
                 if (e.Button == System.Windows.Forms.MouseButtons.Left) {
-                    if (this.mCurrentMap[vP.X, vP.Y] != null && this.mCurrentMap[vP.X, vP.Y].Equals(this.mCurrentTile)) {
-                        //ignore, already set
+                    if (!mFillMode) {
+                        //REGULAR PAINT cell by cell
+                        if (this.mCurrentMap[vP.X, vP.Y] != null && this.mCurrentMap[vP.X, vP.Y].Equals(this.mCurrentTile)) {
+                            //ignore, already set
+                        }
+                        else {
+                            //set and repaint
+                            this.mCurrentMap.SetTile(this.mCurrentTile, vP.X, vP.Y);
+                            this.panMap.Invalidate();
+                        }
                     }
-                    else {
-                        //set and repaint
-                        this.mCurrentMap.SetTile(this.mCurrentTile, vP.X, vP.Y);
-                        this.panMap.Invalidate();
+                    else { 
+                        //FILL MODE
+                        Tile vCellTile = this.mCurrentMap[vP.X, vP.Y];
+                        //don't replace by itself or you will have infinite reccursion
+                        if (!this.mCurrentTile.Equals(vCellTile)) {
+                            RecFillTile(vP, vCellTile, this.mCurrentTile);
+                            this.panMap.Invalidate();
+                        }
                     }
                 }
                 else { 
@@ -95,6 +107,34 @@ namespace GbReaper.Controls {
                     this.panMap.Invalidate();
                 }
             }
+        }
+
+        /// <summary>
+        /// Reccursive fill algo
+        /// </summary>
+        /// <param name="pPosition"></param>
+        /// <param name="pReplacedTile"></param>
+        /// <param name="pNewTile"></param>
+        private void RecFillTile(Point pPosition, Tile pReplacedTile, Tile pNewTile) {
+            if (pPosition.X < 0 || pPosition.X >= this.mCurrentMap.Width ||
+                pPosition.Y < 0 || pPosition.Y >= this.mCurrentMap.Height) {
+                    return;
+            }
+
+            if (this.mCurrentMap[pPosition.X, pPosition.Y] != null 
+                && 
+                !this.mCurrentMap[pPosition.X, pPosition.Y].Equals(pReplacedTile)) {
+                return;
+            }
+
+            //new we know it's wether null wether same as replaceTile
+            this.mCurrentMap.SetTile(pNewTile, pPosition.X, pPosition.Y);
+
+            //reccurse
+            RecFillTile(new Point(pPosition.X - 1, pPosition.Y), pReplacedTile, pNewTile);
+            RecFillTile(new Point(pPosition.X + 1, pPosition.Y), pReplacedTile, pNewTile);
+            RecFillTile(new Point(pPosition.X, pPosition.Y - 1), pReplacedTile, pNewTile);
+            RecFillTile(new Point(pPosition.X, pPosition.Y + 1), pReplacedTile, pNewTile);
         }
 
         void panMap_MouseDown(object sender, MouseEventArgs e) {
@@ -225,6 +265,18 @@ namespace GbReaper.Controls {
 
                     ((FrmMain)this.FindForm()).SetStatus("Tilization: generated " + vTileNewCount + " tiles, reused "+vTileReusedCount+" tiles.");
                 }
+            }
+        }
+
+        private bool mFillMode = false;
+        private void btnFill_Click(object sender, EventArgs e) {
+            mFillMode = !mFillMode;
+
+            if (mFillMode) {
+                ((Control)sender).BackColor = Color.Gold;
+            }
+            else { 
+                ((Control)sender).BackColor = Control.DefaultBackColor; 
             }
         }
 

@@ -26,9 +26,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UcMapEditor));
             this.panMap = new GbReaper.Controls.PanelX();
             this.panTools = new System.Windows.Forms.Panel();
+            this.btnTilizator = new System.Windows.Forms.Button();
             this.btnGrid = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
-            this.btnTilizator = new System.Windows.Forms.Button();
+            this.btnFill = new System.Windows.Forms.Button();
             this.panTools.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,6 +44,7 @@
             // panTools
             // 
             this.panTools.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.panTools.Controls.Add(this.btnFill);
             this.panTools.Controls.Add(this.btnTilizator);
             this.panTools.Controls.Add(this.btnGrid);
             this.panTools.Controls.Add(this.btnNew);
@@ -51,6 +53,18 @@
             this.panTools.Name = "panTools";
             this.panTools.Size = new System.Drawing.Size(32, 284);
             this.panTools.TabIndex = 1;
+            // 
+            // btnTilizator
+            // 
+            this.btnTilizator.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnTilizator.Font = new System.Drawing.Font("MS UI Gothic", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.btnTilizator.Location = new System.Drawing.Point(0, 64);
+            this.btnTilizator.Name = "btnTilizator";
+            this.btnTilizator.Size = new System.Drawing.Size(32, 32);
+            this.btnTilizator.TabIndex = 2;
+            this.btnTilizator.Text = "T";
+            this.btnTilizator.UseVisualStyleBackColor = true;
+            this.btnTilizator.Click += new System.EventHandler(this.btnTilizator_Click);
             // 
             // btnGrid
             // 
@@ -76,17 +90,17 @@
             this.btnNew.UseVisualStyleBackColor = true;
             this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
             // 
-            // btnTilizator
+            // btnFill
             // 
-            this.btnTilizator.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnTilizator.Font = new System.Drawing.Font("MS UI Gothic", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.btnTilizator.Location = new System.Drawing.Point(0, 64);
-            this.btnTilizator.Name = "btnTilizator";
-            this.btnTilizator.Size = new System.Drawing.Size(32, 32);
-            this.btnTilizator.TabIndex = 2;
-            this.btnTilizator.Text = "T";
-            this.btnTilizator.UseVisualStyleBackColor = true;
-            this.btnTilizator.Click += new System.EventHandler(this.btnTilizator_Click);
+            this.btnFill.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnFill.Font = new System.Drawing.Font("MS UI Gothic", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.btnFill.Image = ((System.Drawing.Image)(resources.GetObject("btnFill.Image")));
+            this.btnFill.Location = new System.Drawing.Point(0, 96);
+            this.btnFill.Name = "btnFill";
+            this.btnFill.Size = new System.Drawing.Size(32, 32);
+            this.btnFill.TabIndex = 3;
+            this.btnFill.UseVisualStyleBackColor = true;
+            this.btnFill.Click += new System.EventHandler(this.btnFill_Click);
             // 
             // UcMapEditor
             // 
@@ -109,5 +123,6 @@
         private System.Windows.Forms.Button btnGrid;
         private PanelX panMap;
         private System.Windows.Forms.Button btnTilizator;
+        private System.Windows.Forms.Button btnFill;
     }
 }
