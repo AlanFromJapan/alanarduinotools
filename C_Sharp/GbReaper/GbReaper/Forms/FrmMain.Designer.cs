@@ -27,9 +27,14 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.loadProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutGbReaperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ofdRom = new System.Windows.Forms.OpenFileDialog();
             this.panMain = new System.Windows.Forms.Panel();
             this.tabMaps = new System.Windows.Forms.TabControl();
@@ -43,9 +48,13 @@
             this.sfdProject = new System.Windows.Forms.SaveFileDialog();
             this.strip = new System.Windows.Forms.StatusStrip();
             this.stripLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ofdProject = new System.Windows.Forms.OpenFileDialog();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportForGBDKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ucTileEd = new GbReaper.Controls.UcTileEditor();
             this.ucLibView = new GbReaper.Controls.UcLibraryList();
             this.ucRomViewer1 = new GbReaper.Controls.UcRomViewer();
+            this.fbdExport = new System.Windows.Forms.FolderBrowserDialog();
             this.menuStrip1.SuspendLayout();
             this.panMain.SuspendLayout();
             this.tabMaps.SuspendLayout();
@@ -59,7 +68,9 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.exportToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1054, 26);
@@ -70,6 +81,9 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadToolStripMenuItem,
+            this.toolStripMenuItem2,
+            this.loadProjectToolStripMenuItem,
+            this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
             this.toolStripMenuItem1,
             this.quitToolStripMenuItem});
@@ -82,30 +96,66 @@
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
             this.loadToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F4;
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.loadToolStripMenuItem.Text = "&Load";
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.loadToolStripMenuItem.Text = "&Load ROM";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(209, 6);
+            // 
+            // loadProjectToolStripMenuItem
+            // 
+            this.loadProjectToolStripMenuItem.Name = "loadProjectToolStripMenuItem";
+            this.loadProjectToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
+            this.loadProjectToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.loadProjectToolStripMenuItem.Text = "Load project";
+            this.loadProjectToolStripMenuItem.Click += new System.EventHandler(this.loadProjectToolStripMenuItem_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11;
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.saveToolStripMenuItem.Text = "Save project";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
-            this.saveAsToolStripMenuItem.Text = "Save as ...";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.saveAsToolStripMenuItem.Text = "Save project as ...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(164, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(209, 6);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
             this.quitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.quitToolStripMenuItem.Text = "&Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutGbReaperToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(46, 22);
+            this.helpToolStripMenuItem.Text = "&Help";
+            // 
+            // aboutGbReaperToolStripMenuItem
+            // 
+            this.aboutGbReaperToolStripMenuItem.Name = "aboutGbReaperToolStripMenuItem";
+            this.aboutGbReaperToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.aboutGbReaperToolStripMenuItem.Text = "&About GbReaper...";
+            this.aboutGbReaperToolStripMenuItem.Click += new System.EventHandler(this.aboutGbReaperToolStripMenuItem_Click);
             // 
             // ofdRom
             // 
@@ -224,6 +274,27 @@
             this.stripLabel.Size = new System.Drawing.Size(35, 17);
             this.stripLabel.Text = "Hello";
             // 
+            // ofdProject
+            // 
+            this.ofdProject.Filter = "GbReaper projects|*.gbxml";
+            this.ofdProject.Title = "Open project ...";
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportForGBDKToolStripMenuItem});
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(58, 22);
+            this.exportToolStripMenuItem.Text = "&Export";
+            // 
+            // exportForGBDKToolStripMenuItem
+            // 
+            this.exportForGBDKToolStripMenuItem.Name = "exportForGBDKToolStripMenuItem";
+            this.exportForGBDKToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.exportForGBDKToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
+            this.exportForGBDKToolStripMenuItem.Text = "Export for GBDK";
+            this.exportForGBDKToolStripMenuItem.Click += new System.EventHandler(this.exportForGBDKToolStripMenuItem_Click);
+            // 
             // ucTileEd
             // 
             this.ucTileEd.Dock = System.Windows.Forms.DockStyle.Top;
@@ -249,6 +320,10 @@
             this.ucRomViewer1.Name = "ucRomViewer1";
             this.ucRomViewer1.Size = new System.Drawing.Size(252, 613);
             this.ucRomViewer1.TabIndex = 3;
+            // 
+            // fbdExport
+            // 
+            this.fbdExport.Description = "Choose path to export";
             // 
             // FrmMain
             // 
@@ -304,6 +379,15 @@
         private System.Windows.Forms.Button btnNewMap;
         private System.Windows.Forms.StatusStrip strip;
         private System.Windows.Forms.ToolStripStatusLabel stripLabel;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem loadProjectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutGbReaperToolStripMenuItem;
+        private System.Windows.Forms.OpenFileDialog ofdProject;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportForGBDKToolStripMenuItem;
+        private System.Windows.Forms.FolderBrowserDialog fbdExport;
     }
 }
 

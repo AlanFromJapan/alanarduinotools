@@ -26,6 +26,15 @@ namespace GbReaper.Classes {
             this.mName = pName;
         }
 
+        public int GetIndexInPalette(Color pColor) {
+            for (int i = 0; i < this.mColors.Length; i++) {
+                if (pColor == this.mColors[i])
+                    return i;
+            }
+
+            return -1;
+        }
+
         /// <summary>
         /// Finds the closest color in palette using the minimum square method
         /// http://www.codeproject.com/Articles/17044/Find-the-Nearest-Color-with-C-Using-the-Euclidean

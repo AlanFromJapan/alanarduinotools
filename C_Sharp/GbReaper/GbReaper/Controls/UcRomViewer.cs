@@ -121,6 +121,9 @@ namespace GbReaper.Controls {
             base.OnMouseUp(e);
 
             Bitmap vBmpTile = GetSelectedBitmap8x8();
+            if (vBmpTile == null)
+                return;
+
             this.mSelectedTile = vBmpTile;
 
             OnRomTileViewed(vBmpTile);
@@ -137,6 +140,9 @@ namespace GbReaper.Controls {
         }
 
         private Bitmap GetSelectedBitmap8x8() {
+            if (this.mImage == null)
+                return null;
+
             Rectangle vSource = new Rectangle(
                 hbar.Value + Tile.WIDTH_PX * this.mZoomfactor * (this.mMouseHover.X / (Tile.WIDTH_PX * this.mZoomfactor)) - (hbar.Value % (Tile.WIDTH_PX * this.mZoomfactor)),
                 vbar.Value + Tile.HEIGHT_PX * this.mZoomfactor * (this.mMouseHover.Y / (Tile.HEIGHT_PX * this.mZoomfactor)) - (vbar.Value % (Tile.HEIGHT_PX * this.mZoomfactor)),
