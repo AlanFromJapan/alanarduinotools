@@ -10,6 +10,15 @@ namespace GbReaper.Classes {
         public List<Map> mMaps = new List<Map>();
         public List<Library> mLibraries = new List<Library>();
 
+        public GbProject() { 
+            
+        }
+
+        public void AddMap(Map pNewMap) {
+            this.mMaps.Add(pNewMap);
+            pNewMap.ParentProject = this;
+        }
+
         public void SaveAs(string pFilename) {
 
             
@@ -82,7 +91,7 @@ namespace GbReaper.Classes {
                             }
                         }
 
-                        vResult.mMaps.Add(vMap);
+                        vResult.AddMap(vMap);
                     }
                 }
             }

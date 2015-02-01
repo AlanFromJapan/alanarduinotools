@@ -95,6 +95,12 @@
     <Compile Include="Forms\FrmNewMap.Designer.cs">
       <DependentUpon>FrmNewMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FrmTilizator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmTilizator.Designer.cs">
+      <DependentUpon>FrmTilizator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Controls\UcLibraryList.resx">
@@ -114,6 +120,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmNewMap.resx">
       <DependentUpon>FrmNewMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmTilizator.resx">
+      <DependentUpon>FrmTilizator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -136,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Pixture-Halloween-ReaperScythe.ico" />
+    <None Include="Resources\master_sword.png" />
     <None Include="Resources\icon-grid.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

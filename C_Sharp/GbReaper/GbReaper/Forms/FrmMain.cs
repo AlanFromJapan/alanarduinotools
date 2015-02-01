@@ -73,7 +73,7 @@ namespace GbReaper {
                 if (DialogResult.OK == vFrm.ShowDialog(this)) {
                     Map vNew = new Map(vFrm.CreateWidth, vFrm.CreateHeight);
                     vNew.Name = vFrm.CreateName;
-                    this.mCurrentProject.mMaps.Add(vNew);
+                    this.mCurrentProject.AddMap(vNew);
 
                     TabPage vTP = new TabPage(vNew.Name);
                     UcMapEditor vME = new UcMapEditor();
