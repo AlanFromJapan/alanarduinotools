@@ -22,6 +22,19 @@ namespace GbReaper.Controls {
         public event RomTileSelectDelegate RomTileSelected;
         public event RomTileSelectDelegate RomTileViewed;
 
+        protected Rectangle SourceRectangle {
+            get {
+                Rectangle vSource = new Rectangle(
+                    hbar.Value + Tile.WIDTH_PX * this.mZoomfactor * (this.mMouseHover.X / (Tile.WIDTH_PX * this.mZoomfactor)) - (hbar.Value % (Tile.WIDTH_PX * this.mZoomfactor)),
+                    vbar.Value + Tile.HEIGHT_PX * this.mZoomfactor * (this.mMouseHover.Y / (Tile.HEIGHT_PX * this.mZoomfactor)) - (vbar.Value % (Tile.HEIGHT_PX * this.mZoomfactor)),
+                    Tile.WIDTH_PX * this.mZoomfactor,
+                    Tile.HEIGHT_PX * this.mZoomfactor
+                    );
+
+                return vSource;
+            }
+        }
+
         public UcRomViewer() {
             InitializeComponent();
         }
@@ -46,16 +59,17 @@ namespace GbReaper.Controls {
 
             DrawingLogic.SetGraphicsNoInterpol(e.Graphics);
 
-            e.Graphics.DrawImage(this.mImage, -hbar.Value, -vbar.Value);//, e.ClipRectangle.Width - vbar.Width, e.ClipRectangle.Height - hbar.Height);
+            e.Graphics.DrawImage(this.mImage, 0, -vbar.Value);//, e.ClipRectangle.Width - vbar.Width, e.ClipRectangle.Height - hbar.Height);
 
             if (!this.mMouseHover.IsEmpty) {
+                Rectangle vRed = new Rectangle(SourceRectangle.Location, SourceRectangle.Size);
+                vRed.Offset(0, -vbar.Value);
                 e.Graphics.DrawRectangle(
                     Pens.Red,
-                    Tile.WIDTH_PX * this.mZoomfactor * (this.mMouseHover.X / (Tile.WIDTH_PX * this.mZoomfactor)) - (hbar.Value % (Tile.WIDTH_PX * this.mZoomfactor)),
-                    Tile.HEIGHT_PX * this.mZoomfactor * (this.mMouseHover.Y / (Tile.HEIGHT_PX * this.mZoomfactor)) - (vbar.Value % (Tile.HEIGHT_PX * this.mZoomfactor)), 
-                    Tile.WIDTH_PX * this.mZoomfactor,
-                    Tile.HEIGHT_PX * this.mZoomfactor
+                    vRed
                     );
+
+
             }
         }
 
@@ -90,7 +104,7 @@ namespace GbReaper.Controls {
         }
         protected override void OnMouseMove(MouseEventArgs e) {
             base.OnMouseMove(e);
-            this.mMouseHover = this.PointToClient(Cursor.Position);
+            this.mMouseHover = e.Location;// this.PointToClient(Cursor.Position);
 
 
             this.Invalidate();
@@ -143,12 +157,7 @@ namespace GbReaper.Controls {
             if (this.mImage == null)
                 return null;
 
-            Rectangle vSource = new Rectangle(
-                hbar.Value + Tile.WIDTH_PX * this.mZoomfactor * (this.mMouseHover.X / (Tile.WIDTH_PX * this.mZoomfactor)) - (hbar.Value % (Tile.WIDTH_PX * this.mZoomfactor)),
-                vbar.Value + Tile.HEIGHT_PX * this.mZoomfactor * (this.mMouseHover.Y / (Tile.HEIGHT_PX * this.mZoomfactor)) - (vbar.Value % (Tile.HEIGHT_PX * this.mZoomfactor)),
-                Tile.WIDTH_PX * this.mZoomfactor,
-                Tile.HEIGHT_PX * this.mZoomfactor
-                );
+            Rectangle vSource = SourceRectangle;
             Bitmap vBmpTileZoomed = ((Bitmap)this.mImage).Clone(vSource, ((Bitmap)this.mImage).PixelFormat);
 
             if (this.mZoomfactor == 1) {

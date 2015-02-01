@@ -155,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Pixture-Halloween-ReaperScythe.ico" />
+    <None Include="Resources\bucket16.PNG" />
     <None Include="Resources\master_sword.png" />
     <None Include="Resources\icon-grid.png" />
   </ItemGroup>

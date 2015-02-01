@@ -30,18 +30,22 @@
             // vbar
             // 
             this.vbar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.vbar.LargeChange = 80;
             this.vbar.Location = new System.Drawing.Point(308, 0);
             this.vbar.Name = "vbar";
             this.vbar.Size = new System.Drawing.Size(17, 296);
+            this.vbar.SmallChange = 8;
             this.vbar.TabIndex = 0;
             this.vbar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vbar_Scroll);
             // 
             // hbar
             // 
             this.hbar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.hbar.LargeChange = 64;
             this.hbar.Location = new System.Drawing.Point(0, 279);
             this.hbar.Name = "hbar";
             this.hbar.Size = new System.Drawing.Size(308, 17);
+            this.hbar.SmallChange = 8;
             this.hbar.TabIndex = 1;
             this.hbar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.hbar_Scroll);
             // 

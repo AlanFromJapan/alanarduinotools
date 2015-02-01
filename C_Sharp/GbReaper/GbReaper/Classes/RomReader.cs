@@ -29,7 +29,7 @@ namespace GbReaper.Classes {
 
         public static Image GetRomAsImageUnscaled(string pFilename) {
             int vFileLength = (int)(new FileInfo(pFilename).Length);
-            int vTileH = 20;
+            int vTileH = 14;
 
             using (BinaryReader vReader = new BinaryReader(new FileStream(pFilename, FileMode.Open, FileAccess.Read))) {
                 byte[] vBuff = new byte[READ_BUFFER_LENGTH];
