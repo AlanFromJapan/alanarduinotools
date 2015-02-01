@@ -196,23 +196,29 @@ namespace GbReaper.Controls {
                     DrawingLogic.MapBitmapColorsToPalette(vTarget, vPal);
 
                     //tilization
+                    int vTileNewCount = 0, vTileReusedCount = 0;
                     for (int x = 0; x < vFrm.CreateWidth; x++) {
                         for (int y = 0; y < vFrm.CreateHeight; y++) {
                             Rectangle vTileRect = new Rectangle(x * Tile.WIDTH_PX, y * Tile.HEIGHT_PX, Tile.WIDTH_PX, Tile.HEIGHT_PX);
                             Bitmap vTileBmp = (Bitmap)vTarget.Clone(vTileRect, vTarget.PixelFormat);
 
                             Tile vT = new Tile(vTileBmp, vPal);
-                            this.mCurrentMap.ParentProject.mLibraries[0].AddTile(vT);
+                            bool vTileAlreadyExisted = false;
+                            vT = this.mCurrentMap.ParentProject.mLibraries[0].AddTileWithoutDuplicate(vT, out vTileAlreadyExisted);
+
+                            if (!vTileAlreadyExisted) 
+                                vTileNewCount++;
+                            else 
+                                vTileReusedCount++;
 
                             this.mCurrentMap.SetTile(vT, vFrm.CreateLeft + x, vFrm.CreateTop+ y);
-
-                            
-                            //Todo add tile identification to remove duplicates
                         }
                     }
 
                     //refresh
                     panMap.Invalidate();
+
+                    ((FrmMain)this.FindForm()).SetStatus("Tilization: generated " + vTileNewCount + " tiles, reused "+vTileReusedCount+" tiles.");
                 }
             }
         }

@@ -33,24 +33,27 @@
             this.ofdRom = new System.Windows.Forms.OpenFileDialog();
             this.panMain = new System.Windows.Forms.Panel();
             this.tabMaps = new System.Windows.Forms.TabControl();
+            this.tpMapWelcome = new System.Windows.Forms.TabPage();
+            this.btnNewMap = new System.Windows.Forms.Button();
             this.panLib = new System.Windows.Forms.Panel();
             this.panLeft = new System.Windows.Forms.Panel();
             this.panLeftBottom = new System.Windows.Forms.Panel();
             this.pan128Alt = new System.Windows.Forms.Panel();
             this.pan32 = new System.Windows.Forms.Panel();
             this.sfdProject = new System.Windows.Forms.SaveFileDialog();
+            this.strip = new System.Windows.Forms.StatusStrip();
+            this.stripLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.ucTileEd = new GbReaper.Controls.UcTileEditor();
             this.ucLibView = new GbReaper.Controls.UcLibraryList();
             this.ucRomViewer1 = new GbReaper.Controls.UcRomViewer();
-            this.tpMapWelcome = new System.Windows.Forms.TabPage();
-            this.btnNewMap = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.panMain.SuspendLayout();
             this.tabMaps.SuspendLayout();
+            this.tpMapWelcome.SuspendLayout();
             this.panLib.SuspendLayout();
             this.panLeft.SuspendLayout();
             this.panLeftBottom.SuspendLayout();
-            this.tpMapWelcome.SuspendLayout();
+            this.strip.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -59,7 +62,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1052, 26);
+            this.menuStrip1.Size = new System.Drawing.Size(1054, 26);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -117,7 +120,7 @@
             this.panMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panMain.Location = new System.Drawing.Point(252, 26);
             this.panMain.Name = "panMain";
-            this.panMain.Size = new System.Drawing.Size(800, 747);
+            this.panMain.Size = new System.Drawing.Size(802, 744);
             this.panMain.TabIndex = 4;
             // 
             // tabMaps
@@ -128,16 +131,38 @@
             this.tabMaps.Location = new System.Drawing.Point(0, 256);
             this.tabMaps.Name = "tabMaps";
             this.tabMaps.SelectedIndex = 0;
-            this.tabMaps.Size = new System.Drawing.Size(600, 491);
+            this.tabMaps.Size = new System.Drawing.Size(602, 488);
             this.tabMaps.TabIndex = 3;
+            // 
+            // tpMapWelcome
+            // 
+            this.tpMapWelcome.Controls.Add(this.btnNewMap);
+            this.tpMapWelcome.Location = new System.Drawing.Point(4, 4);
+            this.tpMapWelcome.Name = "tpMapWelcome";
+            this.tpMapWelcome.Size = new System.Drawing.Size(594, 462);
+            this.tpMapWelcome.TabIndex = 0;
+            this.tpMapWelcome.Text = "Maps";
+            this.tpMapWelcome.UseVisualStyleBackColor = true;
+            // 
+            // btnNewMap
+            // 
+            this.btnNewMap.Image = ((System.Drawing.Image)(resources.GetObject("btnNewMap.Image")));
+            this.btnNewMap.Location = new System.Drawing.Point(187, 187);
+            this.btnNewMap.Name = "btnNewMap";
+            this.btnNewMap.Size = new System.Drawing.Size(230, 110);
+            this.btnNewMap.TabIndex = 0;
+            this.btnNewMap.Text = "Create new map...";
+            this.btnNewMap.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnNewMap.UseVisualStyleBackColor = true;
+            this.btnNewMap.Click += new System.EventHandler(this.btnNewMap_Click);
             // 
             // panLib
             // 
             this.panLib.Controls.Add(this.ucLibView);
             this.panLib.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panLib.Location = new System.Drawing.Point(600, 0);
+            this.panLib.Location = new System.Drawing.Point(602, 0);
             this.panLib.Name = "panLib";
-            this.panLib.Size = new System.Drawing.Size(200, 747);
+            this.panLib.Size = new System.Drawing.Size(200, 744);
             this.panLib.TabIndex = 0;
             // 
             // panLeft
@@ -147,7 +172,7 @@
             this.panLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.panLeft.Location = new System.Drawing.Point(0, 26);
             this.panLeft.Name = "panLeft";
-            this.panLeft.Size = new System.Drawing.Size(252, 747);
+            this.panLeft.Size = new System.Drawing.Size(252, 744);
             this.panLeft.TabIndex = 5;
             // 
             // panLeftBottom
@@ -155,7 +180,7 @@
             this.panLeftBottom.Controls.Add(this.pan128Alt);
             this.panLeftBottom.Controls.Add(this.pan32);
             this.panLeftBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panLeftBottom.Location = new System.Drawing.Point(0, 616);
+            this.panLeftBottom.Location = new System.Drawing.Point(0, 613);
             this.panLeftBottom.Name = "panLeftBottom";
             this.panLeftBottom.Size = new System.Drawing.Size(252, 131);
             this.panLeftBottom.TabIndex = 4;
@@ -182,13 +207,30 @@
             this.sfdProject.Filter = "GB Reaper project (*.gbxml)|*.gbxml|All files|*.*";
             this.sfdProject.Title = "Where to save the project?";
             // 
+            // strip
+            // 
+            this.strip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.stripLabel});
+            this.strip.Location = new System.Drawing.Point(0, 770);
+            this.strip.Name = "strip";
+            this.strip.Size = new System.Drawing.Size(1054, 22);
+            this.strip.TabIndex = 6;
+            // 
+            // stripLabel
+            // 
+            this.stripLabel.AutoToolTip = true;
+            this.stripLabel.Font = new System.Drawing.Font("Meiryo", 8F);
+            this.stripLabel.Name = "stripLabel";
+            this.stripLabel.Size = new System.Drawing.Size(35, 17);
+            this.stripLabel.Text = "Hello";
+            // 
             // ucTileEd
             // 
             this.ucTileEd.Dock = System.Windows.Forms.DockStyle.Top;
             this.ucTileEd.Location = new System.Drawing.Point(0, 0);
             this.ucTileEd.MinimumSize = new System.Drawing.Size(0, 256);
             this.ucTileEd.Name = "ucTileEd";
-            this.ucTileEd.Size = new System.Drawing.Size(600, 256);
+            this.ucTileEd.Size = new System.Drawing.Size(602, 256);
             this.ucTileEd.TabIndex = 1;
             // 
             // ucLibView
@@ -196,7 +238,7 @@
             this.ucLibView.Dock = System.Windows.Forms.DockStyle.Right;
             this.ucLibView.Location = new System.Drawing.Point(0, 0);
             this.ucLibView.Name = "ucLibView";
-            this.ucLibView.Size = new System.Drawing.Size(200, 747);
+            this.ucLibView.Size = new System.Drawing.Size(200, 744);
             this.ucLibView.TabIndex = 0;
             // 
             // ucRomViewer1
@@ -205,39 +247,18 @@
             this.ucRomViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ucRomViewer1.Location = new System.Drawing.Point(0, 0);
             this.ucRomViewer1.Name = "ucRomViewer1";
-            this.ucRomViewer1.Size = new System.Drawing.Size(252, 616);
+            this.ucRomViewer1.Size = new System.Drawing.Size(252, 613);
             this.ucRomViewer1.TabIndex = 3;
-            // 
-            // tpMapWelcome
-            // 
-            this.tpMapWelcome.Controls.Add(this.btnNewMap);
-            this.tpMapWelcome.Location = new System.Drawing.Point(4, 4);
-            this.tpMapWelcome.Name = "tpMapWelcome";
-            this.tpMapWelcome.Size = new System.Drawing.Size(592, 465);
-            this.tpMapWelcome.TabIndex = 0;
-            this.tpMapWelcome.Text = "Maps";
-            this.tpMapWelcome.UseVisualStyleBackColor = true;
-            // 
-            // btnNewMap
-            // 
-            this.btnNewMap.Image = ((System.Drawing.Image)(resources.GetObject("btnNewMap.Image")));
-            this.btnNewMap.Location = new System.Drawing.Point(187, 187);
-            this.btnNewMap.Name = "btnNewMap";
-            this.btnNewMap.Size = new System.Drawing.Size(230, 110);
-            this.btnNewMap.TabIndex = 0;
-            this.btnNewMap.Text = "Create new map...";
-            this.btnNewMap.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnNewMap.UseVisualStyleBackColor = true;
-            this.btnNewMap.Click += new System.EventHandler(this.btnNewMap_Click);
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1052, 773);
+            this.ClientSize = new System.Drawing.Size(1054, 792);
             this.Controls.Add(this.panMain);
             this.Controls.Add(this.panLeft);
             this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.strip);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -248,10 +269,12 @@
             this.menuStrip1.PerformLayout();
             this.panMain.ResumeLayout(false);
             this.tabMaps.ResumeLayout(false);
+            this.tpMapWelcome.ResumeLayout(false);
             this.panLib.ResumeLayout(false);
             this.panLeft.ResumeLayout(false);
             this.panLeftBottom.ResumeLayout(false);
-            this.tpMapWelcome.ResumeLayout(false);
+            this.strip.ResumeLayout(false);
+            this.strip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -279,6 +302,8 @@
         private System.Windows.Forms.TabControl tabMaps;
         private System.Windows.Forms.TabPage tpMapWelcome;
         private System.Windows.Forms.Button btnNewMap;
+        private System.Windows.Forms.StatusStrip strip;
+        private System.Windows.Forms.ToolStripStatusLabel stripLabel;
     }
 }
 

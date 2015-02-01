@@ -72,6 +72,12 @@
     <Compile Include="Controls\UcMapEditor.Designer.cs">
       <DependentUpon>UcMapEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\UcPaletteEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\UcPaletteEditor.Designer.cs">
+      <DependentUpon>UcPaletteEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\UcRomViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -109,6 +115,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\UcMapEditor.resx">
       <DependentUpon>UcMapEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\UcPaletteEditor.resx">
+      <DependentUpon>UcPaletteEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\UcRomViewer.resx">
       <DependentUpon>UcRomViewer.cs</DependentUpon>

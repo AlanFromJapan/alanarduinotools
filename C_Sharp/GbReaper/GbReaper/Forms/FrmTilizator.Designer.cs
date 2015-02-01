@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            GbReaper.Classes.Palette palette1 = new GbReaper.Classes.Palette();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnCreate = new System.Windows.Forms.Button();
             this.undHeight = new System.Windows.Forms.NumericUpDown();
@@ -40,6 +41,7 @@
             this.undTop = new System.Windows.Forms.NumericUpDown();
             this.picPreviewB = new System.Windows.Forms.PictureBox();
             this.picPreviewC = new System.Windows.Forms.PictureBox();
+            this.ucPaletteEditor1 = new GbReaper.Controls.UcPaletteEditor();
             ((System.ComponentModel.ISupportInitialize)(this.undHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.undWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picPreviewA)).BeginInit();
@@ -82,10 +84,11 @@
             this.undHeight.Size = new System.Drawing.Size(92, 19);
             this.undHeight.TabIndex = 9;
             this.undHeight.Value = new decimal(new int[] {
-            18,
+            5,
             0,
             0,
             0});
+            this.undHeight.ValueChanged += new System.EventHandler(this.undHeight_ValueChanged);
             // 
             // undWidth
             // 
@@ -99,10 +102,11 @@
             this.undWidth.Size = new System.Drawing.Size(92, 19);
             this.undWidth.TabIndex = 8;
             this.undWidth.Value = new decimal(new int[] {
-            20,
+            5,
             0,
             0,
             0});
+            this.undWidth.ValueChanged += new System.EventHandler(this.undWidth_ValueChanged);
             // 
             // label2
             // 
@@ -150,7 +154,7 @@
             // 
             // ofdBitmap
             // 
-            this.ofdBitmap.Filter = "Bitmap|*.png;*.bmp";
+            this.ofdBitmap.Filter = "Bitmap|*.png;*.bmp;*.jpg;*.gif";
             this.ofdBitmap.Title = "Choose image to import";
             // 
             // picPreviewA
@@ -215,6 +219,15 @@
             this.picPreviewC.TabIndex = 13;
             this.picPreviewC.TabStop = false;
             // 
+            // ucPaletteEditor1
+            // 
+            this.ucPaletteEditor1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ucPaletteEditor1.CurrentPalette = palette1;
+            this.ucPaletteEditor1.Location = new System.Drawing.Point(12, 267);
+            this.ucPaletteEditor1.Name = "ucPaletteEditor1";
+            this.ucPaletteEditor1.Size = new System.Drawing.Size(128, 23);
+            this.ucPaletteEditor1.TabIndex = 14;
+            // 
             // FrmTilizator
             // 
             this.AcceptButton = this.btnCreate;
@@ -222,6 +235,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(418, 302);
+            this.Controls.Add(this.ucPaletteEditor1);
             this.Controls.Add(this.picPreviewC);
             this.Controls.Add(this.picPreviewB);
             this.Controls.Add(this.picPreviewA);
@@ -276,5 +290,6 @@
         private System.Windows.Forms.NumericUpDown undTop;
         private System.Windows.Forms.PictureBox picPreviewB;
         private System.Windows.Forms.PictureBox picPreviewC;
+        private Controls.UcPaletteEditor ucPaletteEditor1;
     }
 }
