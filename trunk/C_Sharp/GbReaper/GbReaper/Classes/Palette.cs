@@ -67,5 +67,56 @@ namespace GbReaper.Classes {
 
             return nearest_color;
         }
+
+        /// <summary>
+        /// Finds the closest color in palette using the minimum square method
+        /// http://www.codeproject.com/Articles/17044/Find-the-Nearest-Color-with-C-Using-the-Euclidean
+        /// </summary>
+        /// <param name="pColorInput"></param>
+        /// <returns></returns>
+        public Color GetNearestColorHSL(Color pColorInput) {
+            Color nearest_color = Color.Empty;
+
+            GbReaper.Classes.RGBHSL.HSL vHSLin = RGBHSL.RGB_to_HSL(pColorInput);
+            double dbl_input_h = vHSLin.H;
+            double dbl_input_s = vHSLin.S;
+            double dbl_input_l = vHSLin.L;
+            double distance = 500.0;
+
+            double dbl_test_h ;
+            double dbl_test_s ;
+            double dbl_test_l ;
+            double temp;
+
+            foreach (Color o in this.mColors) {
+                GbReaper.Classes.RGBHSL.HSL vHSLo = RGBHSL.RGB_to_HSL(o);
+                // compute the Euclidean distance between the two colors
+                // note, that the alpha-component is not used in this example
+                dbl_test_h = Math.Pow(vHSLo.H - dbl_input_h, 2.0);
+                dbl_test_s = Math.Pow(vHSLo.S - dbl_input_s, 2.0);
+                dbl_test_l = Math.Pow(vHSLo.L - dbl_input_l, 2.0);
+                // it is not necessary to compute the square root
+                // it should be sufficient to use:
+                // temp = dbl_test_l + dbl_test_s + dbl_test_h;
+                // if you plan to do so, the distance should be initialized by 250000.0
+                temp = Math.Sqrt(dbl_test_l + dbl_test_s + dbl_test_h);
+                // explore the result and store the nearest color
+                if (temp == 0.0) {
+                    // the lowest possible distance is - of course - zero
+                    // so I can break the loop (thanks to Willie Deutschmann)
+                    // here I could return the input_color itself
+                    // but in this example I am using a list with named colors
+                    // and I want to return the Name-property too
+                    nearest_color = o;
+                    break;
+                }
+                else if (temp < distance) {
+                    distance = temp;
+                    nearest_color = o;
+                }
+            }
+
+            return nearest_color;
+        }
     }
 }
