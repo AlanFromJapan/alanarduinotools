@@ -13,12 +13,12 @@ namespace GbReaper.Classes {
         public const int HEIGHT_PX = 8;
 
         private Guid mUID = Guid.Empty;
-        private Image mImage = null;
+        private Bitmap mImage = null;
         private string mName = null;
         private Palette mPalette = Palette.DEFAULT_PALETTE;
 
         public Guid UID { get { return mUID; } }
-        public Image Image { get { return mImage; } set { mImage = value; OnTileChanged(); } }
+        public Image Image { get { return (Image)mImage.Clone(); } }//set { mImage = value; OnTileChanged(); } }
         public string Name { get { return mName; } set { mName = value; } }
         public Palette Palette { get { return mPalette; } }
 
@@ -28,12 +28,13 @@ namespace GbReaper.Classes {
 
         public Tile(Guid pUID, string pName, Image pImage, Palette pPalette) {
             this.mUID = pUID;
-            this.mImage = pImage;
+            this.mImage = (pImage is Bitmap ? (Bitmap)pImage : new Bitmap(pImage));
             this.mName = pName;
             this.mPalette = pPalette;
         }
 
-        public Tile(Image pImage, Palette pPalette) : this (
+        public Tile(Image pImage, Palette pPalette)
+            : this(
             Guid.NewGuid(),
             string.Empty,
             pImage,
@@ -59,6 +60,12 @@ namespace GbReaper.Classes {
         }
         public override int GetHashCode() {
             return this.mUID.GetHashCode();
+        }
+
+
+        internal void SetPixel(int x, int y, Color pColor) {
+            this.mImage.SetPixel(x, y, pColor);
+            OnTileChanged();
         }
 
         internal void SaveToStream(System.IO.StreamWriter pSW) {
