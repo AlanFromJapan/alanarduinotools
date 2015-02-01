@@ -9,6 +9,12 @@ namespace GbReaper.Classes {
     public class GbProject {
         public List<Map> mMaps = new List<Map>();
         public List<Library> mLibraries = new List<Library>();
+        protected string mLatestKnownFilename = null;
+
+        public string LatestKnownFilename {
+            get { return mLatestKnownFilename; }
+            set { mLatestKnownFilename = value; }
+        }
 
         public GbProject() { 
             
@@ -19,13 +25,23 @@ namespace GbReaper.Classes {
             pNewMap.ParentProject = this;
         }
 
+        public void ExportToGBDK(string pPath) {
+            foreach (Library vLin in mLibraries) {
+                vLin.ExportToGBDK(pPath);
+            }
+
+            foreach (Map vM in mMaps) {
+                vM.ExportToGBDK(pPath);
+            }
+        }
+
         public void SaveAs(string pFilename) {
 
             
             using (FileStream vFS = new FileStream(pFilename, FileMode.Create, FileAccess.ReadWrite, FileShare.None)) {
                 using (StreamWriter vSW = new StreamWriter(vFS)) {
                     vSW.WriteLine(@"<?xml version=""1.0"" encoding=""utf-8"" ?>");
-                    vSW.WriteLine("<gbProject>");
+                    vSW.WriteLine("<gbProject format=\"1.0\">");
 
                     vSW.WriteLine("\t<libraries>");
                     foreach (Library vLib in this.mLibraries) {

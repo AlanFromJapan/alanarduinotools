@@ -20,11 +20,13 @@ namespace GbReaper {
         private GbProject mCurrentProject = new GbProject();
 
         private void FrmMain_Load(object sender, EventArgs e) {
-            Image vM = RomReader.GetRomAsImage(@"D:\Gameboy.dev\ROMS\tetris_(v1.1)\Tetris.gb", 2);
-            ucRomViewer1.SetImage(vM, 2);
-
-
-            LoadGbProject(@"D:\Gameboy.dev\ROMS\Legend of Zelda, The - Link's Awakening (USA, Europe) (Rev B)\test001.gbxml");
+            string[] vArgs = Environment.GetCommandLineArgs();
+            if (vArgs != null && vArgs.Length > 0) {
+                LoadGbProject(vArgs[0]);
+            }
+            else {
+                StartEmptyNewProject();
+            }
 
             //Event handlers
             ucRomViewer1.RomTileViewed += new GbReaper.Controls.UcRomViewer.RomTileSelectDelegate(RomViewer_RomTileViewed);
@@ -39,9 +41,11 @@ namespace GbReaper {
         /// Loads a GB project
         /// </summary>
         private void LoadGbProject(string pFilename) {
+            SetStatus("Loading project " + pFilename + " ...");
             try {
                 //StartEmptyNewProject();
                 this.mCurrentProject = GbProject.LoadFromFile(pFilename);
+                this.mCurrentProject.LatestKnownFilename = pFilename;
             }
             catch (Exception) {
                 StartEmptyNewProject();
@@ -61,6 +65,8 @@ namespace GbReaper {
 
                 vME.NewMap += new EventHandler(MapEditor_NewMap);
             }
+
+            SetStatus("Loading project " + pFilename + " completed.");
         }
 
 
@@ -127,7 +133,8 @@ namespace GbReaper {
         }
 
         void RomViewer_RomTileSelected(Image pImage) {
-            mCurrentProject.mLibraries[0].AddTile(new Tile(pImage, Palette.DEFAULT_PALETTE));
+            bool pAlreadyExisted;
+            mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile(pImage, Palette.DEFAULT_PALETTE), out pAlreadyExisted);
         }
 
        
@@ -138,8 +145,10 @@ namespace GbReaper {
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e) {
             if (DialogResult.OK == ofdRom.ShowDialog(this)) {
+                SetStatus("Loading ROM " + ofdRom.FileName + " ...");
                 Image vM = RomReader.GetRomAsImage(ofdRom.FileName, 2);
                 ucRomViewer1.SetImage(vM, 2);
+                SetStatus("Loading ROM " + ofdRom.FileName + " completed.");
             }
         }
 
@@ -149,7 +158,9 @@ namespace GbReaper {
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e) {
             if (sfdProject.ShowDialog(this) == DialogResult.OK) {
-                this.mCurrentProject.SaveAs(sfdProject.FileName);    
+                this.mCurrentProject.SaveAs(sfdProject.FileName);
+                this.mCurrentProject.LatestKnownFilename = sfdProject.FileName;
+                SetStatus("Saved as " + this.mCurrentProject.LatestKnownFilename + " completed.");
             }
         }
 
@@ -159,6 +170,28 @@ namespace GbReaper {
 
         public void SetStatus(string pStatusText) {
             this.stripLabel.Text = pStatusText;
+        }
+
+        private void loadProjectToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (DialogResult.OK == ofdProject.ShowDialog(this)) {
+                LoadGbProject(ofdProject.FileName);
+            }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e) {
+            this.mCurrentProject.SaveAs(this.mCurrentProject.LatestKnownFilename);
+            SetStatus("Saved as " + this.mCurrentProject.LatestKnownFilename + " completed.");
+        }
+
+        private void exportForGBDKToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (fbdExport.ShowDialog(this) == System.Windows.Forms.DialogResult.OK) {
+                this.mCurrentProject.ExportToGBDK(fbdExport.SelectedPath);
+                SetStatus("Export to " + fbdExport.SelectedPath + " completed.");
+            }
+        }
+
+        private void aboutGbReaperToolStripMenuItem_Click(object sender, EventArgs e) {
+            MessageBox.Show("http://kalshagar.wikispaces.com/GbReaper");
         }
     }
 }

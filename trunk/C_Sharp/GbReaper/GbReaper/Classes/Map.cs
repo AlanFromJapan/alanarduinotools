@@ -138,5 +138,55 @@ namespace GbReaper.Classes {
                 
             pSW.WriteLine("\t\t</map>");
         }
+
+
+        private static string CleanFileName(string fileName) {
+            string s = Path.GetInvalidFileNameChars().Aggregate(fileName, (current, c) => current.Replace(c.ToString(), string.Empty));
+            s = s.Replace(" ", "_");
+            return s;
+        }
+
+        internal void ExportToGBDK(string pPath) {
+            string vMapNameC = CleanFileName(this.Name);
+            string vFilename = Path.Combine(pPath, (string.IsNullOrWhiteSpace(this.Name) ? "GbReaper_map.c" : vMapNameC + ".c"));
+
+            using (FileStream vFS = new FileStream(vFilename, FileMode.Create, FileAccess.ReadWrite, FileShare.None)) {
+                using (StreamWriter vSW = new StreamWriter(vFS)) {
+                    vSW.WriteLine(string.Format(@"
+#define {2}_WIDTH   {0}
+#define {2}_HEIGHT  {1}
+
+", this.Width, this.Height, vMapNameC));
+
+                    vSW.WriteLine(@"unsigned char " + vMapNameC + @"[] =
+{
+");
+                    bool vFirst = true;
+                    for (int y = 0; y < this.Height; y++) {
+                        for (int x=0; x < this.Width; x++){
+                        
+                            if (!vFirst)
+                                vSW.Write(",");
+
+                            if (this.mMatrix[x, y] == null || this.mMatrix[x, y].mTile == null) {
+                                vSW.Write("0x00");
+                            }
+                            else {
+                                int i = this.mParentProject.mLibraries[0].IndexOf(this.mMatrix[x, y].mTile);
+
+                                vSW.Write(string.Format("0x{0:X02}", i));
+                            }
+
+                            vFirst = false;
+                        }
+                        vSW.WriteLine("");
+                    }
+
+                    vSW.WriteLine(@"
+};
+");
+                }
+            }
+        }
     }
 }

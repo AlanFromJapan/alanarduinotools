@@ -37,7 +37,9 @@ namespace GbReaper.Classes {
             return this.mTiles.GetEnumerator();
         }
 
-
+        public int IndexOf(Tile pT) {
+            return this.mTiles.IndexOf(pT);
+        }
 
         public void DeleteTile(Tile pTile) {
             this.mTiles.Remove(pTile);
@@ -103,6 +105,7 @@ namespace GbReaper.Classes {
             return pTile;
         }
 
+        //http://stackoverflow.com/questions/2031217/what-is-the-fastest-way-i-can-compare-two-equal-size-bitmaps-to-determine-whethe
         [DllImport("msvcrt.dll", CallingConvention = CallingConvention.Cdecl)]
         private static extern int memcmp(IntPtr b1, IntPtr b2, long count);
 
@@ -125,6 +128,44 @@ namespace GbReaper.Classes {
             finally {
                 b1.UnlockBits(bd1);
                 b2.UnlockBits(bd2);
+            }
+        }
+
+
+        private static string CleanFileName(string fileName) {
+            string s = Path.GetInvalidFileNameChars().Aggregate(fileName, (current, c) => current.Replace(c.ToString(), string.Empty));
+            s = s.Replace(" ", "_");
+            return s;
+        }
+
+        internal void ExportToGBDK(string pPath) {
+            string vLibNameC = CleanFileName(this.Name);
+            string vFilename = Path.Combine(pPath, (string.IsNullOrWhiteSpace(this.Name) ? "GbReaper_lib.c" : vLibNameC + ".c"));
+
+            using (FileStream vFS = new FileStream(vFilename, FileMode.Create, FileAccess.ReadWrite, FileShare.None)) {
+                using (StreamWriter vSW = new StreamWriter(vFS)) {
+                    vSW.WriteLine(string.Format(@"
+#define {1}_COUNT   {0}
+
+", this.mTiles.Count,  vLibNameC));
+
+                    vSW.WriteLine(@"unsigned char " + vLibNameC + @"[] =
+{
+");
+                    bool vFirst = true;
+                    foreach (Tile vT in this.mTiles){
+                        if (!vFirst)
+                            vSW.WriteLine(",");
+
+                        vSW.Write(vT.ExportTileToGBDKString());
+
+                        vFirst = false;
+                    }
+
+                    vSW.WriteLine(@"
+};
+");
+                }
             }
         }
     }

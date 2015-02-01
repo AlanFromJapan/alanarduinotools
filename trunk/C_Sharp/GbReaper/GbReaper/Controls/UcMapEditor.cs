@@ -71,6 +71,8 @@ namespace GbReaper.Controls {
 
             if (e.Button == System.Windows.Forms.MouseButtons.Left || e.Button == System.Windows.Forms.MouseButtons.Right) {
                 Rectangle vBorders = GridBorders;
+                if (!vBorders.Contains(e.Location))
+                    return;
 
                 Point vP = new Point(
                     (e.X - vBorders.X) / TILE_SIZE,
@@ -84,13 +86,14 @@ namespace GbReaper.Controls {
                     else {
                         //set and repaint
                         this.mCurrentMap.SetTile(this.mCurrentTile, vP.X, vP.Y);
+                        this.panMap.Invalidate();
                     }
                 }
                 else { 
                     //right click clears
                     this.mCurrentMap.ClearTileAt(vP.X, vP.Y);
+                    this.panMap.Invalidate();
                 }
-                this.panMap.Invalidate();
             }
         }
 
@@ -202,6 +205,7 @@ namespace GbReaper.Controls {
                             Rectangle vTileRect = new Rectangle(x * Tile.WIDTH_PX, y * Tile.HEIGHT_PX, Tile.WIDTH_PX, Tile.HEIGHT_PX);
                             Bitmap vTileBmp = (Bitmap)vTarget.Clone(vTileRect, vTarget.PixelFormat);
 
+                            //make new tile and add/get similar from library
                             Tile vT = new Tile(vTileBmp, vPal);
                             bool vTileAlreadyExisted = false;
                             vT = this.mCurrentMap.ParentProject.mLibraries[0].AddTileWithoutDuplicate(vT, out vTileAlreadyExisted);
@@ -211,6 +215,7 @@ namespace GbReaper.Controls {
                             else 
                                 vTileReusedCount++;
 
+                            //apply the tile to the map
                             this.mCurrentMap.SetTile(vT, vFrm.CreateLeft + x, vFrm.CreateTop+ y);
                         }
                     }

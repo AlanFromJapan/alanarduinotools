@@ -110,11 +110,15 @@ namespace GbReaper.Controls {
                 // Draw the background and focus rectangle for a selected item.
                 //e.Graphics.FillRectangle(Brushes.YellowGreen, e.Bounds);
 
+                if (this.lvLibrary.SelectedItems.Contains(e.Item)) {
+                    e.Graphics.FillRectangle(Brushes.Gold, e.Bounds);
+                }
+
                 TileViewItem vSVI = (TileViewItem)e.Item;
                 e.Graphics.DrawImage(vSVI.mTile.Image, e.Bounds.Location.X, e.Bounds.Location.Y, Tile.WIDTH_PX*2, Tile.HEIGHT_PX*2);
 
                 Rectangle vR = new Rectangle(e.Bounds.Location, e.Bounds.Size);
-                vR.Offset(vSVI.mTile.Image.Width, 0);
+                vR.Offset(Tile.WIDTH_PX * 2, 0);
                 e.Graphics.DrawString(
                     vSVI.mTile.UID.ToString(), 
                     lvLibrary.Font,

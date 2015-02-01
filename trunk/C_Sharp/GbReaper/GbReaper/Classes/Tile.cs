@@ -68,6 +68,35 @@ namespace GbReaper.Classes {
             OnTileChanged();
         }
 
+        internal string ExportTileToGBDKString() {
+            byte b1, b2;
+            StringBuilder vSB = new StringBuilder(100);
+
+            for (int y = 0; y < HEIGHT_PX; y++) {
+                b1 = 0;
+                b2 = 0;
+
+                for (int x = 0; x < WIDTH_PX; x++) {
+                    b1 = (byte)(b1 << 1);
+                    b2 = (byte)(b2 << 1);
+
+                    byte vIdx = (byte)this.Palette.GetIndexInPalette(this.mImage.GetPixel(x, y));
+                    if (vIdx < 0)
+                        throw new Exception("Error while exporting : cannot find tile color in palette!");
+
+                    b1 = (byte)(b1 | (byte)(0x01 & vIdx));
+                    b2 = (byte)(b2 | (byte)((0x02 & vIdx) >> 1));
+
+                }
+
+                if (vSB.Length != 0)
+                    vSB.Append(",");
+                vSB.AppendFormat("0x{0:X02},0x{1:X02}", b1, b2);
+            }
+
+            return string.Format("// {0} [{1}]\r\n{2}", this.Name, this.UID, vSB.ToString());
+        }
+
         internal void SaveToStream(System.IO.StreamWriter pSW) {
             pSW.Write("\t\t\t<tile id=\""+this.UID+"\" name=\"" + this.Name + "\" palette=\""+this.Palette.mName+"\">");
 
