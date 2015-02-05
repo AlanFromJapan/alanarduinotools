@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Atmel Studio Solution File, Format Version 11.00
 Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "RGBMatrix", "RGBMatrix\RGBMatrix.cppproj", "{88B7E6E4-2675-45D3-AD16-3C8909001CA7}"
 EndProject
+Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "GbCartridgeKSController", "GbCartridgeKSController\GbCartridgeKSController.cppproj", "{90071E55-5A1F-4C43-8A4B-42E40E3093CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -13,6 +15,10 @@ Global
 		{88B7E6E4-2675-45D3-AD16-3C8909001CA7}.Debug|AVR.Build.0 = Debug|AVR
 		{88B7E6E4-2675-45D3-AD16-3C8909001CA7}.Release|AVR.ActiveCfg = Release|AVR
 		{88B7E6E4-2675-45D3-AD16-3C8909001CA7}.Release|AVR.Build.0 = Release|AVR
+		{90071E55-5A1F-4C43-8A4B-42E40E3093CB}.Debug|AVR.ActiveCfg = Debug|AVR
+		{90071E55-5A1F-4C43-8A4B-42E40E3093CB}.Debug|AVR.Build.0 = Debug|AVR
+		{90071E55-5A1F-4C43-8A4B-42E40E3093CB}.Release|AVR.ActiveCfg = Release|AVR
+		{90071E55-5A1F-4C43-8A4B-42E40E3093CB}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
