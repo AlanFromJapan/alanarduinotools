@@ -205,5 +205,15 @@ namespace GbReaper.Controls {
                 SelectedTileChanged(((TileViewItem)lvLibrary.SelectedItems[0]).mTile);
             }
         }
+
+        private void btnNew_Click(object sender, EventArgs e) {
+            Bitmap vBmp = new Bitmap(Tile.WIDTH_PX, Tile.HEIGHT_PX, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            using (Graphics g = Graphics.FromImage(vBmp)) {
+                g.FillRectangle(new SolidBrush(Palette.DEFAULT_PALETTE.mColors[0]), 0, 0, Tile.WIDTH_PX, Tile.HEIGHT_PX);
+            }
+
+            Tile vT = new Tile(vBmp, Palette.DEFAULT_PALETTE);
+            this.mCurrentLib.AddTile(vT);
+        }
     }
 }
