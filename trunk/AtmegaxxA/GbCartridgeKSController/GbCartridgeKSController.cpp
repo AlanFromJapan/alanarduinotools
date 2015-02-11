@@ -261,9 +261,8 @@ uint8_t flashGetByteDecode() {
 void flashWriteSeq1Byte (uint16_t pAddr, uint8_t pData, uint8_t pIsLast){
 	//Doc: READ = /CE(l) & /WE(l) & /OE(h) & /RST(h)
 	//but watch the sequence
+
 	
-	//go write mode
-	DATABUS_WRITE_MODE;
 	
 	//Start : CE and WE high
 	PORT_CONTROL = (PIN_RST | PIN_CE | PIN_WE);
@@ -314,8 +313,12 @@ void flashWriteSeq1Byte (uint16_t pAddr, uint8_t pData, uint8_t pIsLast){
 
 void flashWriteByteDecode2(uint16_t pAddress, uint8_t pData) {
 
-	PORT_CONTROL = PORT_CONTROL | (PIN_RST);
+	PORT_CONTROL = (PIN_RST);
+	_delay_us(1);
 	
+	//go write mode
+	DATABUS_WRITE_MODE;
+		
 /*
 	//Byte Program 4 555h AAh AAAh 55h 555h A0h PA PD
 	flashWriteSeq1Byte(0x0555, 0xaa,0);
@@ -334,6 +337,8 @@ void flashWriteByteDecode2(uint16_t pAddress, uint8_t pData) {
 	flashWriteSeq1Byte(0x5555, 0xa0, 0);
 	flashWriteSeq1Byte(pAddress, pData, 1);
 	
+	//back to read mode
+	DATABUS_READ_MODE;
 
 #ifdef TALKATIVE
 	serialWriteString("WRITE addr: ");
