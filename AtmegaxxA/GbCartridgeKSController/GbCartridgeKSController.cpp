@@ -36,7 +36,7 @@
 #define PIN_WE				0x20
 #define PIN_RST				0x40
 //mask to enable result of only our control pins
-#define PIN_CONTROLS_MASK	0x78
+//#define PIN_CONTROLS_MASK	(PIN_RST)
 
 
 void delayLong()
@@ -197,7 +197,7 @@ uint8_t flashGetByteDecode2(uint16_t pAddr) {
 	DATABUS_READ_MODE;
 
 	//Doc: READ = /CE(l) & /WE(h) & /OE(l) & /RST(h)
-	PORT_CONTROL = PIN_CONTROLS_MASK & (PIN_RST | PIN_CE | PIN_OE);
+	PORT_CONTROL = (PIN_RST | PIN_CE | PIN_OE);
 	_delay_us(1);
 
 	//WE goes high
@@ -211,11 +211,11 @@ uint8_t flashGetByteDecode2(uint16_t pAddr) {
 	_delay_us(1);
 
 	//CE goes low
-	PORT_CONTROL = PORT_CONTROL & !PIN_CE;
+	PORT_CONTROL = PORT_CONTROL & ~PIN_CE;
 	_delay_us(1);
 
 	//OE goes low
-	PORT_CONTROL = PORT_CONTROL & !PIN_OE;
+	PORT_CONTROL = PORT_CONTROL & ~PIN_OE;
 	//doc says tOE = 0ns
 	_delay_us(1);
 	
@@ -227,7 +227,7 @@ uint8_t flashGetByteDecode2(uint16_t pAddr) {
 	_delay_us(1);
 
 	//WE goes low
-	PORT_CONTROL = PORT_CONTROL & !PIN_WE;
+	PORT_CONTROL = PORT_CONTROL & ~PIN_WE;
 	_delay_us(1);
 	
 	
@@ -266,7 +266,7 @@ void flashWriteSeq1Byte (uint16_t pAddr, uint8_t pData, uint8_t pIsLast){
 	DATABUS_WRITE_MODE;
 	
 	//Start : CE and WE high
-	PORT_CONTROL = PORT_CONTROL | (PIN_RST | PIN_CE | PIN_WE);
+	PORT_CONTROL = (PIN_RST | PIN_CE | PIN_WE);
 	_delay_us(1);
 
 	//put the address
@@ -276,7 +276,7 @@ void flashWriteSeq1Byte (uint16_t pAddr, uint8_t pData, uint8_t pIsLast){
 	_delay_us(1);
 
 	//CE goes low
-	PORT_CONTROL = PORT_CONTROL & !PIN_CE;
+	PORT_CONTROL = PORT_CONTROL & ~PIN_CE;
 	_delay_us(1);
 
 	//OE goes high
@@ -284,7 +284,7 @@ void flashWriteSeq1Byte (uint16_t pAddr, uint8_t pData, uint8_t pIsLast){
 	_delay_us(1);
 	
 	//WE goes low
-	PORT_CONTROL = PORT_CONTROL & !PIN_WE;
+	PORT_CONTROL = PORT_CONTROL & ~PIN_WE;
 	_delay_us(1);
 	
 	//put the data
@@ -301,11 +301,11 @@ void flashWriteSeq1Byte (uint16_t pAddr, uint8_t pData, uint8_t pIsLast){
 		_delay_us(1);
 
 		//CE goes low
-		PORT_CONTROL = PORT_CONTROL & !PIN_CE;
+		PORT_CONTROL = PORT_CONTROL & ~PIN_CE;
 		_delay_us(1);
 
 		//OE goes low
-		PORT_CONTROL = PORT_CONTROL & !PIN_OE;
+		PORT_CONTROL = PORT_CONTROL & ~PIN_OE;
 		_delay_us(1);
 		
 	}
