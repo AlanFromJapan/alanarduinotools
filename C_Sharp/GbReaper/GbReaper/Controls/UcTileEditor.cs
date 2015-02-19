@@ -81,22 +81,31 @@ namespace GbReaper.Controls {
             pan128.Paint += new PaintEventHandler(pan128_Paint);
             pan128Alt.Paint += new PaintEventHandler(pan128Alt_Paint);
             panEdit.MouseMove += new MouseEventHandler(panEdit_MouseMove);
+            panEdit.MouseDown += new MouseEventHandler(panEdit_MouseDown);
+        }
+
+        void panEdit_MouseDown(object sender, MouseEventArgs e) {
+            DoMousePaint(e);
         }
 
         void panEdit_MouseMove(object sender, MouseEventArgs e) {
+            DoMousePaint(e);
+        }
+
+        private void DoMousePaint(MouseEventArgs e) {
             if (this.mCurrentTile == null)
                 return;
 
             if (e.Button == System.Windows.Forms.MouseButtons.Left || e.Button == System.Windows.Forms.MouseButtons.Right) {
                 Rectangle vSelected = new Rectangle(
-                    TILE_SIZE * ((e.X ) / TILE_SIZE),
-                    TILE_SIZE * ((e.Y ) / TILE_SIZE),
+                    TILE_SIZE * ((e.X) / TILE_SIZE),
+                    TILE_SIZE * ((e.Y) / TILE_SIZE),
                     TILE_SIZE,
                     TILE_SIZE);
 
 
                 this.mCurrentTile.SetPixel(
-                    vSelected.X / TILE_SIZE, 
+                    vSelected.X / TILE_SIZE,
                     vSelected.Y / TILE_SIZE,
                     (e.Button == System.Windows.Forms.MouseButtons.Left ? this.ColorLeft : this.ColorRight));
             }
