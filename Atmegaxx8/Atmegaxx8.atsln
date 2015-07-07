@@ -16,6 +16,8 @@ Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "CirclezDemo2", "CirclezDemo
 EndProject
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "MultiClockManager", "MultiClockManager\MultiClockManager.cproj", "{AA5926F1-79EE-4DC6-A232-745D272597A7}"
 EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "FingerPasswordKeyboard", "FingerPasswordKeyboard\FingerPasswordKeyboard.cproj", "{E14134A7-A57D-46D1-BF0E-6591695206E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -54,6 +56,10 @@ Global
 		{AA5926F1-79EE-4DC6-A232-745D272597A7}.Debug|AVR.Build.0 = Debug|AVR
 		{AA5926F1-79EE-4DC6-A232-745D272597A7}.Release|AVR.ActiveCfg = Release|AVR
 		{AA5926F1-79EE-4DC6-A232-745D272597A7}.Release|AVR.Build.0 = Release|AVR
+		{E14134A7-A57D-46D1-BF0E-6591695206E2}.Debug|AVR.ActiveCfg = Debug|AVR
+		{E14134A7-A57D-46D1-BF0E-6591695206E2}.Debug|AVR.Build.0 = Debug|AVR
+		{E14134A7-A57D-46D1-BF0E-6591695206E2}.Release|AVR.ActiveCfg = Release|AVR
+		{E14134A7-A57D-46D1-BF0E-6591695206E2}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
