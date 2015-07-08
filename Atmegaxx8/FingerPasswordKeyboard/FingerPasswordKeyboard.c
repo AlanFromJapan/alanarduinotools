@@ -65,11 +65,16 @@ int main(void)
     sei();
 
 	//Now USB is up, init the Serial
+	serialHardwareInit();
 	
 
     for(;;){                // main event loop
 		wdt_reset();
 		usbPoll();
+		
+		//Serial test
+		//_delay_ms(100);
+		//USART_Transmit('T');
     }	
 	
 	return 0;

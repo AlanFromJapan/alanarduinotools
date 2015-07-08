@@ -10,7 +10,7 @@
 #define SERIALCOMM_H_
 
 
-static void serialHardwareInit();
-
+void serialHardwareInit();
+void USART_Transmit( unsigned char data );
 
 #endif /* SERIALCOMM_H_ */
