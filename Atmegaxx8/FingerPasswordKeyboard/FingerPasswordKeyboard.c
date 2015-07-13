@@ -71,6 +71,16 @@ int main(void)
 	//3: open communication to FPS
 	fpsInit();
 	
+	//4: buttons
+	//button input
+	//PC1 in
+	DDRC &= ~0x01;
+	//Pull up on PC1
+	PORTC = (1 << PORTC1);
+	//just make sure pullups are NOT disabled
+	MCUCR |= (0 << PUD);
+		
+	
 	uint32_t vSpeedDown = 0;
 	uint8_t vToggle = 0;
     for(;;){                // main event loop
@@ -80,9 +90,8 @@ int main(void)
 		
 		
 		//Other stuffs to do in main loop
-		vSpeedDown++;		
-		if (vSpeedDown >= 500000){
-			vSpeedDown = 0;
+		//check for button press : PB0 -> change mode
+		if ((~PINC & (1 << PINC1)) != 0){
 			
 			fpsSetLight(vToggle);
 			
@@ -91,6 +100,9 @@ int main(void)
 				vToggle = 1;
 			else
 				vToggle = 0;
+				
+			//will kill USB most likely ... but not!
+			_delay_ms(100);
 		}
 		
     }	
