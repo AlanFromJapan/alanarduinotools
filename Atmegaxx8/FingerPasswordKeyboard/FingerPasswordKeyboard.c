@@ -20,6 +20,7 @@
 #include "Keyboard.h"
 #include "vusb-config.h"
 #include "serialComm.h"
+#include "FPS.h"
 
 static void usbHardwareInit(void)
 {
@@ -42,32 +43,14 @@ static void usbHardwareInit(void)
 }
 
 
-void fpsSend(uint16_t pParam, uint8_t pCommand){
-	//https://github.com/mlaws/GT-511C1_Mega/blob/master/fingerprint.ino
-	uint16_t vChecksum = 0;
-	vChecksum = 0x55+0xAA+0x01+(uint8_t)pParam+((uint8_t)(pParam >> 8))+pCommand;
-	
-	USART_Transmit((uint8_t)0x55); //Command start code 1
-	USART_Transmit((uint8_t)0xAA); //Command start code 2
-	USART_Transmit((uint8_t)0x01); // This is the first byte for the device ID. It is the word 0x0001
-	USART_Transmit((uint8_t)0x00); // Second byte of Device ID. Notice the larger byte is first. I'm assuming this is because the datasheet says "Multi-byte item is represented as Little Endian"
-	USART_Transmit((uint8_t)pParam); //writing the largest byte of the Parameter
-	USART_Transmit((uint8_t)(pParam >> 8)); //Writing the second largest byte of the Parameter
-	USART_Transmit((uint8_t)0x00); //The datasheet says the parameter is a DWORD, but it never seems to go over the value of a word
-	USART_Transmit((uint8_t)0x00); //so I'm just sending it a word of data. These are the 2 remaining bytes of the Dword
-	USART_Transmit((uint8_t)pCommand); //write the command byte
-	USART_Transmit((uint8_t)0x00); //again, the commands don't go over a byte, but it is sent as a word, so I'm only sending a byte
-	USART_Transmit((uint8_t)vChecksum); //Writes the largest byte of the checksum
-	USART_Transmit((uint8_t)(vChecksum >> 8)); //writes the smallest byte of the checksum
-}
-
-
-
+/************************************************************************/
+/* Main method                                                          */
+/************************************************************************/
 int main(void)
 {
     wdt_enable(WDTO_1S);  // watchdog status is preserved on reset
 
-	//Init USB
+	//1: Init USB
     usbHardwareInit();
     
     usbInit();
@@ -82,29 +65,26 @@ int main(void)
 
     sei();
 
-	//Now USB is up, init the Serial
+	//2: Now USB is up, init the Serial
 	serialHardwareInit();
 	
-
-	//open communication to FPS
-	fpsSend(0x0000,0x01);
+	//3: open communication to FPS
+	fpsInit();
 	
 	uint32_t vSpeedDown = 0;
 	uint8_t vToggle = 0;
     for(;;){                // main event loop
+		//USB data pull
 		wdt_reset();
 		usbPoll();
 		
-		//Serial test
-		//_delay_ms(100);
-		//USART_Transmit('T');
 		
-		
+		//Other stuffs to do in main loop
 		vSpeedDown++;		
 		if (vSpeedDown >= 500000){
 			vSpeedDown = 0;
 			
-			fpsSend((uint16_t)vToggle,0x12);
+			fpsSetLight(vToggle);
 			
 			//vToggle = !vToggle;
 			if (vToggle == 0)
