@@ -18,6 +18,8 @@ Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "MultiClockManager", "MultiC
 EndProject
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "FingerPasswordKeyboard", "FingerPasswordKeyboard\FingerPasswordKeyboard.cproj", "{E14134A7-A57D-46D1-BF0E-6591695206E2}"
 EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "UsbKeyboardSample", "UsbKeyboardSample\UsbKeyboardSample.cproj", "{DFD85CC5-67F9-4D70-B7CF-EB7720BE502C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -60,6 +62,10 @@ Global
 		{E14134A7-A57D-46D1-BF0E-6591695206E2}.Debug|AVR.Build.0 = Debug|AVR
 		{E14134A7-A57D-46D1-BF0E-6591695206E2}.Release|AVR.ActiveCfg = Release|AVR
 		{E14134A7-A57D-46D1-BF0E-6591695206E2}.Release|AVR.Build.0 = Release|AVR
+		{DFD85CC5-67F9-4D70-B7CF-EB7720BE502C}.Debug|AVR.ActiveCfg = Debug|AVR
+		{DFD85CC5-67F9-4D70-B7CF-EB7720BE502C}.Debug|AVR.Build.0 = Debug|AVR
+		{DFD85CC5-67F9-4D70-B7CF-EB7720BE502C}.Release|AVR.ActiveCfg = Release|AVR
+		{DFD85CC5-67F9-4D70-B7CF-EB7720BE502C}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
