@@ -130,7 +130,7 @@ int main(void)
 	sei();
 
 	
-	//4: buttons
+	//2: buttons
 	//button input
 	//PC1 in
 	DDRC &= ~0x01;
@@ -153,6 +153,7 @@ int main(void)
 		
 			for (uint8_t* p = str; (*p) != 0; p++){
 
+				//Necessary: without that if you send a few characters only the first 5-8 ones will arrive
 				do {
 					//usb data pull
 					wdt_reset();
@@ -161,7 +162,7 @@ int main(void)
 				} while (!usbInterruptIsReady());
 											
 				//1) Send the character
-				buildKeyboardReport(*(p));
+				buildKeyboardReport(*p);
 				usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
 				_delay_ms(20);
 															
