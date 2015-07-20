@@ -43,6 +43,67 @@ static void usbHardwareInit(void)
 	TCCR0 = 5;      /* timer 0 prescaler: 1024 */
 }
 
+
+/************************************************************************/
+/* Make keyboard report to send to USB                                  */
+/************************************************************************/
+void buildKeyboardReport(uint8_t pKey) {
+	//default: nothing
+	keyboard_report.modifier = 0;
+	keyboard_report.keycode[0] = 0;
+	
+	//if caps, set the modifier and shift the character to the lchars
+	if(pKey >= 'A' && pKey <= 'Z'){
+		keyboard_report.modifier = MOD_SHIFT_LEFT;
+		pKey = pKey + ('a' - 'A');
+	}
+	
+	if(pKey >= 'a' && pKey <= 'z'){
+		keyboard_report.keycode[0] = 4+(pKey-'a');
+		return;
+	}				
+
+	//Digits
+	if(pKey >= '1' && pKey <= '9'){
+		keyboard_report.keycode[0] = 30+(pKey-'1');
+		return;
+	}
+	else{
+		if(pKey == '0'){
+			keyboard_report.keycode[0] = KEY_0_PARC;
+			return;
+		}
+	}
+
+	//The rest
+	switch (pKey){
+		case '!': keyboard_report.keycode[0] = KEY_1_EXCL; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '@': keyboard_report.keycode[0] = KEY_2_AT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '#': keyboard_report.keycode[0] = KEY_3_SHARP; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '$': keyboard_report.keycode[0] = KEY_4_DOL; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '%': keyboard_report.keycode[0] = KEY_5_PCNT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '^': keyboard_report.keycode[0] = KEY_6_HAT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '&': keyboard_report.keycode[0] = KEY_7_AMP; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '*': keyboard_report.keycode[0] = KEY_8_STAR; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '(': keyboard_report.keycode[0] = KEY_9_PARO; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case ')': keyboard_report.keycode[0] = KEY_0_PARC; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '-': keyboard_report.keycode[0] = KEY_DASH_UNDERSCORE; break;
+		case '_': keyboard_report.keycode[0] = KEY_DASH_UNDERSCORE; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '=': keyboard_report.keycode[0] = KEY_EQUAL_PLUS; break;
+		case '+': keyboard_report.keycode[0] = KEY_EQUAL_PLUS; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case ';': keyboard_report.keycode[0] = KEY_SEMIC_COLON; break;
+		case ':': keyboard_report.keycode[0] = KEY_SEMIC_COLON; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case ',': keyboard_report.keycode[0] = KEY_COMA_LT; break;
+		case '<': keyboard_report.keycode[0] = KEY_COMA_LT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '.': keyboard_report.keycode[0] = KEY_DOT_GT; break;
+		case '>': keyboard_report.keycode[0] = KEY_DOT_GT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '/': keyboard_report.keycode[0] = KEY_SLASH_QUEST; break;
+		case '?': keyboard_report.keycode[0] = KEY_SLASH_QUEST; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		
+	}
+}
+
+
 /************************************************************************/
 /* Main method                                                          */
 /************************************************************************/
@@ -75,38 +136,46 @@ int main(void)
 	//just make sure pullups are NOT disabled
 	MCUCR |= (0 << PUD);
 	
+	uchar* str = "hello Monde. !#$%&'()<>?:;";
 	
 	for(;;){                // main event loop
-	//USB data pull
-	wdt_reset();
-	usbPoll();
+		//USB data pull
+		wdt_reset();
+		usbPoll();
 	
 	
-	//Other stuffs to do in main loop
-	//check for button press
-	if ((~PINC & (1 << PINC1)) != 0){
+		//Other stuffs to do in main loop
+		//check for button press
+		if ((~PINC & (1 << PINC1)) != 0){
 		
-		//1) Send the character
-		if(usbInterruptIsReady()){
-			keyboard_report.keycode[0] = 0; //modifier
-			keyboard_report.keycode[1] = KEY_A; //key
-			
-			usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
-			_delay_ms(50);
+			//1) Send the character
+			if(usbInterruptIsReady()){
+				buildKeyboardReport('a');			
+				usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
+				_delay_ms(50);
+
+				buildKeyboardReport('B');
+				usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
+				_delay_ms(50);
+
+				buildKeyboardReport('c');
+				usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
+				_delay_ms(50);
+
+				buildKeyboardReport('Z');
+				usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
+				_delay_ms(50);
+						
+				//DON'T FORGET to stop sending character
+				buildKeyboardReport(NULL);			
+				usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
+				_delay_ms(50);
+			}
+		
+		
 		}
-		
-		//2) Send 0 to notify key unpressed (otherwise endless aaaaaaaaaaaaaaaaaa...)
-		if(usbInterruptIsReady()){
-			keyboard_report.keycode[0] = 0; //modifier
-			keyboard_report.keycode[1] = 0; //key released
-			
-			usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
-			_delay_ms(50);
-		}
-		
+	
 	}
-	
-}
 
 return 0;
 }
