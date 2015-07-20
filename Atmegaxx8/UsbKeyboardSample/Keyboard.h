@@ -87,4 +87,9 @@
 #define KEY_DOT_GT				55
 #define KEY_SLASH_QUEST			56
 
+//#define KEY_AMPERSAND			199
+#define KEY_ENTER				40
+#define KEY_TAB					43
+
+
 #endif /* KEYBOARD_H_ */

@@ -77,6 +77,7 @@ void buildKeyboardReport(uint8_t pKey) {
 
 	//The rest
 	switch (pKey){
+		case ' ': keyboard_report.keycode[0] = KEY_SPACE; break;
 		case '!': keyboard_report.keycode[0] = KEY_1_EXCL; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
 		case '@': keyboard_report.keycode[0] = KEY_2_AT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
 		case '#': keyboard_report.keycode[0] = KEY_3_SHARP; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
@@ -100,6 +101,8 @@ void buildKeyboardReport(uint8_t pKey) {
 		case '/': keyboard_report.keycode[0] = KEY_SLASH_QUEST; break;
 		case '?': keyboard_report.keycode[0] = KEY_SLASH_QUEST; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
 		
+		case '\t': keyboard_report.keycode[0] = KEY_TAB; break;
+		case '\n': keyboard_report.keycode[0] = KEY_ENTER; break;
 	}
 }
 
@@ -136,7 +139,7 @@ int main(void)
 	//just make sure pullups are NOT disabled
 	MCUCR |= (0 << PUD);
 	
-	uchar* str = "hello Monde. !#$%&'()<>?:;";
+	uint8_t* str = "hello Monde1230. !\t#$%&'()<>?:;^\n";
 	
 	for(;;){                // main event loop
 		//USB data pull
@@ -148,29 +151,26 @@ int main(void)
 		//check for button press
 		if ((~PINC & (1 << PINC1)) != 0){
 		
-			//1) Send the character
-			if(usbInterruptIsReady()){
-				buildKeyboardReport('a');			
-				usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
-				_delay_ms(50);
+			for (uint8_t* p = str; (*p) != 0; p++){
 
-				buildKeyboardReport('B');
+				do {
+					//usb data pull
+					wdt_reset();
+					usbPoll();
+					_delay_ms(5);
+				} while (!usbInterruptIsReady());
+											
+				//1) Send the character
+				buildKeyboardReport(*(p));
 				usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
-				_delay_ms(50);
-
-				buildKeyboardReport('c');
+				_delay_ms(20);
+															
+				//2) DON'T FORGET to stop sending character FOR EACH Character
+				buildKeyboardReport(NULL);
 				usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
-				_delay_ms(50);
-
-				buildKeyboardReport('Z');
-				usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
-				_delay_ms(50);
-						
-				//DON'T FORGET to stop sending character
-				buildKeyboardReport(NULL);			
-				usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
-				_delay_ms(50);
+				_delay_ms(20);
 			}
+
 		
 		
 		}
