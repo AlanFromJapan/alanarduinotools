@@ -19,28 +19,42 @@
 // ----------------------------- USB interface -----------------------------
 // -------------------------------------------------------------------------
 
-#define REPORT_COUNT 8
-
-// The following variables store the status of the current data transfer
-static uchar    currentAddress;
-static uchar    bytesRemaining;
-
-static uint8_t msgbuf[REPORT_COUNT+1];
-//static uint8_t msgbufout[8];
 
 // HID descriptor, 1 report, 8 bytes long
-const PROGMEM char usbHidReportDescriptor[24] = {
-	0x06, 0x00, 0xff,              // USAGE_PAGE (Generic Desktop)
-	0x09, 0x01,                    // USAGE (Vendor Usage 1)
-	0xa1, 0x01,                    // COLLECTION (Application)
-	0x15, 0x00,                    //   LOGICAL_MINIMUM (0)
-	0x26, 0xff, 0x00,              //   LOGICAL_MAXIMUM (255)
-	0x75, 0x08,                    //   REPORT_SIZE (8)
-	0x85, 0x01,                    //   REPORT_ID (1)
-	0x95, REPORT_COUNT,            //   REPORT_COUNT (8)
-	0x09, 0x00,                    //   USAGE (Undefined)
-	0xb2, 0x02, 0x01,              //   FEATURE (Data,Var,Abs,Buf)
-	0xc0                           // END_COLLECTION
+const PROGMEM char usbHidReportDescriptor[63] = {	
+
+	    0x05, 0x01,                    // USAGE_PAGE (Generic Desktop)
+	    0x09, 0x06,                    // USAGE (Keyboard)
+	    0xa1, 0x01,                    // COLLECTION (Application)
+	    0x05, 0x07,                    //   USAGE_PAGE (Keyboard)
+	    0x19, 0xe0,                    //   USAGE_MINIMUM (Keyboard LeftControl)
+	    0x29, 0xe7,                    //   USAGE_MAXIMUM (Keyboard Right GUI)
+	    0x15, 0x00,                    //   LOGICAL_MINIMUM (0)
+	    0x25, 0x01,                    //   LOGICAL_MAXIMUM (1)
+	    0x75, 0x01,                    //   REPORT_SIZE (1)
+	    0x95, 0x08,                    //   REPORT_COUNT (8)
+	    0x81, 0x02,                    //   INPUT (Data,Var,Abs)
+	    0x95, 0x01,                    //   REPORT_COUNT (1)
+	    0x75, 0x08,                    //   REPORT_SIZE (8)
+	    0x81, 0x03,                    //   INPUT (Cnst,Var,Abs)
+	    0x95, 0x05,                    //   REPORT_COUNT (5)
+	    0x75, 0x01,                    //   REPORT_SIZE (1)
+	    0x05, 0x08,                    //   USAGE_PAGE (LEDs)
+	    0x19, 0x01,                    //   USAGE_MINIMUM (Num Lock)
+	    0x29, 0x05,                    //   USAGE_MAXIMUM (Kana)
+	    0x91, 0x02,                    //   OUTPUT (Data,Var,Abs)
+	    0x95, 0x01,                    //   REPORT_COUNT (1)
+	    0x75, 0x03,                    //   REPORT_SIZE (3)
+	    0x91, 0x03,                    //   OUTPUT (Cnst,Var,Abs)
+	    0x95, 0x06,                    //   REPORT_COUNT (6)
+	    0x75, 0x08,                    //   REPORT_SIZE (8)
+	    0x15, 0x00,                    //   LOGICAL_MINIMUM (0)
+	    0x25, 0x65,                    //   LOGICAL_MAXIMUM (101)
+	    0x05, 0x07,                    //   USAGE_PAGE (Keyboard)
+	    0x19, 0x00,                    //   USAGE_MINIMUM (Reserved (no event indicated))
+	    0x29, 0x65,                    //   USAGE_MAXIMUM (Keyboard Application)
+	    0x81, 0x00,                    //   INPUT (Data,Ary,Abs)
+	    0xc0                           // END_COLLECTION
 };
 
 //Need this empty signature, too lazy to check why
@@ -54,69 +68,39 @@ void usbEventResetReady(void){}
 //
 void handleMessage(void)
 {
-	uint8_t* msgbufp = msgbuf+1;  // skip over report id
 
-	//Get the message first byte and assign its value to PORTB.
-	//Since the 3 highest bits(pins) are linked to leds, whatever char you send can lit the leds.
-	PORTB = 	msgbufp[0];
+	
+	
 }
 
 
-/* usbFunctionRead() is called when the host requests a chunk of data from
- * the device. For more information see the documentation in usbdrv/usbdrv.h.
- */
-uchar   usbFunctionRead(uchar *data, uchar len)
-{
-    if(len > bytesRemaining)
-        len = bytesRemaining;
-    memcpy( data, msgbuf + currentAddress, len);
-    currentAddress += len;
-    bytesRemaining -= len;
-    return len;
-}
 
-/* usbFunctionWrite() is called when the host sends a chunk of data to the
- * device. For more information see the documentation in usbdrv/usbdrv.h.
- * Real job is done in handleMessage() above.
- */
-uchar   usbFunctionWrite(uchar *data, uchar len)
-{
-    if(bytesRemaining == 0) {
-        handleMessage();
-        return 1;            // end of transfer 
-    }
-    if(len > bytesRemaining) 
-        len = bytesRemaining;
-    memcpy( msgbuf+currentAddress, data, len );
-    currentAddress += len;
-    bytesRemaining -= len;
-
-    if(bytesRemaining == 0) {  // FIXME: inelegant
-        handleMessage();
-        return 1;            // end of transfer 
-    }
-    return bytesRemaining == 0;  // return 1 if this was the last chunk 
-}
+static uchar    idleRate;           /* in 4 ms units */
 
 //Redirect messages to/from the host and manage callback of functions for USB
 usbMsgLen_t usbFunctionSetup(uchar data[8])
 {
     usbRequest_t    *rq = (void *)data;
+	usbMsgPtr = &keyboard_report;
     // HID class request 
     if((rq->bmRequestType & USBRQ_TYPE_MASK) == USBRQ_TYPE_CLASS) {
         // wValue: ReportType (highbyte), ReportID (lowbyte)
         //uint8_t rid = rq->wValue.bytes[0];  // report Id
         if(rq->bRequest == USBRQ_HID_GET_REPORT){  
             // since we have only one report type, we can ignore the report-ID
-            bytesRemaining = REPORT_COUNT;
-            currentAddress = 0;
-            return USB_NO_MSG; // use usbFunctionRead() to obtain data 
+
+            return sizeof(keyboard_report);
         } else if(rq->bRequest == USBRQ_HID_SET_REPORT) {
             // since we have only one report type, we can ignore the report-ID 
-            bytesRemaining = REPORT_COUNT;
-            currentAddress = 0;
+
             return USB_NO_MSG; // use usbFunctionWrite() to recv data from host 
         }
+	    else if(rq->bRequest == USBRQ_HID_GET_IDLE){
+		    usbMsgPtr = &idleRate;
+		    return 1;
+	    }else if(rq->bRequest == USBRQ_HID_SET_IDLE){
+		    idleRate = rq->wValue.bytes[1];
+	    }
     }else{
         // ignore vendor type requests, we don't use any 
     }

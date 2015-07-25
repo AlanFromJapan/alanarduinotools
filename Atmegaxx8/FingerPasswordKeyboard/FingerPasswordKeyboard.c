@@ -16,8 +16,9 @@
 #include <avr/pgmspace.h>
 #include <avr/wdt.h>
 
-#include "usbdrv.h"
+
 #include "Keyboard.h"
+#include "usbdrv.h"
 #include "vusb-config.h"
 #include "serialComm.h"
 #include "FPS.h"
@@ -25,9 +26,6 @@
 static void usbHardwareInit(void)
 {
 	uint8_t	i, j;
-
-	PORTB = 0x00;   //no pullups
-	DDRB = 0xff;    //all outputs
 
 	PORTD = 0xfa;   /* 1111 1010 bin: activate pull-ups except on USB lines */
 	DDRD = 0x07;    /* 0000 0111 bin: all pins input except USB (-> USB reset) */
@@ -42,7 +40,7 @@ static void usbHardwareInit(void)
 	TCCR0 = 5;      /* timer 0 prescaler: 1024 */
 }
 
-
+//extern uint8_t* msgbuf;
 /************************************************************************/
 /* Main method                                                          */
 /************************************************************************/
@@ -81,29 +79,41 @@ int main(void)
 	MCUCR |= (0 << PUD);
 		
 	
-	uint32_t vSpeedDown = 0;
-	uint8_t vToggle = 0;
+	uint8_t* str = "hello Monde1230. !\t#$%&'()<>?:;^\n";
+
     for(;;){                // main event loop
 		//USB data pull
 		wdt_reset();
 		usbPoll();
 		
-		
 		//Other stuffs to do in main loop
-		//check for button press : PB0 -> change mode
+		//check for button press
 		if ((~PINC & (1 << PINC1)) != 0){
 			
-			fpsSetLight(vToggle);
-			
-			//vToggle = !vToggle;
-			if (vToggle == 0)
-				vToggle = 1;
-			else
-				vToggle = 0;
+			for (uint8_t* p = str; (*p) != 0; p++){
+
+				//Necessary: without that if you send a few characters only the first 5-8 ones will arrive
+				do {
+					//usb data pull
+					wdt_reset();
+					usbPoll();
+					_delay_ms(5);
+				} while (!usbInterruptIsReady());
 				
-			//will kill USB most likely ... but not!
-			_delay_ms(100);
-		}
+				//1) Send the character
+				buildKeyboardReport(*p);
+				usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
+				_delay_ms(20);
+				
+				//2) DON'T FORGET to stop sending character FOR EACH Character
+				buildKeyboardReport(NULL);
+				usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
+				_delay_ms(20);
+			}
+
+			
+			
+		}		
 		
     }	
 	

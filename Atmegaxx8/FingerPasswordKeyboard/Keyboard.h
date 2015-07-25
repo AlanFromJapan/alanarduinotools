@@ -9,6 +9,19 @@
 #ifndef KEYBOARD_H_
 #define KEYBOARD_H_
 
+
+#include <avr/io.h>
+
+typedef struct {
+	uint8_t modifier;
+	uint8_t reserved;
+	uint8_t keycode[6];
+} keyboard_report_t;
+
+
+keyboard_report_t keyboard_report; // sent to PC
+
+
 /* The LED states */
 #define LED_NUM     0x01
 #define LED_CAPS    0x02
@@ -55,16 +68,16 @@
 #define KEY_X       27
 #define KEY_Y       28
 #define KEY_Z       29
-#define KEY_1       30
-#define KEY_2       31
-#define KEY_3       32
-#define KEY_4       33
-#define KEY_5       34
-#define KEY_6       35
-#define KEY_7       36
-#define KEY_8       37
-#define KEY_9       38
-#define KEY_0       39
+#define KEY_1_EXCL				30
+#define KEY_2_AT				31
+#define KEY_3_SHARP				32
+#define KEY_4_DOL				33
+#define KEY_5_PCNT				34
+#define KEY_6_HAT				35
+#define KEY_7_AMP				36
+#define KEY_8_STAR				37
+#define KEY_9_PARO				38
+#define KEY_0_PARC				39
 
 #define KEY_F1      58
 #define KEY_F2      59
@@ -78,6 +91,18 @@
 #define KEY_F10     67
 #define KEY_F11     68
 #define KEY_F12     69
+
+#define KEY_SPACE	44
+#define KEY_DASH_UNDERSCORE		45
+#define KEY_EQUAL_PLUS			46
+#define KEY_SEMIC_COLON			51
+#define KEY_COMA_LT				54
+#define KEY_DOT_GT				55
+#define KEY_SLASH_QUEST			56
+
+//#define KEY_AMPERSAND			199
+#define KEY_ENTER				40
+#define KEY_TAB					43
 
 
 #endif /* KEYBOARD_H_ */
