@@ -40,7 +40,35 @@ static void usbHardwareInit(void)
 	TCCR0 = 5;      /* timer 0 prescaler: 1024 */
 }
 
-//extern uint8_t* msgbuf;
+//Sends a null terminated string as a keyboard
+static void sendString (char* pStr){
+	for (uint8_t* p = pStr; (*p) != 0; p++){
+
+		//Necessary: without that if you send a few characters only the first 5-8 ones will arrive
+		do {
+			//usb data pull
+			wdt_reset();
+			usbPoll();
+			_delay_ms(5);
+		} while (!usbInterruptIsReady());
+					
+		//1) Send the character
+		buildKeyboardReport(*p);
+		usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
+		_delay_ms(20);
+					
+		//2) DON'T FORGET to stop sending character FOR EACH Character
+		buildKeyboardReport(NULL);
+		usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
+		_delay_ms(20);
+	}
+				
+}
+	
+//defined in FPS.c
+extern uint32_t mFPSLatestResponseValue ;
+extern uint8_t mFPSLatestResponseStatus ;
+
 /************************************************************************/
 /* Main method                                                          */
 /************************************************************************/
@@ -80,6 +108,8 @@ int main(void)
 		
 	
 	uint8_t* str = "hello Monde1230. !\t#$%&'()<>?:;^\n";
+	
+	uint8_t vToggle = 0;
 
     for(;;){                // main event loop
 		//USB data pull
@@ -88,31 +118,26 @@ int main(void)
 		
 		//Other stuffs to do in main loop
 		//check for button press
-		if ((~PINC & (1 << PINC1)) != 0){
+		if ((~PINC & (1 << PINC1)) != 0){			
+			/*
+			//EXAMPLE: send string
+			sendString(str);
+			*/
+					
 			
-			for (uint8_t* p = str; (*p) != 0; p++){
-
-				//Necessary: without that if you send a few characters only the first 5-8 ones will arrive
-				do {
-					//usb data pull
-					wdt_reset();
-					usbPoll();
-					_delay_ms(5);
-				} while (!usbInterruptIsReady());
+			//EXAMPLE: toggle light and return response code
+			fpsSetLight(vToggle);
+			_delay_ms(200);
+			
+			//vToggle = !vToggle;
+			if (vToggle == 0)
+				vToggle = 1;
+			else
+				vToggle = 0;	
 				
-				//1) Send the character
-				buildKeyboardReport(*p);
-				usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
-				_delay_ms(20);
-				
-				//2) DON'T FORGET to stop sending character FOR EACH Character
-				buildKeyboardReport(NULL);
-				usbSetInterrupt(&keyboard_report, sizeof(keyboard_report));
-				_delay_ms(20);
-			}
-
-			
-			
+			char vBuf[10];
+			itoa(mFPSLatestResponseStatus, vBuf, 16);
+			sendString(vBuf);
 		}		
 		
     }	
