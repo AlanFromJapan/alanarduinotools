@@ -13,6 +13,7 @@
 #define FPS_INIT			0x01
 #define FPS_CLOSE			0x02
 #define FPS_LIGHT_TOGGLE	0x12
+#define FPS_ENROLL_CHECK	0x21
 #define FPS_ENROLL_START	0x22
 #define FPS_ENROLL_1		0x23
 #define FPS_ENROLL_2		0x24
@@ -102,6 +103,14 @@ void fpsClose(){
 void fpsSetLight (uint8_t pValue) {
 	USART_Flush();
 	fpsSend((uint16_t)pValue, FPS_LIGHT_TOGGLE);
+	fpsReceive();
+}
+
+//Check enrollment of ID [0;19]
+//ACK means enrolled, NACK -> check if response is not used
+void fpsEnrollCheck(uint8_t pID){
+	USART_Flush();
+	fpsSend((uint16_t)pID, FPS_ENROLL_CHECK);
 	fpsReceive();
 }
 

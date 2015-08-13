@@ -105,10 +105,7 @@ int main(void)
 	PORTC = (1 << PORTC1);
 	//just make sure pullups are NOT disabled
 	MCUCR |= (0 << PUD);
-		
-	
-	uint8_t* str = "hello Monde1230. !\t#$%&'()<>?:;^\n";
-	
+			
 	uint8_t vToggle = 0;
 
     for(;;){                // main event loop
@@ -120,11 +117,12 @@ int main(void)
 		//check for button press
 		if ((~PINC & (1 << PINC1)) != 0){			
 			/*
-			//EXAMPLE: send string
+			//EXAMPLE: send string hardcoded
+			uint8_t* str = "hello Monde1230. !\t#$%&'()<>?:;^\n";
 			sendString(str);
 			*/
 					
-			
+			/*
 			//EXAMPLE: toggle light and return response code
 			fpsSetLight(vToggle);
 			_delay_ms(200);
@@ -138,6 +136,23 @@ int main(void)
 			char vBuf[10];
 			itoa(mFPSLatestResponseStatus, vBuf, 16);
 			sendString(vBuf);
+			*/
+			
+			/*
+			//EXAMPLE: check if slot is taken and return error codes
+			fpsEnrollCheck(1);
+			char vBuf[10];
+			itoa(mFPSLatestResponseStatus, vBuf, 16);
+			sendString(vBuf);
+
+			sendString(" - ");
+			
+			uint16_t vRep;
+			vRep = (uint16_t)mFPSLatestResponseValue;
+			itoa(vRep, vBuf, 16);
+			sendString(vBuf);
+			//read "31 - 1004" means not used!
+			*/
 		}		
 		
     }	
