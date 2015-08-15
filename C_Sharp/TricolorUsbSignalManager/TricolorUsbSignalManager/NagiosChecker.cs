@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace TricolorUsbSignalManager {
         private LogLineDelegate mLogLineCallback;
         private DateTime mIgnoreBefore = DateTime.MinValue;
 
+        private static readonly List<String> HOST_IGNORE_PATTERN;
 
         private static readonly Regex REGEX_EVENT_LINE = new Regex(
             //get the tr and the date
@@ -71,6 +73,18 @@ namespace TricolorUsbSignalManager {
             }
         }
 
+        /// <summary>
+        /// Class loader to initialize static readonlies
+        /// </summary>
+        static NagiosChecker() {
+            try {
+                HOST_IGNORE_PATTERN = new List<string>(ConfigurationManager.AppSettings["HostIgnorePattern"].Split(',', '|'));
+            }
+            catch {
+                HOST_IGNORE_PATTERN = new List<string>();
+            }
+        }
+
         public NagiosChecker(LogLineDelegate pLogger, string pURL, string pLogin, string pPassword)
             : this(pLogger, DateTime.MinValue, pURL, pLogin, pPassword) {
             
@@ -121,8 +135,11 @@ namespace TricolorUsbSignalManager {
 
                             NagEvent vEvt = NagEvent.Parse(vLine, this.mIgnoreBefore);
                             if (vEvt != null) {
-                                vEvt.UID = vEventUIDCount--;
-                                vEventList.Add(vEvt.UID, vEvt);
+                                //exclude servers we don't want to see
+                                if (!HOST_IGNORE_PATTERN.Any(s => vEvt.mHost.Contains(s))) {
+                                    vEvt.UID = vEventUIDCount--;
+                                    vEventList.Add(vEvt.UID, vEvt);
+                                }
                             }
                         }
                         while (!TABLE_END.Equals(vLine, StringComparison.InvariantCultureIgnoreCase));
