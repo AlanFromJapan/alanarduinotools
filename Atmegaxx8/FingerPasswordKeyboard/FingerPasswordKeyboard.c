@@ -40,17 +40,21 @@ static void usbHardwareInit(void)
 	TCCR0 = 5;      /* timer 0 prescaler: 1024 */
 }
 
+static void usbPurgeEvents(){
+	do {
+		//usb data pull
+		wdt_reset();
+		usbPoll();
+		_delay_ms(3);
+	} while (!usbInterruptIsReady());
+}
+	
 //Sends a null terminated string as a keyboard
 static void sendString (char* pStr){
 	for (uint8_t* p = pStr; (*p) != 0; p++){
 
 		//Necessary: without that if you send a few characters only the first 5-8 ones will arrive
-		do {
-			//usb data pull
-			wdt_reset();
-			usbPoll();
-			_delay_ms(5);
-		} while (!usbInterruptIsReady());
+		usbPurgeEvents();
 					
 		//1) Send the character
 		buildKeyboardReport(*p);
@@ -68,6 +72,148 @@ static void sendString (char* pStr){
 //defined in FPS.c
 extern uint32_t mFPSLatestResponseValue ;
 extern uint8_t mFPSLatestResponseStatus ;
+
+
+uint8_t DoEnroll( int pID ) 
+{
+	char vBuf[10];		
+	uint8_t v = 0;
+	
+	sendString("Start\n");
+	fpsSetLight(FPS_LIGHT_ON);
+
+	fpsEnrollCheck(pID);
+	if (mFPSLatestResponseStatus == 0x30){
+		//it's USED so you CAN'T re-register it -> get out!
+		sendString("Used!\n");
+		return 10;
+	}
+	
+	//1: enroll start
+	fpsEnrollStart(pID);
+	if (mFPSLatestResponseStatus != 0x30){
+		sendString("Start KO\n");
+		return 15;
+	}
+	sendString("Start ok\n");
+
+	//2: finger capture
+	if (fpsCaptureFinger(123) == 0){
+		sendString("Cap1 KO\n");
+		return 20;
+	}	
+	sendString("Cap1 ok\n");
+	
+	
+	//Keep USB connection alive
+	usbPurgeEvents();
+	
+	
+	//3: enroll1
+	if (fpsEnroll(1) == 0){
+		sendString("Enroll1 KO\n");
+		return 30;
+	}			
+	sendString("Enroll1 ok - remove Finger!\n");
+	
+	////4: wait till finger removed
+do {v = fpsIsFingerPressed(); } while (v == 0);
+fpsSetLight(FPS_LIGHT_OFF);
+//
+
+	_delay_ms(100);
+
+
+	sendString("Enroll2 start - put finger!\n");
+	//5: finger capture
+	fpsSetLight(FPS_LIGHT_ON);
+	_delay_ms(100);
+	if (fpsCaptureFinger(123) == 0){
+		sendString("Cap2 KO\n");
+		return 40;
+	}
+	sendString("Cap2 ok\n");
+
+	//Keep USB connection alive
+	usbPurgeEvents();
+
+	//6: enroll1
+	if (fpsEnroll(2) == 0){
+		sendString("Enroll2 KO\n");
+		return 50;
+	}
+	sendString("Enroll2 ok - Finger!\n");
+
+////7: wait till finger removed
+	//do {v = fpsIsFingerPressed(); } while (v == 0);
+	fpsSetLight(FPS_LIGHT_OFF);
+//
+
+	_delay_ms(500);	
+	
+	//Keep USB connection alive
+	usbPurgeEvents();
+	
+	//8: finger capture
+	fpsSetLight(FPS_LIGHT_ON);
+	_delay_ms(100);
+	if (fpsCaptureFinger(123) == 0){
+		sendString("Cap3 KO\n");
+		return 60;
+	}
+	sendString("Cap3 ok\n");
+
+	//Keep USB connection alive
+	usbPurgeEvents();
+	
+	//9: enroll1
+	if (fpsEnroll(3) == 0){
+		sendString("Enroll3 KO\n");
+		return 70;
+	}
+	sendString("Enroll3 ok - Finger!\n");
+	
+	fpsSetLight(FPS_LIGHT_OFF);
+	_delay_ms(100);
+	fpsSetLight(FPS_LIGHT_ON);
+	_delay_ms(100);
+	fpsSetLight(FPS_LIGHT_OFF);
+
+	sendString("Finished!\n");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//Returns 0 if not found, [1-19] if ok, other codes are errors
+uint8_t fpsIsKnownFinger2 (){
+	uint8_t vIdResult;
+	
+	fpsSetLight(FPS_LIGHT_ON);
+	_delay_ms(50);
+
+
+//Keep USB connection alive
+usbPurgeEvents();
+
+	if (fpsCaptureFinger(0) == 0){
+		vIdResult = 254;
+	}
+	else {
+
+//Keep USB connection alive
+usbPurgeEvents();
+		
+		//vIdResult = fpsIdentifyFinger();
+		vIdResult = fpsVerifyFinger(1);
+	}
+
+
+//Keep USB connection alive
+usbPurgeEvents();
+
+	fpsSetLight(FPS_LIGHT_OFF);
+	
+	return vIdResult;
+}
 
 /************************************************************************/
 /* Main method                                                          */
@@ -96,6 +242,8 @@ int main(void)
 	
 	//3: open communication to FPS
 	fpsInit();
+	fpsSetLight(FPS_LIGHT_OFF);
+	fpsClose();
 	
 	//4: buttons
 	//button input
@@ -153,6 +301,42 @@ int main(void)
 			sendString(vBuf);
 			//read "31 - 1004" means not used!
 			*/
+			
+			/*
+			uint8_t v = fpsEnrollPrintSequence(1);
+			char vBuf[10];
+			itoa(v, vBuf, 10);
+			sendString(vBuf);
+			*/
+			
+			/*
+			DoEnroll(1);
+			*/
+			
+			fpsInit();
+
+			//Keep USB connection alive
+			usbPurgeEvents();			
+			uint8_t v = fpsIsKnownFinger2();
+			//Keep USB connection alive
+			usbPurgeEvents();
+				
+			if (v < 1 || v > 19){
+				sendString("UNAUTHORIZED ");
+				char vBuf[10];
+				itoa(v, vBuf, 10);
+				sendString(vBuf);
+				sendString(" !\n");
+			}
+			else{
+				sendString("Welcome ");
+				char vBuf[10];
+				itoa(v, vBuf, 10);
+				sendString(vBuf);
+				sendString(" !\n");
+			}			
+			
+			fpsClose();
 		}		
 		
     }	
