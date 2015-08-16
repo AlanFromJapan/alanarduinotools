@@ -49,8 +49,6 @@ static void fpsSend(uint16_t pParam, uint8_t pCommand){
 }
 
 #define FPS_RESPONSE_LEN	12
-#define FPS_RESPONSE_ACK	0x30
-#define FPS_RESPONSE_NACK	0x31
 
 uint32_t mFPSLatestResponseValue = 0x00000000;
 uint8_t mFPSLatestResponseStatus = FPS_RESPONSE_NACK;
@@ -274,14 +272,14 @@ uint8_t fpsIsKnownFinger (){
 	uint8_t vIdResult;
 	
 	fpsSetLight(FPS_LIGHT_ON);
-	_delay_ms(100);
+	_delay_ms(50);
 
 	if (fpsCaptureFinger(FPS_CAPTURE_LQ) == 0){
 		vIdResult = 254;	
 	}			
 	else {	
-		//vIdResult = fpsIdentifyFinger();			
-		vIdResult = fpsVerifyFinger(1);
+		vIdResult = fpsIdentifyFinger();			
+		//vIdResult = fpsVerifyFinger(1);
 	}	
 
 	fpsSetLight(FPS_LIGHT_OFF);

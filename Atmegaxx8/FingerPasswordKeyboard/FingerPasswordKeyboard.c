@@ -73,7 +73,7 @@ static void sendString (char* pStr){
 extern uint32_t mFPSLatestResponseValue ;
 extern uint8_t mFPSLatestResponseStatus ;
 
-
+//Does the enrollment of a finger and still works as a keyboard
 uint8_t DoEnroll( int pID ) 
 {
 	char vBuf[10];		
@@ -83,7 +83,7 @@ uint8_t DoEnroll( int pID )
 	fpsSetLight(FPS_LIGHT_ON);
 
 	fpsEnrollCheck(pID);
-	if (mFPSLatestResponseStatus == 0x30){
+	if (mFPSLatestResponseStatus == FPS_RESPONSE_ACK){
 		//it's USED so you CAN'T re-register it -> get out!
 		sendString("Used!\n");
 		return 10;
@@ -91,7 +91,7 @@ uint8_t DoEnroll( int pID )
 	
 	//1: enroll start
 	fpsEnrollStart(pID);
-	if (mFPSLatestResponseStatus != 0x30){
+	if (mFPSLatestResponseStatus != FPS_RESPONSE_ACK){
 		sendString("Start KO\n");
 		return 15;
 	}
@@ -202,8 +202,8 @@ usbPurgeEvents();
 //Keep USB connection alive
 usbPurgeEvents();
 		
-		//vIdResult = fpsIdentifyFinger();
-		vIdResult = fpsVerifyFinger(1);
+		vIdResult = fpsIdentifyFinger();
+		//vIdResult = fpsVerifyFinger(1);
 	}
 
 
@@ -240,21 +240,19 @@ int main(void)
 	//2: Now USB is up, init the Serial
 	serialHardwareInit();
 	
-	//3: open communication to FPS
-	fpsInit();
-	fpsSetLight(FPS_LIGHT_OFF);
-	fpsClose();
-	
-	//4: buttons
-	//button input
+	//3: buttons
+	//button input[0;3] 
 	//PC1 in
 	DDRC &= ~0x01;
 	//Pull up on PC1
 	PORTC = (1 << PORTC1);
 	//just make sure pullups are NOT disabled
-	MCUCR |= (0 << PUD);
-			
-	uint8_t vToggle = 0;
+	SFIOR &= ~(1 << PUD);
+	
+	//FPS on/off transistor [5] (PNP so active LOW)
+	DDRC |= (1 << DDRC5);
+	//C5 high so FPS is OFF (PNP transistor)
+	PORTC |= (1 << PORTC5);
 
     for(;;){                // main event loop
 		//USB data pull
@@ -313,11 +311,23 @@ int main(void)
 			DoEnroll(1);
 			*/
 			
+			
+			//C5 low so FPS is ON (PNP transistor)
+			PORTC &= ~(1 << PORTC5);
+			//in case voltage needs a little time to stabilize
+			_delay_ms(50);
+
+			//Keep USB connection alive
+			usbPurgeEvents();
+			
 			fpsInit();
+			fpsSetLight(FPS_LIGHT_OFF);
 
 			//Keep USB connection alive
 			usbPurgeEvents();			
+			
 			uint8_t v = fpsIsKnownFinger2();
+
 			//Keep USB connection alive
 			usbPurgeEvents();
 				
@@ -337,6 +347,8 @@ int main(void)
 			}			
 			
 			fpsClose();
+			//C5 high so FPS is OFF (PNP transistor)
+			PORTC |= (1 << PORTC5);
 		}		
 		
     }	

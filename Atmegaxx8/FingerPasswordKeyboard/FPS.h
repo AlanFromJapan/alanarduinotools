@@ -15,6 +15,8 @@
 
 #define FPS_LIGHT_ON		1
 #define FPS_LIGHT_OFF		0
+#define FPS_RESPONSE_ACK	0x30
+#define FPS_RESPONSE_NACK	0x31
 
 
 //open communication to FPS
@@ -29,8 +31,6 @@ void fpsClose();
 void fpsEnrollCheck(uint8_t pID);
 //Full print sequence enrollment
 //uint8_t fpsEnrollPrintSequence (uint8_t pID);
-
-//////////////////////////////////////////////////////////////////////////
 //Returns 0 if not found, [1-19] if ok, other codes are errors
 uint8_t fpsIsKnownFinger ();
 
