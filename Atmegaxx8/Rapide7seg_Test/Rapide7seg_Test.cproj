@@ -16,7 +16,7 @@
     <Name>Rapide7seg_Test</Name>
     <RootNamespace>Rapide7seg_Test</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <AsfVersion>3.5.0</AsfVersion>
+    <AsfVersion>2.11.1</AsfVersion>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <OverrideVtorValue />
