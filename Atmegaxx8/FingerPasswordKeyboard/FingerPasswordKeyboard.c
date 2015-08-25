@@ -23,6 +23,19 @@
 #include "serialComm.h"
 #include "FPS.h"
 
+
+#include "PasswordConstants.h"
+/** NOT in source control because one day there might have my passwords inside.
+Contains 4 constants that will be what is send as keyboard upon successful finger press.
+
+Sample:
+#define PASSWORDCONSTANT1 "login1\tpassword1\n"
+#define PASSWORDCONSTANT2 "login2\tpassword2\n"
+#define PASSWORDCONSTANT3 "login3\tpassword3\n"
+#define PASSWORDCONSTANT4 "just the password4\n"
+
+**/
+
 static void usbHardwareInit(void)
 {
 	uint8_t	i, j;
@@ -242,10 +255,10 @@ int main(void)
 	
 	//3: buttons
 	//button input[0;3] 
-	//PC1 in
-	DDRC &= ~0x01;
-	//Pull up on PC1
-	PORTC = (1 << PORTC1);
+	//PC[0;3] in
+	DDRC &= ~0x0F;
+	//Pull up on PC[0;3]
+	PORTC = 0x0F;
 	//just make sure pullups are NOT disabled
 	SFIOR &= ~(1 << PUD);
 	
@@ -261,7 +274,8 @@ int main(void)
 		
 		//Other stuffs to do in main loop
 		//check for button press
-		if ((~PINC & (1 << PINC1)) != 0){			
+		uint8_t vPinc = PINC;
+		if ((~vPinc & 0x0F) != 0){			
 			/*
 			//EXAMPLE: send string hardcoded
 			uint8_t* str = "hello Monde1230. !\t#$%&'()<>?:;^\n";
@@ -320,6 +334,14 @@ int main(void)
 			//Keep USB connection alive
 			usbPurgeEvents();
 			
+			//give a little time to move the finger to the reader (1.5 sec)
+			for (uint8_t z = 0; z < 30; z++){
+				_delay_ms(50);
+				//Keep USB connection alive
+				usbPurgeEvents();
+			}
+			
+			
 			fpsInit();
 			fpsSetLight(FPS_LIGHT_OFF);
 
@@ -332,18 +354,28 @@ int main(void)
 			usbPurgeEvents();
 				
 			if (v < 1 || v > 19){
-				sendString("UNAUTHORIZED ");
-				char vBuf[10];
-				itoa(v, vBuf, 10);
-				sendString(vBuf);
-				sendString(" !\n");
+				//sendString("UNAUTHORIZED ");
+				//char vBuf[10];
+				//itoa(v, vBuf, 10);
+				//sendString(vBuf);
+				//sendString(" !\n");
 			}
 			else{
-				sendString("Welcome ");
-				char vBuf[10];
-				itoa(v, vBuf, 10);
-				sendString(vBuf);
-				sendString(" !\n");
+				if ((~vPinc & (1 << PINC0)) != 0){
+					sendString(PASSWORDCONSTANT1);
+				} 
+				else if ((~vPinc & (1 << PINC1)) != 0){
+					sendString(PASSWORDCONSTANT2);
+				}
+				else if ((~vPinc & (1 << PINC2)) != 0){
+					sendString(PASSWORDCONSTANT3);
+				}
+				else if ((~vPinc & (1 << PINC3)) != 0){
+					sendString(PASSWORDCONSTANT4);
+				}
+				else{
+					sendString("Unknown button");
+				}
 			}			
 			
 			fpsClose();
