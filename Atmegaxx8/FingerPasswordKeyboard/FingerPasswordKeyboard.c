@@ -144,13 +144,13 @@ do {v = fpsIsFingerPressed(); } while (v == 0);
 fpsSetLight(FPS_LIGHT_OFF);
 //
 
-	_delay_ms(100);
+	usbDelayMs(1000);
 
 
 	sendString("Enroll2 start - put finger!\n");
 	//5: finger capture
 	fpsSetLight(FPS_LIGHT_ON);
-	_delay_ms(100);
+	usbDelayMs(1000);
 	if (fpsCaptureFinger(123) == 0){
 		sendString("Cap2 KO\n");
 		return 40;
@@ -165,21 +165,21 @@ fpsSetLight(FPS_LIGHT_OFF);
 		sendString("Enroll2 KO\n");
 		return 50;
 	}
-	sendString("Enroll2 ok - Finger!\n");
+	sendString("Enroll2 ok - remove Finger!\n");
 
 ////7: wait till finger removed
 	//do {v = fpsIsFingerPressed(); } while (v == 0);
 	fpsSetLight(FPS_LIGHT_OFF);
 //
 
-	_delay_ms(500);	
+	usbDelayMs(1000);	
 	
 	//Keep USB connection alive
 	usbPurgeEvents();
 	
 	//8: finger capture
 	fpsSetLight(FPS_LIGHT_ON);
-	_delay_ms(100);
+	usbDelayMs(1000);
 	if (fpsCaptureFinger(123) == 0){
 		sendString("Cap3 KO\n");
 		return 60;
@@ -194,12 +194,12 @@ fpsSetLight(FPS_LIGHT_OFF);
 		sendString("Enroll3 KO\n");
 		return 70;
 	}
-	sendString("Enroll3 ok - Finger!\n");
+	sendString("Enroll3 ok - remove Finger!\n");
 	
 	fpsSetLight(FPS_LIGHT_OFF);
-	_delay_ms(100);
+	usbDelayMs(100);
 	fpsSetLight(FPS_LIGHT_ON);
-	_delay_ms(100);
+	usbDelayMs(100);
 	fpsSetLight(FPS_LIGHT_OFF);
 
 	sendString("Finished!\n");
@@ -350,7 +350,7 @@ int main(void)
 			*/
 			
 			/*
-			DoEnroll(1);
+			DoEnroll(2);
 			*/
 			
 			
@@ -419,6 +419,7 @@ int main(void)
 			
 			//C5 high so FPS is OFF (PNP transistor)
 			PORTC |= (1 << PORTC5);
+			
 		}		
 		
     }	
