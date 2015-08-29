@@ -61,6 +61,16 @@ static void usbPurgeEvents(){
 		_delay_ms(3);
 	} while (!usbInterruptIsReady());
 }
+
+#define USB_DELAY_DELTA_MS 50
+static void usbDelayMs(double pDelay){
+	uint8_t vDelay = (uint8_t)((uint16_t)pDelay / USB_DELAY_DELTA_MS);
+	for (uint16_t t = 0; t < vDelay; t++){
+		_delay_ms(USB_DELAY_DELTA_MS);
+		//Keep USB connection alive
+		usbPurgeEvents();
+	}
+}
 	
 //Sends a null terminated string as a keyboard
 static void sendString (char* pStr){
@@ -228,6 +238,7 @@ usbPurgeEvents();
 	return vIdResult;
 }
 
+
 /************************************************************************/
 /* Main method                                                          */
 /************************************************************************/
@@ -262,11 +273,28 @@ int main(void)
 	//just make sure pullups are NOT disabled
 	SFIOR &= ~(1 << PUD);
 	
+	
+	//Vibrator on/off transistor [4] (NPN so active HIGH)
+	DDRC |= (1 << DDRC4);
+	//C4 low so vibrator is OFF (NPN transistor)
+	PORTC &= ~(1 << PORTC4);
+	
+	
 	//FPS on/off transistor [5] (PNP so active LOW)
 	DDRC |= (1 << DDRC5);
 	//C5 high so FPS is OFF (PNP transistor)
 	PORTC |= (1 << PORTC5);
 
+
+			//Vibrate
+			PORTC |= (1 << PORTC4);
+			usbDelayMs(200);
+			PORTC &= ~(1 << PORTC4);
+			usbDelayMs(300);
+			PORTC |= (1 << PORTC4);
+			usbDelayMs(200);
+			PORTC &= ~(1 << PORTC4);
+			
     for(;;){                // main event loop
 		//USB data pull
 		wdt_reset();
@@ -359,6 +387,11 @@ int main(void)
 				//itoa(v, vBuf, 10);
 				//sendString(vBuf);
 				//sendString(" !\n");
+				
+				//Vibrate
+				PORTC |= (1 << PORTC4);
+				usbDelayMs(300);
+				PORTC &= ~(1 << PORTC4);				
 			}
 			else{
 				if ((~vPinc & (1 << PINC0)) != 0){
@@ -379,6 +412,11 @@ int main(void)
 			}			
 			
 			fpsClose();
+		
+			//Keep USB connection alive
+			usbPurgeEvents();
+			
+			
 			//C5 high so FPS is OFF (PNP transistor)
 			PORTC |= (1 << PORTC5);
 		}		
