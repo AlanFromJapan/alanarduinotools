@@ -12,6 +12,12 @@
 
 #include <avr/io.h>
 
+//Choose if you want the keys for Japanese keyboard or US (default) keyboard
+//#define KEYBOARD_MODE_US
+#define KEYBOARD_MODE_JP
+
+
+
 typedef struct {
 	uint8_t modifier;
 	uint8_t reserved;
@@ -32,6 +38,8 @@ keyboard_report_t keyboard_report; // sent to PC
 
 /* Keyboard usage values, see usb.org's HID-usage-tables document, chapter
  * 10 Keyboard/Keypad Page for more codes.
+ * 
+ * Direct link (Aug2015): http://www.usb.org/developers/hidpage/Hut1_12v2.pdf
  */
 #define MOD_CONTROL_LEFT    (1<<0)
 #define MOD_SHIFT_LEFT      (1<<1)
@@ -68,16 +76,16 @@ keyboard_report_t keyboard_report; // sent to PC
 #define KEY_X       27
 #define KEY_Y       28
 #define KEY_Z       29
-#define KEY_1_EXCL				30
-#define KEY_2_AT				31
-#define KEY_3_SHARP				32
-#define KEY_4_DOL				33
-#define KEY_5_PCNT				34
-#define KEY_6_HAT				35
-#define KEY_7_AMP				36
-#define KEY_8_STAR				37
-#define KEY_9_PARO				38
-#define KEY_0_PARC				39
+#define KEY_1		30
+#define KEY_2		31
+#define KEY_3		32
+#define KEY_4		33
+#define KEY_5		34
+#define KEY_6		35
+#define KEY_7		36
+#define KEY_8		37
+#define KEY_9		38
+#define KEY_0		39
 
 #define KEY_F1      58
 #define KEY_F2      59
@@ -92,17 +100,69 @@ keyboard_report_t keyboard_report; // sent to PC
 #define KEY_F11     68
 #define KEY_F12     69
 
-#define KEY_SPACE	44
-#define KEY_DASH_UNDERSCORE		45
-#define KEY_EQUAL_PLUS			46
-#define KEY_SEMIC_COLON			51
-#define KEY_COMA_LT				54
-#define KEY_DOT_GT				55
-#define KEY_SLASH_QUEST			56
-
-//#define KEY_AMPERSAND			199
 #define KEY_ENTER				40
 #define KEY_TAB					43
+#define KEY_SPACE				44
 
+#ifdef KEYBOARD_MODE_US
+	#define KEY_EXCL			30
+	#define KEY_AT				31
+	#define KEY_SHARP			32
+	#define KEY_DOL				33
+	#define KEY_PCNT			34
+	#define KEY_HAT				35
+	#define KEY_AMP				36
+	#define KEY_STAR			37
+	#define KEY_PARO			38
+	#define KEY_PARC			39
+
+	#define KEY_DASH			45
+	#define KEY_EQUAL			46
+	#define KEY_SEMIC			51
+	#define KEY_COMA			54
+	#define KEY_DOT				55
+	#define KEY_SLASH			56
+	#define KEY_UNDERSCORE		45
+	#define KEY_PLUS			46
+	#define KEY_COLON			51
+	#define KEY_LT				54
+	#define KEY_GT				55
+	#define KEY_QUEST			56
+	
+	#define KEY_QUOTE			52
+	#define KEY_DBLQUOTE		52
+#endif //KEYBOARD_MODE_US
+
+#ifdef KEYBOARD_MODE_JP
+	/************************************************************************/
+	/* Details here : http://web.stanford.edu/class/cs140/projects/pintos/specs/kbd/scancodes-7.html */
+	/************************************************************************/
+	#define KEY_EXCL			30
+	#define KEY_AT				47
+	#define KEY_SHARP			32
+	#define KEY_DOL				33
+	#define KEY_PCNT			34
+	#define KEY_HAT				46
+	#define KEY_AMP				35
+	#define KEY_STAR			52
+	#define KEY_PARO			37
+	#define KEY_PARC			38
+
+	#define KEY_DASH			45
+	#define KEY_EQUAL			45
+	#define KEY_SEMIC			51
+	#define KEY_COMA			54
+	#define KEY_DOT				55
+	#define KEY_SLASH			56
+	#define KEY_UNDERSCORE		135
+	#define KEY_PLUS			51
+	#define KEY_COLON			52
+	#define KEY_LT				54
+	#define KEY_GT				55
+	#define KEY_QUEST			56
+	
+	#define KEY_QUOTE			36
+	#define KEY_DBLQUOTE		31
+#endif //KEYBOARD_MODE_JP
 
 #endif /* KEYBOARD_H_ */

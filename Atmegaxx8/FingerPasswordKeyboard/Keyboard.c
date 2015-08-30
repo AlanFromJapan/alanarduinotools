@@ -33,38 +33,81 @@ void buildKeyboardReport(uint8_t pKey) {
 	}
 	else{
 		if(pKey == '0'){
-			keyboard_report.keycode[0] = KEY_0_PARC;
+			keyboard_report.keycode[0] = KEY_0;
 			return;
 		}
 	}
 
+#ifdef KEYBOARD_MODE_US
 	//The rest
 	switch (pKey){
-		case ' ': keyboard_report.keycode[0] = KEY_SPACE; break;
-		case '!': keyboard_report.keycode[0] = KEY_1_EXCL; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
-		case '@': keyboard_report.keycode[0] = KEY_2_AT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
-		case '#': keyboard_report.keycode[0] = KEY_3_SHARP; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
-		case '$': keyboard_report.keycode[0] = KEY_4_DOL; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
-		case '%': keyboard_report.keycode[0] = KEY_5_PCNT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
-		case '^': keyboard_report.keycode[0] = KEY_6_HAT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
-		case '&': keyboard_report.keycode[0] = KEY_7_AMP; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
-		case '*': keyboard_report.keycode[0] = KEY_8_STAR; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
-		case '(': keyboard_report.keycode[0] = KEY_9_PARO; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
-		case ')': keyboard_report.keycode[0] = KEY_0_PARC; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
-		case '-': keyboard_report.keycode[0] = KEY_DASH_UNDERSCORE; break;
-		case '_': keyboard_report.keycode[0] = KEY_DASH_UNDERSCORE; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
-		case '=': keyboard_report.keycode[0] = KEY_EQUAL_PLUS; break;
-		case '+': keyboard_report.keycode[0] = KEY_EQUAL_PLUS; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
-		case ';': keyboard_report.keycode[0] = KEY_SEMIC_COLON; break;
-		case ':': keyboard_report.keycode[0] = KEY_SEMIC_COLON; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
-		case ',': keyboard_report.keycode[0] = KEY_COMA_LT; break;
-		case '<': keyboard_report.keycode[0] = KEY_COMA_LT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
-		case '.': keyboard_report.keycode[0] = KEY_DOT_GT; break;
-		case '>': keyboard_report.keycode[0] = KEY_DOT_GT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
-		case '/': keyboard_report.keycode[0] = KEY_SLASH_QUEST; break;
-		case '?': keyboard_report.keycode[0] = KEY_SLASH_QUEST; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case ' ' : keyboard_report.keycode[0] = KEY_SPACE; break;
+		case '!' : keyboard_report.keycode[0] = KEY_EXCL; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '@' : keyboard_report.keycode[0] = KEY_AT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '#' : keyboard_report.keycode[0] = KEY_SHARP; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '$' : keyboard_report.keycode[0] = KEY_DOL; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '%' : keyboard_report.keycode[0] = KEY_PCNT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '^' : keyboard_report.keycode[0] = KEY_HAT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '&' : keyboard_report.keycode[0] = KEY_AMP; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '*' : keyboard_report.keycode[0] = KEY_STAR; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '(' : keyboard_report.keycode[0] = KEY_PARO; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case ')' : keyboard_report.keycode[0] = KEY_PARC; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '-' : keyboard_report.keycode[0] = KEY_DASH; break;
+		case '_' : keyboard_report.keycode[0] = KEY_UNDERSCORE; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '=' : keyboard_report.keycode[0] = KEY_EQUAL; break;
+		case '+' : keyboard_report.keycode[0] = KEY_PLUS; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case ';' : keyboard_report.keycode[0] = KEY_SEMIC; break;
+		case ':' : keyboard_report.keycode[0] = KEY_COLON; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case ',' : keyboard_report.keycode[0] = KEY_COMA; break;
+		case '<' : keyboard_report.keycode[0] = KEY_LT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '.' : keyboard_report.keycode[0] = KEY_DOT; break;
+		case '>' : keyboard_report.keycode[0] = KEY_GT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '/' : keyboard_report.keycode[0] = KEY_SLASH; break;
+		case '?' : keyboard_report.keycode[0] = KEY_QUEST; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '\'': keyboard_report.keycode[0] = KEY_QUOTE; break;
+		case '"' : keyboard_report.keycode[0] = KEY_DBLQUOTE; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
 		
 		case '\t': keyboard_report.keycode[0] = KEY_TAB; break;
 		case '\n': keyboard_report.keycode[0] = KEY_ENTER; break;
 	}
+#endif //KEYBOARD_MODE_US
+
+#ifdef KEYBOARD_MODE_JP
+	//The rest
+	/************************************************************************/
+	/* Details here : http://web.stanford.edu/class/cs140/projects/pintos/specs/kbd/scancodes-7.html */
+	/************************************************************************/
+	switch (pKey){
+		case ' ' : keyboard_report.keycode[0] = KEY_SPACE; break;
+		case '!' : keyboard_report.keycode[0] = KEY_EXCL; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '@' : keyboard_report.keycode[0] = KEY_AT; break; /* DIFFERENT*/
+		case '#' : keyboard_report.keycode[0] = KEY_SHARP; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '$' : keyboard_report.keycode[0] = KEY_DOL; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '%' : keyboard_report.keycode[0] = KEY_PCNT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '^' : keyboard_report.keycode[0] = KEY_HAT; break; /* DIFFERENT*/
+		case '&' : keyboard_report.keycode[0] = KEY_AMP; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '*' : keyboard_report.keycode[0] = KEY_STAR; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '(' : keyboard_report.keycode[0] = KEY_PARO; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case ')' : keyboard_report.keycode[0] = KEY_PARC; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '-' : keyboard_report.keycode[0] = KEY_DASH; break;
+		case '_' : keyboard_report.keycode[0] = KEY_UNDERSCORE; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '=' : keyboard_report.keycode[0] = KEY_EQUAL; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '+' : keyboard_report.keycode[0] = KEY_PLUS; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case ';' : keyboard_report.keycode[0] = KEY_SEMIC; break;
+		case ':' : keyboard_report.keycode[0] = KEY_COLON; break; /* DIFFERENT*/
+		case ',' : keyboard_report.keycode[0] = KEY_COMA; break;
+		case '<' : keyboard_report.keycode[0] = KEY_LT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '.' : keyboard_report.keycode[0] = KEY_DOT; break;
+		case '>' : keyboard_report.keycode[0] = KEY_GT; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '/' : keyboard_report.keycode[0] = KEY_SLASH; break;
+		case '?' : keyboard_report.keycode[0] = KEY_QUEST; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+		case '\'': keyboard_report.keycode[0] = KEY_QUOTE; keyboard_report.modifier = MOD_SHIFT_LEFT; break;/* DIFFERENT*/
+		case '"' : keyboard_report.keycode[0] = KEY_DBLQUOTE; keyboard_report.modifier = MOD_SHIFT_LEFT; break;
+	
+		case '\t': keyboard_report.keycode[0] = KEY_TAB; break;
+		case '\n': keyboard_report.keycode[0] = KEY_ENTER; break;
+	}
+#endif //KEYBOARD_MODE_JP
+
+
 }
