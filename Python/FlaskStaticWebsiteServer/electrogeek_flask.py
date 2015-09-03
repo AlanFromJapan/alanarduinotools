@@ -11,53 +11,33 @@ ROOTDIR = None
 LOGFILE = None
 HTTPPORT = None
 
+#default page -> redirect
 @app.route('/')
 @app.route('/index.html')
 def homepage():
-#    app.logger.debug('homepage')
-#    return app.send_static_file('home.html')
     return redirect('/home.html')
 
-"""
-@app.route('/<page>.html')
-def servePage(page):
-    t = None
-    vFilePath = "" + page + ".html"
-    with os.open(vFilePath, mode="r") as f:
-        t = f.read()
-    return t
-"""
-
-"""
-#test of the templating
-@app.route('/T.html')
-def testTemplate(page="whoami"):
-    t = None
-    vFilePath = ROOTDIR + page + ".html"
-    with open(vFilePath, mode="r") as f:
-        t = f.read().decode("utf-8")
-    return render_template('template01.html', pagename=page, pagecontent=t)
-"""
-"""
-#standard static page serving
-@app.route('/<page>.html')
-def servePage(page):
-    app.logger.debug('servePage: ' + page)
-    return app.send_static_file(page.lower() + ".html")
-"""
 
 #serving page through template
 @app.route('/<page>.html')
 def serveTemplate(page):
     t = None
     year = datetime.now().strftime('%Y')
+
     #make sure this path is a *safe* path
     vFilePath = ROOTDIR + page.lower() + ".html"
+
+    #read content of the static file
     with open(vFilePath, mode="r") as f:
         t = f.read().decode("utf-8")
+
+    #generate the output by injecting static page content and a couple of variables in the template page
     return render_template(Config.get("Design", "Template"), pagename=page, pagecontent=t, year=year)
 
 
+
+########################################################################################
+## Main entry point
 if __name__ == '__main__':
     import logging
     logging.basicConfig(filename=LOGFILE,level=logging.DEBUG)
