@@ -11,6 +11,23 @@ ROOTDIR = None
 LOGFILE = None
 HTTPPORT = None
 
+#static pages cache (to avoid reading from disk each time)
+StaticPagesCache = dict()
+
+#store static pages (.html) in memory for faster response
+def getStatic(page, vFilePath):
+    if not StaticPagesCache.has_key(page):
+        #not in cache? then add it
+        t = None
+        #read content of the static file
+        with open(vFilePath, mode="r") as f:
+            t = f.read().decode("utf-8")
+        #and store
+        StaticPagesCache[page] = t
+
+    return StaticPagesCache[page]
+    
+
 #default page -> redirect
 @app.route('/')
 @app.route('/index.html')
@@ -27,9 +44,13 @@ def serveTemplate(page):
     #make sure this path is a *safe* path
     vFilePath = ROOTDIR + page.lower() + ".html"
 
+    #caching or read from disk
+    if Config.getboolean("WebConfig", "CACHING"):
+        t = getStatic(page.lower(), vFilePath)
+    else:
     #read content of the static file
-    with open(vFilePath, mode="r") as f:
-        t = f.read().decode("utf-8")
+        with open(vFilePath, mode="r") as f:
+            t = f.read().decode("utf-8")
 
     #generate the output by injecting static page content and a couple of variables in the template page
     return render_template(Config.get("Design", "Template"), pagename=page, pagecontent=t, year=year)
