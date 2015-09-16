@@ -8393,7 +8393,6 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 <part name="C6" library="SparkFun-Capacitors" deviceset="CAP" device="1206" value="22pF"/>
 <part name="C7" library="SparkFun-Capacitors" deviceset="CAP" device="1206" value="22pF"/>
 <part name="Q1" library="crystal" deviceset="CRYSTAL" device="CTS406" value="12MHz"/>
-<part name="JPID" library="SparkFun-Connectors" deviceset="M01" device="PTH_NO_SILK_YES_STOP"/>
 <part name="LED1" library="kalshagar" deviceset="RGB-SMT-SQUARE" device="" technology="6X6MM"/>
 <part name="LED2" library="kalshagar" deviceset="RGB-SMT-SQUARE" device="5X5MM"/>
 <part name="GND4" library="SparkFun-Aesthetics" deviceset="DGND" device=""/>
@@ -8444,7 +8443,6 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 <instance part="C6" gate="G$1" x="-40.64" y="99.06" rot="R90"/>
 <instance part="C7" gate="G$1" x="-40.64" y="73.66" rot="R90"/>
 <instance part="Q1" gate="G$1" x="-22.86" y="83.82" rot="R90"/>
-<instance part="JPID" gate="G$1" x="132.08" y="137.16" rot="R270"/>
 <instance part="LED1" gate="G$1" x="124.46" y="-25.4"/>
 <instance part="LED2" gate="G$1" x="154.94" y="-25.4"/>
 <instance part="GND4" gate="G$1" x="137.16" y="-50.8"/>
@@ -8694,18 +8692,6 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 <wire x1="63.5" y1="60.96" x2="48.26" y2="60.96" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="D6" class="0">
-<segment>
-<pinref part="UC1" gate="G$1" pin="(ICP)PD6"/>
-<wire x1="48.26" y1="71.12" x2="50.8" y2="71.12" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="D5" class="0">
-<segment>
-<pinref part="UC1" gate="G$1" pin="(T1)PD5"/>
-<wire x1="48.26" y1="68.58" x2="50.8" y2="68.58" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="D3" class="0">
 <segment>
 <pinref part="UC1" gate="G$1" pin="(INT1)PD3"/>
@@ -8730,34 +8716,8 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 <wire x1="48.26" y1="86.36" x2="73.66" y2="86.36" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$2" class="0">
-<segment>
-<pinref part="UC1" gate="G$1" pin="(OCI)PB3"/>
-<wire x1="73.66" y1="83.82" x2="48.26" y2="83.82" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$3" class="0">
-<segment>
-<pinref part="UC1" gate="G$1" pin="PB2"/>
-<wire x1="48.26" y1="81.28" x2="73.66" y2="81.28" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$4" class="0">
-<segment>
-<pinref part="UC1" gate="G$1" pin="(AIN1)PB1"/>
-<wire x1="73.66" y1="78.74" x2="48.26" y2="78.74" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$13" class="0">
-<segment>
-<pinref part="UC1" gate="G$1" pin="(AIN0)PB0"/>
-<wire x1="48.26" y1="76.2" x2="73.66" y2="76.2" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="N$14" class="0">
 <segment>
-<pinref part="JPID" gate="G$1" pin="1"/>
-<wire x1="132.08" y1="129.54" x2="132.08" y2="101.6" width="0.1524" layer="91"/>
 <pinref part="USB_MICRO" gate="G$1" pin="ID"/>
 <wire x1="132.08" y1="101.6" x2="134.62" y2="101.6" width="0.1524" layer="91"/>
 </segment>
@@ -8797,6 +8757,10 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 <wire x1="116.84" y1="12.7" x2="116.84" y2="15.24" width="0.1524" layer="91"/>
 <label x="114.3" y="15.24" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="UC1" gate="G$1" pin="(ICP)PD6"/>
+<wire x1="48.26" y1="71.12" x2="50.8" y2="71.12" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="LED1R" class="0">
 <segment>
@@ -8806,6 +8770,10 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 <wire x1="124.46" y1="12.7" x2="124.46" y2="15.24" width="0.1524" layer="91"/>
 <label x="121.92" y="17.78" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="UC1" gate="G$1" pin="(T1)PD5"/>
+<wire x1="48.26" y1="68.58" x2="50.8" y2="68.58" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="LED1B" class="0">
 <segment>
@@ -8814,6 +8782,10 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 <wire x1="129.54" y1="12.7" x2="132.08" y2="12.7" width="0.1524" layer="91"/>
 <wire x1="132.08" y1="12.7" x2="132.08" y2="15.24" width="0.1524" layer="91"/>
 <label x="129.54" y="15.24" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="UC1" gate="G$1" pin="(AIN0)PB0"/>
+<wire x1="48.26" y1="76.2" x2="73.66" y2="76.2" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$19" class="0">
@@ -8851,6 +8823,10 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 <wire x1="147.32" y1="15.24" x2="147.32" y2="17.78" width="0.1524" layer="91"/>
 <label x="144.78" y="17.78" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="UC1" gate="G$1" pin="PB2"/>
+<wire x1="48.26" y1="81.28" x2="73.66" y2="81.28" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="LED2R" class="0">
 <segment>
@@ -8860,6 +8836,10 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 <wire x1="154.94" y1="15.24" x2="154.94" y2="17.78" width="0.1524" layer="91"/>
 <label x="152.4" y="20.32" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="UC1" gate="G$1" pin="(AIN1)PB1"/>
+<wire x1="73.66" y1="78.74" x2="48.26" y2="78.74" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="LED2B" class="0">
 <segment>
@@ -8868,6 +8848,10 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 <wire x1="160.02" y1="15.24" x2="162.56" y2="15.24" width="0.1524" layer="91"/>
 <wire x1="162.56" y1="15.24" x2="162.56" y2="17.78" width="0.1524" layer="91"/>
 <label x="160.02" y="17.78" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="UC1" gate="G$1" pin="(OCI)PB3"/>
+<wire x1="73.66" y1="83.82" x2="48.26" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$22" class="0">
