@@ -11,6 +11,8 @@ Project("{18226A42-8477-4023-8AD2-40C49DA407C9}") = "Watchdog_tiny10", "Watchdog
 EndProject
 Project("{18226A42-8477-4023-8AD2-40C49DA407C9}") = "ArdReveil4Effects", "ArdReveil4Effects\ArdReveil4Effects.asmproj", "{CF76CDEA-28AF-4325-ACA9-CB8F0414311C}"
 EndProject
+Project("{18226A42-8477-4023-8AD2-40C49DA407C9}") = "seaphone_v1_attiny10", "seaphone_v1_attiny10\seaphone_v1_attiny10.asmproj", "{426A3BEB-C944-413E-AE49-7691B0D0B179}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -37,6 +39,10 @@ Global
 		{CF76CDEA-28AF-4325-ACA9-CB8F0414311C}.Debug|AVR.Build.0 = Debug|AVR
 		{CF76CDEA-28AF-4325-ACA9-CB8F0414311C}.Release|AVR.ActiveCfg = Release|AVR
 		{CF76CDEA-28AF-4325-ACA9-CB8F0414311C}.Release|AVR.Build.0 = Release|AVR
+		{426A3BEB-C944-413E-AE49-7691B0D0B179}.Debug|AVR.ActiveCfg = Debug|AVR
+		{426A3BEB-C944-413E-AE49-7691B0D0B179}.Debug|AVR.Build.0 = Debug|AVR
+		{426A3BEB-C944-413E-AE49-7691B0D0B179}.Release|AVR.ActiveCfg = Release|AVR
+		{426A3BEB-C944-413E-AE49-7691B0D0B179}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
