@@ -31,9 +31,10 @@
 .EQU DDRB_BIT_MASK		= ((1 << PB2))
 ; PB1 is input
 .EQU ROTARY_BIT_MASK	= (1 << PB1)
-
+; PB2 is the optocoupler to NEXT button
+.EQU NEXT_BIT_MASK	= (1 << PB2)
 ;the secret value
-.EQU SECRET_VAL			=1234
+.EQU SECRET_VAL			= 1
 ;----------------------------------------------------------------------
 ;variables
 .DEF State					= r16
@@ -42,6 +43,7 @@
 .DEF LastChangePulseCount	= r19
 ;work register
 .DEF w						= r20
+.DEF v						= r21
 ;16 bits word registers
 .DEF w16					= r26 ; and r27
 .DEF Counter16				= r28 ; and r29
@@ -260,7 +262,29 @@ digit_completed:
 	
 	;if you're here, SecretNumber == SECRET_VAL
 	; Blink blink, you inputed the number!
-	TODO
+	
+	;Press the <NEXT> key
+	in w, PORTB
+	ori w, NEXT_BIT_MASK
+	out PORTB, w
+
+	;wait 3ms x 100 = 300ms
+	ldi v, 100
+next_long_wait:
+	cpi v, 0
+	breq end_next_long_wait
+	dec v
+	
+	;delay 3ms
+	rcall delayPulse
+	
+	rjmp next_long_wait
+end_next_long_wait:
+
+	;clear bit
+	ldi v, NEXT_BIT_MASK
+	eor w, v
+	out PORTB, w
 	
 end_digit_completed:
 
