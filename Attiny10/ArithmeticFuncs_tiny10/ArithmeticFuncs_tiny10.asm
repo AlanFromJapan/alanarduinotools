@@ -1,39 +1,17 @@
 /*
- * seaphone_v1_attiny10.asm
+ * ArithmeticFuncs_tiny10.asm
  *
- *  Created: 2015/10/28 23:54:20
+ *  Created: 2015/11/05 22:58:56
  *   Author: Alan
- * 
- * For the SeaPhone project, will scan the rotary dial impulse and do something if a given number is entered.
- 
-                  +-\/-+
-              PB0 |o   | PB3  
-              GND |    | VCC
- Rotary dial  PB1 |____| PB2  Next (optocoupler)
+
+ Just for the sake of testing ATTiny10 mathematical functions, home made ones too.
 
  */ 
 
+
+ 
 .DEVICE ATtiny10
 
-;----------------------------------------------------------------------
-; constants
-.EQU F_CPU				= 8000000
-.EQU DELAY_PULSE_MS		= 3
-;how many clock tick it makes (answer = 24000 for 8MHz cpu and 3 ms delay)
-.EQU DELAY_PULSE_COUNT	= (F_CPU * (DELAY_PULSE_MS / 1000))
-.EQU DELAY_PULSE_COUNTA = 255 ; the delay is delaymult2*delaymult1 
-.EQU DELAY_PULSE_COUNTB = 94
-;255 * 94 = 23970 ~= what we need for 3ms delay
-
-.EQU DELAY_DIGIT_MS		= 100
-.EQU COUNT_DIGIT_PULSE	= DELAY_DIGIT_MS / DELAY_PULSE_MS
-; PB2 is output, PB1 is 0 to be input
-.EQU DDRB_BIT_MASK		= ((1 << PB2))
-; PB1 is input
-.EQU ROTARY_BIT_MASK	= (1 << PB1)
-
-;the secret value
-.EQU SECRET_VAL			=1234
 ;----------------------------------------------------------------------
 ;variables
 .DEF State					= r16
@@ -125,27 +103,6 @@ noad8:	ror	m16u3		;shift right result byte 3
 	ret
 
 
-;----------------------------------------------------------------------
-;Delay of about DELAY_PULSE_MS
-delayPulse:
-	push r20
-	push r21
-	
-	ldi r20, DELAY_PULSE_COUNTA
-	ldi r21, DELAY_PULSE_COUNTB
-
-	; start delay loop
-delayLoop:
-	subi r20, 1
-	sbci r21, 0
-	brne delayLoop
-	; end delay loop
-	
-	pop r21
-	pop r20
-	ret
-
-
 
 ;----------------------------------------------------------------------
 /************ Main entry point ************/
@@ -156,64 +113,14 @@ main:
 	out CCP, r20 ; Configuration Change Protection, allows protected changes
 	out CLKPSR, r21 ; sets the clock divider
 
-	; set pin mask
-	ldi w, DDRB_BIT_MASK 
-	out DDRB, w ; data direction
-	;no pullups
-	ldi w, 0x00
-	out PORTB, w
 
-	;stop interrupts (not needed in this program)
-	cli
-
-	;init variables 
-	clr ReadInProgress
-	clr State
-	clr Counter
-	clr LastChangePulseCount
-
-	;load the expected value in the register
-	ldi SecretNumber, LOW(SECRET_VAL)
-	ldi r31, HIGH(SECRET_VAL)
-	;init current counter to 0 (read number)
-	clr Counter16
-	clr r29
 
 loop:
-	;read PB1
-	in w, PINB
-	;clean
-	andi w, ROTARY_BIT_MASK ;keep PB1 info only
+	;Secret num = 0
+	clr r30
+	clr r31
 
-	cp State, w
-	breq end_val_diff_state	
-val_diff_state:
-	mov State, w
-	//remember last change time
-	clr LastChangePulseCount
-
-	cpi State, ROTARY_BIT_MASK 
-	brne end_val_is_up
-val_is_up:
-	cpi ReadInProgress, 0x00
-	brne end_not_read_in_progress
-not_read_in_progress:
-	ldi ReadInProgress, 0x01
-	clr Counter
-end_not_read_in_progress:
-	inc Counter
-end_val_is_up:
-
-	; if (readingInProgress == 1 && lastChangeMs > 100)
-	cpi ReadInProgress, 0x01
-	brne end_digit_completed
-	cpi LastChangePulseCount, COUNT_DIGIT_PULSE
-	brlt end_digit_completed
-digit_completed:
-	clr ReadInProgress
-
-	;read a digit (in Counter), now store
-
+mul3plus1:
 	;Counter16 = Counter16 *10 + Counter
 	push r16
 	push r17
@@ -223,14 +130,13 @@ digit_completed:
 	push r21
 	push r22
 
-	;Put 10 in the multiplicand
-	ldi mc16uL,10
+	;Put 3 in the multiplicand
+	ldi mc16uL,3
 	ldi mc16uH,0 
 	;Put the existing value in multiplier
 	mov mp16uL, SecretNumber ; r30
 	mov mp16uH, r31 ; r31
 	;Call 16bits x 16bits = 32bits multiply routine
-	;NB: use *rcall*, not call!!
 	rcall mpy16u 
 	;result is in r18-r21 (l->h)
 	mov SecretNumber, r18
@@ -245,31 +151,11 @@ digit_completed:
 	pop r16
 
 	;and now add the counter (so far we have only Counter16 = Counter16 *10)
-	;note the technique: first ADD then ADC. Since we add a single digit, high byte is always zero hence the 'clr w'
+	;note the technique: first ADD then ADC. 
 	; (see AVR Assembler doc at ADC descr)
-	clr w
-	add SecretNumber, Counter
-	adc r31, w
-
-
-	; And now check if SecretNumber == SECRET_VAL
-	cpi SecretNumber, LOW(SECRET_VAL)
-	brne end_digit_completed
-	cpi r31, HIGH(SECRET_VAL)
-	brne end_digit_completed
-	
-	;if you're here, SecretNumber == SECRET_VAL
-	; Blink blink, you inputed the number!
-	TODO
-	
-end_digit_completed:
-
-end_val_diff_state:
-	 
-	;delay 3ms
-	rcall delayPulse
-
-	ldi w, COUNT_DIGIT_PULSE
-	add LastChangePulseCount, w
-
-	rjmp loop
+	ldi r16, 1
+	ldi r17, 0
+	add SecretNumber, r16
+	adc r31, r17
+		
+	rjmp mul3plus1

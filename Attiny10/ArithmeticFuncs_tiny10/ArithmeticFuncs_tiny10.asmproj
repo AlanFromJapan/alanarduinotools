@@ -4,23 +4,35 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>6.0</ProjectVersion>
     <ToolchainName>com.Atmel.AVRAssembler</ToolchainName>
-    <ProjectGuid>{426a3beb-c944-413e-ae49-7691b0d0b179}</ProjectGuid>
+    <ProjectGuid>{e44abe2e-b0b4-4a6c-8cf9-e4e2b92fb6f4}</ProjectGuid>
     <avrdeviceseries>none</avrdeviceseries>
     <avrdevice>ATtiny10</avrdevice>
     <OutputFileName>$(MSBuildProjectName)</OutputFileName>
     <OutputFileExtension>.obj</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
     <Language>ASSEMBLY</Language>
-    <AssemblyName>seaphone_v1_attiny10</AssemblyName>
-    <Name>seaphone_v1_attiny10</Name>
-    <RootNamespace>seaphone_v1_attiny10</RootNamespace>
-    <EntryFile>$(MSBuildProjectDirectory)\seaphone_v1_attiny10.asm</EntryFile>
+    <AssemblyName>ArithmeticFuncs_tiny10</AssemblyName>
+    <Name>ArithmeticFuncs_tiny10</Name>
+    <RootNamespace>ArithmeticFuncs_tiny10</RootNamespace>
+    <EntryFile>$(MSBuildProjectDirectory)\ArithmeticFuncs_tiny10.asm</EntryFile>
     <ToolchainFlavour>Native</ToolchainFlavour>
-    <AsfVersion>3.5.1</AsfVersion>
-    <KeepTimersRunning>true</KeepTimersRunning>
-    <OverrideVtor>false</OverrideVtor>
-    <OverrideVtorValue />
-    <eraseonlaunchrule>0</eraseonlaunchrule>
+    <avrtoolinterface />
+    <avrtool>com.atmel.avrdbg.tool.simulator</avrtool>
+    <com_atmel_avrdbg_tool_simulator>
+      <ToolType xmlns="">com.atmel.avrdbg.tool.simulator</ToolType>
+      <ToolName xmlns="">AVR Simulator</ToolName>
+      <ToolNumber xmlns="">
+      </ToolNumber>
+      <KeepTimersRunning xmlns="">true</KeepTimersRunning>
+      <OverrideVtor xmlns="">false</OverrideVtor>
+      <OverrideVtorValue xmlns="">
+      </OverrideVtorValue>
+      <Channel xmlns="">
+        <host>127.0.0.1</host>
+        <port>49315</port>
+        <ssl>False</ssl>
+      </Channel>
+    </com_atmel_avrdbg_tool_simulator>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
@@ -28,7 +40,6 @@
   <avrasm.assembler.general.IncludeFile>($IncludeFile)</avrasm.assembler.general.IncludeFile>
 </AvrAssembler>
     </ToolchainSettings>
-    <OutputType>Executable</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -38,13 +49,13 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ArithmeticFuncs_tiny10.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="avr200.asm">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="avr201.asm">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="seaphone_v1_attiny10.asm">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
