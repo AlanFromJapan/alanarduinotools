@@ -45,8 +45,6 @@
 .DEF w						= r20
 .DEF v						= r21
 ;16 bits word registers
-.DEF w16					= r26 ; and r27
-.DEF Counter16				= r28 ; and r29
 .DEF SecretNumber			= r30 ; and r31
 
 ;----------------------------------------------------------------------
@@ -163,7 +161,7 @@ main:
 	out DDRB, w ; data direction
 	;no pullups
 	ldi w, 0x00
-	out PORTB, w
+	out PUEB, w
 
 	;stop interrupts (not needed in this program)
 	cli
@@ -174,12 +172,10 @@ main:
 	clr Counter
 	clr LastChangePulseCount
 
-	;load the expected value in the register
-	ldi SecretNumber, LOW(SECRET_VAL)
-	ldi r31, HIGH(SECRET_VAL)
-	;init current counter to 0 (read number)
-	clr Counter16
-	clr r29
+	;Read so far is 00000
+	ldi SecretNumber, 0
+	ldi r31, 0
+
 
 loop:
 	;read PB1
@@ -264,9 +260,7 @@ digit_completed:
 	; Blink blink, you inputed the number!
 	
 	;Press the <NEXT> key
-	in w, PORTB
-	ori w, NEXT_BIT_MASK
-	out PORTB, w
+	sbi PORTB, 2
 
 	;wait 3ms x 100 = 300ms
 	ldi v, 100
@@ -282,9 +276,7 @@ next_long_wait:
 end_next_long_wait:
 
 	;clear bit
-	ldi v, NEXT_BIT_MASK
-	eor w, v
-	out PORTB, w
+	cbi PORTB, 2
 	
 end_digit_completed:
 
