@@ -7,7 +7,7 @@
  * For the SeaPhone project, will scan the rotary dial impulse and do something if a given number is entered.
  
                   +-\/-+
-              PB0 |o   | PB3  
+ Debug LED    PB0 |o   | PB3  
               GND |    | VCC
  Rotary dial  PB1 |____| PB2  Next (optocoupler)
 
@@ -22,17 +22,19 @@
 ;how many clock tick it makes (answer = 24000 for 8MHz cpu and 3 ms delay)
 .EQU DELAY_PULSE_COUNT	= (F_CPU * (DELAY_PULSE_MS / 1000))
 .EQU DELAY_PULSE_COUNTA = 255 ; the delay is delaymult2*delaymult1 
-.EQU DELAY_PULSE_COUNTB = 94
+.EQU DELAY_PULSE_COUNTB = 10
 ;255 * 94 = 23970 ~= what we need for 3ms delay
 
 .EQU DELAY_DIGIT_MS		= 100
 .EQU COUNT_DIGIT_PULSE	= DELAY_DIGIT_MS / DELAY_PULSE_MS
-; PB2 is output, PB1 is 0 to be input
-.EQU DDRB_BIT_MASK		= ((1 << PB2))
+; PB0/PB2 are output, PB1 is 0 to be input
+.EQU DDRB_BIT_MASK		= ((1 << PB2) | (1 << PB0))
 ; PB1 is input
 .EQU ROTARY_BIT_MASK	= (1 << PB1)
 ; PB2 is the optocoupler to NEXT button
 .EQU NEXT_BIT_MASK	= (1 << PB2)
+; PB0 is the debug LED
+.EQU LED_BIT_MASK	= (1 << PB0)
 ;the secret value
 .EQU SECRET_VAL			= 1
 ;----------------------------------------------------------------------
@@ -191,8 +193,11 @@ val_diff_state:
 	clr LastChangePulseCount
 
 	cpi State, ROTARY_BIT_MASK 
-	brne end_val_is_up
+	brne not_val_is_up
 val_is_up:
+	//DEBUG LED on
+	sbi PORTB, PB0
+
 	cpi ReadInProgress, 0x00
 	brne end_not_read_in_progress
 not_read_in_progress:
@@ -200,6 +205,10 @@ not_read_in_progress:
 	clr Counter
 end_not_read_in_progress:
 	inc Counter
+	rjmp end_val_is_up
+not_val_is_up:
+	//DEBUG LED off
+	cbi PORTB, PB0
 end_val_is_up:
 
 	; if (readingInProgress == 1 && lastChangeMs > 100)
@@ -260,7 +269,7 @@ digit_completed:
 	; Blink blink, you inputed the number!
 	
 	;Press the <NEXT> key
-	sbi PORTB, 2
+	sbi PORTB, PB2
 
 	;wait 3ms x 100 = 300ms
 	ldi v, 100
@@ -276,7 +285,7 @@ next_long_wait:
 end_next_long_wait:
 
 	;clear bit
-	cbi PORTB, 2
+	cbi PORTB, PB2
 	
 end_digit_completed:
 
