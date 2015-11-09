@@ -219,7 +219,6 @@ pip-log.txt
 .mr.developer.cfg
 
 *.atsuo
-*.atsuo
 
 #Eagle backup files
 *.b#*
