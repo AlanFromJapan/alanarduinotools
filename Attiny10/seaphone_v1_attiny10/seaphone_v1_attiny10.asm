@@ -22,11 +22,11 @@
 ;how many clock tick it makes (answer = 24000 for 8MHz cpu and 3 ms delay)
 .EQU DELAY_PULSE_COUNT	= (F_CPU * (DELAY_PULSE_MS / 1000))
 .EQU DELAY_PULSE_COUNTA = 255 ; the delay is delaymult2*delaymult1 
-.EQU DELAY_PULSE_COUNTB = 10
+.EQU DELAY_PULSE_COUNTB = 3
 ;255 * 94 = 23970 ~= what we need for 3ms delay
 
 .EQU DELAY_DIGIT_MS		= 100
-.EQU COUNT_DIGIT_PULSE	= DELAY_DIGIT_MS / DELAY_PULSE_MS
+.EQU COUNT_DIGIT_PULSE	= 50
 ; PB0/PB2 are output, PB1 is 0 to be input
 .EQU DDRB_BIT_MASK		= ((1 << PB2) | (1 << PB0))
 ; PB1 is input
@@ -36,13 +36,13 @@
 ; PB0 is the debug LED
 .EQU LED_BIT_MASK	= (1 << PB0)
 ;the secret value
-.EQU SECRET_VAL			= 1
+.EQU SECRET_VAL			= 123
 ;----------------------------------------------------------------------
 ;variables
 .DEF State					= r16
 .DEF ReadInProgress			= r17
 .DEF Counter				= r18
-.DEF LastChangePulseCount	= r19
+.DEF LastChangeCounter		= r19
 ;work register
 .DEF w						= r20
 .DEF v						= r21
@@ -172,7 +172,7 @@ main:
 	clr ReadInProgress
 	clr State
 	clr Counter
-	clr LastChangePulseCount
+	clr LastChangeCounter
 
 	;Read so far is 00000
 	ldi SecretNumber, 0
@@ -190,13 +190,13 @@ loop:
 val_diff_state:
 	mov State, w
 	//remember last change time
-	clr LastChangePulseCount
+	clr LastChangeCounter
 
 	cpi State, ROTARY_BIT_MASK 
 	brne not_val_is_up
 val_is_up:
 	//DEBUG LED on
-	sbi PORTB, PB0
+	;sbi PORTB, PB0
 
 	cpi ReadInProgress, 0x00
 	brne end_not_read_in_progress
@@ -208,16 +208,28 @@ end_not_read_in_progress:
 	rjmp end_val_is_up
 not_val_is_up:
 	//DEBUG LED off
-	cbi PORTB, PB0
+	;cbi PORTB, PB0
 end_val_is_up:
+
+
+;No status change, just keep on waiting after a little sleep
+end_val_diff_state:
+	 
+
+
 
 	; if (readingInProgress == 1 && lastChangeMs > 100)
 	cpi ReadInProgress, 0x01
 	brne end_digit_completed
-	cpi LastChangePulseCount, COUNT_DIGIT_PULSE
-	brlt end_digit_completed
+	cpi LastChangeCounter, 50
+	brlo end_digit_completed
 digit_completed:
 	clr ReadInProgress
+	
+	//DEBUG LED on
+	;sbi PORTB, PB0
+
+
 
 	;read a digit (in Counter), now store
 
@@ -286,15 +298,38 @@ end_next_long_wait:
 
 	;clear bit
 	cbi PORTB, PB2
-	
+		
+
 end_digit_completed:
 
-end_val_diff_state:
-	 
+	//DEBUG LED off
+	;cbi PORTB, PB0
+
+
+	//DEBUG LED on
+	;sbi PORTB, PB0	
+
+/*
+// DEBUG blink led if reading number, off if not within a number
+	cpi ReadInProgress, 0x01
+	brne DBG_ledoff
+	//DEBUG LED on
+	sbi PORTB, PB0	
+	rjmp DBG_end
+DBG_ledoff:
+	//DEBUG LED off
+	cbi PORTB, PB0	  
+DBG_end:
+	nop
+// /DEBUG
+*/
 	;delay 3ms
 	rcall delayPulse
 
-	ldi w, COUNT_DIGIT_PULSE
-	add LastChangePulseCount, w
+	//DEBUG LED off
+	;cbi PORTB, PB0
+
+	ldi w, 1
+	add LastChangeCounter, w
 
 	rjmp loop
