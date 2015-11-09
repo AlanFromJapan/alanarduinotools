@@ -224,3 +224,18 @@ pip-log.txt
 #Eagle backup files
 *.b#*
 *.s#*
+
+#Eagle other docs
+*.gbl
+*.gbo
+*.gbp
+*.gbs
+*.gml
+*.gpi
+*.gtl
+*.gto
+*.gtp
+*.gts
+*.dri
+*.pro
+
