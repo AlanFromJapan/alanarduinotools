@@ -18,14 +18,10 @@
 ;----------------------------------------------------------------------
 ; constants
 .EQU F_CPU				= 8000000
-.EQU DELAY_PULSE_MS		= 3
-;how many clock tick it makes (answer = 24000 for 8MHz cpu and 3 ms delay)
-.EQU DELAY_PULSE_COUNT	= (F_CPU * (DELAY_PULSE_MS / 1000))
 .EQU DELAY_PULSE_COUNTA = 255 ; the delay is delaymult2*delaymult1 
 .EQU DELAY_PULSE_COUNTB = 3
-;255 * 94 = 23970 ~= what we need for 3ms delay
+;255 * 3 = 23970 ~= what we need for 4.2ms delay (doesn't have to be precise, this is a good value per my tests)
 
-.EQU DELAY_DIGIT_MS		= 100
 .EQU COUNT_DIGIT_PULSE	= 50
 ; PB0/PB2 are output, PB1 is 0 to be input
 .EQU DDRB_BIT_MASK		= ((1 << PB2) | (1 << PB0))
@@ -36,7 +32,7 @@
 ; PB0 is the debug LED
 .EQU LED_BIT_MASK	= (1 << PB0)
 ;the secret value
-.EQU SECRET_VAL			= 123
+.EQU SECRET_VAL			= 1010
 ;----------------------------------------------------------------------
 ;variables
 .DEF State					= r16
@@ -221,7 +217,7 @@ end_val_diff_state:
 	; if (readingInProgress == 1 && lastChangeMs > 100)
 	cpi ReadInProgress, 0x01
 	brne end_digit_completed
-	cpi LastChangeCounter, 50
+	cpi LastChangeCounter, COUNT_DIGIT_PULSE
 	brlo end_digit_completed
 digit_completed:
 	clr ReadInProgress
@@ -264,6 +260,14 @@ digit_completed:
 	pop r16
 
 	;and now add the counter (so far we have only Counter16 = Counter16 *10)
+	;Firstly, 10 becomes 0
+	cpi Counter, 10
+	brlo counter_less_than_10
+	clr Counter
+counter_less_than_10:
+	;nothing to do
+
+	;Secondly, the addition
 	;note the technique: first ADD then ADC. Since we add a single digit, high byte is always zero hence the 'clr w'
 	; (see AVR Assembler doc at ADC descr)
 	clr w
