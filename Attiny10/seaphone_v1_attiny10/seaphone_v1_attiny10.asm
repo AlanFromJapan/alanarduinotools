@@ -32,7 +32,7 @@
 ; PB0 is the debug LED
 .EQU LED_BIT_MASK	= (1 << PB0)
 ;the secret value
-.EQU SECRET_VAL			= 1010
+.EQU SECRET_VAL			= 1230
 ;----------------------------------------------------------------------
 ;variables
 .DEF State					= r16
@@ -303,6 +303,9 @@ end_next_long_wait:
 	;clear bit
 	cbi PORTB, PB2
 		
+	;Reset secret number 
+	ldi SecretNumber, 0
+	ldi r31, 0
 
 end_digit_completed:
 
