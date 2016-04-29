@@ -2,6 +2,7 @@
 -- by AlanFromJapan - 2016/04/26
 -- http://electrogeek.cc/kodi-xbmc%20remote.html
 
+
 function callKodiRemoteURL (ip, port, token, command)
 conn = nil
 conn=net.createConnection(net.TCP, 0) 
@@ -10,7 +11,7 @@ conn=net.createConnection(net.TCP, 0)
 
 conn:on("receive", function(conn, payload) 
                        success = true
-                       print(strsub(payload, 1, 50)) 
+                       print(string.sub(payload, 1, 500)) 
                        end) 
 
 -- when connected, request page (send parameters to a script)
@@ -24,6 +25,7 @@ conn:on("connection", function(conn, payload)
                         .."User-Agent: Mozilla/4.0 (compatible; esp8266 Lua; Windows NT 5.1)\r\n" 
 						.."Pragma: no-cache\r\n"
 						.."Cache-Control: no-cache\r\n"
+						.."Authorization: Basic "..token.."\r\n"
                         .."\r\n")
                        end) 
 					   
@@ -31,5 +33,8 @@ conn:on("connection", function(conn, payload)
 conn:on("disconnection", function(conn, payload) print('\nDisconnected') end)
                                              
 conn:connect(port,ip) 
+
+--conn:close()
+--conn = nil
 
 end --/callKodiRemoteURL
