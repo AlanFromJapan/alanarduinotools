@@ -9,6 +9,7 @@ conn = nil
 conn=net.createConnection(net.TCP, 0) 
 
 -- show the retrieved web page
+print("DEBUG command="..command.."\r\n")
 
 conn:on("receive", function(conn, payload) 
                        success = true
@@ -17,21 +18,23 @@ conn:on("receive", function(conn, payload)
 
 -- when connected, request page (send parameters to a script)
 conn:on("connection", function(conn, payload) 
-                       print('\nConnected') 
-                       conn:send("GET "..command.."\r\n"
-                        .." HTTP/1.1\r\n" 
+                       print('\nTCP Connected')
+						httpReq = "GET "..command.." HTTP/1.1\r\n" --Get /xxxx HTTP/1.1 
 						.."Host: "..ip.."\r\n"
-               		    .."Connection: close\r\n"
-                        .."Accept: text/html\r\n" 
-                        .."User-Agent: Mozilla/4.0 (compatible; esp8266 Lua; Windows NT 5.1)\r\n" 
-						.."Pragma: no-cache\r\n"
-						.."Cache-Control: no-cache\r\n"
 						.."Authorization: Basic "..token.."\r\n"
-                        .."\r\n")
+               		    .."Connection: close\r\n"
+--                        .."Accept: text/html\r\n" 
+--                        .."User-Agent: Mozilla/4.0 (compatible; esp8266 Lua; Windows NT 5.1)\r\n" 
+--						.."Pragma: no-cache\r\n"
+--						.."Cache-Control: no-cache\r\n"
+                        .."\r\n" --FINAL is needed!
+						
+						print("DEBUG HTTP Req:\r\n" .. httpReq)
+                       conn:send(httpReq)
                        end) 
 					   
 -- when disconnected, let it be known
-conn:on("disconnection", function(conn, payload) print('\nDisconnected') end)
+conn:on("disconnection", function(conn, payload) print('\nTCP Disconnected') end)
                                              
 conn:connect(port,ip) 
 
