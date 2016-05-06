@@ -21,6 +21,17 @@
 #include "usbdrv.h"
 #include "vusb-config.h"
 #include "serialComm.h"
+#include "Adc.h"
+
+#include "FiniteStateMachine.h"
+
+#define WIRE_DEBOUNCE_COUNT 3
+#define WIRE_DEBOUNCE_MS	15
+
+uint8_t FSM_PATTERN[] = {0xAA, 0x01, 0xff, 0x81};
+#define FSM_PATTERN_LEN 4
+
+fsm fsm1;
 
 static void usbHardwareInit(void)
 {
@@ -40,6 +51,7 @@ static void usbHardwareInit(void)
 }
 
 static void usbPurgeEvents(){
+	return;
 	do {
 		//usb data pull
 		wdt_reset();
@@ -48,7 +60,7 @@ static void usbPurgeEvents(){
 	} while (!usbInterruptIsReady());
 }
 
-#define USB_DELAY_DELTA_MS 50
+#define USB_DELAY_DELTA_MS 10
 static void usbDelayMs(double pDelay){
 	uint8_t vDelay = (uint8_t)((uint16_t)pDelay / USB_DELAY_DELTA_MS);
 	for (uint16_t t = 0; t < vDelay; t++){
@@ -56,6 +68,11 @@ static void usbDelayMs(double pDelay){
 		//Keep USB connection alive
 		usbPurgeEvents();
 	}
+	
+	//delay\ms needs a constant so this doesn't work
+	//_delay_ms(vDelay % USB_DELAY_DELTA_MS);
+	////Keep USB connection alive
+	//usbPurgeEvents();
 }
 	
 //Sends a null terminated string as a keyboard
@@ -78,14 +95,52 @@ static void sendString (char* pStr){
 				
 }
 	
+	
+uint8_t readWirelessDebounced() {
+	//read x times, return 1 if read ONES *only*
+	
+	uint8_t vValue = 1;
+	
+	for (uint8_t i = 0; i < WIRE_DEBOUNCE_COUNT; i++){
+		vValue &= (PINC & 0x01);
+		usbDelayMs(WIRE_DEBOUNCE_MS);
+	}
+	
+	return vValue;
+}
+	
+	
+//uint8_t readWirelessDebouncedStrict() {
+	////read x times, return 1 if read ONES *only*, 0 if only zeroes, 2 otherwise
+		//
+	//uint8_t vValue = 0;
+	//uint8_t vGotZeroes = 0;
+		//
+	//for (uint8_t i = 0; i < WIRE_DEBOUNCE_COUNT; i++){
+		//uint8_t v = (PINC & 0x01);
+		//
+		//vValue |= v;
+		//vGotZeroes |= (0xfe & ~v) todo fixer ca demain;
+				//
+		//usbDelayMs(WIRE_DEBOUNCE_MS);
+	//}
+		//
+	//return vValue;
+//}
+	//
+
+
+
 
 /************************************************************************/
 /* Main method                                                          */
 /************************************************************************/
 int main(void)
 {
-    wdt_enable(WDTO_1S);  // watchdog status is preserved on reset
-
+	
+/*	
+	wdt_enable(WDTO_1S);  // watchdog status is preserved on reset
+	
 	//1: Init USB
     usbHardwareInit();
     
@@ -102,21 +157,88 @@ int main(void)
     sei();
 
 	//2: Now USB is up, init the Serial
-//	serialHardwareInit();
-	
+	serialHardwareInit();
+*/	
 	//3: Leds
 	DDRB = 0xff; //PortB all output
-
-	uint8_t v = 0;			
-    for(;;){                
+	
+	//4: ADC init on ADC0 -> PC0
+	//InitADC(0x00);
+	
+	//Port C in
+	DDRC = 0x00;
+		
+	//Init the finite state machine
+	fsmInit(&fsm1, FSM_PATTERN, FSM_PATTERN_LEN);
+		
+	uint8_t vWireless = 0;
+	for(;;){    
+		//pulse red
+		PORTB = 0x04;
+		            
 		//Keep USB connection alive
 		usbPurgeEvents();
+
+		//vWireless = ReadADCx8();
+			//
+		//if (vWireless > 200) {
+			//PORTB = 0x01;
+		//}
+		//else {
+			//PORTB = 0x00;
+		//}
 		
-		PORTB = 1 << (v % 4);	
-		usbDelayMs(300);
 		
-		v++;
-    }	
+		
+		//if ((PINC & 0x01) != 0x00) {
+			//PORTB = 0x01;
+		//} 
+		//else {
+			//PORTB = 0x00;
+		//}
+		
+		
+		
+		//if (readWirelessDebounced() == 0x01) {
+			//PORTB = 0x01;
+		//}
+		//else {
+			//PORTB = 0x00;
+		//}
+		
+		uint8_t vRead = 1;
+
+		vRead = vRead * (PINC & 0x01);
+		_delay_ms(1);
+		vRead = vRead * (PINC & 0x01);
+		_delay_ms(1);
+		vRead = vRead * (PINC & 0x01);
+		_delay_ms(1);
+
+		fsmTransit(&fsm1, vRead);
+		
+		////read pin
+		//if ((PINC & 0x01) != 0x00) {
+			//fsmTransit(&fsm1, 1);
+		//}
+		//else {
+			//fsmTransit(&fsm1, 0);			
+		//}
+
+		if (fsmIsCompleted(&fsm1) == 1){
+			
+			PORTB = 0x01;
+			usbDelayMs(200);
+			PORTB = 0x00;
+			fsmReset(&fsm1);
+			
+			usbDelayMs(1000);
+		}
+
+
+		usbDelayMs(10);
+		PORTB = 0x00;
+	}	
 	
 	return 0;
 }
