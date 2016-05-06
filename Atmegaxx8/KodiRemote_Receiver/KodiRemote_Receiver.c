@@ -137,7 +137,9 @@ uint8_t readWirelessDebounced() {
 /************************************************************************/
 int main(void)
 {
-	
+	This project failed, it does not work due to the transmission (cheap 433MHz ebay modules).
+	The code itself should be good and do the job, but there's too much noise on the line.
+	So I just keep for memory here.
 /*	
 	wdt_enable(WDTO_1S);  // watchdog status is preserved on reset
 	
