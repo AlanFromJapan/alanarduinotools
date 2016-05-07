@@ -12,6 +12,8 @@ Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "Clapclap1386", "Clapclap138
 EndProject
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "Serial13", "Serial13\Serial13.cproj", "{C1D9C97D-0CAA-48B7-9085-7C99A16FA1C7}"
 EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "Kodi_Remote13", "Kodi_Remote13\Kodi_Remote13.cproj", "{F7B1F9A7-4987-48DE-B712-6AD67486E3CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -42,6 +44,10 @@ Global
 		{C1D9C97D-0CAA-48B7-9085-7C99A16FA1C7}.Debug|AVR.Build.0 = Debug|AVR
 		{C1D9C97D-0CAA-48B7-9085-7C99A16FA1C7}.Release|AVR.ActiveCfg = Release|AVR
 		{C1D9C97D-0CAA-48B7-9085-7C99A16FA1C7}.Release|AVR.Build.0 = Release|AVR
+		{F7B1F9A7-4987-48DE-B712-6AD67486E3CE}.Debug|AVR.ActiveCfg = Debug|AVR
+		{F7B1F9A7-4987-48DE-B712-6AD67486E3CE}.Debug|AVR.Build.0 = Debug|AVR
+		{F7B1F9A7-4987-48DE-B712-6AD67486E3CE}.Release|AVR.ActiveCfg = Release|AVR
+		{F7B1F9A7-4987-48DE-B712-6AD67486E3CE}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
