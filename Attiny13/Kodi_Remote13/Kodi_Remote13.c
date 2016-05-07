@@ -23,8 +23,11 @@ int main(void)
 		
     while(1)
     {
-		serialSendHex(doADC());
-		serialSendChar('\n');
-		_delay_ms(1500);
+		uint8_t v = doADC();
+		if (v == 0xc4){
+			serialSendString("clicked()\n");
+			_delay_ms(1500);
+		}		
+		_delay_ms(50);
     }
 }

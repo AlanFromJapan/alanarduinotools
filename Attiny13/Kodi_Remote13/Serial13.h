@@ -32,4 +32,6 @@ void serialSendChar (uint8_t c);
 
 void serialSendHex(uint8_t v);
 
+void serialSendString(char* pStr);
+
 #endif /* SERIAL13_H_ */

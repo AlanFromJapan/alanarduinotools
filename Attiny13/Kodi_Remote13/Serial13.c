@@ -74,3 +74,11 @@ void serialSendHex(uint8_t v){
 	__sendHex(v >> 4);
 	__sendHex(v & 0x0f);
 }
+
+
+void serialSendString(char* pStr){
+	while (*pStr != 0){
+		serialSendChar(*pStr);
+		pStr += 1;
+	}
+}
