@@ -11,9 +11,9 @@
 
 #include <avr/io.h>
 
-//One bit is 104 uS -> You have to tweak this value to match your crystal OR get a precise crystal.
-//In my case, I use the infamous internal crystal of my ATtiny 13 which is 9.6% off !!
-#define SER_BIT_US		114
+//If you use internal oscillator at 4.8 MHz, the accuracy is nominal at 3.3V (see doc)
+//One bit is 104 uS at 3.3V -> you have to tweak the value if you develop at 5v (at 5v => 114 is good)
+#define SER_BIT_US		104
 
 #define SER_PORT		PORTB
 #define SER_DIRECT		DDRB
