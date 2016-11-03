@@ -12,17 +12,34 @@
 //CPU is 1MHz
 #define F_CPU 1000000
 
+#define BATTERY_COUNT	4
+#define LED1_PINB		6
+#define RELAY1_PINA		4
+
 #include <avr/io.h>
 #include <util/delay.h>
 
 int main(void)
 {
-	DDRA = 0xff;
+	//B is all out
+	DDRB = 0xff;
+	//A is in for A0-1, out for the rest
+	DDRA = 0xfc;
 	
-	PORTA = 0xff;
+	PORTB = 0x00;
+	PORTA = 0x00;
+	
+	uint8_t vBattery = 0;
     while(1)
     {
-		_delay_ms(500);
-		PORTA = ~PORTA;
+		PORTB = 1 << (LED1_PINB - vBattery);
+		PORTA = 1 << (RELAY1_PINA + vBattery);
+		
+		_delay_ms(1000);
+		
+		vBattery++;
+		if (vBattery >= BATTERY_COUNT){
+			vBattery = 0;
+		}		
     }
 }
