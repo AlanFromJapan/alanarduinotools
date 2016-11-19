@@ -85,34 +85,42 @@ void setLEDRelay (uint8_t pRelayId, uint8_t pFlagOnOff){
 /************************************************************************/
 /* Read Li-Ion charger module and update current status and display leds*/
 /************************************************************************/
-void updateChargerStatusLed(){
+uint8_t updateChargerStatusLed(double pDurationMs){
 	//Read status on A0 & A1 and show on debug pins
 	//I put a pullup (external, and now I just remember I could have use the internal one ... anyway)
 	
 	//README! 
 	//inverted logic: if pulled low means transistor of optocoupler is ON means LED on the LiIon charger is ON
 
-	//store in local variable to avoid risk or ready incoherent data 
-	uint8_t vPina = PINA;
 	//default
 	mCurrentStatus = STATUS_CHARGED;
-	
-	if ((vPina & 0x01) == 0){
-		PORTB |= LED_DEBUG1;
-	}
-	else{
-		PORTB &= ~LED_DEBUG1;
-	}
 
-	if ((vPina & 0x02) == 0){
-		PORTB |= LED_DEBUG2;
-		mCurrentStatus = STATUS_CHARGING;
-	}
-	else{
-		PORTB &= ~LED_DEBUG2;
-	}	
-		
+	double vTime = 0;
+	while(vTime < pDurationMs) {
+		//store in local variable to avoid risk or ready incoherent data 
+		uint8_t vPina = PINA;
 	
+		if ((vPina & 0x01) == 0){
+			PORTB |= LED_DEBUG1;
+		}
+		else{
+			PORTB &= ~LED_DEBUG1;
+		}
+
+		if ((vPina & 0x02) == 0){
+			PORTB |= LED_DEBUG2;
+			mCurrentStatus = STATUS_CHARGING;
+		}
+		else{
+			PORTB &= ~LED_DEBUG2;
+		}	
+		
+		
+		vTime += 50;
+		_delay_ms(50);
+	}		
+	
+	return mCurrentStatus;
 }	
 	
 /************************************************************************/
@@ -170,15 +178,10 @@ int main(void)
 	setRelayOn(vCurrentRelay);
 	setLEDRelay(vCurrentRelay, LED_ON);
 	
-	_delay_ms(100);
-	updateChargerStatusLed();
-	
 	//give some time to the li-ion charger to read the status and update itself
-	_delay_ms(2000);
+	updateChargerStatusLed(2000);
 
 	while (1){		
-		updateChargerStatusLed();
-		
 		//if not charging, assume we're charged or unconnected
 		if (mCurrentStatus != STATUS_CHARGING) {
 			//go next
@@ -190,16 +193,17 @@ int main(void)
 				setLEDRelay(0, LED_OFF);
 				doFinishedAnimation();
 			}
-			else {
+			else {				
 				//not finished, turn next relay ON
+				
+				setRelayOn(0);
+				updateChargerStatusLed(500);
+				
 				setRelayOn(vCurrentRelay);
 				setLEDRelay(vCurrentRelay, LED_ON);
-
-				//give some time to the li-ion charger to read the status and update itself
-				_delay_ms(2000);
 			}				
 		}
 		
-		_delay_ms(200);
+		updateChargerStatusLed(2000);
 	}		
 }
