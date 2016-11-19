@@ -20,8 +20,16 @@
 #define LED_ON			2
 #define LED_OFF			0
 
+//The current status: "Charging" is when something is plugged and being charged, "Charged" is when unplugged or current plugged one is full
+#define STATUS_CHARGING	1
+#define STATUS_CHARGED	0
+
 #include <avr/io.h>
 #include <util/delay.h>
+
+
+uint8_t mCurrentStatus = STATUS_CHARGED;
+
 
 /************************************************************************/
 /* Turns on ONE relay at a time (only one active possible).             */
@@ -57,6 +65,9 @@ void setLEDRelay (uint8_t pRelayId, uint8_t pFlagOnOff){
 	if (pRelayId> 4 || pRelayId == 0)
 		return;	
 
+	//ALL leds OFF [Pins B6-B3]
+	PORTB &= 0b10000111;
+	
 	//Led pin [PB6= Relay1, PB3= Relay4]
 	pRelayId = 7 - pRelayId;
 	
@@ -69,7 +80,40 @@ void setLEDRelay (uint8_t pRelayId, uint8_t pFlagOnOff){
 		PORTB |= (1 << pRelayId);
 	}
 }
+
+
+/************************************************************************/
+/* Read Li-Ion charger module and update current status and display leds*/
+/************************************************************************/
+void updateChargerStatusLed(){
+	//Read status on A0 & A1 and show on debug pins
+	//I put a pullup (external, and now I just remember I could have use the internal one ... anyway)
 	
+	//README! 
+	//inverted logic: if pulled low means transistor of optocoupler is ON means LED on the LiIon charger is ON
+
+	//store in local variable to avoid risk or ready incoherent data 
+	uint8_t vPina = PINA;
+	//default
+	mCurrentStatus = STATUS_CHARGED;
+	
+	if ((vPina & 0x01) == 0){
+		PORTB |= LED_DEBUG1;
+	}
+	else{
+		PORTB &= ~LED_DEBUG1;
+	}
+
+	if ((vPina & 0x02) == 0){
+		PORTB |= LED_DEBUG2;
+		mCurrentStatus = STATUS_CHARGING;
+	}
+	else{
+		PORTB &= ~LED_DEBUG2;
+	}	
+		
+	
+}	
 	
 /************************************************************************/
 /* Init function. Call me first.                                        */
@@ -86,34 +130,76 @@ void init(){
 }
 
 
+void doFinishedAnimation(){
+
+	//ALL leds OFF [Pins B6-B3]
+	PORTB &= 0b10000111;
+
+	while(1) {
+		for (uint8_t vLed = 2; vLed <= BATTERY_COUNT; vLed++){
+			setLEDRelay(vLed, LED_ON);
+			_delay_ms(100);
+		}
+		for (uint8_t vLed = BATTERY_COUNT-1; vLed > 0; vLed--){
+			setLEDRelay(vLed, LED_ON);
+			_delay_ms(100);
+		}	
+	}	
+}
+
+/*
+void test_allRelaysCycle() {
+	
+	for (uint8_t i = 1; i <=BATTERY_COUNT; i++){
+		setRelayOn(i);
+		setLEDRelay(i, LED_ON);
+	
+		_delay_ms(1500);	
+	}
+}
+*/
+
 int main(void)
 {
 	init();	
 
-	//force turn on the #1 after 10 sec
-	_delay_ms(3000);
-	setRelayOn(1);
-	setLEDRelay(1, LED_ON);
+	//test_allRelaysCycle();
 
-	//Read status on A0 & A1 and show on debug pins
-	//I put a pullup (external, and now I just remember I could have use the internal one ... anyway)
-	while (1){
-		
-		//inverted logic: if pulled low means transistor of optocoupler is ON means LED on the LiIon charger is ON
-		if ((PINA & 0x01) == 0){
-			PORTB |= LED_DEBUG1;
-		}
-		else{
-			PORTB &= ~LED_DEBUG1;			
-		}
+	uint8_t vCurrentRelay = 1;		
 
-		if ((PINA & 0x02) == 0){
-			PORTB |= LED_DEBUG2;
-		}
-		else{
-			PORTB &= ~LED_DEBUG2;
+	setRelayOn(vCurrentRelay);
+	setLEDRelay(vCurrentRelay, LED_ON);
+	
+	_delay_ms(100);
+	updateChargerStatusLed();
+	
+	//give some time to the li-ion charger to read the status and update itself
+	_delay_ms(2000);
+
+	while (1){		
+		updateChargerStatusLed();
+		
+		//if not charging, assume we're charged or unconnected
+		if (mCurrentStatus != STATUS_CHARGING) {
+			//go next
+			vCurrentRelay++;
+			
+			if (vCurrentRelay > BATTERY_COUNT){
+				//finished, turn all OFF and do some "finished" animation
+				setRelayOn(0);
+				setLEDRelay(0, LED_OFF);
+				doFinishedAnimation();
+			}
+			else {
+				//not finished, turn next relay ON
+				setRelayOn(vCurrentRelay);
+				setLEDRelay(vCurrentRelay, LED_ON);
+
+				//give some time to the li-ion charger to read the status and update itself
+				_delay_ms(2000);
+			}				
 		}
 		
-		_delay_ms(50);
+		_delay_ms(200);
 	}		
 }
