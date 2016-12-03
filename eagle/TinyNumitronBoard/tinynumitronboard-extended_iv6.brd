@@ -14,7 +14,7 @@
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
 <layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
@@ -171,6 +171,19 @@
 <text x="70.1675" y="0.635" size="1.27" layer="52" font="vector" rot="MR0">Alan numitron clock - IV6 (v1.0 - Dec 2016)</text>
 <text x="0.635" y="28.575" size="1.4224" layer="52" font="vector" rot="MR180">[IN]</text>
 <text x="93.6625" y="28.575" size="1.4224" layer="52" font="vector" rot="MR180">[OUT]</text>
+<wire x1="12.461875" y1="25.479375" x2="14.525625" y2="27.46375" width="0.1524" layer="51"/>
+<wire x1="32.464375" y1="25.24125" x2="34.210625" y2="27.46375" width="0.1524" layer="51"/>
+<wire x1="62.5475" y1="25.320625" x2="64.373125" y2="27.46375" width="0.1524" layer="51"/>
+<wire x1="82.55" y1="25.161875" x2="84.375625" y2="27.46375" width="0.1524" layer="51"/>
+<wire x1="52.22875" y1="29.68625" x2="52.22875" y2="28.178125" width="0.1524" layer="51"/>
+<wire x1="52.22875" y1="21.74875" x2="52.22875" y2="20.240625" width="0.1524" layer="51"/>
+<wire x1="50.8" y1="8.89" x2="50.8" y2="2.54" width="0.1524" layer="52"/>
+<wire x1="50.8" y1="2.54" x2="49.53" y2="3.81" width="0.1524" layer="52"/>
+<wire x1="49.53" y1="3.81" x2="52.07" y2="3.81" width="0.1524" layer="52"/>
+<wire x1="52.07" y1="3.81" x2="50.8" y2="2.54" width="0.1524" layer="52"/>
+<text x="49.8475" y="4.445" size="1.27" layer="52" font="vector" rot="MR0">Front</text>
+<text x="53.6575" y="43.815" size="1.016" layer="52" font="vector" rot="MR0">C1
+1uF</text>
 </plain>
 <libraries>
 <library name="kalshagar">
@@ -8891,4 +8904,10 @@ design rules under a new name.</description>
 </signals>
 </board>
 </drawing>
+<compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
+</compatibility>
 </eagle>
