@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.3">
+<eagle version="7.2.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -16856,12 +16856,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="UC2" gate="G$1" pin="PC1(ADC1)"/>
 <pinref part="PORTC" gate="G$1" pin="2"/>
 <wire x1="60.96" y1="38.1" x2="78.74" y2="38.1" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$7" class="0">
-<segment>
-<pinref part="UC2" gate="G$1" pin="PC2(ADC2)"/>
-<wire x1="60.96" y1="35.56" x2="81.28" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$8" class="0">
