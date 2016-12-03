@@ -133,9 +133,9 @@ int main(void)
 	//2: buttons
 	//button input
 	//PC1 in
-	DDRC &= ~0x01;
+	DDRC &= ~((1 << PORTC1) | (1 << PORTC3));
 	//Pull up on PC1
-	PORTC = (1 << PORTC1);
+	PORTC = (1 << PORTC1) | (1 << PORTC3);
 	//just make sure pullups are NOT disabled
 	MCUCR |= (0 << PUD);
 	
@@ -149,7 +149,7 @@ int main(void)
 	
 		//Other stuffs to do in main loop
 		//check for button press
-		if ((~PINC & (1 << PINC1)) != 0){
+		if ((~PINC & (1 << PINC3)) != 0){
 		
 			for (uint8_t* p = str; (*p) != 0; p++){
 
