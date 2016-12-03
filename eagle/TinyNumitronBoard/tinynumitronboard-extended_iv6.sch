@@ -9846,10 +9846,10 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="C2" library="SparkFun-Passives" deviceset="CAP_POL" device="D"/>
 <part name="LED_COLON_LO" library="SparkFun-LED" deviceset="LED" device="1206"/>
 <part name="R_COLON_LO" library="resistor" deviceset="R-EU_" device="M1206" value="470"/>
-<part name="JP_DOT_TUBE2" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NO" device="ROUND"/>
+<part name="JP_DOT_TUBE2" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NO" device="YES_SILK" value="JUMPER-PAD-2-NOYES_SILK"/>
 <part name="LED_COLON_HI" library="SparkFun-LED" deviceset="LED" device="1206"/>
 <part name="R_COLON_HI" library="resistor" deviceset="R-EU_" device="M1206" value="470"/>
-<part name="JP_DOT_TUBE3" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NO" device="ROUND"/>
+<part name="JP_DOT_TUBE3" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NO" device="YES_SILK" value="JUMPER-PAD-2-NOYES_SILK"/>
 <part name="TP1" library="testpad" deviceset="TP" device="B2,54" value="TPB2,54"/>
 </parts>
 <sheets>
