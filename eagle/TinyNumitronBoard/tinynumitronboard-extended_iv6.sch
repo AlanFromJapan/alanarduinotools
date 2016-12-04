@@ -9851,6 +9851,9 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="R_COLON_HI" library="resistor" deviceset="R-EU_" device="M1206" value="470"/>
 <part name="JP_DOT_TUBE3" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NO" device="YES_SILK" value="JUMPER-PAD-2-NOYES_SILK"/>
 <part name="TP1" library="testpad" deviceset="TP" device="B2,54" value="TPB2,54"/>
+<part name="TP2" library="testpad" deviceset="TP" device="B2,54" value="TPB2,54"/>
+<part name="TP3" library="testpad" deviceset="TP" device="B2,54" value="TPB2,54"/>
+<part name="TP4" library="testpad" deviceset="TP" device="B2,54" value="TPB2,54"/>
 </parts>
 <sheets>
 <sheet>
@@ -9910,6 +9913,9 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <instance part="R_COLON_HI" gate="G$1" x="50.8" y="-30.48"/>
 <instance part="JP_DOT_TUBE3" gate="G$1" x="43.18" y="-43.18"/>
 <instance part="TP1" gate="G$1" x="15.24" y="33.02" rot="R180"/>
+<instance part="TP2" gate="G$1" x="20.32" y="-17.78" rot="R180"/>
+<instance part="TP3" gate="G$1" x="20.32" y="-76.2" rot="R180"/>
+<instance part="TP4" gate="G$1" x="20.32" y="-139.7" rot="R180"/>
 </instances>
 <busses>
 </busses>
@@ -10858,6 +10864,21 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="DRIVER1" gate="G$1" pin="DIODE"/>
 <pinref part="TP1" gate="G$1" pin="TP"/>
 <wire x1="15.24" y1="40.64" x2="15.24" y2="35.56" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="DRIVER2" gate="G$1" pin="DIODE"/>
+<pinref part="TP2" gate="G$1" pin="TP"/>
+<wire x1="20.32" y1="-10.16" x2="20.32" y2="-15.24" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="DRIVER3" gate="G$1" pin="DIODE"/>
+<pinref part="TP3" gate="G$1" pin="TP"/>
+<wire x1="20.32" y1="-68.58" x2="20.32" y2="-73.66" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="DRIVER4" gate="G$1" pin="DIODE"/>
+<pinref part="TP4" gate="G$1" pin="TP"/>
+<wire x1="20.32" y1="-134.62" x2="20.32" y2="-137.16" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
