@@ -9854,6 +9854,8 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="TP2" library="testpad" deviceset="TP" device="B2,54" value="TPB2,54"/>
 <part name="TP3" library="testpad" deviceset="TP" device="B2,54" value="TPB2,54"/>
 <part name="TP4" library="testpad" deviceset="TP" device="B2,54" value="TPB2,54"/>
+<part name="JP_DOT_TUBE1" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NO" device="YES_SILK" value="JUMPER-PAD-2-NOYES_SILK"/>
+<part name="JP_DOT_TUBE4" library="SparkFun-Passives" deviceset="JUMPER-PAD-2-NO" device="YES_SILK" value="JUMPER-PAD-2-NOYES_SILK"/>
 </parts>
 <sheets>
 <sheet>
@@ -9916,6 +9918,8 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <instance part="TP2" gate="G$1" x="20.32" y="-17.78" rot="R180"/>
 <instance part="TP3" gate="G$1" x="20.32" y="-76.2" rot="R180"/>
 <instance part="TP4" gate="G$1" x="20.32" y="-139.7" rot="R180"/>
+<instance part="JP_DOT_TUBE1" gate="G$1" x="38.1" y="66.04"/>
+<instance part="JP_DOT_TUBE4" gate="G$1" x="43.18" y="-109.22"/>
 </instances>
 <busses>
 </busses>
@@ -10192,8 +10196,8 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="DRIVER1" gate="G$1" pin="OUT8"/>
 <wire x1="15.24" y1="43.18" x2="30.48" y2="43.18" width="0.1524" layer="91"/>
 <wire x1="30.48" y1="43.18" x2="30.48" y2="66.04" width="0.1524" layer="91"/>
-<pinref part="TUBE1" gate="G$1" pin="DOT"/>
-<wire x1="30.48" y1="66.04" x2="50.8" y2="66.04" width="0.1524" layer="91"/>
+<pinref part="JP_DOT_TUBE1" gate="G$1" pin="1"/>
+<wire x1="30.48" y1="66.04" x2="33.02" y2="66.04" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$1" class="0">
@@ -10689,8 +10693,8 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="DRIVER4" gate="G$1" pin="OUT8"/>
 <wire x1="20.32" y1="-132.08" x2="35.56" y2="-132.08" width="0.1524" layer="91"/>
 <wire x1="35.56" y1="-132.08" x2="35.56" y2="-109.22" width="0.1524" layer="91"/>
-<pinref part="TUBE4" gate="G$1" pin="DOT"/>
-<wire x1="35.56" y1="-109.22" x2="55.88" y2="-109.22" width="0.1524" layer="91"/>
+<pinref part="JP_DOT_TUBE4" gate="G$1" pin="1"/>
+<wire x1="35.56" y1="-109.22" x2="38.1" y2="-109.22" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$32" class="0">
@@ -10879,6 +10883,20 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="DRIVER4" gate="G$1" pin="DIODE"/>
 <pinref part="TP4" gate="G$1" pin="TP"/>
 <wire x1="20.32" y1="-134.62" x2="20.32" y2="-137.16" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$79" class="0">
+<segment>
+<pinref part="JP_DOT_TUBE1" gate="G$1" pin="2"/>
+<pinref part="TUBE1" gate="G$1" pin="DOT"/>
+<wire x1="43.18" y1="66.04" x2="50.8" y2="66.04" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$80" class="0">
+<segment>
+<pinref part="JP_DOT_TUBE4" gate="G$1" pin="2"/>
+<pinref part="TUBE4" gate="G$1" pin="DOT"/>
+<wire x1="48.26" y1="-109.22" x2="55.88" y2="-109.22" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

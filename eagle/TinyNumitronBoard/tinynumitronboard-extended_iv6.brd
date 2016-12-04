@@ -215,6 +215,8 @@ Diode</text>
 <text x="96.2025" y="34.925" size="1.27" layer="52" font="vector" rot="MR0">-Fil</text>
 <text x="44.688125" y="16.66875" size="1.016" layer="52" font="vector" rot="MR0">Dot2</text>
 <text x="57.388125" y="16.66875" size="1.016" layer="52" font="vector" rot="MR0">Dot3</text>
+<text x="77.708125" y="14.12875" size="1.016" layer="52" font="vector" rot="MR0">Dot4</text>
+<text x="25.638125" y="26.82875" size="1.016" layer="52" font="vector" rot="MR0">Dot1</text>
 </plain>
 <libraries>
 <library name="kalshagar">
@@ -7511,8 +7513,8 @@ design rules under a new name.</description>
 <element name="LED_COLON_HI" library="SparkFun-LED" package="LED-1206" value="" x="50" y="29"/>
 <element name="R_COLON_HI" library="resistor" package="M1206" value="470" x="49.53" y="33.02" rot="MR0"/>
 <element name="JP_DOT_TUBE3" library="SparkFun-Passives" package="PAD-JUMPER-2-NO_YES_SILK" value="JUMPER-PAD-2-NOYES_SILK" x="55.88" y="19.05" rot="MR90"/>
-<element name="TP1" library="testpad" package="B2,54" value="TPB2,54" x="25.4" y="30.48" rot="MR0">
-<attribute name="TP_SIGNAL_NAME" value="" x="25.4" y="30.48" size="1.016" layer="28" rot="MR0" display="off"/>
+<element name="TP1" library="testpad" package="B2,54" value="TPB2,54" x="25.4" y="38.1" rot="MR0">
+<attribute name="TP_SIGNAL_NAME" value="" x="25.4" y="38.1" size="1.016" layer="28" rot="MR0" display="off"/>
 </element>
 <element name="TP2" library="testpad" package="B2,54" value="TPB2,54" x="24.13" y="13.97" rot="MR0">
 <attribute name="TP_SIGNAL_NAME" value="" x="24.13" y="13.97" size="1.016" layer="28" rot="MR0" display="off"/>
@@ -7520,9 +7522,11 @@ design rules under a new name.</description>
 <element name="TP3" library="testpad" package="B2,54" value="TPB2,54" x="76.2" y="35.56" rot="MR0">
 <attribute name="TP_SIGNAL_NAME" value="" x="76.2" y="35.56" size="1.016" layer="28" rot="MR0" display="off"/>
 </element>
-<element name="TP4" library="testpad" package="B2,54" value="TPB2,54" x="75.40625" y="14.684375" rot="MR0">
-<attribute name="TP_SIGNAL_NAME" value="" x="75.40625" y="14.684375" size="1.016" layer="28" rot="MR0" display="off"/>
+<element name="TP4" library="testpad" package="B2,54" value="TPB2,54" x="75.08875" y="11.668125" rot="MR0">
+<attribute name="TP_SIGNAL_NAME" value="" x="75.08875" y="11.668125" size="1.016" layer="28" rot="MR0" display="off"/>
 </element>
+<element name="JP_DOT_TUBE1" library="SparkFun-Passives" package="PAD-JUMPER-2-NO_YES_SILK" value="JUMPER-PAD-2-NOYES_SILK" x="24.13" y="29.21" rot="MR270"/>
+<element name="JP_DOT_TUBE4" library="SparkFun-Passives" package="PAD-JUMPER-2-NO_YES_SILK" value="JUMPER-PAD-2-NOYES_SILK" x="76.2" y="16.51" rot="MR90"/>
 </elements>
 <signals>
 <signal name="GND">
@@ -7777,16 +7781,18 @@ design rules under a new name.</description>
 </signal>
 <signal name="N$59">
 <contactref element="DRIVER1" pad="11"/>
-<contactref element="TUBE1" pad="DOT"/>
-<wire x1="20.52" y1="32.25" x2="19.288125" y2="32.623125" width="0.1524" layer="16"/>
 <wire x1="19.288125" y1="32.623125" x2="19.25" y2="34.25" width="0.1524" layer="16"/>
-<wire x1="20.52" y1="30.5" x2="20.52" y2="32.25" width="0.1524" layer="1"/>
-<wire x1="22.305625" y1="27.920625" x2="20.52" y2="30.5" width="0.1524" layer="1"/>
-<wire x1="22.305625" y1="23.670625" x2="22.305625" y2="27.920625" width="0.1524" layer="1"/>
+<wire x1="22.1075" y1="26.84875" x2="22.1075" y2="28.678125" width="0.1524" layer="1"/>
+<wire x1="22.305625" y1="26.650625" x2="22.1075" y2="26.84875" width="0.1524" layer="1"/>
+<wire x1="22.305625" y1="23.670625" x2="22.305625" y2="26.650625" width="0.1524" layer="1"/>
 <wire x1="20.25" y1="22.25" x2="22.305625" y2="23.670625" width="0.1524" layer="1"/>
 <wire x1="19.25" y1="34.25" x2="19.05" y2="34.4678" width="0.1524" layer="16"/>
-<wire x1="20.25" y1="22.25" x2="20.08" y2="22.1425" width="0.1524" layer="1"/>
-<via x="20.52" y="32.25" extent="1-16" drill="0.3048"/>
+<via x="22.1075" y="28.678125" extent="1-16" drill="0.3048"/>
+<contactref element="JP_DOT_TUBE1" pad="1"/>
+<wire x1="19.288125" y1="32.623125" x2="24.050625" y2="30.7975" width="0.1524" layer="16"/>
+<wire x1="24.050625" y1="30.7975" x2="24.13" y2="29.68625" width="0.1524" layer="16"/>
+<wire x1="24.13" y1="29.68625" x2="24.13" y2="29.66" width="0" layer="19" extent="16-16"/>
+<wire x1="22.1075" y1="28.678125" x2="24.13" y2="29.66" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="N$1">
 <contactref element="DRIVER1" pad="1"/>
@@ -8619,16 +8625,16 @@ design rules under a new name.</description>
 </signal>
 <signal name="N$31">
 <contactref element="DRIVER4" pad="11"/>
-<contactref element="TUBE4" pad="DOT"/>
-<wire x1="81.25" y1="15.5" x2="81.25" y2="14" width="0.1524" layer="16"/>
-<wire x1="81.13875" y1="13.9125" x2="81.25" y2="15.5" width="0.1524" layer="1"/>
+<wire x1="81.13875" y1="13.9125" x2="79.50375" y2="17.008125" width="0.1524" layer="1"/>
 <wire x1="83.1825" y1="13.853125" x2="81.13875" y2="13.9125" width="0.1524" layer="1"/>
 <wire x1="87.6825" y1="13.853125" x2="83.1825" y2="13.853125" width="0.1524" layer="1"/>
 <wire x1="90" y1="16.25" x2="87.6825" y2="13.853125" width="0.1524" layer="1"/>
 <wire x1="90" y1="22" x2="90" y2="16.25" width="0.1524" layer="1"/>
 <wire x1="81.25" y1="14" x2="81.28" y2="13.7922" width="0.1524" layer="16"/>
-<wire x1="90" y1="22" x2="90.08" y2="22.1425" width="0.1524" layer="1"/>
-<via x="81.25" y="15.5" extent="1-16" drill="0.3048"/>
+<via x="79.50375" y="17.008125" extent="1-16" drill="0.3048"/>
+<contactref element="JP_DOT_TUBE4" pad="1"/>
+<wire x1="81.25" y1="14" x2="81.13875" y2="13.9125" width="0" layer="19" extent="1-16"/>
+<wire x1="76.2" y1="16.06" x2="79.50375" y2="17.008125" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="N$32">
 <contactref element="DRIVER4" pad="1"/>
@@ -8930,9 +8936,9 @@ design rules under a new name.</description>
 <contactref element="DRIVER1" pad="10"/>
 <contactref element="TP1" pad="TP"/>
 <wire x1="20.21" y1="34.5" x2="20.5" y2="34.5" width="0.1524" layer="16"/>
-<wire x1="23.59" y1="31.53" x2="20.21" y2="34.5" width="0.1524" layer="16"/>
+<wire x1="23.59" y1="35.34" x2="20.21" y2="34.5" width="0.1524" layer="16"/>
 <wire x1="20.5" y1="34.5" x2="20.32" y2="34.4678" width="0.1524" layer="16"/>
-<wire x1="23.574375" y1="31.511875" x2="25.4" y2="30.48" width="0.1524" layer="16"/>
+<wire x1="23.574375" y1="35.321875" x2="25.4" y2="38.1" width="0.1524" layer="16"/>
 <contactref element="DRIVER2" pad="10"/>
 <contactref element="TP2" pad="TP"/>
 <contactref element="DRIVER3" pad="10"/>
@@ -8941,13 +8947,13 @@ design rules under a new name.</description>
 <contactref element="TP4" pad="TP"/>
 <wire x1="29.21" y1="13.81125" x2="24.13" y2="13.97" width="0.1524" layer="16"/>
 <wire x1="69.85" y1="34.44875" x2="76.2" y2="35.56" width="0.1524" layer="16"/>
-<wire x1="80.01" y1="13.81125" x2="75.40625" y2="14.684375" width="0.1524" layer="16"/>
+<wire x1="80.01" y1="13.81125" x2="75.08875" y2="11.668125" width="0.1524" layer="16"/>
 <wire x1="69.85" y1="34.44875" x2="69.85" y2="34.4678" width="0" layer="19" extent="16-16"/>
-<wire x1="75.40625" y1="14.684375" x2="69.85" y2="34.44875" width="0" layer="19" extent="16-16"/>
+<wire x1="80.01" y1="13.81125" x2="76.2" y2="35.56" width="0" layer="19" extent="16-16"/>
 <wire x1="80.01" y1="13.7922" x2="80.01" y2="13.81125" width="0" layer="19" extent="16-16"/>
-<wire x1="25.4" y1="30.48" x2="69.85" y2="34.4678" width="0" layer="19" extent="16-16"/>
-<wire x1="23.59" y1="31.53" x2="23.574375" y2="31.511875" width="0" layer="19" extent="16-16"/>
-<wire x1="24.13" y1="13.97" x2="25.4" y2="30.48" width="0" layer="19" extent="16-16"/>
+<wire x1="25.4" y1="38.1" x2="69.85" y2="34.4678" width="0" layer="19" extent="16-16"/>
+<wire x1="23.59" y1="35.34" x2="23.574375" y2="35.321875" width="0" layer="19" extent="16-16"/>
+<wire x1="24.13" y1="13.97" x2="20.32" y2="34.4678" width="0" layer="19" extent="16-16"/>
 <wire x1="29.21" y1="13.7922" x2="29.21" y2="13.81125" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="N$78">
@@ -8959,6 +8965,26 @@ design rules under a new name.</description>
 <wire x1="20.240625" y1="20.0025" x2="18.494375" y2="19.923125" width="0.1524" layer="1"/>
 <via x="23.65375" y="26.51125" extent="1-16" drill="0.3048"/>
 <wire x1="16.98625" y1="28.495625" x2="16.748125" y2="29.289375" width="0.1524" layer="1"/>
+</signal>
+<signal name="N$79">
+<contactref element="JP_DOT_TUBE1" pad="2"/>
+<contactref element="TUBE1" pad="DOT"/>
+<wire x1="20.08" y1="22.1425" x2="24.13" y2="28.76" width="0" layer="19" extent="16-16"/>
+</signal>
+<signal name="N$80">
+<contactref element="JP_DOT_TUBE4" pad="2"/>
+<contactref element="TUBE4" pad="DOT"/>
+<wire x1="76.2" y1="16.96" x2="90.08" y2="22.1425" width="0" layer="19" extent="16-16"/>
+</signal>
+<signal name="N$81">
+<wire x1="24.13" y1="28.73375" x2="22.06625" y2="28.654375" width="0.1524" layer="16"/>
+</signal>
+<signal name="N$82">
+<wire x1="81.28" y1="13.97" x2="81.28" y2="15.954375" width="0.1524" layer="16"/>
+<wire x1="81.28" y1="15.954375" x2="76.2" y2="16.03375" width="0.1524" layer="16"/>
+</signal>
+<signal name="N$83">
+<wire x1="76.2" y1="16.98625" x2="79.53375" y2="16.98625" width="0.1524" layer="16"/>
 </signal>
 </signals>
 </board>
