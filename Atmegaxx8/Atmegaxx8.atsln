@@ -22,6 +22,8 @@ Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "UsbKeyboardSample", "UsbKey
 EndProject
 Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "KodiRemote_Receiver", "KodiRemote_Receiver\KodiRemote_Receiver.cproj", "{8DA562BE-11F0-4BC1-B3F2-63005752D7CF}"
 EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "UsbVolumeControl", "UsbVolumeControl\UsbVolumeControl.cproj", "{8956E1BD-AA41-4224-B024-90442F27EA7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -72,6 +74,10 @@ Global
 		{8DA562BE-11F0-4BC1-B3F2-63005752D7CF}.Debug|AVR.Build.0 = Debug|AVR
 		{8DA562BE-11F0-4BC1-B3F2-63005752D7CF}.Release|AVR.ActiveCfg = Release|AVR
 		{8DA562BE-11F0-4BC1-B3F2-63005752D7CF}.Release|AVR.Build.0 = Release|AVR
+		{8956E1BD-AA41-4224-B024-90442F27EA7D}.Debug|AVR.ActiveCfg = Debug|AVR
+		{8956E1BD-AA41-4224-B024-90442F27EA7D}.Debug|AVR.Build.0 = Debug|AVR
+		{8956E1BD-AA41-4224-B024-90442F27EA7D}.Release|AVR.ActiveCfg = Release|AVR
+		{8956E1BD-AA41-4224-B024-90442F27EA7D}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
