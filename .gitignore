@@ -239,3 +239,4 @@ pip-log.txt
 *.pro
 
 eagle/TinyNumitronBoard/tinynumitronboard-extended_iv6.TXT
+*.atsuo
