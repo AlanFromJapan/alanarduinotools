@@ -16894,13 +16894,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="60.96" y1="22.86" x2="78.74" y2="22.86" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$16" class="0">
-<segment>
-<pinref part="UC2" gate="G$1" pin="PD5(T1)"/>
-<pinref part="PORTD" gate="G$1" pin="6"/>
-<wire x1="60.96" y1="5.08" x2="86.36" y2="5.08" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="D7" class="0">
 <segment>
 <pinref part="UC2" gate="G$1" pin="PD7(AIN1)"/>
@@ -16944,6 +16937,11 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <segment>
 <pinref part="UC1" gate="G$1" pin="(T1)PD5"/>
 <wire x1="48.26" y1="68.58" x2="50.8" y2="68.58" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="UC2" gate="G$1" pin="PD5(T1)"/>
+<pinref part="PORTD" gate="G$1" pin="6"/>
+<wire x1="60.96" y1="5.08" x2="86.36" y2="5.08" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="D3" class="0">
