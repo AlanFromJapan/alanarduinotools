@@ -97,8 +97,18 @@ usbHardwareInit();
 		DDRC &= ~((1 << PORTC1) | (1 << PORTC3));
 		//Pull up on PC1
 		PORTC = (1 << PORTC1) | (1 << PORTC3);
+		
+		//PD6-7 in
+		DDRD &= ~(0xc0);
+		//Pull up on PD6-7
+		PORTD |= 0xc0;
+		
 		//just make sure pullups are NOT disabled
 		MCUCR |= (0 << PUD);
+
+//LEDS
+DDRB |= (1 << DDRB2) | (1 << DDRB3);
+
 	
 	for(;;){                
       usbPoll();          
@@ -106,8 +116,7 @@ usbHardwareInit();
 	  
       ///////////////////////////////////////////////
       
-	  //down
-      KeyPressed = 0xea;
+
 	  
 	  /*
 	  encstate = ENC_GetStateEncoder();
@@ -127,7 +136,32 @@ usbHardwareInit();
 	  }	
         
 		*/
-	  if((~PINC & (1 << PINC3)) != 0){
+	  
+	  //mask of pins 6 & 7
+	  uint8_t MASK = 0xC0;
+	   
+/*	  if((~PINC & (1 << PINC3)) != 0){*/
+	
+	  if((PIND & MASK) != MASK){
+		 if ((PIND & MASK) == 0) {
+			//ignore, already low
+			PORTB = (1 << PORTB2) | (1 << PORTB3);
+			continue;
+		 }
+		 else {
+			 if ((PIND & 0x80) == 0x80) {
+				 //down
+				 KeyPressed = 0xea;
+				 PORTB = (1 << PORTB2) ;
+			 }
+			 else {
+				 //up
+				 KeyPressed = 0xe9;
+				 PORTB = (1 << PORTB3) ;	 
+			 }			 
+		 }
+		 
+		  
 		 DBG1(0x01, reportBuffer, 3);
 		 if (usbInterruptIsReady()){
 			LastKeyPress = KeyPressed;
@@ -136,6 +170,16 @@ usbHardwareInit();
 			/* use last key and not current key status in order to avoid lost
              changes in key status. */
 			usbSetInterrupt(reportBuffer, sizeof(reportBuffer));
+			
+			_delay_ms(10);
+			//and send STOP
+			KeyPressed = 0x00;
+			reportBuffer[1] = KeyPressed;
+			DBG1(0x01, reportBuffer, 3);
+			/* use last key and not current key status in order to avoid lost
+             changes in key status. */
+			usbSetInterrupt(reportBuffer, sizeof(reportBuffer));
+			
 		 }	
 		/* This block sets the the number of additional keypress a volume key. 
 		This increases the rate of change of volume of from 2 to 50 times
@@ -148,8 +192,13 @@ usbHardwareInit();
 			}
 		}//End of block		
 		
-		usbDelayMs(330);
+		usbDelayMs(20);
       }
+	  else {
+		KeyPressed = 0x00;
+		PORTB = 0x00;
+	  }
+
 	}
     return 0;
 	
