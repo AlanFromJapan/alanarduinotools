@@ -16424,6 +16424,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="JP3" library="SparkFun-Connectors" deviceset="M16" device="1X16_NO_SILK"/>
 <part name="JP4" library="SparkFun-Connectors" deviceset="M16" device="1X16_NO_SILK"/>
 <part name="C5" library="resistor" deviceset="C-EU" device="025-024X044" value="1uF"/>
+<part name="C6" library="resistor" deviceset="C-EU" device="C1206K"/>
+<part name="C7" library="resistor" deviceset="C-EU" device="C1206K"/>
 </parts>
 <sheets>
 <sheet>
@@ -16471,6 +16473,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <instance part="JP3" gate="G$1" x="220.98" y="15.24"/>
 <instance part="JP4" gate="G$1" x="231.14" y="15.24"/>
 <instance part="C5" gate="G$1" x="119.38" y="38.1"/>
+<instance part="C6" gate="G$1" x="-20.32" y="101.6" rot="R90"/>
+<instance part="C7" gate="G$1" x="-20.32" y="71.12" rot="R90"/>
 </instances>
 <busses>
 </busses>
@@ -16622,6 +16626,10 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="GND1" gate="G$1" pin="GND"/>
 <wire x1="-22.86" y1="81.28" x2="-30.48" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="-30.48" y1="81.28" x2="-30.48" y2="78.74" width="0.1524" layer="91"/>
+<pinref part="C6" gate="G$1" pin="1"/>
+<wire x1="-22.86" y1="86.36" x2="-22.86" y2="101.6" width="0.1524" layer="91"/>
+<pinref part="C7" gate="G$1" pin="1"/>
+<wire x1="-22.86" y1="71.12" x2="-22.86" y2="81.28" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="UC1" gate="G$1" pin="GND"/>
@@ -16711,6 +16719,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="PORTB328" gate="G$1" pin="8"/>
 <wire x1="2.54" y1="-22.86" x2="78.74" y2="-22.86" width="0.1524" layer="91"/>
 <junction x="2.54" y="10.16"/>
+<pinref part="C6" gate="G$1" pin="2"/>
+<wire x1="-15.24" y1="101.6" x2="-15.24" y2="86.36" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="B6" class="0">
@@ -16730,6 +16740,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="PORTB328" gate="G$1" pin="7"/>
 <wire x1="5.08" y1="-20.32" x2="78.74" y2="-20.32" width="0.1524" layer="91"/>
 <junction x="5.08" y="15.24"/>
+<pinref part="C7" gate="G$1" pin="2"/>
+<wire x1="-15.24" y1="81.28" x2="-15.24" y2="71.12" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="RESET" class="0">
