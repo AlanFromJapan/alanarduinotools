@@ -1,9 +1,13 @@
 /*
- * UsbVolumeControl.c
- *
- * Created: 2016/12/04 16:29:25
- *  Author: Alan
- */ 
+* UsbVolumeControl.c
+*
+* Created: 2016/12/04 16:29:25
+*  Author: Alan
+* http://electrogeek.cc/usb%20volume%20control.html
+* 
+* Based on the works of Vitalij found at http://obruboff.ru/english-pages/usb-volume-control/
+*
+*/
 
 
 
@@ -22,22 +26,29 @@
 #include "vusb-config.h"
 
 
+#define VOL_UP		0xe9
+#define VOL_DOWN	0xea
+#define ROTENC_MASK	0xc0
 
-static void usbHardwareInit(void)
-{
+#define LED_RED		0x02
+#define LED_GREEN	0x08
+#define LED_BLUE	0x20
+
+
+static void usbHardwareInit(void) {
 	uint8_t	i, j;
 
 	PORTD = 0xfa;   /* 1111 1010 bin: activate pull-ups except on USB lines */
 	DDRD = 0x07;    /* 0000 0111 bin: all pins input except USB (-> USB reset) */
 	j = 0;
 	while(--j){     /* USB Reset by device only required on Watchdog Reset */
-	i = 0;
-	while(--i); /* delay >10ms for USB reset */
-}
-DDRD = 0x02;    /* 0000 0010 bin: remove USB reset condition */
-/* configure timer 0 for a rate of 12M/(1024 * 256) = 45.78 Hz (~22ms) */
-//AVI: what is this used for?
-TCCR0 = 5;      /* timer 0 prescaler: 1024 */
+		i = 0;
+		while(--i); /* delay >10ms for USB reset */
+	}
+	DDRD = 0x02;    /* 0000 0010 bin: remove USB reset condition */
+	/* configure timer 0 for a rate of 12M/(1024 * 256) = 45.78 Hz (~22ms) */
+	//AVI: what is this used for?
+	TCCR0 = 5;      /* timer 0 prescaler: 1024 */
 }
 
 
@@ -60,146 +71,104 @@ static void usbDelayMs(double pDelay){
 	}
 }
 
-int main(void)
-{
 
+/************************************************************************/
+/* MAIN                                                                 */
+/************************************************************************/
+int main(void) {
 
-   uchar encstate;
-    uchar Btnstate = 0;
-    uchar LastBtnstate = 0;
-	uchar LastKeyPress = 0;
 	uchar KeyPressed = 0;
-// 	odDebugInit();
-//	ENC_InitEncoder();
 
 
-//1: Init USB
-usbHardwareInit();
+	//1: Init USB
+	usbHardwareInit();
+	
+	usbInit();
+	usbDeviceDisconnect();
 
-    usbInit();
-    usbDeviceDisconnect();  
-    uchar i = 0;
-    while(--i){             
-        _delay_ms(1);
+	// fake USB disconnect for > 250 ms
+	for( uint8_t i=255; i>0; i-- ) {
+		wdt_reset();
+		_delay_ms(1);
+	}
+	usbDeviceConnect();
 
-    }
-    
-    usbDeviceConnect();     
-
-    sei();                  
+	sei();
+	            
 	reportBuffer[0] = 1;  // ReportID = 1
 	reportBuffer[2] = 0;  
-    DBG1(0x00, 0, 0);
 	
-		//2: buttons
-		//button input
-		//PC1 in
-		DDRC &= ~((1 << PORTC1) | (1 << PORTC3));
-		//Pull up on PC1
-		PORTC = (1 << PORTC1) | (1 << PORTC3);
+
+	//2: rotary encoder setup (pullups)		
+	//PD6-7 input
+	DDRD &= ~(ROTENC_MASK);
+	//Pull up on PD6-7
+	PORTD |= ROTENC_MASK;
 		
-		//PD6-7 in
-		DDRD &= ~(0xc0);
-		//Pull up on PD6-7
-		PORTD |= 0xc0;
+	//just make sure pullups are NOT disabled
+	MCUCR |= (0 << PUD);
+
+	
+	//3: LEDS
+	DDRD |= LED_BLUE | LED_GREEN | LED_RED;
+	//all leds off
+	PORTD &= ~(LED_BLUE | LED_GREEN | LED_RED);	
+
+	
+	for(;;){
+		usbPoll();
+	
+	
+		if((PIND & ROTENC_MASK) != ROTENC_MASK){
+			if ((PIND & ROTENC_MASK) == 0) {
+				//ignore, already low
+			
+				//all leds off
+				PORTD &= ~(LED_BLUE | LED_GREEN | LED_RED);
+			
+				continue;
+			}
+			else {
+				if ((PIND & 0x80) == 0x80) {
+					//UP!
+					KeyPressed = VOL_UP;
+				
+					PORTD |= (LED_RED);
+
+				}
+				else {
+					//down
+					KeyPressed = VOL_DOWN;
+
+					PORTD |= (LED_BLUE);
+				}
+			}
 		
-		//just make sure pullups are NOT disabled
-		MCUCR |= (0 << PUD);
-
-//LEDS
-DDRB |= (1 << DDRB2) | (1 << DDRB3);
-
-	
-	for(;;){                
-      usbPoll();          
-//      ENC_PollEncoder();
-	  
-      ///////////////////////////////////////////////
-      
-
-	  
-	  /*
-	  encstate = ENC_GetStateEncoder();
-      if (LEFT_SPIN == encstate)
-      {
-         KeyPressed = 0xea;
-      }
-      else if (RIGHT_SPIN == encstate)
-      {
-         KeyPressed = 0xe9;
-      }
-	  Btnstate = ENC_GetBtnState();
-	  if (Btnstate != LastBtnstate)
-	  {
-	    if (Btnstate != 1) KeyPressed = 0xe2;				
-		LastBtnstate = Btnstate;
-	  }	
-        
-		*/
-	  
-	  //mask of pins 6 & 7
-	  uint8_t MASK = 0xC0;
-	   
-/*	  if((~PINC & (1 << PINC3)) != 0){*/
-	
-	  if((PIND & MASK) != MASK){
-		 if ((PIND & MASK) == 0) {
-			//ignore, already low
-			PORTB = (1 << PORTB2) | (1 << PORTB3);
-			continue;
-		 }
-		 else {
-			 if ((PIND & 0x80) == 0x80) {
-				 //down
-				 KeyPressed = 0xea;
-				 PORTB = (1 << PORTB2) ;
-			 }
-			 else {
-				 //up
-				 KeyPressed = 0xe9;
-				 PORTB = (1 << PORTB3) ;	 
-			 }			 
-		 }
-		 
-		  
-		 DBG1(0x01, reportBuffer, 3);
-		 if (usbInterruptIsReady()){
-			LastKeyPress = KeyPressed;
-			reportBuffer[1] = KeyPressed;
-			DBG1(0x01, reportBuffer, 3);
-			/* use last key and not current key status in order to avoid lost
-             changes in key status. */
-			usbSetInterrupt(reportBuffer, sizeof(reportBuffer));
+		
+			if (usbInterruptIsReady()){
+				reportBuffer[1] = KeyPressed;
+				usbSetInterrupt(reportBuffer, sizeof(reportBuffer));
 			
-			_delay_ms(10);
-			//and send STOP
-			KeyPressed = 0x00;
-			reportBuffer[1] = KeyPressed;
-			DBG1(0x01, reportBuffer, 3);
-			/* use last key and not current key status in order to avoid lost
-             changes in key status. */
-			usbSetInterrupt(reportBuffer, sizeof(reportBuffer));
+				_delay_ms(10);
 			
-		 }	
-		/* This block sets the the number of additional keypress a volume key. 
-		This increases the rate of change of volume of from 2 to 50 times
-		The number of additional keypress sets by the variable AdditionalKeyPress. 	*/
-		uchar AdditionalKeyPress = 0;
-		while(AdditionalKeyPress--){ 
-			if ((KeyPressed == 0xea)||(KeyPressed == 0xe9)){
-				while (!(usbInterruptIsReady())){}
+			
+				//and send STOP!!
+				KeyPressed = 0x00;
+				reportBuffer[1] = KeyPressed;
 				usbSetInterrupt(reportBuffer, sizeof(reportBuffer));
 			}
-		}//End of block		
 		
-		usbDelayMs(20);
-      }
-	  else {
-		KeyPressed = 0x00;
-		PORTB = 0x00;
-	  }
+			//wait a little to debounce on the cheap
+			usbDelayMs(20);
+		}
+		else {
+			//other cases: ignore
+			KeyPressed = 0x00;
+			//all leds off
+			PORTD &= ~(LED_BLUE | LED_GREEN | LED_RED);
+		}
 
 	}
-    return 0;
 	
+	return 0;	
 }
