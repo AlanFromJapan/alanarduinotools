@@ -71,6 +71,9 @@ static void usbDelayMs(double pDelay){
 	}
 }
 
+static inline void ledsOff(){
+	PORTD &= ~(LED_BLUE | LED_GREEN | LED_RED);		
+}
 
 /************************************************************************/
 /* MAIN                                                                 */
@@ -78,7 +81,6 @@ static void usbDelayMs(double pDelay){
 int main(void) {
 
 	uchar KeyPressed = 0;
-
 
 	//1: Init USB
 	usbHardwareInit();
@@ -112,7 +114,7 @@ int main(void) {
 	//3: LEDS
 	DDRD |= LED_BLUE | LED_GREEN | LED_RED;
 	//all leds off
-	PORTD &= ~(LED_BLUE | LED_GREEN | LED_RED);	
+	ledsOff();
 
 	
 	for(;;){
@@ -121,10 +123,10 @@ int main(void) {
 	
 		if((PIND & ROTENC_MASK) != ROTENC_MASK){
 			if ((PIND & ROTENC_MASK) == 0) {
-				//ignore, already low
+				//ignore, already low on both lines A & B
 			
 				//all leds off
-				PORTD &= ~(LED_BLUE | LED_GREEN | LED_RED);
+				ledsOff();
 			
 				continue;
 			}
@@ -144,7 +146,7 @@ int main(void) {
 				}
 			}
 		
-		
+			//send the USB message
 			if (usbInterruptIsReady()){
 				reportBuffer[1] = KeyPressed;
 				usbSetInterrupt(reportBuffer, sizeof(reportBuffer));
@@ -165,7 +167,7 @@ int main(void) {
 			//other cases: ignore
 			KeyPressed = 0x00;
 			//all leds off
-			PORTD &= ~(LED_BLUE | LED_GREEN | LED_RED);
+			ledsOff();
 		}
 
 	}
