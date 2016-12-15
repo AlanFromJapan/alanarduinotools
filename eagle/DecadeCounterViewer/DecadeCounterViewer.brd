@@ -163,6 +163,7 @@
 <text x="32.54375" y="19.20875" size="1.016" layer="26" rot="MR0">GND</text>
 <wire x1="29.68625" y1="13.335" x2="31.27375" y2="13.335" width="0.254" layer="26"/>
 <wire x1="31.27375" y1="13.335" x2="32.0675" y2="13.0175" width="0.254" layer="26"/>
+<text x="16.51" y="25.55875" size="0.8128" layer="26" font="vector" rot="MR0">v1.0 - 20161215</text>
 </plain>
 <libraries>
 <library name="SparkFun-LED">
