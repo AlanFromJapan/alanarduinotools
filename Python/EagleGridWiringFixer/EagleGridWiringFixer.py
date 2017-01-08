@@ -6,6 +6,7 @@ Takes an Eagle .brd file (XML so Eagle v6+) and fix those close-but-not-matching
 
 import sys
 import xml.etree.ElementTree as ET
+import math
 
 #constants
 verbose = False
@@ -47,7 +48,15 @@ def wireMatch(vWire, vAirWire):
 
 ###############################################################################################3
 ##
-#Is the Pad airwire matched by one of the extremities of the unpadded wire?
+# Returns the distance btw 2 points
+def distance(w1, w2, w1suffix, w2suffix):
+    return math.sqrt( \
+                      (float(w1.get('x' + w1suffix)) - float(w2.get('x' + w2suffix))) ** 2 \
+                      + (float(w1.get('y' + w1suffix)) - float(w2.get('y' + w2suffix))) ** 2 )
+
+###############################################################################################3
+##
+# Find the best candidate segment within the wire to match the position and update
 def forceMatchWires(vWire, vAirWire):
     vAirWireEnd = vAirWire.find('./wire[@layer="19"]')
 
@@ -56,39 +65,46 @@ def forceMatchWires(vWire, vAirWire):
         #print("wireMatch try to match x1=%f y1=%f and x2=%f y2=%f" % ( float(vAirWireEnd.get('x1')),  float(vAirWireEnd.get('y1')),  float(vAirWireEnd.get('x2')),  float(vAirWireEnd.get('y2'))))
     
     #Eagle is not very picky, so ANY end of ANY wire might match the pads 
-    vMatchStart = False
-    vMatchEnd = False
-    
+    vMatchStart = None
+    vDistStart = 10000000.0
+    vMatchStart12 = 0
+
+    vMatchEnd = None
+    vDistEnd = 10000000.0
+    vMatchEnd12 = 0
+
     for w in vWire.findall("wire"):
-        if not vMatchStart:
-            if abs(float(w.get('x2')) - float(vAirWireEnd.get('x1'))) < 2 * delta and \
-               abs(float(w.get('y2')) - float(vAirWireEnd.get('y1'))) < 2 * delta :
-                vMatchStart = True
-                w.set('x2', vAirWireEnd.get('x1'))
-                w.set('y2', vAirWireEnd.get('y1'))
+        d = distance(w, vAirWireEnd, '1', '1')
+        if vMatchStart is None or d < vDistStart:
+            vMatchStart = w
+            vMatchStart12 = 1
+            vDistStart = d
 
-        if not vMatchStart:
-            if abs(float(w.get('x1')) - float(vAirWireEnd.get('x1'))) < 2 * delta and \
-               abs(float(w.get('y1')) - float(vAirWireEnd.get('y1'))) < 2 * delta:
-                vMatchStart = True
-                w.set('x1', vAirWireEnd.get('x1'))
-                w.set('y1', vAirWireEnd.get('y1'))
-            
-        if not vMatchEnd:
-            if abs(float(w.get('x2')) - float(vAirWireEnd.get('x2'))) < 2 * delta and \
-               abs(float(w.get('y2')) - float(vAirWireEnd.get('y2'))) < 2 * delta :
-                vMatchEnd = True
-                w.set('x2', vAirWireEnd.get('x2'))
-                w.set('y2', vAirWireEnd.get('y2'))
+        d = distance(w, vAirWireEnd, '2', '1')
+        if vMatchStart is None or d < vDistStart:
+            vMatchStart = w
+            vMatchStart12 = 2
+            vDistStart = d
 
-        if not vMatchEnd:
-            if abs(float(w.get('x1')) - float(vAirWireEnd.get('x2'))) < 2 * delta and \
-               abs(float(w.get('y1')) - float(vAirWireEnd.get('y2'))) < 2 * delta:
-                vMatchEnd = True
-                w.set('x1', vAirWireEnd.get('x2'))
-                w.set('y1', vAirWireEnd.get('y2'))
+        d = distance(w, vAirWireEnd, '1', '2')
+        if vMatchEnd is None or d < vDistEnd:
+            vMatchEnd = w
+            vMatchEnd12 = 1
+            vDistEnd = d
+
+        d = distance(w, vAirWireEnd, '2', '2')
+        if vMatchEnd is None or d < vDistEnd:
+            vMatchEnd = w
+            vMatchEnd12 = 2
+            vDistEnd = d
 
 
+    #now the closest points are in vMatchStart and vMatchEnd
+    vMatchStart.set('x' + str(vMatchStart12), vAirWireEnd.get('x1'))
+    vMatchStart.set('y' + str(vMatchStart12), vAirWireEnd.get('y1'))
+    
+    vMatchEnd.set('x' + str(vMatchEnd12), vAirWireEnd.get('x2'))
+    vMatchEnd.set('y' + str(vMatchEnd12), vAirWireEnd.get('y2'))
 
 
 ########################################################################################
