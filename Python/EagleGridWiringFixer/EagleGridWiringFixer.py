@@ -12,9 +12,12 @@ import math
 verbose = False
 delta = 0.5
 
+#global variables
 totalwire=0
 totalmatched=0
 
+###############################################################################################3
+##
 #Is the Pad airwire matched by one of the extremities of the unpadded wire?
 def wireMatch(vWire, vAirWire):
     vAirWireEnd = vAirWire.find('wire')
@@ -29,17 +32,13 @@ def wireMatch(vWire, vAirWire):
     
     for w in vWire.findall('wire'):
         vMatchStart = vMatchStart or \
-            (abs(float(w.get('x2')) - float(vAirWireEnd.get('x1'))) < 2 * delta and \
-            abs(float(w.get('y2')) - float(vAirWireEnd.get('y1'))) < 2 * delta or \
-            abs(float(w.get('x1')) - float(vAirWireEnd.get('x1'))) < 2 * delta and \
-            abs(float(w.get('y1')) - float(vAirWireEnd.get('y1'))) < 2 * delta)
-            
-        vMatchEnd = vMatchEnd or \
-            (abs(float(w.get('x2')) - float(vAirWireEnd.get('x2'))) < 2 * delta and \
-            abs(float(w.get('y2')) - float(vAirWireEnd.get('y2'))) < 2 * delta or \
-            abs(float(w.get('x1')) - float(vAirWireEnd.get('x2'))) < 2 * delta and \
-            abs(float(w.get('y1')) - float(vAirWireEnd.get('y2'))) < 2 * delta)
+                distance(w,vAirWireEnd, '1', '1') < delta  or \
+                distance(w,vAirWireEnd, '2', '1') < delta 
 
+        vMatchEnd = vMatchEnd or \
+                distance(w,vAirWireEnd, '1', '2') < delta  or \
+                distance(w,vAirWireEnd, '2', '2') < delta 
+                
     if verbose:
         print("wireMatch Start=%s End=%s" % (vMatchStart, vMatchEnd))
             
