@@ -1,0 +1,1 @@
+d:\python27\python.exe .\EagleGridWiringFixer.py .\tinynumitronboard-extended_iv6.input.brd
