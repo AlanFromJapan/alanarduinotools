@@ -200,7 +200,7 @@ Takes an Eagle .brd file (XML so Eagle v6+) and fix those close-but-not-matching
                 #can match once only
                 continue
 
-    eOutTree.write("output.brd")            
+    eOutTree.write(vInputFile)            
 
     print ("""SUMMARY:
 Total umatched wires: %s
