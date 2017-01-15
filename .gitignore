@@ -242,3 +242,4 @@ eagle/TinyNumitronBoard/tinynumitronboard-extended_iv6.TXT
 *.atsuo
 eagle/DecadeCounterViewer/DecadeCounterViewer.TXT
 Python/EagleGridWiringFixer/*.brd
+ESP8266/sonoff_basic/PrivateConstants.h
