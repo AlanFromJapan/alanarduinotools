@@ -23,9 +23,17 @@ String webPage = "";
 
 int gpio13Led = 13;
 int gpio12Relay = 12;
+volatile byte mStatus = 0;
+
+void generatePage(){
+  webPage = "<h1>SONOFF Web Server 2</h1><div style=\"height:80px;width:80px;background-color:";
+  webPage += (mStatus == 0? "red": "green") ;
+  webPage += ";\"/><p><a href=\"on\"><button>ON</button></a>&nbsp;<a href=\"off\"><button>OFF</button></a></p>"; 
+}
 
 void setup(void){
-  webPage += "<h1>SONOFF Web Server</h1><p><a href=\"on\"><button>ON</button></a>&nbsp;<a href=\"off\"><button>OFF</button></a></p>";  
+ generatePage(); 
+  
   // preparing GPIOs
   pinMode(gpio13Led, OUTPUT);
   digitalWrite(gpio13Led, HIGH);
@@ -73,18 +81,25 @@ uint8_t dummy = 0;
   }
   
   server.on("/", [](){
+    generatePage();
     server.send(200, "text/html", webPage);
   });
   server.on("/on", [](){
-    server.send(200, "text/html", webPage);
     digitalWrite(gpio13Led, LOW);
     digitalWrite(gpio12Relay, HIGH);
+    mStatus = 1;
+    generatePage();
+
+    server.send(200, "text/html", webPage);
     delay(1000);
   });
   server.on("/off", [](){
-    server.send(200, "text/html", webPage);
     digitalWrite(gpio13Led, HIGH);
     digitalWrite(gpio12Relay, LOW);
+    mStatus = 0;
+    generatePage();
+
+    server.send(200, "text/html", webPage);
     delay(1000); 
   });
   server.begin();
