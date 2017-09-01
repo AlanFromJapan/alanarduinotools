@@ -8,6 +8,7 @@ Desktop="Desktop"
 [Globals]
 AutoSaveProject=1
 UsedLibrary="/home/alan/.eagle/lbr/diode.lbr"
+UsedLibrary="/home/alan/.eagle/lbr/holes.lbr"
 UsedLibrary="/home/alan/.eagle/lbr/pot.lbr"
 UsedLibrary="/home/alan/.eagle/lbr/resistor.lbr"
 UsedLibrary="/home/alan/.eagle/lbr/transistor-power.lbr"
@@ -45,7 +46,7 @@ UsedLibrary="/home/alan/Git/SparkFun-Eagle-Libraries/User-Submitted.lbr"
 
 [Win_1]
 Type="Control Panel"
-Loc="422 0 1365 715"
+Loc="370 -8 1313 707"
 State=2
 Number=0
 
