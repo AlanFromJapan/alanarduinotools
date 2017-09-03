@@ -146,23 +146,25 @@
 <wire x1="0" y1="34.76" x2="0" y2="0" width="0" layer="20"/>
 <hole x="21.59" y="30.48" drill="3.2"/>
 <hole x="30.48" y="5.08" drill="3.2"/>
-<text x="16.51" y="26.67" size="1.778" layer="51">PWM555</text>
+<text x="13.335" y="24.765" size="2.54" layer="51" font="vector">PWM555</text>
 <wire x1="33.02" y1="11.43" x2="31.75" y2="13.97" width="1.27" layer="52"/>
 <wire x1="31.75" y1="13.97" x2="27.94" y2="21.59" width="1.27" layer="52"/>
 <wire x1="27.94" y1="21.59" x2="27.94" y2="6.35" width="1.27" layer="52"/>
 <wire x1="27.94" y1="6.35" x2="22.86" y2="12.7" width="1.27" layer="52"/>
 <wire x1="31.75" y1="13.97" x2="29.21" y2="13.97" width="1.27" layer="52"/>
-<text x="29.21" y="1.27" size="1.27" layer="52" rot="MR0">http://electrogeek.cc/rapide555.html</text>
+<text x="48.26" y="1.27" size="1.016" layer="52" font="vector" rot="MR0">http://electrogeek.cc/rapide555.html</text>
 <rectangle x1="27.94" y1="22.86" x2="30.48" y2="33.02" layer="51"/>
 <wire x1="45.72" y1="22.86" x2="48.26" y2="22.86" width="0.254" layer="51"/>
 <wire x1="48.26" y1="22.86" x2="48.26" y2="33.02" width="0.254" layer="51"/>
 <wire x1="48.26" y1="33.02" x2="45.72" y2="33.02" width="0.254" layer="51"/>
 <wire x1="45.72" y1="33.02" x2="45.72" y2="22.86" width="0.254" layer="51"/>
-<text x="45.72" y="21.59" size="1.016" layer="51">VCC</text>
-<text x="27.94" y="21.59" size="1.016" layer="51">GND</text>
-<text x="36.83" y="33.02" size="1.016" layer="51">PWM</text>
+<text x="45.72" y="21.59" size="1.016" layer="51" font="vector">VCC</text>
+<text x="27.94" y="21.59" size="1.016" layer="51" font="vector">GND</text>
+<text x="36.83" y="33.02" size="1.016" layer="51" font="vector">PWM</text>
 <wire x1="36.195" y1="33.655" x2="28.575" y2="33.655" width="0.254" layer="51" style="shortdash"/>
 <wire x1="40.005" y1="33.655" x2="47.625" y2="33.655" width="0.254" layer="51" style="shortdash"/>
+<text x="14.605" y="19.685" size="1.27" layer="51" font="vector">555</text>
+<text x="48.26" y="6.35" size="1.016" layer="52" font="vector" rot="MR0">v1.0 (Sept 2017)</text>
 </plain>
 <libraries>
 <library name="SparkFun-IC-Special-Function">
