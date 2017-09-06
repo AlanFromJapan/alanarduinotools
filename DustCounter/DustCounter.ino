@@ -1,4 +1,8 @@
 /*
+ * By Alan
+ * See the doc here http://electrogeek.cc/dust%20counter.html
+ * based on the below code (see below)
+ * 
  Standalone Sketch to use with a Arduino Fio and a
  Sharp Optical Dust Sensor GP2Y1010AU0F
  
@@ -16,9 +20,13 @@
  or send a letter to Creative Commons, 444 Castro Street, Suite 900,
  Mountain View, California, 94041, USA.
 */
- 
-int measurePin = 0;
-int ledPower = 12;
+
+
+//#define _VERBOSE_
+
+int measurePin = 5; //A5
+int ledPower = 8;
+int ledbarStartPin = 18; //PIN 27 = A4 and we'll go toward the low numbers
  
 int samplingTime = 280;
 int deltaTime = 40;
@@ -29,13 +37,27 @@ float calcVoltage = 0;
 float dustDensity = 0;
  
 void setup(){
+#ifdef _VERBOSE_
   Serial.begin(9600);
+#endif //_VERBOSE_
+
   pinMode(ledPower,OUTPUT);
 
   //for the ledbar
-  for (int i = 2; i< 12; i++){
-    pinMode (i, OUTPUT);
+  for (int i = 0; i< 10; i++){
+    pinMode (ledbarStartPin - i, OUTPUT);
   }
+
+  //for the show
+  for (int i = 0; i< 10; i++){
+    digitalWrite (ledbarStartPin - i, HIGH);
+    delay(50);
+  }
+  for (int i = 0; i< 10; i++){
+    digitalWrite (ledbarStartPin -10 + i, LOW);
+    delay(50);
+  }
+  
 }
 
 /* Takes the voltage (in V) read and return the dust density based on the graph provided in the Datasheet
@@ -74,7 +96,9 @@ void loop(){
   //dustDensity = 0.17 * calcVoltage - 0.1;
   //above is 1) wrong and 2) for 3.3v
   dustDensity = voltage2DustDensity (calcVoltage);
- 
+
+#ifdef _VERBOSE_
+
   Serial.print("Raw Signal Value (0-1023): ");
   Serial.print(voMeasured);
  
@@ -84,14 +108,24 @@ void loop(){
   Serial.print(" - Dust Density: ");
   Serial.println(dustDensity);
 
+#endif // _VERBOSE_
 
   float maxdust = 0.8;
   int vledmax = (int)(10.0 * dustDensity / maxdust);
+  /*
   for (int i = 2; i< 12; i++){
     if ((i-2) <= vledmax -1)
       digitalWrite(i,HIGH);
     else
       digitalWrite(i,LOW);
+  }
+  */
+  
+  for (int i = 0; i< 10; i++){
+    if (i < vledmax )
+      digitalWrite(ledbarStartPin - i,HIGH);
+    else
+      digitalWrite(ledbarStartPin - i,LOW);
   }
 
  
