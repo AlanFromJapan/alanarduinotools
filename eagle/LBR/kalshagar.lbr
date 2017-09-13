@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.3">
+<eagle version="7.7.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -1148,6 +1148,20 @@ Free to reuse and modify.&lt;/p&gt;</description>
 <rectangle x1="0.889" y1="3.556" x2="1.143" y2="3.683" layer="21"/>
 <rectangle x1="0.889" y1="3.683" x2="1.016" y2="3.81" layer="21"/>
 </package>
+<package name="SOT23">
+<wire x1="0" y1="0" x2="0" y2="1.6" width="0.127" layer="21"/>
+<wire x1="0" y1="1.6" x2="2.9" y2="1.6" width="0.127" layer="21"/>
+<wire x1="2.9" y1="1.6" x2="2.9" y2="0" width="0.127" layer="21"/>
+<wire x1="2.9" y1="0" x2="0" y2="0" width="0.127" layer="21"/>
+<circle x="-0.3175" y="-0.15875" radius="0.15875" width="0.127" layer="21"/>
+<smd name="P$1" x="0.47625" y="-0.47625" dx="1.27" dy="0.635" layer="1" rot="R90"/>
+<smd name="P$2" x="1.42875" y="-0.47625" dx="1.27" dy="0.635" layer="1" rot="R90"/>
+<smd name="P$3" x="2.38125" y="-0.47625" dx="1.27" dy="0.635" layer="1" rot="R90"/>
+<smd name="P$4" x="2.38125" y="2.06375" dx="1.27" dy="0.635" layer="1" rot="R90"/>
+<smd name="P$5" x="1.42875" y="2.06375" dx="1.27" dy="0.635" layer="1" rot="R90"/>
+<smd name="P$6" x="0.47625" y="2.06375" dx="1.27" dy="0.635" layer="1" rot="R90"/>
+<wire x1="-0.3175" y1="1.5875" x2="-0.3175" y2="0" width="0.127" layer="21"/>
+</package>
 </packages>
 <symbols>
 <symbol name="PCF8584">
@@ -1651,6 +1665,18 @@ Free to reuse and modify.&lt;/p&gt;</description>
 <text x="-2.54" y="-15.24" size="2.54" layer="95" rot="R270">EN29F002T</text>
 <text x="-15.24" y="28.702" size="1.27" layer="95">&gt;NAME</text>
 </symbol>
+<symbol name="ATTINY10">
+<wire x1="-5.08" y1="12.7" x2="15.24" y2="12.7" width="0.254" layer="94"/>
+<wire x1="15.24" y1="12.7" x2="15.24" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="15.24" y1="-2.54" x2="-5.08" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="-2.54" x2="-5.08" y2="12.7" width="0.254" layer="94"/>
+<pin name="VCC" x="-10.16" y="2.54" length="middle"/>
+<pin name="GND" x="-10.16" y="0" length="middle"/>
+<pin name="!RESET" x="-10.16" y="10.16" length="middle"/>
+<pin name="PB0" x="20.32" y="10.16" length="middle" rot="R180"/>
+<pin name="PB1" x="20.32" y="5.08" length="middle" rot="R180"/>
+<pin name="PB2" x="20.32" y="0" length="middle" rot="R180"/>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="DS3231">
@@ -2018,6 +2044,26 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 <connect gate="G$1" pin="D7" pad="21"/>
 <connect gate="G$1" pin="GND" pad="16"/>
 <connect gate="G$1" pin="VCC" pad="32"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="ATTINY10">
+<gates>
+<gate name="G$1" symbol="ATTINY10" x="-5.08" y="-5.08"/>
+</gates>
+<devices>
+<device name="" package="SOT23">
+<connects>
+<connect gate="G$1" pin="!RESET" pad="P$6"/>
+<connect gate="G$1" pin="GND" pad="P$2"/>
+<connect gate="G$1" pin="PB0" pad="P$1"/>
+<connect gate="G$1" pin="PB1" pad="P$3"/>
+<connect gate="G$1" pin="PB2" pad="P$4"/>
+<connect gate="G$1" pin="VCC" pad="P$5"/>
 </connects>
 <technologies>
 <technology name=""/>
