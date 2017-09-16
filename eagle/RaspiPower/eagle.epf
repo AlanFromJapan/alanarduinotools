@@ -1,40 +1,22 @@
 [Eagle]
 Version="07 07 00"
-Platform="Windows"
+Platform="Linux"
 Serial="62191E841E-LSR-WLM-1EL"
 Globals="Globals"
 Desktop="Desktop"
 
 [Globals]
 AutoSaveProject=1
-UsedLibrary="D:/Program Files/Eagle-7.7.0/lbr/atmel.lbr"
-UsedLibrary="D:/Program Files (x86)/EAGLE-6.3.0/lbr/resistor.lbr"
-UsedLibrary="D:/Git/SparkFun-Eagle-Libraries/SparkFun-Connectors.lbr"
-UsedLibrary="D:/Git/SparkFun-Eagle-Libraries/SparkFun-IC-Microcontroller.lbr"
-UsedLibrary="D:/Git/alanarduinotools/eagle/LBR/kalshagar.lbr"
-UsedLibrary="D:/Git/SparkFun-Eagle-Libraries/SparkFun-Aesthetics.lbr"
-UsedLibrary="D:/Git/SparkFun-Eagle-Libraries/SparkFun-Capacitors.lbr"
-UsedLibrary="D:/Git/SparkFun-Eagle-Libraries/SparkFun-DiscreteSemi.lbr"
-UsedLibrary="D:/Git/SparkFun-Eagle-Libraries/SparkFun-Fuses.lbr"
-UsedLibrary="D:/Git/SparkFun-Eagle-Libraries/SparkFun-Jumpers.lbr"
-UsedLibrary="D:/Git/SparkFun-Eagle-Libraries/SparkFun-LED.lbr"
-UsedLibrary="D:/Git/SparkFun-Eagle-Libraries/SparkFun-PowerSymbols.lbr"
-UsedLibrary="D:/Git/SparkFun-Eagle-Libraries/SparkFun-Resistors.lbr"
-UsedLibrary="D:/Git/SparkFun-Eagle-Libraries/SparkFun-Switches.lbr"
+UsedLibrary="/home/alan/Git/SparkFun-Eagle-Libraries/SparkFun-Connectors.lbr"
+UsedLibrary="/home/alan/Git/SparkFun-Eagle-Libraries/SparkFun-Jumpers.lbr"
 
 [Win_1]
-Type="Control Panel"
-Loc="960 0 1903 1001"
-State=2
-Number=0
-
-[Win_2]
 Type="Schematic Editor"
-Loc="960 0 1903 1001"
-State=2
+Loc="422 0 1365 715"
+State=1
 Number=1
 File="RaspiPower.sch"
-View="8.0557 68.2279 97.2301 125.554"
+View="46.5801 84.5298 153.589 153.321"
 WireWidths=" 0 0.3048 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0.4064 0.1524"
 PadDiameters=" 0.254 0.3048 0.4064 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0"
 PadDrills=" 0.5 0.6 0.7 0.9 1 1.1 1.2 1.3 1.4 1.5 1.6 2 2.2 2.8 3.2 0.8"
@@ -73,10 +55,16 @@ ArcDirection=0
 AddLevel=2
 PadsSameType=0
 Layer=91
-Views=" 1: 8.0557 68.2279 97.2301 125.554"
+Views=" 1: 46.5801 84.5298 153.589 153.321"
 Sheet="1"
 
+[Win_2]
+Type="Control Panel"
+Loc="370 0 1313 715"
+State=1
+Number=0
+
 [Desktop]
-Screen="3600 1080"
+Screen="1366 768"
 Window="Win_1"
 Window="Win_2"
