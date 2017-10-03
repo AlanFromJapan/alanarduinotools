@@ -170,7 +170,7 @@ void test3() {
 unsigned char mMatrix[64];
 
 int test4delais = 0;
-void test4( unsigned char buf[]) {  
+void renderMatrix( unsigned char buf[]) {  
 
   test4delais++;
   if (test4delais >= 100){
@@ -242,7 +242,45 @@ void resetBuf (unsigned char buf[]) {
 
 void toggleBit (unsigned char buf[], uint8_t x, uint8_t y) {
   uint8_t v = ((y * 32) +x) / 8;
-  buf[v] = buf[v] ^ (x % 8);
+  buf[v] = buf[v] ^ (0x80 >> (x % 8));
+}
+
+void setBit (unsigned char buf[], uint8_t x, uint8_t y) {
+  uint8_t v = ((y * 32) +x) / 8;
+  buf[v] = buf[v] | (0x80 >> (x % 8));
+}
+
+void offBit (unsigned char buf[], uint8_t x, uint8_t y) {
+  uint8_t v = ((y * 32) +x) / 8;
+  buf[v] = buf[v] & ~(0x80 >> (x % 8));
+}
+
+
+int8_t mX = random(32);int8_t mY = random(16);int8_t mDX = random(3) -1;int8_t mDY = random(3) -1;
+//int8_t mX = 0;int8_t mY = 0;int8_t mDX = 0;int8_t mDY = 0;
+uint8_t mMoveBallDelay = 0;
+
+void moveBall (unsigned char buf[]){
+  mMoveBallDelay++;
+  if (mMoveBallDelay < 10)
+    return;
+  mMoveBallDelay = 0;
+  
+
+  
+  //offBit (buf, mX, mY);
+  
+  mX += mDX;
+  mY += mDY;
+
+  if (mX == 0 || mX == 31)
+    mDX = -mDX;
+  if (mY == 0 || mY == 15)
+    mDY = -mDY;
+
+  //setBit(buf, mX, mY);
+
+toggleBit(buf, mX, mY);
 }
 /**********************************************************************************************************************************************************/
 
@@ -269,8 +307,11 @@ void setup() {
 }
 
 void loop() {
-  test4rnd(mMatrix);
-  test4(mMatrix);
+  //test4rnd(mMatrix); renderMatrix(mMatrix);
+
+  moveBall (mMatrix); renderMatrix(mMatrix);
+
+  //renderMatrix (mbed);
 
 
   
