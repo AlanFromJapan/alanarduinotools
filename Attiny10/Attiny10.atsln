@@ -15,6 +15,8 @@ Project("{18226A42-8477-4023-8AD2-40C49DA407C9}") = "seaphone_v1_attiny10", "sea
 EndProject
 Project("{18226A42-8477-4023-8AD2-40C49DA407C9}") = "ArithmeticFuncs_tiny10", "ArithmeticFuncs_tiny10\ArithmeticFuncs_tiny10.asmproj", "{E44ABE2E-B0B4-4A6C-8CF9-E4E2B92FB6F4}"
 EndProject
+Project("{18226A42-8477-4023-8AD2-40C49DA407C9}") = "RaspiPower_tiny10", "RaspiPower_tiny10\RaspiPower_tiny10.asmproj", "{0757F68A-48B5-4707-9A86-B04A064E6032}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -49,6 +51,10 @@ Global
 		{E44ABE2E-B0B4-4A6C-8CF9-E4E2B92FB6F4}.Debug|AVR.Build.0 = Debug|AVR
 		{E44ABE2E-B0B4-4A6C-8CF9-E4E2B92FB6F4}.Release|AVR.ActiveCfg = Release|AVR
 		{E44ABE2E-B0B4-4A6C-8CF9-E4E2B92FB6F4}.Release|AVR.Build.0 = Release|AVR
+		{0757F68A-48B5-4707-9A86-B04A064E6032}.Debug|AVR.ActiveCfg = Debug|AVR
+		{0757F68A-48B5-4707-9A86-B04A064E6032}.Debug|AVR.Build.0 = Debug|AVR
+		{0757F68A-48B5-4707-9A86-B04A064E6032}.Release|AVR.ActiveCfg = Release|AVR
+		{0757F68A-48B5-4707-9A86-B04A064E6032}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
