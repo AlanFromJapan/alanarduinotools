@@ -16863,14 +16863,15 @@ SparkFun BigTime Watch Kit&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;
 <label x="86.36" y="17.78" size="1.778" layer="95"/>
 <pinref part="K1" gate="1" pin="1"/>
 <pinref part="D1" gate="G$1" pin="C"/>
-<pinref part="K1" gate="2" pin="O"/>
-<wire x1="86.36" y1="0" x2="121.92" y2="0" width="0.1524" layer="91"/>
-<wire x1="121.92" y1="0" x2="121.92" y2="-7.62" width="0.1524" layer="91"/>
-<pinref part="U$2" gate="G$2" pin="O"/>
-<wire x1="121.92" y1="0" x2="137.16" y2="0" width="0.1524" layer="91"/>
-<wire x1="137.16" y1="0" x2="137.16" y2="-7.62" width="0.1524" layer="91"/>
+<wire x1="86.36" y1="0" x2="111.76" y2="0" width="0.1524" layer="91"/>
 <pinref part="U$2" gate="G$1" pin="+"/>
+<wire x1="111.76" y1="0" x2="127" y2="0" width="0.1524" layer="91"/>
 <wire x1="86.36" y1="-7.62" x2="99.06" y2="-7.62" width="0.1524" layer="91"/>
+<pinref part="K1" gate="2" pin="S"/>
+<wire x1="111.76" y1="-7.62" x2="111.76" y2="0" width="0.1524" layer="91"/>
+<junction x="111.76" y="0"/>
+<pinref part="U$2" gate="G$2" pin="S"/>
+<wire x1="127" y1="0" x2="127" y2="-7.62" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="NPNOR1" gate="G$1" pin="C"/>
