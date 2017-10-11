@@ -6,9 +6,9 @@
 
 
                    +-\/-+
- <DoShutdown   PB0 |o   | PB3  
+ <DoShutdown>  PB0 |o   | PB3  >Pi is on< /RESET
                GND |    | VCC
- >Button       PB1 |____| PB2  <Relay
+ >Button<      PB1 |____| PB2  <Relay>
 
  */ 
 
@@ -18,8 +18,15 @@
 ;----------------------------------------------------------------------
 ; constants
 .EQU F_CPU				= 8000000
+
+;delay for do shutdown, should be a handful of MS
+.EQU DELAY_PULSE_COUNTA = 10 ; the delay is delaymult2*delaymult1 
+.EQU DELAY_PULSE_COUNTB = 1
+
 ; PB0/PB2 are output, PB1 is input
 .EQU DDRB_BIT_MASK		= ((1 << PB2) | (1 << PB0))
+;button filter
+.EQU BUTTON_MASK		= 0x02
 
 ;----------------------------------------------------------------------
 ;variables
@@ -35,8 +42,101 @@
 	; no other interrupts should be enabled
 
 
+
 ;----------------------------------------------------------------------
-/************ Main entry point ************/
+; ****************** Wait for button pressed ****************** 
+wait_for_button:
+	;read PB1
+	in w, PINB	
+	;clean
+	andi w, BUTTON_MASK ;keep PB1 info only
+
+	;button has pullup
+	cpi w, BUTTON_MASK
+	breq wait_for_button	
+wait_for_button_is_pressed:
+	ret
+
+;----------------------------------------------------------------------
+; ****************** Set relay ON ****************** 
+set_relay_on:
+	sbi PORTB, PB2
+	ret
+
+;----------------------------------------------------------------------
+; ****************** Set relay OFF ****************** 
+set_relay_off:
+	cbi PORTB, PB2
+	ret
+
+
+;----------------------------------------------------------------------
+;Delay of about DELAY_PULSE_MS
+delayPulse:
+	push r20
+	push r21
+	
+	ldi r20, DELAY_PULSE_COUNTA
+	ldi r21, DELAY_PULSE_COUNTB
+
+	; start delay loop
+delayLoop:
+	subi r20, 1
+	sbci r21, 0
+	brne delayLoop
+	; end delay loop
+	
+	pop r21
+	pop r20
+	ret
+
+;----------------------------------------------------------------------
+; ****************** Send DO SHUTDOWN ****************** 
+send_do_shutdown:
+	;PB0 goes HIGH
+	sbi PORTB, PB0
+
+	;let it HIGH a bit
+	rcall delayPulse
+
+	;PB0 goes LOW
+	cbi PORTB, PB0
+
+	ret
+
+
+;----------------------------------------------------------------------
+; ****************** wait a little ****************** 
+wait_small:
+	push w
+	clr w
+loop_delay_off3:
+	inc w
+
+	rcall delayPulse
+
+	cpi w, 5
+	brne loop_delay_off3
+	pop w
+	ret
+
+;----------------------------------------------------------------------
+; ****************** wait longer ****************** 
+wait_long:
+	push w
+	clr w
+loop_delay_off2:
+	inc w
+
+	rcall delayPulse
+
+	cpi w, 50
+	brne loop_delay_off2
+	pop w
+	ret
+
+;----------------------------------------------------------------------
+; ****************** Main entry point ****************** 
 main:
 	; set clock divider : max speed
 	ldi r20, 0x08 ; clock divided by 256
@@ -56,39 +156,47 @@ loop_intro:
 	clr w
 	clr v
 
-	
+	;////////////////////////// TEST //////////////////////////////
+	;just wait 30 sec-ish
+
+	//rjmp delayPulse
+
+	;button pressed > Turn on the relay
+	rcall set_relay_on
+
+	;just wait 5 sec-ish
+	rcall wait_small
+
+	;Turn OFF the relay
+	rcall set_relay_off
+	;////////////////////////// /TEST //////////////////////////////
 
 loop:
-	inc w
+	;wait for first press to turn on
+	rcall wait_for_button
 
-	cpi w, 0
-	brne loop
-	
-	inc v
+	;button pressed > Turn on the relay
+	rcall set_relay_on
 
-	cpi v, 100
-	brne loop
+	;just wait 5 sec-ish
+	rcall wait_small
+		
+	;wait for next press to turn off
+	rcall wait_for_button
 
-	;now 256 times w x 100 times v have passed
+	;send the shudown signal
+	rcall send_do_shutdown
 
-	;Turn on the Relay
-	in w, PORTB
-	andi w, 0x04
-	cpi w, 0x04
+	;version simple: no reading of the /RESET - Pi_is_on pin
+	;just wait 30 sec-ish
+	rcall wait_long
 
-	breq loop_relay_clear
+	;Turn OFF the relay
+	rcall set_relay_off
 
-loop_relay_set:
 
-	sbi PORTB, PB2
-	rjmp loop_outro
-
-loop_relay_clear:
-	cbi PORTB, PB2
-
-loop_outro:
-	clr w
-	clr v
+	;just wait 5 sec-ish
+	rcall wait_small
 
 	;Loop!
 	rjmp loop
