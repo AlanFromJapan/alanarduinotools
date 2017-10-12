@@ -3,7 +3,10 @@
  *
  *  Created: 2017/10/05 23:17:18
  *   Author: Alan
-
+ *
+ * Project page: http://electrogeek.cc/raspipower.html
+ *
+ * This is the simple version without the feedback from the Raspi (just has a timeout of 30s to turn off the current)
 
                    +-\/-+
  <DoShutdown>  PB0 |o   | PB3  >Pi is on< /RESET
@@ -20,8 +23,8 @@
 .EQU F_CPU				= 8000000
 
 ;delay for do shutdown, should be a handful of MS
-.EQU DELAY_PULSE_COUNTA = 10 ; the delay is delaymult2*delaymult1 
-.EQU DELAY_PULSE_COUNTB = 1
+.EQU DELAY_PULSE_COUNTA = 255 ; the delay is delaymult2*delaymult1 
+.EQU DELAY_PULSE_COUNTB = 100
 
 ; PB0/PB2 are output, PB1 is input
 .EQU DDRB_BIT_MASK		= ((1 << PB2) | (1 << PB0))
@@ -71,7 +74,7 @@ set_relay_off:
 
 
 ;----------------------------------------------------------------------
-;Delay of about DELAY_PULSE_MS
+;Delay of about 100ms
 delayPulse:
 	push r20
 	push r21
@@ -115,7 +118,7 @@ loop_delay_off3:
 
 	rcall delayPulse
 
-	cpi w, 5
+	cpi w, 50
 	brne loop_delay_off3
 	pop w
 	ret
@@ -130,7 +133,7 @@ loop_delay_off2:
 
 	rcall delayPulse
 
-	cpi w, 50
+	cpi w, 255
 	brne loop_delay_off2
 	pop w
 	ret
@@ -151,15 +154,18 @@ main:
 	ldi w, (1<<PUEB1)
 	out PUEB, w	
 
+	;stop interrupts (not needed in this program)
+	cli
+
 
 loop_intro:
 	clr w
 	clr v
 
+	/*
 	;////////////////////////// TEST //////////////////////////////
 	;just wait 30 sec-ish
-
-	//rjmp delayPulse
+	;rjmp wait_long
 
 	;button pressed > Turn on the relay
 	rcall set_relay_on
@@ -170,6 +176,7 @@ loop_intro:
 	;Turn OFF the relay
 	rcall set_relay_off
 	;////////////////////////// /TEST //////////////////////////////
+	*/
 
 loop:
 	;wait for first press to turn on
@@ -188,8 +195,9 @@ loop:
 	rcall send_do_shutdown
 
 	;version simple: no reading of the /RESET - Pi_is_on pin
-	;just wait 30 sec-ish
+	;just wait 35 sec-ish
 	rcall wait_long
+	rcall wait_small
 
 	;Turn OFF the relay
 	rcall set_relay_off
