@@ -8,6 +8,83 @@
 
 #define DELAYUS   5
 
+//https://xantorohara.github.io/led-matrix-editor/#1818181818181818|7c7c0c7c7c607c7c|7c7c603838607c7c|6060607c7c6c6c0c|7c7c6c7c7c0c0c0c|6060606060607c7c|7c7c6c7c7c6c7c7c|6060607c7c6c7c7c
+const byte IMAGES[][8] = {
+{
+  B00011000,
+  B00011000,
+  B00011000,
+  B00011000,
+  B00011000,
+  B00011000,
+  B00011000,
+  B00011000
+},{
+  B00111110,
+  B00111110,
+  B00000110,
+  B00111110,
+  B00111110,
+  B00110000,
+  B00111110,
+  B00111110
+},{
+  B00111110,
+  B00111110,
+  B00000110,
+  B00011100,
+  B00011100,
+  B00000110,
+  B00111110,
+  B00111110
+},{
+  B00110000,
+  B00110110,
+  B00110110,
+  B00111110,
+  B00111110,
+  B00000110,
+  B00000110,
+  B00000110
+},{
+  B00110000,
+  B00110000,
+  B00110000,
+  B00111110,
+  B00111110,
+  B00110110,
+  B00111110,
+  B00111110
+},{
+  B00111110,
+  B00111110,
+  B00000110,
+  B00000110,
+  B00000110,
+  B00000110,
+  B00000110,
+  B00000110
+},{
+  B00111110,
+  B00111110,
+  B00110110,
+  B00111110,
+  B00111110,
+  B00110110,
+  B00111110,
+  B00111110
+},{
+  B00111110,
+  B00111110,
+  B00110110,
+  B00111110,
+  B00111110,
+  B00000110,
+  B00000110,
+  B00000110
+}};
+const int IMAGES_LEN = sizeof(IMAGES)/8;
+
 
 void test1() {
   //GO!
@@ -255,6 +332,22 @@ void offBit (unsigned char buf[], uint8_t x, uint8_t y) {
   buf[v] = buf[v] & ~(0x80 >> (x % 8));
 }
 
+uint8_t getBit (unsigned char buf[], uint8_t x, uint8_t y) {
+  uint8_t v = ((y * 32) +x) / 8;
+  if (  (buf[v] & (0x80 >> (x % 8))) != 0)
+    return 1;
+  else 
+    return 0;
+}
+
+uint8_t mxIsEmpty (unsigned char buf[]) {
+  for (uint8_t i = 0; i < 64; i++)
+    if (buf[i] != 0)
+      return 0;
+
+  return 1;
+}
+
 
 int8_t mX = random(32);int8_t mY = random(16);int8_t mDX = random(3) -1;int8_t mDY = random(3) -1;
 //int8_t mX = 0;int8_t mY = 0;int8_t mDX = 0;int8_t mDY = 0;
@@ -306,13 +399,54 @@ void setup() {
 
 }
 
-void loop() {
+uint16_t mReset = 0;
+void anim1() {
   //test4rnd(mMatrix); renderMatrix(mMatrix);
 
   moveBall (mMatrix); renderMatrix(mMatrix);
 
   //renderMatrix (mbed);
 
+  mReset++;
+  if (mReset == 2000) {
+    mReset = 0;
+    mX = random(32);
+    mY = random(16);
+    mDX = random(3) -1;
+    mDY = random(3) -1;  
 
-  
+    resetBuf(mMatrix);
+  }  
+}
+
+void anim2() {
+  uint8_t voffset = random(8);
+  for (uint8_t i = 0; i < 4; i++) {
+    for (uint8_t j = 0; j < 8; j++) {
+      mMatrix[(j + voffset) * 4 + i] = IMAGES[i][j];      
+    }
+  }
+
+  uint8_t count = 0;
+  while (mxIsEmpty(mMatrix) == 0) {
+    renderMatrix(mMatrix);  
+
+    count++;
+    if (count >= 10) {
+      count = 0;
+      for (uint8_t i = 0; i < 32 -1; i++) {
+        for (uint8_t j = 0; j < 16; j++) {
+          if (getBit (mMatrix, i+1, j) == 0)
+            offBit(mMatrix, i, j);
+          else
+            setBit(mMatrix, i, j);
+        }
+      }        
+    }
+  }
+}
+
+
+void loop() {
+anim2();
 }
