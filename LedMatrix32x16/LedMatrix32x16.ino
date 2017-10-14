@@ -8,9 +8,18 @@
 
 #define DELAYUS   5
 
-//https://xantorohara.github.io/led-matrix-editor/#1818181818181818|7c7c0c7c7c607c7c|7c7c603838607c7c|6060607c7c6c6c0c|7c7c6c7c7c0c0c0c|6060606060607c7c|7c7c6c7c7c6c7c7c|6060607c7c6c7c7c
+//https://xantorohara.github.io/led-matrix-editor/#7c7c6c6c6c6c7c7c|1818181818181818|7c7c0c7c7c607c7c|7c7c603838607c7c|6060607c7c6c6c0c|7c7c607c7c0c7c7c|7c7c6c7c7c0c0c0c|6060606060607c7c|7c7c6c7c7c6c7c7c|6060607c7c6c7c7c
 const byte IMAGES[][8] = {
 {
+  B00111110,
+  B00111110,
+  B00110110,
+  B00110110,
+  B00110110,
+  B00110110,
+  B00111110,
+  B00111110
+},{
   B00011000,
   B00011000,
   B00011000,
@@ -46,6 +55,15 @@ const byte IMAGES[][8] = {
   B00000110,
   B00000110,
   B00000110
+},{
+  B00111110,
+  B00111110,
+  B00110000,
+  B00111110,
+  B00111110,
+  B00000110,
+  B00111110,
+  B00111110
 },{
   B00110000,
   B00110000,
@@ -84,6 +102,7 @@ const byte IMAGES[][8] = {
   B00000110
 }};
 const int IMAGES_LEN = sizeof(IMAGES)/8;
+
 
 
 void test1() {
@@ -419,20 +438,27 @@ void anim1() {
   }  
 }
 
-void anim2() {
-  uint8_t voffset = random(8);
+
+void digit2Matrix (uint16_t v, uint8_t vOffset, unsigned char buf[]){
   for (uint8_t i = 0; i < 4; i++) {
+    uint8_t digitId = (v%10000)/1000;
     for (uint8_t j = 0; j < 8; j++) {
-      mMatrix[(j + voffset) * 4 + i] = IMAGES[i][j];      
+      buf[(j + vOffset) * 4 + i] = IMAGES[digitId][j];      
     }
-  }
+    v = (v - digitId * 1000)*10;
+  }  
+}
+
+void anim2(uint16_t v) {
+  uint8_t voffset = random(8);
+  digit2Matrix(v, voffset, mMatrix);
 
   uint8_t count = 0;
   while (mxIsEmpty(mMatrix) == 0) {
     renderMatrix(mMatrix);  
 
     count++;
-    if (count >= 10) {
+    if (count >= 5) {
       count = 0;
       for (uint8_t i = 0; i < 32 -1; i++) {
         for (uint8_t j = 0; j < 16; j++) {
@@ -446,7 +472,12 @@ void anim2() {
   }
 }
 
+uint16_t vCounter = 0;
 
 void loop() {
-anim2();
+  //anim2(vCounter++);
+
+  digit2Matrix(vCounter++, 0, mMatrix);
+  renderMatrix(mMatrix); 
+  
 }
