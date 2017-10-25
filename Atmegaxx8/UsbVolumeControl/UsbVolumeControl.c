@@ -31,9 +31,10 @@
 #define ROTENC_MASK	0xc0
 
 #define LED_RED		0x02
-#define LED_GREEN	0x08
+//#define LED_GREEN	0x08
 #define LED_BLUE	0x20
 
+#define PIN_INT1	0x08
 
 static void usbHardwareInit(void) {
 	uint8_t	i, j;
@@ -72,7 +73,7 @@ static void usbDelayMs(double pDelay){
 }
 
 static inline void ledsOff(){
-	PORTD &= ~(LED_BLUE | LED_GREEN | LED_RED);		
+	PORTD &= ~(LED_BLUE /*| LED_GREEN */ | LED_RED);		
 }
 
 /************************************************************************/
@@ -112,15 +113,18 @@ int main(void) {
 
 	
 	//3: LEDS
-	DDRD |= LED_BLUE | LED_GREEN | LED_RED;
+	DDRD |= LED_BLUE /*| LED_GREEN */ | LED_RED;
 	//all leds off
 	ledsOff();
 
+
+	DDRD &= ~PIN_INT1;
+	PORTD &= ~PIN_INT1;
 	
 	for(;;){
 		usbPoll();
 	
-	
+		//Active wait technique: doesn't work so well
 		if((PIND & ROTENC_MASK) != ROTENC_MASK){
 			if ((PIND & ROTENC_MASK) == 0) {
 				//ignore, already low on both lines A & B
@@ -149,10 +153,12 @@ int main(void) {
 			//send the USB message
 			if (usbInterruptIsReady()){
 				reportBuffer[1] = KeyPressed;
-				usbSetInterrupt(reportBuffer, sizeof(reportBuffer));
-			
+				usbSetInterrupt(reportBuffer, sizeof(reportBuffer));			
 				_delay_ms(10);
-			
+				
+				reportBuffer[1] = KeyPressed;
+				usbSetInterrupt(reportBuffer, sizeof(reportBuffer));
+				_delay_ms(10);
 			
 				//and send STOP!!
 				KeyPressed = 0x00;
@@ -170,6 +176,8 @@ int main(void) {
 			ledsOff();
 		}
 
+
+		
 	}
 	
 	return 0;	
