@@ -21,8 +21,8 @@
  * 
  */ 
 
-//for delay.h
-#define F_CPU 16000000L
+//for delay.h >> defined in the compilation symbols
+//#define F_CPU 16000000L
 
 //System includes
 #include <avr/io.h>
@@ -32,15 +32,15 @@
 #include "MCMShared.h"
 
 //Choose what RTC to use
+#include "DS3231.h"
 //#include "DS3234.h"
-#include "RTCFake.h"
+//#include "RTCFake.h"
 
 
 //Choose the display to use (put the define BEFORE the includes!)
 #define USE_DISPLAY_BCD1
 #include "MCMLedMatrix.h"
 #include "WordclockLayouts.h"
-
 //#include "VoltmeterDisplay.h"
 
 
