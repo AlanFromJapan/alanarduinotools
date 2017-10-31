@@ -39,7 +39,8 @@ void ReadTime3231(Date* pTimeDate){
 	if (TWIGetStatus() != TW_START){
 		//something wrong
 		pTimeDate->hour = 99;
-		pTimeDate->minute = 99;		
+		pTimeDate->minute = pTimeDate->hour;
+		pTimeDate->second = pTimeDate->minute;	
 		return;
 	}
 	
@@ -54,16 +55,18 @@ void ReadTime3231(Date* pTimeDate){
 	if (TWIGetStatus() != TW_MR_SLA_ACK){
 		//something wrong
 		pTimeDate->hour = 98;
-		pTimeDate->minute = 98;
+		pTimeDate->minute = pTimeDate->hour;
+		pTimeDate->second = pTimeDate->minute;
 		return;
 	}
 	
 	//Read 1: Seconds
-	v = TWIReadNACK():	
+	v = TWIReadNACK();	
 	if (TWIGetStatus() != TW_MR_DATA_NACK){
 		//something wrong
 		pTimeDate->hour = 97;
-		pTimeDate->minute = 97;
+		pTimeDate->minute = pTimeDate->hour;
+		pTimeDate->second = pTimeDate->minute;
 		return;
 	}
 	pTimeDate->second = bcdToDec(v & 0x7f);
