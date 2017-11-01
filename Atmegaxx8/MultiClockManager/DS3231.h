@@ -14,8 +14,14 @@
 #ifndef DS3231_H_
 #define DS3231_H_
 
+#define SERIAL_DEBUG
+
 #include "MCMShared.h"
 #include "twi.h"
+
+#ifdef SERIAL_DEBUG
+#include "serialComm.h"
+#endif 
 
 //for the TWI constants 
 #include <util/twi.h>
@@ -36,25 +42,56 @@ void ReadTime3231(Date* pTimeDate){
 	uint8_t v = 0x00;
 	
 	TWIStart();
+#ifdef SERIAL_DEBUG
+	USART_Transmit('A');
+#endif
 	if (TWIGetStatus() != TW_START){
+#ifdef SERIAL_DEBUG
+USART_Transmit('B');
+#endif
 		//something wrong
-		pTimeDate->hour = 99;
+		pTimeDate->hour = TWIGetStatus();
 		pTimeDate->minute = pTimeDate->hour;
 		pTimeDate->second = pTimeDate->minute;	
 		return;
 	}
+
+#ifdef SERIAL_DEBUG
+USART_Transmit('C');
+#endif
 	
 	TWIWrite((DS3231_I2C_ADDRESS << 1) | TW_WRITE);
-	TWIWrite(0x00); //move to reg 0
+#ifdef SERIAL_DEBUG
+USART_Transmit('D');
+#endif
+	//TWIWrite(0x00); //move to reg 0
+#ifdef SERIAL_DEBUG
+USART_Transmit('E');
+#endif
 	TWIStop();
+#ifdef SERIAL_DEBUG
+USART_Transmit('F');
+#endif
 	
 	_delay_ms(20); //in case
 	
 	TWIStart();
+#ifdef SERIAL_DEBUG
+USART_Transmit('G');
+#endif
+	
 	TWIWrite((DS3231_I2C_ADDRESS << 1) | TW_READ);
+#ifdef SERIAL_DEBUG
+USART_Transmit('H');
+#endif
+	
 	if (TWIGetStatus() != TW_MR_SLA_ACK){
+#ifdef SERIAL_DEBUG
+USART_Transmit('I');
+#endif
+		
 		//something wrong
-		pTimeDate->hour = 98;
+		pTimeDate->hour = TWIGetStatus();
 		pTimeDate->minute = pTimeDate->hour;
 		pTimeDate->second = pTimeDate->minute;
 		return;
@@ -64,7 +101,7 @@ void ReadTime3231(Date* pTimeDate){
 	v = TWIReadNACK();	
 	if (TWIGetStatus() != TW_MR_DATA_NACK){
 		//something wrong
-		pTimeDate->hour = 97;
+		pTimeDate->hour = TWIGetStatus();
 		pTimeDate->minute = pTimeDate->hour;
 		pTimeDate->second = pTimeDate->minute;
 		return;
