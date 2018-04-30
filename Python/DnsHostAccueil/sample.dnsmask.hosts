@@ -1,0 +1,32 @@
+
+#Iapetus, the DNS server itself!
+192.168.0.2 dns
+192.168.0.2 iapetus
+
+#The SonOFF controlling the file server Encelade
+192.168.0.14 encelade-switch
+
+#Encelade, the file server
+192.168.0.3 encelade
+192.168.0.3 files
+
+#Rhea, the 3F office router (from main NW and 3F sub-network)
+192.168.0.13 rhea
+192.168.1.1  rhea3f
+
+#Hyperion, the DMZ Router, also on port 80 the Website Electrogeek.cc
+192.168.0.10 dmz
+192.168.0.10 hyperion
+192.168.0.10 website
+
+#Dione, the first Raspi Zero W
+192.168.0.15 dione
+
+#Main router
+192.168.0.1 aterm
+192.168.0.1 mainrouter
+
+#the ion PC under the tv
+192.168.0.5 alanion
+192.168.0.5 salon
+
