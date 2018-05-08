@@ -7,7 +7,9 @@ import re
 #http://stackoverflow.com/questions/20646822/how-to-serve-static-files-in-flask
 app = Flask(__name__, static_url_path='')
 
-DNS_FILE="/home/alan/temp/sample.dnsmask.hosts"
+#DNS file is in current folder for the test
+DNS_FILE=os.path.join(os.path.dirname(os.path.abspath(__file__)), "sample.dnsmask.hosts")
+
 REGEX_DNSENTRY=r"(?P<ip>(\d+\.\d+\.\d+\.\d+))\s+(?P<dns>(\S+))"
 
 ##########################################################################################
@@ -15,17 +17,36 @@ REGEX_DNSENTRY=r"(?P<ip>(\d+\.\d+\.\d+\.\d+))\s+(?P<dns>(\S+))"
 @app.route('/')
 @app.route('/index.html')
 def homepage():
-    t = ""
+    t = """ 
+<html>
+<head>
+<style>
+body {font-family: Sansation, 'Lato', sans-serif;}
+</style>
+</head>
+<body>
+
+<span style="">DNS Entries list</span>
+"""
     with open(DNS_FILE, mode="r") as f:
         for l in f:
-            l2 = re.sub (REGEX_DNSENTRY, """ <a href="\g<ip>">Go to \g<dns></a> """, l)
-            print (l + " => " + l2)
-            t = t + l + "=&gt;" + l2
-#    t = f.read()
-    
-    t = string.replace(t, "\n", "<br/>")
+            l2 = re.sub (REGEX_DNSENTRY, r""" <a href="http://\g<ip>">Go to <span style="font-weight:bold;text-transform: capitalize;">\g<dns></span></a> (\g<ip>) """, l)
 
+            if l2.startswith("#"):
+                l2 = r""" <span style="color:grey;">""" +l2+ """</span> """
+
+            l2 = l2.replace ("\n", "<br/>")
+            print (l + " => " + l2)            
+            t = t + l2
+    
+
+    t = t + """ 
+</body>
+</html>
+"""
 #    t = re.sub (REGEX_DNSENTRY, """ "<a href="\g<ip>">\g<dns></a" """, t)
+
+
     return t
 
 
