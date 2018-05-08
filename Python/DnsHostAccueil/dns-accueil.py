@@ -26,7 +26,14 @@ body {font-family: Sansation, 'Lato', sans-serif;}
 </head>
 <body>
 
-<span style="">DNS Entries list</span>
+    <span style="
+background-color: lavender;
+display: block;
+border: solid 1px darkblue;
+text-align:center;
+font-size:20pt;
+"
+>DNS Entries list</span>
 """
     with open(DNS_FILE, mode="r") as f:
         for l in f:
