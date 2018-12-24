@@ -6,6 +6,8 @@ import ImageDraw
 import ImageFont
 from weather import Weather, Unit
 
+
+
 PADDING = 10
 
 condition2image = {
@@ -50,6 +52,17 @@ def getImageFromCondition(condition):
         return condition2image[condition]
     else:
         return "unknown.png"
+
+
+def getMoonPhase():
+    #http://www.ben-daglish.net/moon.shtml
+    lp = 2551443
+    now = datetime.datetime.now()
+    new_moon = datetime.datetime(1970, 1, 7, 20, 35)
+    ph = ((now - new_moon).total_seconds() / 1000) % lp
+    return 1+ int(ph / (24*3600))
+
+
 
     
 def main():
@@ -115,6 +128,7 @@ def main():
     draw.text((PADDING, PADDING +60), now.strftime("%A"), font = font24, fill = 0)
     draw.text((PADDING, PADDING +60+24), now.strftime("%Y/%m/%d"), font = font16, fill = 0)
     
+    draw.text((PADDING + 96, PADDING +60), str(getMoonPhase()), font = font24, fill = 0)
     
     img = image.rotate(90)
 
