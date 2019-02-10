@@ -1,0 +1,46 @@
+{
+  "data": [
+    {
+      "wind_cdir": "NNE",
+      "rh": 88,
+      "pod": "n",
+      "lon": "139.69171",
+      "pres": 1009,
+      "timezone": "Asia/Tokyo",
+      "ob_time": "2019-02-09 14:52",
+      "country_code": "JP",
+      "clouds": 100,
+      "vis": 2,
+      "solar_rad": 0,
+      "state_code": "40",
+      "wind_spd": 3.1,
+      "lat": "35.6895",
+      "wind_cdir_full": "north-northeast",
+      "slp": 1010.5,
+      "datetime": "2019-02-09:15",
+      "ts": 1549723920,
+      "station": "AS392",
+      "h_angle": -90,
+      "dewpt": 1,
+      "snow": 0,
+      "uv": 0,
+      "dni": 0,
+      "wind_dir": 30,
+      "elev_angle": -65.6666,
+      "ghi": 0,
+      "dhi": 0,
+      "precip": 0.5,
+      "city_name": "Tokyo",
+      "weather": {
+        "icon": "r01n",
+        "code": "500",
+        "description": "Light Rain"
+      },
+      "sunset": "08:16",
+      "temp": 2.8,
+      "sunrise": "21:33",
+      "app_temp": -0.3
+    }
+  ],
+  "count": 1
+}
