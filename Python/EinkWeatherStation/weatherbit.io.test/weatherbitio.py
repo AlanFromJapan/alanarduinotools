@@ -3,7 +3,7 @@ import requests
 
 #placeholders for city and key
 URL_CURRENTWEATHER="https://api.weatherbit.io/v2.0/current?city_id=%s&key=%s"
-URL_2DAYS3H="https://api.weatherbit.io/v2.0/forecast/3hourly?city_id=%s&days=1&key=%s"
+URL_1DAYS3H="https://api.weatherbit.io/v2.0/forecast/3hourly?city_id=%s&days=1&key=%s"
 
 #Maps weather code to a easy to one word code
 code2weather = {
@@ -26,7 +26,7 @@ def unwrapOneData(resp, k):
 	code = int(k["weather"]["code"])
 	code = (code / 100)*100
 
-	resp["code"] = code
+	resp["code"] = int(k["weather"]["code"])
 	resp["status"] = "Unknown" if not code in code2weather else code2weather[code]
 
 
@@ -35,7 +35,8 @@ def unwrapOneData(resp, k):
 	return resp
 
 
-def getDaily(pKey, pCity):
+#Get CURRENT data
+def getCurrentWeather(pKey, pCity):
 	response = requests.get(URL_CURRENTWEATHER % (pCity, pKey))
 	j  = json.loads(response.text)
 
@@ -47,19 +48,21 @@ def getDaily(pKey, pCity):
 	return resp
 
 
-def getNext(pKey, pCity):
-	response = requests.get(URL_2DAYS3H % (pCity, pKey))
+#Get the weather for the next 24h with a status every 3h 
+def getNext24hby3h(pKey, pCity):
+	response = requests.get(URL_1DAYS3H % (pCity, pKey))
 	j  = json.loads(response.text)
     
 	resp = dict()
 	
 	resp["city_name"] = j["city_name"]
-	resp["data"] = dict()
+	resp["data"] = list()
 
 	for d in j["data"]:
 		n = unwrapOneData(dict(), d)
 
-		resp["data"][n["time"]] = n
+		#resp["data"][n["time"]] = n
+		resp["data"].append(n)
 
 	
 	return resp

@@ -18,7 +18,7 @@ URL_2DAYS3H="https://api.weatherbit.io/v2.0/forecast/3hourly?city_id=%s&days=1&k
 
 def showOne(weather):
 	print(weather)
-	print("City = " + weather["city_name"] if "city_name" in weather else "?")
+	print("City = " + (weather["city_name"] if "city_name" in weather else "?"))
 	print("Current temp  = " + str(weather["temp"]))
 	print("Current weather  = " + weather["weather"])
 	print("Current status = %s (%d)" % (weather["status"], weather["code"]))
@@ -27,7 +27,7 @@ def showOne(weather):
 
 def testToday(pKey):
 	print("**TODAY**")
-	result = wbit.getDaily(pKey, CITYCODE)
+	result = wbit.getCurrentWeather(pKey, CITYCODE)
 	showOne(result)
 
 
@@ -46,9 +46,10 @@ def testNext (pKey):
 		print ("%s temp %s : %s" % (d["timestamp_local"], d["temp"], d["weather"]["description"]))
 	"""
 
-	result = wbit.getNext(pKey, CITYCODE)
+	result = wbit.getNext24hby3h(pKey, CITYCODE)
 	for n in result["data"]:
-		showOne(result["data"][n])
+		#showOne(result["data"][n])
+		showOne(n)
 		print ("-------------------------------------------------------------")
 
 
