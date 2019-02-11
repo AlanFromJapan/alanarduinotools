@@ -1,0 +1,3 @@
+weatherio = dict (
+    key = "aaaaaaaaaaaaaaaaa"
+)

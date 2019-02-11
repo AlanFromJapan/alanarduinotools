@@ -5,25 +5,34 @@ import time
 import Image
 import ImageDraw
 import ImageFont
-from weather import Weather, Unit
+import weatherbitio as wbit
+import traceback
+import os
+import config
+
+#Tokyo
+CITYCODE="1850147"
+KEY=config.weatherio["key"]
 
 PADDING = 5
 PATH_TO_FONTS = "fonts/"
 PATH_TO_IMG = "retinaweather/"
 
+#key is LOWERCASE!
 condition2image = {
-    "mosly sunny" : "retina-cloud-part.png",
-    "partly cloudy": "retina-cloud-part.png",    
+    "cloudy": "retina-cloud.png",    
 
     "sunny" : "retina-sunny.png",
-    "fair" : "retina-sunny.png",
-    "hot" : "retina-sunny.png",
 
-    "mostly cloudy": "retina-cloud.png",
+    "rain" : "retina-rain.png",
 
-    "scattered showers" : "retina-rain.png",
+    "snow" : "retina-snow.png",
 
-    "snow" : "retina-snow.png"
+    "thunder" : "retina-thunder.png",
+
+    "mist": "retina-mist.png",
+
+    "drizzle": "retina-rain.png",
     
 }
 
@@ -49,112 +58,34 @@ def moonPhase1(d):
     return b
 
 
-
+#Get the forecast every 3h for 24h
 def getWeather(forecastIndex):
-    weather = Weather(unit=Unit.CELSIUS)
-    lookup = weather.lookup(26237347) #TKO
-    #condition = lookup.condition()
-    forecasts = lookup.forecast
-    #0 is today, 1 is tomorrow, etc...
-    f = forecasts[forecastIndex]
-#    return  [f.text, f2c(f.high), f2c(f.low)]
-    return  [f.text, float(f.high), float(f.low)]
+    w = wbit.getNext24hby3h(KEY, CITYCODE)["data"][forecastIndex]
+    print(w)
+    return w
 
-
-
-def getWeatherToday():
-    w = getWeather (0)
-    return "Today is %s Min %d Max %d"  % (w[0], w[2], w[1]) 
+#Get CURRENT weather
+def getWeatherNow():
+    w = wbit.getCurrentWeather(KEY, CITYCODE)
+    print(w)
+    return w
 
 
 
 def getWeatherTomorrow():
-    return "Tomorrow is " +getWeather (1)[0]
+    return "Tomorrow is " +getWeather (7)
 
 
 
 def getImageFromCondition(condition):
+    #print("DEBUG: search image for '%s'." % (condition))
     if condition in condition2image: 
         return condition2image[condition]
     else:
         return "unknown.png"
 
-    
-    
-def main():
 
-    # Display resolution in epd2in13.py
-    #EPD_WIDTH       = 128
-    #EPD_HEIGHT      = 250
-
-    # For simplicity, the arguments are explicit numerical coordinates
-    image = Image.new('1', (epd2in13.EPD_HEIGHT, epd2in13.EPD_WIDTH), 255)  # 255: clear the frame
-#    image = Image.new('1', (EPD_HEIGHT, EPD_WIDTH), 255)  # 255: clear the frame
-    draw = ImageDraw.Draw(image)
-
-    
-    #init the e-Ink
-    epd = epd2in13.EPD()
-    epd.init(epd.lut_full_update)
-
-    epd.clear_frame_memory(0xFF)
-    epd.set_frame_memory(image, 0, 0)
-    epd.display_frame()
-#    epd.init(epd.lut_partial_update)
-
-    
-    #Screen is horizontal
-    #the TOP LEFT (sticker)  angle is 0,0, BOTTOM RIGHT is max 
-    image_width, image_height  = image.size
-
-
-    w = ["unknown", 0, 0]
-    fong_big = ImageFont.truetype(PATH_TO_FONTS + 'DisposableDroidBB.ttf', 30)
-    font_medium = ImageFont.truetype(PATH_TO_FONTS + 'DisposableDroidBB.ttf', 20)
-    font_small = ImageFont.truetype(PATH_TO_FONTS + 'DisposableDroidBB.ttf', 16)
-    font_xsmall = ImageFont.truetype(PATH_TO_FONTS + 'DisposableDroidBB.ttf', 9)
-    
-    try:
-        pass
-        w = getWeather (0) #0 = today, 1 = tomorrow, ...
-    except BaseException,ex:
-        #something wrong happened
-        print (ex)
-        pass
-        
-
-    try:
-        imgWeather = Image.open (PATH_TO_IMG + getImageFromCondition(w[0].lower()))
-        
-        draw.bitmap ( (epd2in13.EPD_HEIGHT - 64 - PADDING, 0), imgWeather)
-    except BaseException,ex:
-        #failed to find the image most likey
-        print (ex)
-        pass
-
-    #horizontal line
-    draw.line ([(0, 64),( image_width, 64 )], fill=0)
-
-    ###########################################3
-    ##
-    ## TOP PART : WEATHER
-    ##
-    #the weather in text
-    draw.text((PADDING, PADDING), w[0], font = fong_big, fill = 0)
-    #temp min-max
-    draw.text((PADDING, PADDING + 30), "min = %dC, max = %dC" % (w[1], w[2]), font = font_medium, fill = 0)
-
-
-    ###########################################3
-    ##
-    ## BOTTOM PART : Misc info
-    ##
-    now = datetime.datetime.now()
-    draw.text((PADDING, PADDING +60), now.strftime("%A"), font = fong_big, fill = 0)
-    draw.text((PADDING, PADDING +60+30), now.strftime("%Y/%m/%d"), font = font_small, fill = 0)
-    draw.text((PADDING, image_height - 14), now.strftime("Last update  %H:%M"), font = font_xsmall, fill = 0)
-
-    # Moon
+def drawMoon():
     phase = moonPhase1(now)
     basex = image_width - 50
     basey = 70
@@ -183,10 +114,119 @@ def main():
     elif phase == 7:
         draw.rectangle ([ (basex +2 + (moonw * 0.25) , basey+2) , (basex + moonw - 2, basey + moonh-2 )], outline = 0, fill = 0)
 
+
+        
+################################################################################################3
+##
+##  MAIN
+##
+################################################################################################3
+def main():
+
+    # Display resolution in epd2in13.py
+    #EPD_WIDTH       = 128
+    #EPD_HEIGHT      = 250
+
+    # For simplicity, the arguments are explicit numerical coordinates
+    image = Image.new('1', (epd2in13.EPD_HEIGHT, epd2in13.EPD_WIDTH), 255)  # 255: clear the frame
+#    image = Image.new('1', (EPD_HEIGHT, EPD_WIDTH), 255)  # 255: clear the frame
+    draw = ImageDraw.Draw(image)
+
+    
+    #init the e-Ink
+    epd = epd2in13.EPD()
+    epd.init(epd.lut_full_update)
+
+    epd.clear_frame_memory(0xFF)
+    epd.set_frame_memory(image, 0, 0)
+    epd.display_frame()
+#    epd.init(epd.lut_partial_update)
+
+    
+    #Screen is horizontal
+    #the TOP LEFT (sticker)  angle is 0,0, BOTTOM RIGHT is max 
+    image_width, image_height  = image.size
+
+
+    wNow = None
+    wLater = None
+    
+    #Fonts
+    fong_big = ImageFont.truetype(PATH_TO_FONTS + 'DisposableDroidBB.ttf', 30)
+    font_medium = ImageFont.truetype(PATH_TO_FONTS + 'DisposableDroidBB.ttf', 20)
+    font_small = ImageFont.truetype(PATH_TO_FONTS + 'DisposableDroidBB.ttf', 16)
+    font_xsmall = ImageFont.truetype(PATH_TO_FONTS + 'DisposableDroidBB.ttf', 9)
+
+    
+    try:
+        #get current weather
+        wNow = getWeatherNow ()
+
+        #now +6h-9h
+        wLater = getWeather(2)
+    except BaseException,ex:
+        #something wrong happened
+        traceback.print_exc()
+        pass
+        
+
+    try:
+        #get the image to display
+        imgName = "unknown.png" if wNow == None else getImageFromCondition(wNow["status"].lower())
+        
+        imgWeather = Image.open (os.path.join(PATH_TO_IMG,imgName))
+    except BaseException,ex:
+        #failed to find the image most likey
+        traceback.print_exc()
+        pass
+
+
+    ##########################################3
+    ##
+    ## DRAWING START
+    ##
+    #horizontal line
+    for i in range(5):
+        draw.line ([(0, 64+i),( image_width-64 -2*i, 64+i )], fill=0)
+
+
+    ###########################################3
+    ##
+    ## TOP PART : WEATHER
+    ##
+    #the weather in text
+    draw.text((PADDING, PADDING), wNow["weather"], font = fong_big, fill = 0)
+    #weather change
+    vWeatherChange = ""
+    if not wLater == None:
+        if wNow["status"] == wLater["status"]:
+            vWeatherChange = "(holding)"
+        else:
+            vWeatherChange = "(=> %s)" % (wLater["weather"])
+    #temp min-max
+    draw.text((PADDING, PADDING + 30), "Temp %dC %s" % (wNow["temp"], vWeatherChange), font = font_medium, fill = 0)
+
+
+    ###########################################3
+    ##
+    ## BOTTOM PART : Misc info
+    ##
+    now = datetime.datetime.now()
+    draw.text((PADDING, PADDING +60+10), now.strftime("%A"), font = font_medium, fill = 0)
+    draw.text((PADDING, PADDING +60+30), now.strftime("%Y/%m/%d"), font = font_small, fill = 0)
+    draw.text((PADDING, image_height - 14), now.strftime("Last update  %H:%M"), font = font_xsmall, fill = 0)
+
+    
+    #draw image
+    #draw.bitmap ( (epd2in13.EPD_HEIGHT - 64 - PADDING, 0), imgWeather)
+    draw.bitmap ( (epd2in13.EPD_HEIGHT - 64 - PADDING, 64), imgWeather)
+
+    # Moon
+    #drawMoon()
         
     ###########################################3
     ##
-    ## Drawinf finished - display
+    ## Drawing finished - display
     ##
     img = image.rotate(90)
 
