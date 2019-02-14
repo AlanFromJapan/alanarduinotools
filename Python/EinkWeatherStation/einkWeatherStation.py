@@ -89,7 +89,7 @@ def getImageFromCondition(condition, when):
     if when.hour < 8 or when.hour >= 20:
         c = c +  "-night"
         
-    print("DEBUG: search image for '%s' at %s." % (c, when))
+    #print("DEBUG: search image for '%s' at %s." % (c, when))
     if c in condition2image: 
         return condition2image[c]
     else:
@@ -163,10 +163,12 @@ def main():
     wLater = None
     
     #Fonts
-    fong_big = ImageFont.truetype(PATH_TO_FONTS + 'DisposableDroidBB.ttf', 30)
-    font_medium = ImageFont.truetype(PATH_TO_FONTS + 'DisposableDroidBB.ttf', 20)
-    font_small = ImageFont.truetype(PATH_TO_FONTS + 'DisposableDroidBB.ttf', 16)
-    font_xsmall = ImageFont.truetype(PATH_TO_FONTS + 'DisposableDroidBB.ttf', 9)
+    font_xbig = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 48)
+    font_big = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 30)
+    font_medium = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 20)
+    font_mediumsmall = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 18)
+    font_small = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 16)
+    font_xsmall = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 9)
 
     
     try:
@@ -206,16 +208,17 @@ def main():
     ## TOP PART : WEATHER
     ##
     #the weather in text
-    draw.text((PADDING, PADDING), wNow["weather"], font = fong_big, fill = 0)
+    draw.text((PADDING, PADDING), wNow["weather"], font = font_big, fill = 0)
     #weather change
-    vWeatherChange = ""
+    vWeatherChange = "?"
     if not wLater == None:
         if wNow["status"] == wLater["status"]:
-            vWeatherChange = "(holding)"
+            vWeatherChange = "holding"
         else:
-            vWeatherChange = "(=> %s)" % (wLater["weather"])
+            vWeatherChange = wLater["weather"]
+    vWeatherChange = "%s %s (%dc)" % (wLater ["time"][11:16], vWeatherChange, wLater["temp"])
     #temp min-max
-    draw.text((PADDING, PADDING + 30), "Temp %dC %s" % (wNow["temp"], vWeatherChange), font = font_medium, fill = 0)
+    draw.text((PADDING, PADDING + 30), vWeatherChange, font = font_mediumsmall, fill = 0)
 
 
     ###########################################3
@@ -227,10 +230,13 @@ def main():
     draw.text((PADDING, PADDING +60+30), now.strftime("%Y/%m/%d"), font = font_small, fill = 0)
     draw.text((PADDING, image_height - 14), now.strftime("Last update  %H:%M"), font = font_xsmall, fill = 0)
 
-    
     #draw image
-    #draw.bitmap ( (epd2in13.EPD_HEIGHT - 64 - PADDING, 0), imgWeather)
     draw.bitmap ( (epd2in13.EPD_HEIGHT - 64 - PADDING, 64), imgWeather)
+
+    #draw temp
+    draw.text((epd2in13.EPD_HEIGHT - 64 - PADDING - 48 -10, 64 + 8), "%2d" % (float(wNow["temp"])), font = font_xbig, fill = 0)
+    draw.arc ([(epd2in13.EPD_HEIGHT - 64 - 10 -10 , 64 + 12), (epd2in13.EPD_HEIGHT - 64 -10 + 8 -10, 64 + 12 + 8)], 0, 360, fill= 0)
+    
 
     # Moon
     #drawMoon()
