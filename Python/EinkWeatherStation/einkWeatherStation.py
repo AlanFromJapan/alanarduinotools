@@ -21,18 +21,25 @@ PATH_TO_IMG = "retinaweather/"
 #key is LOWERCASE!
 condition2image = {
     "cloudy": "retina-cloud.png",    
+    "cloudy-night": "retina-night-cloud.png",    
 
     "sunny" : "retina-sunny.png",
+    "sunny-night" : "retina-night-clear.png",
 
     "rain" : "retina-rain.png",
+    "rain-night" : "retina-rain.png",
 
     "snow" : "retina-snow.png",
+    "snow-night" : "retina-snow.png",
 
     "thunder" : "retina-thunder.png",
+    "thunder-night" : "retina-thunder.png",
 
     "mist": "retina-mist.png",
+    "mist-night": "retina-mist.png",
 
     "drizzle": "retina-rain.png",
+    "drizzle-night": "retina-rain.png",
     
 }
 
@@ -77,10 +84,14 @@ def getWeatherTomorrow():
 
 
 
-def getImageFromCondition(condition):
-    #print("DEBUG: search image for '%s'." % (condition))
-    if condition in condition2image: 
-        return condition2image[condition]
+def getImageFromCondition(condition, when):
+    c = condition
+    if when.hour < 8 or when.hour >= 20:
+        c = c +  "-night"
+        
+    print("DEBUG: search image for '%s' at %s." % (c, when))
+    if c in condition2image: 
+        return condition2image[c]
     else:
         return "unknown.png"
 
@@ -172,7 +183,7 @@ def main():
 
     try:
         #get the image to display
-        imgName = "unknown.png" if wNow == None else getImageFromCondition(wNow["status"].lower())
+        imgName = "unknown.png" if wNow == None else getImageFromCondition(wNow["status"].lower(), datetime.datetime.now())
         
         imgWeather = Image.open (os.path.join(PATH_TO_IMG,imgName))
     except BaseException,ex:
