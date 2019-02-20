@@ -10,6 +10,16 @@ import traceback
 import os
 import config
 
+#for buttons
+import RPi.GPIO as GPIO
+
+
+################################################################################################3
+##
+##  Constants & Globals
+##
+################################################################################################3
+
 #Tokyo
 CITYCODE="1850147"
 KEY=config.weatherio["key"]
@@ -43,7 +53,21 @@ condition2image = {
     
 }
 
+# Pin Definitons: it's the GPIO##, not the Pin number on the connector (beware)
+BUTTONPINA = 16
+BUTTONPINB = 12
 
+#available panels and current one
+PANELS = ["Weather", "Shutdown", "Others"]
+currentPanelIdx = 0
+
+################################################################################################3
+##
+##  Functions
+##
+################################################################################################3
+
+#Supposedely calculates moon phases ... just plain wrong :(
 def moonPhase1(d):
     #http://www.voidware.com/moon_phase.htm
     y = d.year
@@ -95,7 +119,7 @@ def getImageFromCondition(condition, when):
     else:
         return "unknown.png"
 
-
+#Draws the moon according it's phase (it's a square)
 def drawMoon():
     phase = moonPhase1(now)
     basex = image_width - 50
@@ -126,13 +150,45 @@ def drawMoon():
         draw.rectangle ([ (basex +2 + (moonw * 0.25) , basey+2) , (basex + moonw - 2, basey + moonh-2 )], outline = 0, fill = 0)
 
 
-        
+#Does the init for the eInk display
+def eInkInit():
+    epd = epd2in13.EPD()
+    epd.init(epd.lut_full_update)
+
+    epd.clear_frame_memory(0xFF)
+    #    epd.set_frame_memory(image, 0, 0)
+    #    epd.display_frame()
+    #    epd.init(epd.lut_partial_update)
+    return epd
+    
+
+#shows the image parameter on the eInk display
+def eInkShow(epd, img):
+    epd.set_frame_memory(img, 0, 0)
+    epd.display_frame()
+
+
+#Init the GPIO buttons
+def initButtons():
+    GPIO.setmode(GPIO.BCM) # Broadcom pin-numbering scheme
+    GPIO.setup(BUTTONPINA, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(BUTTONPINB, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.add_event_detect(BUTTONPINA, GPIO.FALLING, callback=buttonCallbackA, bouncetime=300)  
+    GPIO.add_event_detect(BUTTONPINB, GPIO.FALLING, callback=buttonCallbackB, bouncetime=300)  
+
+def buttonCallbackA(channel):
+    print ("Pressed [A] !")
+
+def buttonCallbackB(channel):
+    print ("Pressed [B] !")
+
+    
 ################################################################################################3
 ##
-##  MAIN
+##  Draw Weather Panel
 ##
 ################################################################################################3
-def main():
+def drawWeatherPanel():
 
     # Display resolution in epd2in13.py
     #EPD_WIDTH       = 128
@@ -145,14 +201,10 @@ def main():
 
     
     #init the e-Ink
-    epd = epd2in13.EPD()
-    epd.init(epd.lut_full_update)
+    epd = eInkInit()
 
-    epd.clear_frame_memory(0xFF)
-    epd.set_frame_memory(image, 0, 0)
-    epd.display_frame()
-#    epd.init(epd.lut_partial_update)
-
+    #init buttons
+    initButtons()
     
     #Screen is horizontal
     #the TOP LEFT (sticker)  angle is 0,0, BOTTOM RIGHT is max 
@@ -231,11 +283,11 @@ def main():
     draw.text((PADDING, image_height - 14), now.strftime("Last update  %H:%M"), font = font_xsmall, fill = 0)
 
     #draw image
-    draw.bitmap ( (epd2in13.EPD_HEIGHT - 64 - PADDING, 64), imgWeather)
+    draw.bitmap ( (image_width - 64 - PADDING, 64), imgWeather)
 
     #draw temp
-    draw.text((epd2in13.EPD_HEIGHT - 64 - PADDING - 48 -10, 64 + 8), "%2d" % (float(wNow["temp"])), font = font_xbig, fill = 0)
-    draw.arc ([(epd2in13.EPD_HEIGHT - 64 - 10 -10 , 64 + 12), (epd2in13.EPD_HEIGHT - 64 -10 + 8 -10, 64 + 12 + 8)], 0, 360, fill= 0)
+    draw.text((image_width - 64 - PADDING - 48 -10, 64 + 8), "%2d" % (float(wNow["temp"])), font = font_xbig, fill = 0)
+    draw.arc ([(image_width - 64 - 10 -10 , 64 + 12), (image_width - 64 -10 + 8 -10, 64 + 12 + 8)], 0, 360, fill= 0)
     
 
     # Moon
@@ -248,9 +300,23 @@ def main():
     img = image.rotate(90)
 
     #display on e-Ink
-    epd.set_frame_memory(img, 0, 0)
-    epd.display_frame()
+    eInkShow(epd, img)
 
     
+################################################################################################3
+##
+##  Main entry point
+##
+################################################################################################3
 if __name__ == '__main__':
-    main()
+    #draws the weather    
+    drawWeatherPanel()
+
+    print("Here we go! Press CTRL+C to exit")
+    try:
+        while 1:
+            print (".")
+            time.sleep(1)
+            
+    except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
+        GPIO.cleanup() # cleanup all GPIO
