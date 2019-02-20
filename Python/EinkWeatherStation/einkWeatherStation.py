@@ -13,6 +13,8 @@ import config
 #for buttons
 import RPi.GPIO as GPIO
 
+#some utils functions
+import alan_utils
 
 ################################################################################################3
 ##
@@ -57,9 +59,20 @@ condition2image = {
 BUTTONPINA = 16
 BUTTONPINB = 12
 
+#the epd object for the display
+epd = None
+
 #available panels and current one
 PANELS = ["Weather", "Shutdown", "Others"]
 currentPanelIdx = 0
+
+#Fonts
+font_xbig = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 48)
+font_big = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 30)
+font_medium = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 20)
+font_mediumsmall = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 18)
+font_small = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 16)
+font_xsmall = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 9)
 
 ################################################################################################3
 ##
@@ -176,13 +189,47 @@ def initButtons():
     GPIO.add_event_detect(BUTTONPINA, GPIO.FALLING, callback=buttonCallbackA, bouncetime=300)  
     GPIO.add_event_detect(BUTTONPINB, GPIO.FALLING, callback=buttonCallbackB, bouncetime=300)  
 
-def buttonCallbackA(channel):
-    print ("Pressed [A] !")
 
-def buttonCallbackB(channel):
-    print ("Pressed [B] !")
+#Red button pressed : confirm action
+def buttonCallbackA(channel):
+    print ("DEBUG: Pressed [A]/[RED] !")
+
+    #if shudown then do shutdown
+    if PANELS[currentPanelIdx] == "Shutdown":
+        print ("Good night!")
+        #os.system("sudo shutdown -h now")
+        return
+
 
     
+#Green button pressed : move to next panel
+def buttonCallbackB(channel):
+    print ("DEBUG: Pressed [B]/[GREEN] !")
+    global currentPanelIdx
+    currentPanelIdx = (currentPanelIdx + 1) % len(PANELS)
+
+    #draws the UPDATED  panel
+    drawCurrentPanel()
+
+
+#make a blank image sized for the panel
+def makeBlankPanelImage():
+    # Display resolution in epd2in13.py
+    #EPD_WIDTH       = 128
+    #EPD_HEIGHT      = 250
+
+    # For simplicity, the arguments are explicit numerical coordinates
+    image = Image.new('1', (epd2in13.EPD_HEIGHT, epd2in13.EPD_WIDTH), 255)  # 255: clear the frame
+    #image = Image.new('1', (EPD_HEIGHT, EPD_WIDTH), 255)  # 255: clear the frame
+    draw = ImageDraw.Draw(image)
+
+    #Screen is horizontal
+    #the TOP LEFT (sticker)  angle is 0,0, BOTTOM RIGHT is max 
+    image_width, image_height  = image.size
+
+    return image, draw, image_width, image_height
+
+
 ################################################################################################3
 ##
 ##  Draw Weather Panel
@@ -190,38 +237,13 @@ def buttonCallbackB(channel):
 ################################################################################################3
 def drawWeatherPanel():
 
-    # Display resolution in epd2in13.py
-    #EPD_WIDTH       = 128
-    #EPD_HEIGHT      = 250
-
-    # For simplicity, the arguments are explicit numerical coordinates
-    image = Image.new('1', (epd2in13.EPD_HEIGHT, epd2in13.EPD_WIDTH), 255)  # 255: clear the frame
-#    image = Image.new('1', (EPD_HEIGHT, EPD_WIDTH), 255)  # 255: clear the frame
-    draw = ImageDraw.Draw(image)
-
+    #make blank image and get all we need to draw
+    image, draw, image_width, image_height = makeBlankPanelImage()
     
-    #init the e-Ink
-    epd = eInkInit()
-
-    #init buttons
-    initButtons()
-    
-    #Screen is horizontal
-    #the TOP LEFT (sticker)  angle is 0,0, BOTTOM RIGHT is max 
-    image_width, image_height  = image.size
-
 
     wNow = None
     wLater = None
     
-    #Fonts
-    font_xbig = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 48)
-    font_big = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 30)
-    font_medium = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 20)
-    font_mediumsmall = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 18)
-    font_small = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 16)
-    font_xsmall = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.ttf'), 9)
-
     
     try:
         #get current weather
@@ -302,6 +324,65 @@ def drawWeatherPanel():
     #display on e-Ink
     eInkShow(epd, img)
 
+
+
+################################################################################################3
+##
+##  Draw Shutdown Panel
+##
+################################################################################################3
+def drawShutdownPanel():
+    print("DEBUG: shut panel")
+    #make blank image and get all we need to draw
+    image, draw, image_width, image_height = makeBlankPanelImage()
+
+    draw.text (( 12, 24 ), "Shutdown?", font= font_xbig, fill = 0  )  
+    draw.text (( 12, 64 ), "Press [RED] button to confirm", font= font_small, fill = 0  )  
+
+    ## Drawing finished - display
+    img = image.rotate(90)
+    #display on e-Ink
+    eInkShow(epd, img)
+
+
+################################################################################################3
+##
+##  Draw Others Panel
+##
+################################################################################################3
+def drawOthersPanel():
+    print("others panel")
+    #make blank image and get all we need to draw
+    image, draw, image_width, image_height = makeBlankPanelImage()
+
+    draw.text (( 12, 24 ), "Others...", font= font_xbig, fill = 0  )  
+    draw.text (( 12, 64 ), "Current IP: %s" % (alan_utils.getWifiIP()), font= font_small, fill = 0  )  
+
+    ## Drawing finished - display
+    img = image.rotate(90)
+    #display on e-Ink
+    eInkShow(epd, img)
+
+
+################################################################################################3
+##
+##  Choose which panel to draw
+##
+################################################################################################3
+def drawCurrentPanel():
+    if PANELS[currentPanelIdx] == "Weather":
+        drawWeatherPanel()
+        return
+    elif PANELS[currentPanelIdx] == "Shutdown":
+        drawShutdownPanel()
+        return
+    elif PANELS[currentPanelIdx] == "Others":
+        drawOthersPanel()
+        return
+
+    #what the hell are we doing here??
+    raise ValueError ("Unknown current panel idx : %d" % (currentPanelIdx))
+    
     
 ################################################################################################3
 ##
@@ -309,14 +390,25 @@ def drawWeatherPanel():
 ##
 ################################################################################################3
 if __name__ == '__main__':
-    #draws the weather    
-    drawWeatherPanel()
+    currentPanelIdx = 1
+
+    #init the e-Ink
+    epd = eInkInit()
+
+    #init buttons
+    initButtons()
+
+    #draws the current panel
+    drawCurrentPanel()
 
     print("Here we go! Press CTRL+C to exit")
     try:
         while 1:
-            print (".")
+            #print (".")
             time.sleep(1)
             
     except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
+        pass
+    finally:
         GPIO.cleanup() # cleanup all GPIO
+        
