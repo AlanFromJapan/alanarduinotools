@@ -62,6 +62,9 @@ BUTTONPINB = 12
 #the epd object for the display
 epd = None
 
+#last time weather was updated
+lastWeatherDT = None
+
 #available panels and current one
 PANELS = ["Weather", "Shutdown", "Others"]
 currentPanelIdx = 0
@@ -197,7 +200,7 @@ def buttonCallbackA(channel):
     #if shudown then do shutdown
     if PANELS[currentPanelIdx] == "Shutdown":
         print ("Good night!")
-        #os.system("sudo shutdown -h now")
+        os.system("sudo shutdown -h now")
         return
 
 
@@ -236,7 +239,10 @@ def makeBlankPanelImage():
 ##
 ################################################################################################3
 def drawWeatherPanel():
-
+    global lastWeatherDT
+    lastWeatherDT = datetime.datetime.now()
+    print("Draw weather panel : start at %s" % (lastWeatherDT.strftime("%Y/%m/%d %H:%M")))
+    
     #make blank image and get all we need to draw
     image, draw, image_width, image_height = makeBlankPanelImage()
     
@@ -299,7 +305,7 @@ def drawWeatherPanel():
     ##
     ## BOTTOM PART : Misc info
     ##
-    now = datetime.datetime.now()
+    now = lastWeatherDT
     draw.text((PADDING, PADDING +60+10), now.strftime("%A"), font = font_medium, fill = 0)
     draw.text((PADDING, PADDING +60+30), now.strftime("%Y/%m/%d"), font = font_small, fill = 0)
     draw.text((PADDING, image_height - 14), now.strftime("Last update  %H:%M"), font = font_xsmall, fill = 0)
@@ -390,7 +396,7 @@ def drawCurrentPanel():
 ##
 ################################################################################################3
 if __name__ == '__main__':
-    currentPanelIdx = 1
+    currentPanelIdx = 0
 
     #init the e-Ink
     epd = eInkInit()
@@ -406,9 +412,21 @@ if __name__ == '__main__':
         while 1:
             #print (".")
             time.sleep(1)
+
+            #If weather do autorefresh
+            if currentPanelIdx == 0:
+                now = datetime.datetime.now()
+                tdelta = now - lastWeatherDT
+                #refresh every 20 mins = 1200 sec
+                if tdelta.total_seconds() > 1200:
+                    print("Weather: force refresh.")
+                    #force refresh
+                    drawCurrentPanel()
+                
             
     except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
         pass
     finally:
         GPIO.cleanup() # cleanup all GPIO
+        print("Good bye.")
         
