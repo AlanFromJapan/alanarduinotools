@@ -118,12 +118,7 @@ def getWeatherNow():
     return w
 
 
-
-def getWeatherTomorrow():
-    return "Tomorrow is " +getWeather (7)
-
-
-
+#returns the image to used based on condition keyword and time
 def getImageFromCondition(condition, when):
     c = condition
     if when.hour < 8 or when.hour >= 20:
@@ -182,6 +177,8 @@ def eInkInit():
 def eInkShow(epd, img):
     epd.set_frame_memory(img, 0, 0)
     epd.display_frame()
+    #go to sleep to not damage the display
+    epd.sleep()
 
 
 #Init the GPIO buttons
@@ -350,7 +347,7 @@ def drawShutdownPanel():
     #display on e-Ink
     eInkShow(epd, img)
 
-
+    
 ################################################################################################3
 ##
 ##  Draw Others Panel
@@ -376,6 +373,9 @@ def drawOthersPanel():
 ##
 ################################################################################################3
 def drawCurrentPanel():
+    #wake up! in case it sleeps
+    epd.reset()
+    
     if PANELS[currentPanelIdx] == "Weather":
         drawWeatherPanel()
         return
