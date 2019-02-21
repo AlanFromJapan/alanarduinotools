@@ -28,7 +28,8 @@ KEY=config.weatherio["key"]
 
 PADDING = 5
 PATH_TO_FONTS = "fonts/"
-PATH_TO_IMG = "retinaweather/"
+PATH_TO_ICONS = "retinaweather/"
+PATH_TO_IMG = "images/"
 
 #key is LOWERCASE!
 condition2image = {
@@ -58,6 +59,12 @@ condition2image = {
 # Pin Definitons: it's the GPIO##, not the Pin number on the connector (beware)
 BUTTONPINA = 16
 BUTTONPINB = 12
+
+#LED : GPIO05 means PIN 29 on controller
+LEDPIN = 5
+
+#Thursday is #3 day of week (Monday == 0)
+DOW_THURSDAY = 3
 
 #the epd object for the display
 epd = None
@@ -108,13 +115,13 @@ def moonPhase1(d):
 #Get the forecast every 3h for 24h
 def getWeather(forecastIndex):
     w = wbit.getNext24hby3h(KEY, CITYCODE)["data"][forecastIndex]
-    print(w)
+    #print(w)
     return w
 
 #Get CURRENT weather
 def getWeatherNow():
     w = wbit.getCurrentWeather(KEY, CITYCODE)
-    print(w)
+    #print(w)
     return w
 
 
@@ -184,10 +191,16 @@ def eInkShow(epd, img):
 #Init the GPIO buttons
 def initButtons():
     GPIO.setmode(GPIO.BCM) # Broadcom pin-numbering scheme
+    #Buttons setup
     GPIO.setup(BUTTONPINA, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(BUTTONPINB, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.add_event_detect(BUTTONPINA, GPIO.FALLING, callback=buttonCallbackA, bouncetime=300)  
     GPIO.add_event_detect(BUTTONPINB, GPIO.FALLING, callback=buttonCallbackB, bouncetime=300)  
+
+    #Now the LED
+    GPIO.setup(LEDPIN, GPIO.OUT) # LED pin set as output
+    # Initial state for LEDs:
+    GPIO.output(LEDPIN, GPIO.LOW)
 
 
 #Red button pressed : confirm action
@@ -197,7 +210,10 @@ def buttonCallbackA(channel):
     #if shudown then do shutdown
     if PANELS[currentPanelIdx] == "Shutdown":
         print ("Good night!")
-        os.system("sudo shutdown -h now")
+        try:
+            drawEndPanel()
+        finally:
+            os.system("sudo shutdown -h now")
         return
 
 
@@ -264,7 +280,7 @@ def drawWeatherPanel():
         #get the image to display
         imgName = "unknown.png" if wNow == None else getImageFromCondition(wNow["status"].lower(), datetime.datetime.now())
         
-        imgWeather = Image.open (os.path.join(PATH_TO_IMG,imgName))
+        imgWeather = Image.open (os.path.join(PATH_TO_ICONS,imgName))
     except BaseException,ex:
         #failed to find the image most likey
         traceback.print_exc()
@@ -354,12 +370,32 @@ def drawShutdownPanel():
 ##
 ################################################################################################3
 def drawOthersPanel():
-    print("others panel")
+    print("DEBUG: others panel")
     #make blank image and get all we need to draw
     image, draw, image_width, image_height = makeBlankPanelImage()
 
     draw.text (( 12, 24 ), "Others...", font= font_xbig, fill = 0  )  
     draw.text (( 12, 64 ), "Current IP: %s" % (alan_utils.getWifiIP()), font= font_small, fill = 0  )  
+
+    ## Drawing finished - display
+    img = image.rotate(90)
+    #display on e-Ink
+    eInkShow(epd, img)
+
+
+################################################################################################3
+##
+##  Draw The End panel
+##
+################################################################################################3
+def drawEndPanel():
+    print("DEBUG: End panel")
+    #make blank image and get all we need to draw
+    image, draw, image_width, image_height = makeBlankPanelImage()
+
+    theend = Image.open (os.path.join(PATH_TO_IMG, "theend.png"))
+
+    draw.bitmap ( (0, 0), theend )
 
     ## Drawing finished - display
     img = image.rotate(90)
@@ -396,6 +432,7 @@ def drawCurrentPanel():
 ##
 ################################################################################################3
 if __name__ == '__main__':
+    #start on weather
     currentPanelIdx = 0
 
     #init the e-Ink
@@ -412,10 +449,10 @@ if __name__ == '__main__':
         while 1:
             #print (".")
             time.sleep(1)
+            now = datetime.datetime.now()
 
             #If weather do autorefresh
-            if currentPanelIdx == 0:
-                now = datetime.datetime.now()
+            if currentPanelIdx == 0 and not lastWeatherDT == None:
                 tdelta = now - lastWeatherDT
                 #refresh every 20 mins = 1200 sec
                 if tdelta.total_seconds() > 1200:
@@ -423,7 +460,13 @@ if __name__ == '__main__':
                     #force refresh
                     drawCurrentPanel()
                 
-            
+            #Led should blink the 2nd Thrusday of the month
+            #I SHOULD use futures or threads, I'm just being lazy and lucky since button change of panel is a callback on another thread (free multithreading)
+            ajd = now.today()
+            dom = ajd.day
+            if ajd.weekday() == DOW_THURSDAY and (8 <= dom <= 14 or 22 <= dom <= 28):
+                GPIO.output(LEDPIN, GPIO.LOW if now.second %2 ==0 else GPIO.HIGH)
+
     except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
         pass
     finally:
