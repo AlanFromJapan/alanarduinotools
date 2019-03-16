@@ -451,6 +451,9 @@ if __name__ == '__main__':
             time.sleep(1)
             now = datetime.datetime.now()
 
+            #turn the pin low by default every round
+            GPIO.output(LEDPIN, GPIO.LOW)
+
             #If weather do autorefresh
             if currentPanelIdx == 0 and not lastWeatherDT == None:
                 tdelta = now - lastWeatherDT
