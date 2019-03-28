@@ -270,10 +270,16 @@ def drawWeatherPanel():
 
         #now +6h-9h
         wLater = getWeather(2)
+
+        #some consistency checks
+        if wNow == None or wLater == None:
+            print ("**** Error: received None as weather forecast!")
+            raise ValueError ("Now or Later weather received was NULL (None).")
     except BaseException,ex:
         #something wrong happened
         traceback.print_exc()
-        pass
+        #skip refresh this time
+        return
         
 
     try:
