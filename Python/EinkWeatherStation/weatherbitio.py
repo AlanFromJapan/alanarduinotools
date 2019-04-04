@@ -56,7 +56,9 @@ def getCurrentWeather(pKey, pCity):
 def getNext24hby3h(pKey, pCity):
 	response = requests.get(URL_1DAYS3H % (pCity, pKey))
 	j  = json.loads(response.text)
-    
+
+        print ("DEBUG: " + response.text)
+        
 	resp = dict()
 	
 	resp["city_name"] = j["city_name"]
