@@ -24,15 +24,15 @@ def unwrapOneData(resp, k):
 	resp["weather"] = k["weather"]["description"]
         
 	code = int(k["weather"]["code"])
-        resp["code"] = int(k["weather"]["code"])
+	resp["code"] = int(k["weather"]["code"])
 
-        if code < 800 or code > 801:
-                code = (code / 100)*100
+	if code < 800 or code > 801:
+			code = (code / 100)*100
 
-                resp["status"] = "Unknown" if not code in code2weather else code2weather[code]
-        else:
-                #800/801 are sunny, other 8xx are cloudy 
-                resp["status"] = "Sunny"
+			resp["status"] = "Unknown" if not code in code2weather else code2weather[code]
+	else:
+			#800/801 are sunny, other 8xx are cloudy 
+			resp["status"] = "Sunny"
 
 	resp["time"] = "now" if not "timestamp_local" in k else k["timestamp_local"]
 
@@ -57,7 +57,7 @@ def getNext24hby3h(pKey, pCity):
 	response = requests.get(URL_1DAYS3H % (pCity, pKey))
 	j  = json.loads(response.text)
 
-        print ("DEBUG: " + response.text)
+	print ("DEBUG: " + response.text)
         
 	resp = dict()
 	
@@ -72,3 +72,14 @@ def getNext24hby3h(pKey, pCity):
 
 	
 	return resp
+
+
+def getDummyWeather():
+        wNow = dict()
+        wNow["city_name"] = "Tokyo"
+        wNow["temp"] = 23
+        wNow["weather"] = "Grand soleil"        
+        wNow["code"] = 800
+        wNow["status"] = "Sunny"
+        wNow["time"] = "now"
+        return wNow

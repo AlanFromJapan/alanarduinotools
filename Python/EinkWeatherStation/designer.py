@@ -1,10 +1,10 @@
 
-import epd2in13
+#import epd2in13
 import datetime
 import time
-import Image
-import ImageDraw
-import ImageFont
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
 import weatherbitio as wbit
 import traceback
 import os
@@ -82,12 +82,13 @@ def getImageFromCondition(condition, when):
 #make a blank image sized for the panel
 def makeBlankPanelImage():
     # Display resolution in epd2in13.py
-    #EPD_WIDTH       = 128
-    #EPD_HEIGHT      = 250
+    EPD_WIDTH       = 128
+    EPD_HEIGHT      = 250
 
     # For simplicity, the arguments are explicit numerical coordinates
-    image = Image.new('1', (epd2in13.EPD_HEIGHT, epd2in13.EPD_WIDTH), 255)  # 255: clear the frame
-    #image = Image.new('1', (EPD_HEIGHT, EPD_WIDTH), 255)  # 255: clear the frame
+    #image = Image.new('1', (epd2in13.EPD_HEIGHT, epd2in13.EPD_WIDTH), 255)  # 255: clear the frame
+    
+    image = Image.new('L', (EPD_HEIGHT, EPD_WIDTH), 255)  # 255: clear the frame
     draw = ImageDraw.Draw(image)
 
     #Screen is horizontal
