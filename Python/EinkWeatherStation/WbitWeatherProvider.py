@@ -97,7 +97,7 @@ class WbitWeatherProvider(AbstractWeatherProvider):
                 #800/801 are sunny, other 8xx are cloudy 
                 resp["status"] = "Sunny"
 
-        resp["time"] = "now" if not "timestamp_local" in k else k["timestamp_local"]
+        resp["time"] = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S") if not "timestamp_local" in k else k["timestamp_local"]
 
         return resp
 

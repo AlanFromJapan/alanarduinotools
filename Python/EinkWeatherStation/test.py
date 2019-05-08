@@ -4,14 +4,14 @@ import time
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
-import weatherbitio as wbit
 import traceback
 import os
 import config
 
 #some utils functions
 import alan_utils
-from designer import drawWeatherPanel, drawShutdownPanel, drawOthersPanel, drawEndPanel
+from designerSquares import drawWeatherPanel
+from designer import  drawShutdownPanel, drawOthersPanel, drawEndPanel
 
 from DummyWeatherProvider import DummyWeatherProvider
 from WbitWeatherProvider import WbitWeatherProvider

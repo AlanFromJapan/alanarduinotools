@@ -5,7 +5,6 @@ import time
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
-import weatherbitio as wbit
 import traceback
 import os
 import config
@@ -112,15 +111,7 @@ def getWeatherImg (w):
         return None
     
 
-#draws a weather box with the weather text, temp and image    
-def drawWeatherBox (w, topleft, image, draw):
-    img = getWeatherImg(w)
-    #draw image
-    draw.bitmap (topleft, img)
-    #the weather in text
-    draw.text((topleft[0], topleft[1] + 64), w["weather"], font = font_big, fill = 0)
-    
-    
+
     
 ################################################################################################3
 ##
