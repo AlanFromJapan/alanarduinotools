@@ -19,6 +19,8 @@ code2weather = {
 	900: "Unknown"
 }
 
+WBIT_DATETIME_PATTERN = "%Y-%m-%dT%H:%M:%S"
+
 class WbitWeatherProvider(AbstractWeatherProvider):
     #attributes
     __CITYCODE=""
@@ -70,7 +72,7 @@ class WbitWeatherProvider(AbstractWeatherProvider):
 
         #go through them all, return the last
         for d in j["data"]:
-            n = self.__unwrapOneData(resp, d)
+            self.__unwrapOneData(resp, d)
 
         return resp
 
@@ -97,7 +99,8 @@ class WbitWeatherProvider(AbstractWeatherProvider):
                 #800/801 are sunny, other 8xx are cloudy 
                 resp["status"] = "Sunny"
 
-        resp["time"] = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S") if not "timestamp_local" in k else k["timestamp_local"]
-
+        resp["time"] = datetime.datetime.now().strftime(WBIT_DATETIME_PATTERN) if not "timestamp_local" in k else k["timestamp_local"]
+        resp["datetimeobj"] = datetime.datetime.now() if not "timestamp_local" in k else datetime.datetime.strptime(k["timestamp_local"] , WBIT_DATETIME_PATTERN)
+        
         return resp
 

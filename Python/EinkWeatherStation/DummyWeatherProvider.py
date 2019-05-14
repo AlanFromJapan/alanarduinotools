@@ -1,4 +1,5 @@
 from AbstractWeatherProvider import AbstractWeatherProvider
+import datetime
 
 class DummyWeatherProvider (AbstractWeatherProvider):
 
@@ -20,4 +21,5 @@ class DummyWeatherProvider (AbstractWeatherProvider):
         wNow["code"] = 800
         wNow["status"] = "Sunny"
         wNow["time"] = "now"
+        wNow["datetimeobj"] = datetime.datetime.now()
         return wNow
