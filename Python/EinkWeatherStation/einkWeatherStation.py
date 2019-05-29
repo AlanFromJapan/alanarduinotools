@@ -1,22 +1,22 @@
 
 import epd2in13
+
 import datetime
 import time
-import Image
-import ImageDraw
-import ImageFont
-import weatherbitio as wbit
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
 import traceback
 import os
 import config
 
-#for buttons
-import RPi.GPIO as GPIO
-
 #some utils functions
 import alan_utils
-from designer import drawWeatherPanel, drawShutdownPanel, drawOthersPanel, drawEndPanel
+from designerSquares import drawWeatherPanel
+from designer import  drawShutdownPanel, drawOthersPanel, drawEndPanel
 
+from DummyWeatherProvider import DummyWeatherProvider
+from WbitWeatherProvider import WbitWeatherProvider
 ################################################################################################3
 ##
 ##  Constants & Globals
@@ -53,21 +53,6 @@ currentPanelIdx = 0
 ##  Functions
 ##
 ################################################################################################3
-
-
-
-#Get the forecast every 3h for 24h
-def getWeather(forecastIndex):
-    w = wbit.getNext24hby3h(KEY, CITYCODE)["data"][forecastIndex]
-    #print(w)
-    return w
-
-#Get CURRENT weather
-def getWeatherNow():
-    w = wbit.getCurrentWeather(KEY, CITYCODE)
-    #print(w)
-    return w
-
 
 
 #Does the init for the eInk display
@@ -141,18 +126,16 @@ def buttonCallbackB(channel):
 ##  Choose which panel to draw
 ##
 ################################################################################################3
-def drawCurrentPanel():
+def drawCurrentPanel(weatherProvider):
     #wake up! in case it sleeps
     epd.reset()
 
     try:
         if PANELS[currentPanelIdx] == "Weather":
             try:
-                #get current weather
-                wNow = getWeatherNow ()
-
-                #now +6h-9h
-                wLater = getWeather(2)
+                #get current weather and "later"
+                wNow = weatherProvider.getCurrentWeather()    
+                wLater = weatherProvider.getNextWeather()
 
                 #some consistency checks
                 if wNow == None or wLater == None:
@@ -203,8 +186,11 @@ if __name__ == '__main__':
     #init buttons
     initButtons()
 
+    #wprovider = DummyWeatherProvider()
+    wprovider = WbitWeatherProvider(CITYCODE, KEY)
+
     #draws the current panel
-    drawCurrentPanel()
+    drawCurrentPanel(wprovider)
 
     print("Here we go! Press CTRL+C to exit")
     try:
@@ -223,11 +209,14 @@ if __name__ == '__main__':
                 if tdelta.total_seconds() > 1200:
                     print("Weather: force refresh.")
                     #force refresh
-                    drawCurrentPanel()
+                    drawCurrentPanel(wprovider)
                 
             #Led should blink the 2nd Thrusday of the month
             #I SHOULD use futures or threads, I'm just being lazy and lucky since button change of panel is a callback on another thread (free multithreading)
             ajd = now.today()
+            #dirty trick: I want it to blink in fact the day before from say 7pm si I know I have to prepare trash for next day
+            #so I just shift time for a few hours
+            ajd = ajd + datetime.timedelta(hours=5)
             dom = ajd.day
             if ajd.weekday() == DOW_THURSDAY and (8 <= dom <= 14 or 22 <= dom <= 28):
                 GPIO.output(LEDPIN, GPIO.LOW if now.second %2 ==0 else GPIO.HIGH)
