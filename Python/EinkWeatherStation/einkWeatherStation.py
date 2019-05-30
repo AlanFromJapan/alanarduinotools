@@ -182,7 +182,7 @@ def drawCurrentPanel():
 ##
 ################################################################################################3
 if __name__ == '__main__':
-    global wprovider
+
     #start on weather
     currentPanelIdx = 0
 
