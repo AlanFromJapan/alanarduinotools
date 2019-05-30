@@ -1,5 +1,7 @@
-
+#for the eInk display
 import epd2in13
+#for buttons
+import RPi.GPIO as GPIO
 
 import datetime
 import time
@@ -47,6 +49,9 @@ lastWeatherDT = None
 #available panels and current one
 PANELS = ["Weather", "Shutdown", "Others"]
 currentPanelIdx = 0
+
+#the weather provider to be used
+wprovider = None
 
 ################################################################################################3
 ##
@@ -102,7 +107,7 @@ def buttonCallbackA(channel):
             epd.reset()
             
             img = drawEndPanel()
-            img = img.rotate(90)
+            img = img.rotate(90, expand=True)
             eInkShow(epd, img)
 
         finally:
@@ -126,7 +131,7 @@ def buttonCallbackB(channel):
 ##  Choose which panel to draw
 ##
 ################################################################################################3
-def drawCurrentPanel(weatherProvider):
+def drawCurrentPanel():
     #wake up! in case it sleeps
     epd.reset()
 
@@ -134,8 +139,8 @@ def drawCurrentPanel(weatherProvider):
         if PANELS[currentPanelIdx] == "Weather":
             try:
                 #get current weather and "later"
-                wNow = weatherProvider.getCurrentWeather()    
-                wLater = weatherProvider.getNextWeather()
+                wNow = wprovider.getCurrentWeather()    
+                wLater = wprovider.getNextWeather()
 
                 #some consistency checks
                 if wNow == None or wLater == None:
@@ -143,7 +148,7 @@ def drawCurrentPanel(weatherProvider):
                     raise ValueError ("Now or Later weather received was NULL (None).")
 
                 img = drawWeatherPanel(wNow, wLater)
-                img = img.rotate(90)
+                img = img.rotate(90, expand=True)
                 eInkShow(epd, img)
 
             except BaseException,ex:
@@ -155,12 +160,12 @@ def drawCurrentPanel(weatherProvider):
 
         elif PANELS[currentPanelIdx] == "Shutdown":
             img = drawShutdownPanel()
-            img = img.rotate(90)
+            img = img.rotate(90, expand=True)
             eInkShow(epd, img)
 
         elif PANELS[currentPanelIdx] == "Others":
             img = drawOthersPanel()
-            img = img.rotate(90)
+            img = img.rotate(90, expand=True)
             eInkShow(epd, img)
 
         else:
@@ -177,6 +182,7 @@ def drawCurrentPanel(weatherProvider):
 ##
 ################################################################################################3
 if __name__ == '__main__':
+    global wprovider
     #start on weather
     currentPanelIdx = 0
 
@@ -190,7 +196,7 @@ if __name__ == '__main__':
     wprovider = WbitWeatherProvider(CITYCODE, KEY)
 
     #draws the current panel
-    drawCurrentPanel(wprovider)
+    drawCurrentPanel()
 
     print("Here we go! Press CTRL+C to exit")
     try:
