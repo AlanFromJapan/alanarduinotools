@@ -86,8 +86,8 @@ def initButtons():
     #Buttons setup
     GPIO.setup(BUTTONPINA, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.setup(BUTTONPINB, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.add_event_detect(BUTTONPINA, GPIO.FALLING, callback=buttonCallbackA, bouncetime=300)  
-    GPIO.add_event_detect(BUTTONPINB, GPIO.FALLING, callback=buttonCallbackB, bouncetime=300)  
+    GPIO.add_event_detect(BUTTONPINA, GPIO.FALLING, callback=buttonCallbackA, bouncetime=500)  
+    GPIO.add_event_detect(BUTTONPINB, GPIO.FALLING, callback=buttonCallbackB, bouncetime=500)  
 
     #Now the LED
     GPIO.setup(LEDPIN, GPIO.OUT) # LED pin set as output
@@ -215,7 +215,7 @@ if __name__ == '__main__':
                 if tdelta.total_seconds() > 1200:
                     print("Weather: force refresh.")
                     #force refresh
-                    drawCurrentPanel(wprovider)
+                    drawCurrentPanel()
                 
             #Led should blink the 2nd Thrusday of the month
             #I SHOULD use futures or threads, I'm just being lazy and lucky since button change of panel is a callback on another thread (free multithreading)
