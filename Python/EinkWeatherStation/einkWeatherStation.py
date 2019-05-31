@@ -198,6 +198,9 @@ if __name__ == '__main__':
     #draws the current panel
     drawCurrentPanel()
 
+    #save time of last check of weather
+    lastWeatherDT = datetime.datetime.now()
+    
     print("Here we go! Press CTRL+C to exit")
     try:
         while 1:
@@ -216,6 +219,8 @@ if __name__ == '__main__':
                     print("Weather: force refresh.")
                     #force refresh
                     drawCurrentPanel()
+                    #and save time
+                    lastWeatherDT = datetime.datetime.now()
                 
             #Led should blink the 2nd Thrusday of the month
             #I SHOULD use futures or threads, I'm just being lazy and lucky since button change of panel is a callback on another thread (free multithreading)
