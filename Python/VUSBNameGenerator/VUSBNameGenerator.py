@@ -18,6 +18,8 @@ Easy way to generate the painful V-USB vendor name (USB_CFG_VENDOR_NAME) or Devi
     
 s = str(sys.argv[1])
 print ("Input '%s'"  % (s))
+print("""Copy the below 2 lines in your project, in file 'usbconfig,h' (about line ~266).
+""")
 
 print ("#define USB_CFG_DEVICE_NAME  ", end="")
 first=True
@@ -31,4 +33,5 @@ print ("") #new line
 
 print ("#define USB_CFG_DEVICE_NAME_LEN  %s" % (str(len(s))))
 
-print ("Total: %s chars."% (str(len(s))))
+print ("""
+(Total: %s characters)"""% (str(len(s))))
