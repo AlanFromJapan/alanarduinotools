@@ -33,9 +33,9 @@
 
 #define LED_MASK	0x08
 
-#define KEYUP_MASK		0x01
+#define KEYUP_MASK		0x04
 #define KEYDOWN_MASK	0x02
-#define KEYMUTE_MASK	0x04
+#define KEYMUTE_MASK	0x01
 
 
 static void usbHardwareInit(void) {
@@ -74,6 +74,10 @@ static void usbDelayMs(double pDelay){
 	}
 }
 
+static inline void ledsOn(){
+	PORTB |= LED_MASK;
+}
+
 static inline void ledsOff(){
 	PORTB &= ~(LED_MASK);
 }
@@ -107,7 +111,7 @@ int main(void) {
 
 	//2: 3 tact switch setup (pullups)
 	//PB0-2 input
-	DDRB &= ~(0x07);
+	DDRB &= ~0x07;
 	//Pull up on PB0-2
 	PORTB |= 0x07;
 		
@@ -124,33 +128,36 @@ int main(void) {
 	//MAIN LOOP
 	for(;;){
 		usbPoll();
-	
-		if ((PINB & KEYUP_MASK) == KEYUP_MASK){
+
+		//nothing pressed at the start
+		KeyPressed = 0x00;
+
+		//check buttons status
+		if ((PINB & KEYUP_MASK) != KEYUP_MASK){
 			KeyPressed = VOL_UP;
 		}
 		else{
-			if ((PINB & KEYDOWN_MASK) == KEYDOWN_MASK){
+			if ((PINB & KEYDOWN_MASK) != KEYDOWN_MASK){
 				KeyPressed = VOL_DOWN;
 			}
 			else{
-				if ((PINB & KEYMUTE_MASK) == KEYMUTE_MASK){
+				if ((PINB & KEYMUTE_MASK) != KEYMUTE_MASK){
 					KeyPressed = VOL_MUTE;
-				}
-				else {
-					ledsOff();
 				}
 			}
 		}
 
 		//if something was pressed
 		if (KeyPressed != 0x00) {
+			ledsOn();
+
 			//send the USB message
 			if (usbInterruptIsReady()){
 				//Send the key
 				reportBuffer[1] = KeyPressed;
 				usbSetInterrupt(reportBuffer, sizeof(reportBuffer));
 				_delay_ms(10);
-			
+
 				//and send STOP!!
 				KeyPressed = 0x00;
 				reportBuffer[1] = KeyPressed;
@@ -158,10 +165,9 @@ int main(void) {
 			}
 
 			//wait a little to debounce on the cheap
-			usbDelayMs(100);
+			usbDelayMs(250);
+			ledsOff();
 		}
-
-		
 	}
 	
 	return 0;	
