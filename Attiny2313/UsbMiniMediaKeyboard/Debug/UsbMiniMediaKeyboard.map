@@ -145,7 +145,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x0000000000000000      0x7e2
+.text           0x0000000000000000      0x778
  *(.vectors)
  .vectors       0x0000000000000000       0x26 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr25/tiny-stack/crtattiny2313.o
                 0x0000000000000000                __vectors
@@ -254,66 +254,68 @@ END GROUP
  .text          0x00000000000003ec        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_clear_bss.o)
                 0x00000000000003ec                . = ALIGN (0x2)
  *(.text.*)
+ .text.usbDelayMs.constprop.0
+                0x00000000000003ec       0x3c ./UsbMiniMediaKeyboard.o
  .text.usbEventResetReady
-                0x00000000000003ec        0x2 ./UsbMiniMediaKeyboard.o
-                0x00000000000003ec                usbEventResetReady
+                0x0000000000000428        0x2 ./UsbMiniMediaKeyboard.o
+                0x0000000000000428                usbEventResetReady
  .text.usbFunctionSetup
-                0x00000000000003ee       0x46 ./UsbMiniMediaKeyboard.o
-                0x00000000000003ee                usbFunctionSetup
+                0x000000000000042a       0x46 ./UsbMiniMediaKeyboard.o
+                0x000000000000042a                usbFunctionSetup
  .text.startup.main
-                0x0000000000000434       0xfc ./UsbMiniMediaKeyboard.o
-                0x0000000000000434                main
+                0x0000000000000470       0x56 ./UsbMiniMediaKeyboard.o
+                0x0000000000000470                main
  .text.usbSetInterrupt
-                0x0000000000000530       0x42 ./usbdrv.o
-                0x0000000000000530                usbSetInterrupt
- .text.usbPoll  0x0000000000000572      0x252 ./usbdrv.o
-                0x0000000000000572                usbPoll
- .text.usbInit  0x00000000000007c4       0x1a ./usbdrv.o
-                0x00000000000007c4                usbInit
+                0x00000000000004c6       0x42 ./usbdrv.o
+                0x00000000000004c6                usbSetInterrupt
+ .text.usbPoll  0x0000000000000508      0x252 ./usbdrv.o
+                0x0000000000000508                usbPoll
+ .text.usbInit  0x000000000000075a       0x1a ./usbdrv.o
+                0x000000000000075a                usbInit
  .text.libgcc.mul
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
  .text.libgcc.div
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
- .text.libgcc   0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
+ .text.libgcc   0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
  .text.libgcc.prologue
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
  .text.libgcc.builtins
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
  .text.libgcc.fmul
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
  .text.libgcc.fixed
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
  .text.libgcc.mul
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_copy_data.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_copy_data.o)
  .text.libgcc.div
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_copy_data.o)
- .text.libgcc   0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_copy_data.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_copy_data.o)
+ .text.libgcc   0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_copy_data.o)
  .text.libgcc.prologue
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_copy_data.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_copy_data.o)
  .text.libgcc.builtins
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_copy_data.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_copy_data.o)
  .text.libgcc.fmul
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_copy_data.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_copy_data.o)
  .text.libgcc.fixed
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_copy_data.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_copy_data.o)
  .text.libgcc.mul
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_clear_bss.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_clear_bss.o)
  .text.libgcc.div
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_clear_bss.o)
- .text.libgcc   0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_clear_bss.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_clear_bss.o)
+ .text.libgcc   0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_clear_bss.o)
  .text.libgcc.prologue
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_clear_bss.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_clear_bss.o)
  .text.libgcc.builtins
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_clear_bss.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_clear_bss.o)
  .text.libgcc.fmul
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_clear_bss.o)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_clear_bss.o)
  .text.libgcc.fixed
-                0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_clear_bss.o)
-                0x00000000000007de                . = ALIGN (0x2)
+                0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_clear_bss.o)
+                0x0000000000000774                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000000000007de        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
-                0x00000000000007de                exit
-                0x00000000000007de                _exit
+ .fini9         0x0000000000000774        0x0 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
+                0x0000000000000774                exit
+                0x0000000000000774                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -332,11 +334,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000000000007de        0x4 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
+ .fini0         0x0000000000000774        0x4 /usr/lib/gcc/avr/5.4.0/avr25/tiny-stack/libgcc.a(_exit.o)
  *(.fini0)
-                0x00000000000007e2                _etext = .
+                0x0000000000000778                _etext = .
 
-.data           0x0000000000800060        0x2 load address 0x00000000000007e2
+.data           0x0000000000800060        0x2 load address 0x0000000000000778
                 0x0000000000800060                PROVIDE (__data_start, .)
  *(.data)
  .data          0x0000000000800060        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr25/tiny-stack/crtattiny2313.o
@@ -393,8 +395,8 @@ END GROUP
                 0x0000000000800087                usbConfiguration
                 0x0000000000800088                usbRxBuf
                 0x000000000080009e                PROVIDE (__bss_end, .)
-                0x00000000000007e2                __data_load_start = LOADADDR (.data)
-                0x00000000000007e4                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000000000000778                __data_load_start = LOADADDR (.data)
+                0x000000000000077a                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x000000000080009e        0x0
                 [!provide]                        PROVIDE (__noinit_start, .)
@@ -422,19 +424,19 @@ END GROUP
 .user_signatures
  *(.user_signatures*)
 
-.stab           0x0000000000000000     0x288c
+.stab           0x0000000000000000     0x2790
  *(.stab)
- .stab          0x0000000000000000      0x918 ./UsbMiniMediaKeyboard.o
- .stab          0x0000000000000918      0x300 ./oddebug.o
+ .stab          0x0000000000000000      0x81c ./UsbMiniMediaKeyboard.o
+ .stab          0x000000000000081c      0x300 ./oddebug.o
                                         0x4ec (size before relaxing)
- .stab          0x0000000000000c18      0xbc4 ./usbdrv.o
+ .stab          0x0000000000000b1c      0xbc4 ./usbdrv.o
                                         0xe10 (size before relaxing)
- .stab          0x00000000000017dc     0x10b0 ./usbdrvasm.o
+ .stab          0x00000000000016e0     0x10b0 ./usbdrvasm.o
                                        0x10bc (size before relaxing)
 
-.stabstr        0x0000000000000000     0x11b7
+.stabstr        0x0000000000000000     0x11d6
  *(.stabstr)
- .stabstr       0x0000000000000000     0x11b7 ./UsbMiniMediaKeyboard.o
+ .stabstr       0x0000000000000000     0x11d6 ./UsbMiniMediaKeyboard.o
 
 .stab.excl
  *(.stab.excl)
