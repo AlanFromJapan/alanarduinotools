@@ -11,16 +11,17 @@
  */
 
 
-//#define F_CPU 4800000L
+//#define F_CPU 9600000L
 
 #include <avr/io.h>
 #include <avr/iotn13.h>
-#include <avr/delay.h>
+#include <util/delay.h>
 #include <avr/interrupt.h>
 
-#define PORT_LED_CLAP PORTB3
+#define PORT_LED_CLAP 	PORTB3
 #define PORT_LED_STATUS PORTB4
-#define PORT_RELAY PORTB2
+#define PORT_RELAY 		PORTB2
+#define PORT_SWITCH		PORTB0
 
 //Just for the test of leds ... will be removed by optimizer
 void test_Blink()
@@ -31,21 +32,28 @@ void test_Blink()
 
     while(1)
     {
-		PORTB = 1 << PORT_LED_CLAP;
-
-		_delay_ms(50);
-
-		PORTB = 1 << PORT_LED_STATUS;
-
-		_delay_ms(50);
-
-		PORTB = 0;
+    	blink();
 
 		_delay_ms(900);
     }
 }
 
 
+//Blink all leds once
+void blink(void) {
+	PORTB |= 1 << PORT_LED_CLAP;
+	PORTB &= ~(1 << PORT_LED_STATUS);
+
+	_delay_ms(50);
+
+	PORTB |= 1 << PORT_LED_STATUS;
+	PORTB &= ~(1 << PORT_LED_CLAP);
+
+	_delay_ms(50);
+
+	PORTB &= ~(1 << PORT_LED_CLAP);
+	PORTB &= ~(1 << PORT_LED_STATUS);
+}
 
 
 int main(void)
@@ -56,22 +64,22 @@ int main(void)
 	// no clock pre-scaling
 	CLKPR = 0x00;
 
-	//all pins are output EXCEPT PB0 & PB1 (AIN0 and AIN1) that are input
-	DDRB = 0xFF
-		& ~(1 << PB0)
-		& ~(1 << PB1);
+	//Switch on PB0 only is input, the rest it output
+	DDRB = 0xFE;
+	//pullup on PB0
+	PORTB = 0x01;
 
-	//needed it seems.
-	//One need also a pulldown on the AIN0 (Comparator+) to avoid having it floating (if you use a switch for instance)
-	PORTB &= ~(1<<PB0);    // no Pull-up on PB0
-
-	//relay and status led are OFF
-	PORTB &= ~(1 << PORT_RELAY) & ~(1 << PORT_LED_STATUS);
-
+	//just make sure pullups are NOT disabled
+	MCUCR |= (0 << PUD);
 
 	//main body loop
 	while(1) {
-		test_Blink();
+		//if foot button pressed
+		if ((PINB & 0x01) != 0x01){
+			blink();
+
+
+		}
 
 	}
 }
