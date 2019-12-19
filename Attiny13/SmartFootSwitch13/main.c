@@ -55,6 +55,10 @@ void blink(void) {
 	PORTB &= ~(1 << PORT_LED_STATUS);
 }
 
+//Toggles the relay status
+void toggleRelay (){
+	PORTB ^= (1 << PORT_RELAY);
+}
 
 int main(void)
 {
@@ -78,7 +82,10 @@ int main(void)
 		if ((PINB & 0x01) != 0x01){
 			blink();
 
+			toggleRelay();
 
+			//debounce
+			_delay_ms(100);
 		}
 
 	}
