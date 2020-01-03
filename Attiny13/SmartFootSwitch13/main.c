@@ -23,8 +23,15 @@
 #define PORT_RELAY 		PORTB2
 #define PORT_SWITCH		PORTB0
 
-//0 off, else on
-uint8_t mRelayStatus = 0;
+#define AUTOMATE_OFF 		0
+#define AUTOMATE_LONGPRESS 	1
+#define AUTOMATE_ON 		2
+
+uint8_t mAutomate= AUTOMATE_OFF;
+
+#define DEBOUNCE_DELAY	100
+#define LONGPRESS_COUNT 5
+//----------------------------------------------------------------------------
 
 //Just for the test of leds ... will be removed by optimizer
 void test_Blink()
@@ -51,30 +58,19 @@ void blink(void) {
 	PORTB &= ~(1 << PORT_LED_CLAP);
 
 	_delay_ms(50);
-
-	PORTB &= ~(1 << PORT_LED_CLAP);
 }
 
-//Toggles the relay status
-void toggleRelay (){
-	if (mRelayStatus == 0)
-		relayOn();
-	else
-		relayOff();
-}
 
 //Turns the relay OFF
 void relayOff() {
 	PORTB &= ~(1 << PORT_RELAY);
 	PORTB &= ~(1 << PORT_LED_STATUS);
-	mRelayStatus = 0;
 }
 
 //Turns the relay ON
 void relayOn (){
 	PORTB |= (1 << PORT_RELAY);
 	PORTB |= (1 << PORT_LED_STATUS);
-	mRelayStatus = 1;
 }
 
 int main(void)
@@ -101,16 +97,52 @@ int main(void)
 	_delay_ms(500);
 	blink();
 	blink();
+	blink();
 
+	uint8_t mLongPressCount = 0;
 	//main body loop
 	while(1) {
 		//if foot button pressed
 		if ((PINB & 0x01) != 0x01){
-			toggleRelay();
 			blink();
 
+			switch (mAutomate) {
+				case AUTOMATE_OFF:
+					// OFF -> LONGPRESS
+					mAutomate = AUTOMATE_LONGPRESS;
+					mLongPressCount = 0;
+					break;
+				case AUTOMATE_ON:
+					//ON -> OFF
+					mAutomate = AUTOMATE_OFF;
+					relayOff();
+					break;
+				case AUTOMATE_LONGPRESS:
+					mLongPressCount ++;
+
+					if (mLongPressCount > LONGPRESS_COUNT) {
+						relayOn();
+					}
+					break;
+			}
 			//debounce
-			_delay_ms(100);
+			_delay_ms(DEBOUNCE_DELAY);
+		}
+		else {
+			//NOT PRESSED
+			switch (mAutomate) {
+				case AUTOMATE_LONGPRESS:
+					// LONGPRESS -> OFF or ON
+
+					if (mLongPressCount > LONGPRESS_COUNT) {
+						mAutomate = AUTOMATE_ON;
+					}
+					else {
+						mAutomate = AUTOMATE_OFF;
+					}
+
+					break;
+			}
 		}
 
 	}
