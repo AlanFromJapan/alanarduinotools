@@ -139,8 +139,12 @@ int main(void)
 					}
 					else {
 						mAutomate = AUTOMATE_OFF;
+						//should not be needed but I had a strange bug where I couldn't stop nor start so, in case...
+						relayOff();
 					}
 
+					//debounce : also not needed but in case...
+					_delay_ms(DEBOUNCE_DELAY);
 					break;
 			}
 		}
