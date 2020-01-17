@@ -133,15 +133,15 @@ int main(void) {
 		KeyPressed = 0x00;
 
 		//check buttons status
-		if ((PINB & KEYUP_MASK) != KEYUP_MASK){
+		if ((PINB & KEYUP_MASK) == KEYUP_MASK){
 			KeyPressed = VOL_UP;
 		}
 		else{
-			if ((PINB & KEYDOWN_MASK) != KEYDOWN_MASK){
+			if ((PINB & KEYDOWN_MASK) == KEYDOWN_MASK){
 				KeyPressed = VOL_DOWN;
 			}
 			else{
-				if ((PINB & KEYMUTE_MASK) != KEYMUTE_MASK){
+				if ((PINB & KEYMUTE_MASK) == KEYMUTE_MASK){
 					KeyPressed = VOL_MUTE;
 				}
 			}
