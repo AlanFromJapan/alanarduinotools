@@ -19,6 +19,8 @@ from designer import  drawShutdownPanel, drawOthersPanel, drawEndPanel, drawErro
 
 from DummyWeatherProvider import DummyWeatherProvider
 from WbitWeatherProvider import WbitWeatherProvider
+from OWMWeatherProvider import OWMWeatherProvider
+
 ################################################################################################3
 ##
 ##  Constants & Globals
@@ -26,8 +28,8 @@ from WbitWeatherProvider import WbitWeatherProvider
 ################################################################################################3
 
 #Tokyo
-CITYCODE=config.weatherio["citycode"]
-KEY=config.weatherio["key"]
+CITYCODE=config.OpenWeatherMap["citycode"]
+KEY=config.OpenWeatherMap["key"]
 
 
 # Pin Definitons: it's the GPIO##, not the Pin number on the connector (beware)
@@ -198,7 +200,8 @@ if __name__ == '__main__':
     initButtons()
 
     #wprovider = DummyWeatherProvider()
-    wprovider = WbitWeatherProvider(CITYCODE, KEY)
+    #wprovider = WbitWeatherProvider(CITYCODE, KEY)
+    wprovider = OWMWeatherProvider(CITYCODE, KEY)
 
     #draws the current panel
     drawCurrentPanel()
