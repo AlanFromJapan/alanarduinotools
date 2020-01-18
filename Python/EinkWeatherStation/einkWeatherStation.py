@@ -15,7 +15,7 @@ import config
 #some utils functions
 import alan_utils
 from designerSquares import drawWeatherPanel
-from designer import  drawShutdownPanel, drawOthersPanel, drawEndPanel, drawErrorGeneric
+from designer import  drawShutdownPanel, drawOthersPanel, drawEndPanel, drawErrorGeneric, drawStartupPanel
 
 from DummyWeatherProvider import DummyWeatherProvider
 from WbitWeatherProvider import WbitWeatherProvider
@@ -182,7 +182,20 @@ def drawCurrentPanel():
         #go to sleep to not damage the display
         epd.sleep()
         
-    
+
+def showStartup():
+    #wake up! in case it sleeps
+    epd.reset()
+
+    try:
+        img = drawStartupPanel()
+        img = img.rotate(90, expand=True)
+        eInkShow(epd, img)
+    finally:
+        #go to sleep to not damage the display
+        epd.sleep()
+
+        
 ################################################################################################3
 ##
 ##  Main entry point
@@ -196,6 +209,9 @@ if __name__ == '__main__':
     #init the e-Ink
     epd = eInkInit()
 
+    #show startup
+    showStartup()
+    
     #init buttons
     initButtons()
 

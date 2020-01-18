@@ -41,10 +41,10 @@ class OWMWeatherProvider(AbstractWeatherProvider):
             resp["city_name"] = j["name"]
 
             self.__unwrapOneData(resp, j)
-        except Exception:
+        except Exception, e:
             #log
             eType = sys.exc_info()[0]
-            print ("ERROR! %s" % (eType))
+            print ("ERROR! %s - %s" % (eType, str(e)))
             print("Response received;")
             print(j)
             
@@ -56,8 +56,56 @@ class OWMWeatherProvider(AbstractWeatherProvider):
 
     #returns the weather for the "next" period (to the discretion of implementation) 
     def getNextWeather(self):
-        #just for now...
-        return self.getCurrentWeather()
+        j = "{nothing}"
+        try:
+            #find the right "next time": evening I want next morning, morning afternoon, afternoon evening
+            now = datetime.datetime.now()
+            if now.hour >=18:
+                #get tomorrow 9am
+                later = datetime.datetime(now.year, now.month, now.day, 9) + datetime.timedelta(days=1)
+            elif now.hour >= 12:
+                #afternoon give me today evening
+                later = datetime.datetime(now.year, now.month, now.day, 21)
+            elif now.hour >= 6:
+                #orning give me this noon
+                later = datetime.datetime(now.year, now.month, now.day, 12)
+            else:
+                #before 6am, give me today 9am
+                later = datetime.datetime(now.year, now.month, now.day, 9)
+
+            #print ("DEBUG : later is JST  %s" % (later.strftime("%Y-%m-%d %H:%M:%S")))
+            
+            response = requests.get(URL_5DAYS3H % (self.__CITYCODE, self.__KEY))
+            j  = json.loads(response.text)
+
+            resp = dict()
+        
+            resp["city_name"] = j["city"]["name"]
+
+
+            #go through them all, return the one just after "later"
+            for d in j["list"]:
+                self.__unwrapOneData(resp, d)
+
+                #print ("DEBUG : JST %s" % (resp["datetimeobj"].strftime("%Y-%m-%d %H:%M:%S")))
+                if resp["datetimeobj"] >= later:
+                    break
+
+            return resp
+        except Exception, e:
+            #log
+            eType = sys.exc_info()[0]
+            print ("ERROR! %s - %s" % (eType, str(e)))
+            print("Response received;")
+            print(j)
+            
+            #let it go to hell
+            raise 
+
+
+
+
+        
 
     #constructor
     def __init__(self, citycode, privatekey):
