@@ -15,7 +15,7 @@ import config
 #some utils functions
 import alan_utils
 from designerSquares import drawWeatherPanel
-from designer import  drawShutdownPanel, drawOthersPanel, drawEndPanel
+from designer import  drawShutdownPanel, drawOthersPanel, drawEndPanel, drawErrorGeneric
 
 from DummyWeatherProvider import DummyWeatherProvider
 from WbitWeatherProvider import WbitWeatherProvider
@@ -26,7 +26,7 @@ from WbitWeatherProvider import WbitWeatherProvider
 ################################################################################################3
 
 #Tokyo
-CITYCODE="1850147"
+CITYCODE=config.weatherio["citycode"]
 KEY=config.weatherio["key"]
 
 
@@ -154,6 +154,11 @@ def drawCurrentPanel():
             except BaseException,ex:
                 #something wrong happened
                 traceback.print_exc()
+
+                img = drawErrorGeneric(ex)
+                img = img.rotate(90, expand=True)
+                eInkShow(epd, img)
+                
                 #skip refresh this time
                 return
 
@@ -200,6 +205,9 @@ if __name__ == '__main__':
 
     #save time of last check of weather
     lastWeatherDT = datetime.datetime.now()
+
+    #refresh interval in sec
+    refreshIntervalSec = int(config.params["refreshIntervalSec"])
     
     print("Here we go! Press CTRL+C to exit")
     try:
@@ -215,7 +223,7 @@ if __name__ == '__main__':
             if currentPanelIdx == 0 and not lastWeatherDT == None:
                 tdelta = now - lastWeatherDT
                 #refresh every 20 mins = 1200 sec
-                if tdelta.total_seconds() > 1200:
+                if tdelta.total_seconds() > refreshIntervalSec:
                     print("Weather: force refresh.")
                     #force refresh
                     drawCurrentPanel()

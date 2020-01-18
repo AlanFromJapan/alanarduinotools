@@ -251,3 +251,28 @@ def drawEndPanel():
     return image
 
 
+
+################################################################################################3
+##
+## In case of error
+##
+################################################################################################3
+def drawErrorGeneric(ex):
+    message = str(ex)
+    print("DEBUG: generic error panel with message '%s'." % (message))
+    #make blank image and get all we need to draw
+    image, draw, image_width, image_height = makeBlankPanelImage()
+
+    draw.text (( 0, 0 ), "Error:", font= font_small, fill = 0  )
+    
+    #    draw.text (( 0, 16 ), str(message), font= font_small, fill = 0  )
+    n= 30
+    splited = [message[i:i+n] for i in range(0, len(message), n)]
+
+    y= deltay = 16
+    for line in splited:
+        draw.text (( 0, y ), line, font= font_small, fill = 0  )
+        y= y + deltay
+    
+    return image
+    
