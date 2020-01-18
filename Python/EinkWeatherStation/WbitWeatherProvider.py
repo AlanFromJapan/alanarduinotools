@@ -2,6 +2,7 @@ from AbstractWeatherProvider import AbstractWeatherProvider
 import json
 import requests
 import datetime
+import sys
 
 #placeholders for city and key
 URL_CURRENTWEATHER="https://api.weatherbit.io/v2.0/current?city_id=%s&key=%s"
@@ -47,34 +48,43 @@ class WbitWeatherProvider(AbstractWeatherProvider):
 
     #returns the weather for the "next" period (to the discretion of implementation) 
     def getNextWeather(self):
-        deltah = 9
+        j = "{nothing}"
+        try:
+            deltah = 9
 
-        #find the right "next time": evening I want next morning, morning afternoon, afternoon evening
-        now = datetime.datetime.now()
-        if now.hour >=18:
-            deltah = 24+9 - now.hour
-        elif now.hour <= 7:
-            deltah = 9 - now.hour
-        elif now.hour <= 12:
-            deltah = 14 - now.hour
-        elif now.hour <= 17:
-            deltah = 20 - now.hour
+            #find the right "next time": evening I want next morning, morning afternoon, afternoon evening
+            now = datetime.datetime.now()
+            if now.hour >=18:
+                deltah = 24+9 - now.hour
+            elif now.hour <= 7:
+                deltah = 9 - now.hour
+            elif now.hour <= 12:
+                deltah = 14 - now.hour
+            elif now.hour <= 17:
+                deltah = 20 - now.hour
 
 
-        response = requests.get(URL_HOURLY % (self.__CITYCODE, deltah, self.__KEY))
-        j  = json.loads(response.text)
+            response = requests.get(URL_HOURLY % (self.__CITYCODE, deltah, self.__KEY))
+            j  = json.loads(response.text)
 
-        #print ("DEBUG: " + response.text)
-            
-        resp = dict()
+            resp = dict()
         
-        resp["city_name"] = j["city_name"]
+            resp["city_name"] = "Unknown" if not "city_name" in j else j["city_name"]
 
-        #go through them all, return the last
-        for d in j["data"]:
-            self.__unwrapOneData(resp, d)
+            #go through them all, return the last
+            for d in j["data"]:
+                self.__unwrapOneData(resp, d)
 
-        return resp
+            return resp
+        except:
+            #log
+            eType = sys.exc_info()[0]
+            print ("ERROR! %s" % (eType))
+            print("Response received;")
+            print(j)
+            
+            #let it go to hell
+            raise Exception ("%s : %s" % (eType, j))
 
 
     #constructor

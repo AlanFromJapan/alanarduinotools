@@ -15,10 +15,12 @@ import config
 #some utils functions
 import alan_utils
 from designerSquares import drawWeatherPanel
-from designer import  drawShutdownPanel, drawOthersPanel, drawEndPanel
+from designer import  drawShutdownPanel, drawOthersPanel, drawEndPanel, drawErrorGeneric, drawStartupPanel
 
 from DummyWeatherProvider import DummyWeatherProvider
 from WbitWeatherProvider import WbitWeatherProvider
+from OWMWeatherProvider import OWMWeatherProvider
+
 ################################################################################################3
 ##
 ##  Constants & Globals
@@ -26,8 +28,8 @@ from WbitWeatherProvider import WbitWeatherProvider
 ################################################################################################3
 
 #Tokyo
-CITYCODE="1850147"
-KEY=config.weatherio["key"]
+CITYCODE=config.OpenWeatherMap["citycode"]
+KEY=config.OpenWeatherMap["key"]
 
 
 # Pin Definitons: it's the GPIO##, not the Pin number on the connector (beware)
@@ -154,6 +156,11 @@ def drawCurrentPanel():
             except BaseException,ex:
                 #something wrong happened
                 traceback.print_exc()
+
+                img = drawErrorGeneric(ex)
+                img = img.rotate(90, expand=True)
+                eInkShow(epd, img)
+                
                 #skip refresh this time
                 return
 
@@ -175,7 +182,20 @@ def drawCurrentPanel():
         #go to sleep to not damage the display
         epd.sleep()
         
-    
+
+def showStartup():
+    #wake up! in case it sleeps
+    epd.reset()
+
+    try:
+        img = drawStartupPanel()
+        img = img.rotate(90, expand=True)
+        eInkShow(epd, img)
+    finally:
+        #go to sleep to not damage the display
+        epd.sleep()
+
+        
 ################################################################################################3
 ##
 ##  Main entry point
@@ -189,17 +209,24 @@ if __name__ == '__main__':
     #init the e-Ink
     epd = eInkInit()
 
+    #show startup
+    showStartup()
+    
     #init buttons
     initButtons()
 
     #wprovider = DummyWeatherProvider()
-    wprovider = WbitWeatherProvider(CITYCODE, KEY)
+    #wprovider = WbitWeatherProvider(CITYCODE, KEY)
+    wprovider = OWMWeatherProvider(CITYCODE, KEY)
 
     #draws the current panel
     drawCurrentPanel()
 
     #save time of last check of weather
     lastWeatherDT = datetime.datetime.now()
+
+    #refresh interval in sec
+    refreshIntervalSec = int(config.params["refreshIntervalSec"])
     
     print("Here we go! Press CTRL+C to exit")
     try:
@@ -215,7 +242,7 @@ if __name__ == '__main__':
             if currentPanelIdx == 0 and not lastWeatherDT == None:
                 tdelta = now - lastWeatherDT
                 #refresh every 20 mins = 1200 sec
-                if tdelta.total_seconds() > 1200:
+                if tdelta.total_seconds() > refreshIntervalSec:
                     print("Weather: force refresh.")
                     #force refresh
                     drawCurrentPanel()

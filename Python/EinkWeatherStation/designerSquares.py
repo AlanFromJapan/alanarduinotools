@@ -141,4 +141,3 @@ def drawWeatherPanel(wNow, wLater):
 
     return image
 
-

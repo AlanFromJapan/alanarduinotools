@@ -66,6 +66,9 @@ font_xsmall = ImageFont.truetype(os.path.join(PATH_TO_FONTS, 'DisposableDroidBB.
 
 #returns the image to used based on condition keyword and time
 def getImageFromCondition(condition, when):
+
+    #print("DEBUG: when = %s" % (when))
+    
     c = condition
     if when.hour < 8 or when.hour >= 20:
         c = c +  "-night"
@@ -102,7 +105,7 @@ def makeBlankPanelImage():
 def getWeatherImg (w):
     try:
         #get the image to display
-        imgName = "unknown.png" if w == None else getImageFromCondition(w["status"].lower(), datetime.datetime.now())
+        imgName = "unknown.png" if w == None else getImageFromCondition(w["status"].lower(), w["datetimeobj"])
         
         return Image.open (os.path.join(PATH_TO_ICONS,imgName))
     except BaseException,ex:
@@ -250,4 +253,50 @@ def drawEndPanel():
     #eInkShow(epd, img)
     return image
 
+
+
+################################################################################################3
+##
+## In case of error
+##
+################################################################################################3
+def drawErrorGeneric(ex):
+    message = str(ex)
+    print("DEBUG: generic error panel with message '%s'." % (message))
+    #make blank image and get all we need to draw
+    image, draw, image_width, image_height = makeBlankPanelImage()
+
+    draw.text (( 0, 0 ), "Error:", font= font_small, fill = 0  )
+    
+    #    draw.text (( 0, 16 ), str(message), font= font_small, fill = 0  )
+    n= 30
+    splited = [message[i:i+n] for i in range(0, len(message), n)]
+
+    y= deltay = 16
+    for line in splited:
+        draw.text (( 0, y ), line, font= font_small, fill = 0  )
+        y= y + deltay
+    
+    return image
+
+
+################################################################################################3
+##
+##  Draw the Startup panel
+##
+################################################################################################3
+def drawStartupPanel():
+    print("DEBUG: Startup panel")
+    #make blank image and get all we need to draw
+    image, draw, image_width, image_height = makeBlankPanelImage()
+
+    i = Image.open (os.path.join(PATH_TO_IMG, "logo_weatherstation.png"))
+
+    draw.bitmap ( (0, 0), i )
+
+    ## Drawing finished - display
+    #img = image.rotate(90)
+    #display on e-Ink
+    #eInkShow(epd, img)
+    return image
 
