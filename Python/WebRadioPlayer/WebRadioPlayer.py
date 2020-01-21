@@ -18,6 +18,8 @@ import RPi.GPIO as GPIO
 
 #misc imports
 import time
+import os
+import config
 
 
 ##########################################################################################################
@@ -31,8 +33,8 @@ RESET_PIN = digitalio.DigitalInOut(board.D4)
 oled = None
 
 # Load a font in 2 different sizes.
-font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 20)
-font2 = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 14)
+font1 = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 24)
+font2 = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 12)
 
 ##########################################################################################################
 
@@ -51,24 +53,34 @@ def clearScreen():
     oled.show()
     
 
+    
+def showMessage(m, sleep=0, clearAfter=False, font=font1):
+    image = Image.new('1', (oled.width, oled.height))
+    draw = ImageDraw.Draw(image)
+    
+    # Draw the text
+    draw.text((0, 0), m, font=font, fill=255)
+    
+    # Display image
+    oled.image(image)
+    oled.show()
+    
+    #wait a little?
+    if sleep > 0:
+        time.sleep(sleep)
+    #clear screen?
+    if clearAfter:
+        clearScreen()
+        
+
+    
 def showStartupScreen():
     msg = ["Web", "Radio", "Player"]
     for m in msg:
-        # Create blank image for drawing.
-        image = Image.new('1', (oled.width, oled.height))
-        draw = ImageDraw.Draw(image)
+        showMessage(m, sleep=0.3, clearAfter=True, font=font1)
+
+
         
-        # Draw the text
-        draw.text((0, 0), m, font=font, fill=255)
-    
-        # Display image
-        oled.image(image)
-        oled.show()
-
-        #wait a little
-        time.sleep(0.3)
-
-
 
             
 ################################################################################################3
@@ -85,9 +97,9 @@ if __name__ == '__main__':
 
     showStartupScreen()
 
-    time.sleep(2)
-
     clearScreen()
 
+    m = str(len(config.radios)) + " radios registered."
+    showMessage(m, font=font2)
     
     
