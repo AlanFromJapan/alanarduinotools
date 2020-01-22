@@ -26,6 +26,8 @@ import config
 
 RESET_PIN = digitalio.DigitalInOut(board.D4)
 
+BUTTONA = 21
+BUTTONB = 20
 
 ##########################################################################################################
 
@@ -38,7 +40,7 @@ font2 = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 12
 
 ##########################################################################################################
 
-
+#init the screen
 def initScreen():
     # Very important... This lets py-gaugette 'know' what pins to use in order to reset the display
     global oled
@@ -46,15 +48,15 @@ def initScreen():
     oled = adafruit_ssd1306.SSD1306_I2C(128, 32, i2c, addr=0x3c, reset=RESET_PIN)
 
 
-    
+#clears the screen
 def clearScreen():
     # Clear display.
     oled.fill(0)
     oled.show()
     
 
-    
-def showMessage(m, sleep=0, clearAfter=False, font=font1):
+#show a message on the screen
+def showMessage(m, sleep=0, clearAfter=False, font=font2):
     image = Image.new('1', (oled.width, oled.height))
     draw = ImageDraw.Draw(image)
     
@@ -73,7 +75,7 @@ def showMessage(m, sleep=0, clearAfter=False, font=font1):
         clearScreen()
         
 
-    
+#makes the startup animation
 def showStartupScreen():
     msg = ["Web", "Radio", "Player"]
     for m in msg:
@@ -81,8 +83,31 @@ def showStartupScreen():
 
 
         
+#Init the GPIO buttons
+def initButtons():
+    GPIO.setmode(GPIO.BCM) # Broadcom pin-numbering scheme
+    #Buttons setup
+    GPIO.setup(BUTTONA, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(BUTTONB, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.add_event_detect(BUTTONA, GPIO.FALLING, callback=buttonCallbackA, bouncetime=500)  
+    GPIO.add_event_detect(BUTTONB, GPIO.FALLING, callback=buttonCallbackB, bouncetime=500)  
 
-            
+
+
+#Red button pressed : confirm action
+def buttonCallbackA(channel):
+    print ("DEBUG: Pressed [A]/[WHITE] !")
+    showMessage("white")
+
+
+    
+#Green button pressed : move to next panel
+def buttonCallbackB(channel):
+    print ("DEBUG: Pressed [B]/[YELLOW] !")
+    showMessage("yellow")
+
+
+    
 ################################################################################################3
 ##
 ##  Main entry point
@@ -91,6 +116,7 @@ def showStartupScreen():
 if __name__ == '__main__':
     #inits
     initScreen()
+    initButtons()
 
     #startup
     clearScreen()
@@ -101,5 +127,17 @@ if __name__ == '__main__':
 
     m = str(len(config.radios)) + " radios registered."
     showMessage(m, font=font2)
+
     
+    try:
+        while (True):
+            time.sleep(1)
+            
+    except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
+        pass
+    finally:
+        # cleanup all GPIO
+        GPIO.cleanup() 
+        print("Good bye.")
+        
     
