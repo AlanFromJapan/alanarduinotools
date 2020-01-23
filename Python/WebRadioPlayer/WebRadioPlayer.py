@@ -24,6 +24,9 @@ import config
 #display
 import designer
 
+#playa
+import player
+
 ##########################################################################################################
 
 RESET_PIN = digitalio.DigitalInOut(board.D4)
@@ -41,8 +44,11 @@ oled = None
 #THE designer
 d = None
 
+#THE player
+p = None
+
 #state machine status
-mCurrentState = "play"
+mCurrentState = "pause"
 mCurrentRadioName = None
 
 ##########################################################################################################
@@ -80,6 +86,8 @@ def buttonCallbackA(channel):
     elif mCurrentState == "pause":
         mCurrentState = "play"
 
+    updatePlayerStatus()
+    
     #update the screen
     showCurrentScreen()
 
@@ -97,6 +105,8 @@ def buttonCallbackB(channel):
 
     #in case, pause playing
     mCurrentState = "pause"
+
+    updatePlayerStatus()
     
     #update the screen
     showCurrentScreen()
@@ -110,6 +120,14 @@ def showCurrentScreen():
         d.showScreenPlay(mCurrentRadioName)
     elif mCurrentState == "pause":
         d.showScreenPause(mCurrentRadioName)
+
+
+def updatePlayerStatus():
+    if mCurrentState == "play":
+        p.play(config.radios[mCurrentRadioName])
+    elif mCurrentState == "pause":
+        p.pause()
+    
     
     
 ################################################################################################3
@@ -122,6 +140,8 @@ if __name__ == '__main__':
     initScreen()
     initButtons()
 
+    p = player.Player()
+    
     #startup
     d.clearScreen()
 
@@ -138,6 +158,7 @@ if __name__ == '__main__':
     mCurrentRadioName = list(config.radios.keys())[0]
     
     #Goto main screen
+    updatePlayerStatus()
     showCurrentScreen()
     
     try:
