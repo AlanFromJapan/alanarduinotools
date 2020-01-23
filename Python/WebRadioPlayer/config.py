@@ -5,3 +5,7 @@ radios = {
         "Couleur 3" : "http://stream.srg-ssr.ch/m/couleur3/mp3_128",
         "Rires et chansons" : "http://185.52.127.163/fr/30401/mp3_128.mp3"
 }
+
+general = dict (
+    flipScreen = True
+)

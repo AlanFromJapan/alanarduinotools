@@ -21,6 +21,8 @@ import time
 import os
 import config
 
+#display
+import designer
 
 ##########################################################################################################
 
@@ -29,57 +31,31 @@ RESET_PIN = digitalio.DigitalInOut(board.D4)
 BUTTONA = 21
 BUTTONB = 20
 
+STATUS= ["play", "pause", "stop?", "stop"]
+
 ##########################################################################################################
 
 #THE oled screen object
 oled = None
 
-# Load a font in 2 different sizes.
-font1 = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 24)
-font2 = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 12)
+#THE designer
+d = None
+
+#state machine status
+mCurrentState = "play"
+mCurrentRadioName = None
 
 ##########################################################################################################
 
 #init the screen
 def initScreen():
     # Very important... This lets py-gaugette 'know' what pins to use in order to reset the display
-    global oled
+    global oled, d
     i2c = board.I2C()
     oled = adafruit_ssd1306.SSD1306_I2C(128, 32, i2c, addr=0x3c, reset=RESET_PIN)
+    d = designer.Designer (oled)
 
 
-#clears the screen
-def clearScreen():
-    # Clear display.
-    oled.fill(0)
-    oled.show()
-    
-
-#show a message on the screen
-def showMessage(m, sleep=0, clearAfter=False, font=font2):
-    image = Image.new('1', (oled.width, oled.height))
-    draw = ImageDraw.Draw(image)
-    
-    # Draw the text
-    draw.text((0, 0), m, font=font, fill=255)
-    
-    # Display image
-    oled.image(image)
-    oled.show()
-    
-    #wait a little?
-    if sleep > 0:
-        time.sleep(sleep)
-    #clear screen?
-    if clearAfter:
-        clearScreen()
-        
-
-#makes the startup animation
-def showStartupScreen():
-    msg = ["Web", "Radio", "Player"]
-    for m in msg:
-        showMessage(m, sleep=0.3, clearAfter=True, font=font1)
 
 
         
@@ -94,19 +70,47 @@ def initButtons():
 
 
 
-#Red button pressed : confirm action
+#White button pressed : Play/Pause/Valid
 def buttonCallbackA(channel):
+    global mCurrentState
     print ("DEBUG: Pressed [A]/[WHITE] !")
-    showMessage("white")
+
+    if mCurrentState == "play":
+        mCurrentState = "pause"
+    elif mCurrentState == "pause":
+        mCurrentState = "play"
+
+    #update the screen
+    showCurrentScreen()
 
 
     
-#Green button pressed : move to next panel
+#White button pressed : change channel
 def buttonCallbackB(channel):
+    global mCurrentRadioName, mCurrentState
     print ("DEBUG: Pressed [B]/[YELLOW] !")
-    showMessage("yellow")
+    
+    l = list(config.radios.keys())
+    i = l.index(mCurrentRadioName)
+    i = (i + 1) % len(l)
+    mCurrentRadioName = l[i]
+
+    #in case, pause playing
+    mCurrentState = "pause"
+    
+    #update the screen
+    showCurrentScreen()
+    
 
 
+
+#Show the current screen as per the current status
+def showCurrentScreen():
+    if mCurrentState == "play":
+        d.showScreenPlay(mCurrentRadioName)
+    elif mCurrentState == "pause":
+        d.showScreenPause(mCurrentRadioName)
+    
     
 ################################################################################################3
 ##
@@ -119,19 +123,26 @@ if __name__ == '__main__':
     initButtons()
 
     #startup
-    clearScreen()
+    d.clearScreen()
 
-    showStartupScreen()
+    d.showStartupScreen()
 
-    clearScreen()
+    d.clearScreen()
 
+    #show how many radios
     m = str(len(config.radios)) + " radios registered."
-    showMessage(m, font=font2)
+    d.showMessage(m, font=d.fontSmall, sleep=1)
 
+    #play the first radio
+    #below line : make a list() before taking index 0 because dict_keys() is a set (there's no "order")
+    mCurrentRadioName = list(config.radios.keys())[0]
+    
+    #Goto main screen
+    showCurrentScreen()
     
     try:
         while (True):
-            time.sleep(1)
+            pass
             
     except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
         pass
