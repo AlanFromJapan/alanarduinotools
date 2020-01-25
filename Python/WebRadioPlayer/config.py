@@ -1,5 +1,6 @@
 radios = {
         "Radio classique" : "https://radioclassique.ice.infomaniak.ch/radioclassique-high.mp3",
+        "not working" : "http://192.168.0.2:5338/live",
         "Classic Rock radio" : "http://144.217.158.59:5338/live",
         "Alpes 1" :"http://alpes1grenoble.ice.infomaniak.ch/alpes1grenoble-high.mp3",
         "Couleur 3" : "http://stream.srg-ssr.ch/m/couleur3/mp3_128",

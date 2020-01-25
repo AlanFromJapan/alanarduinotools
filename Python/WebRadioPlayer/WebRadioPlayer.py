@@ -34,7 +34,7 @@ RESET_PIN = digitalio.DigitalInOut(board.D4)
 BUTTONA = 21
 BUTTONB = 20
 
-STATUS= ["play", "pause", "stop?", "stop"]
+STATUS= ["play", "pause", "stop"]
 
 ##########################################################################################################
 
@@ -107,7 +107,12 @@ def buttonCallbackB(channel):
     mCurrentState = "pause"
 
     updatePlayerStatus()
-    
+    """
+    if i == 0:
+        #go to settings
+        mCurrentState = "stop"
+arrete ici faut que je dorme
+"""
     #update the screen
     showCurrentScreen()
     
@@ -123,11 +128,20 @@ def showCurrentScreen():
 
 
 def updatePlayerStatus():
-    if mCurrentState == "play":
-        p.play(config.radios[mCurrentRadioName])
-    elif mCurrentState == "pause":
-        p.pause()
-    
+    global mCurrentState
+    try:
+        if mCurrentState == "play":
+            p.play(config.radios[mCurrentRadioName])
+        elif mCurrentState == "pause":
+            p.pause()
+    except BaseException as e:
+        print(str(e))
+        d.showMessage(str(e), font=d.fontSmall, sleep=3)
+        #go back or stay in pause
+        mCurrentState = "pause"
+        showCurrentScreen()
+            
+        
     
     
 ################################################################################################3
@@ -136,40 +150,43 @@ def updatePlayerStatus():
 ##
 ################################################################################################3
 if __name__ == '__main__':
-    #inits
-    initScreen()
-    initButtons()
-
-    p = player.Player()
-    
-    #startup
-    d.clearScreen()
-
-    d.showStartupScreen()
-
-    d.clearScreen()
-
-    #show how many radios
-    m = str(len(config.radios)) + " radios registered."
-    d.showMessage(m, font=d.fontSmall, sleep=1)
-
-    #play the first radio
-    #below line : make a list() before taking index 0 because dict_keys() is a set (there's no "order")
-    mCurrentRadioName = list(config.radios.keys())[0]
-    
-    #Goto main screen
-    updatePlayerStatus()
-    showCurrentScreen()
-    
     try:
-        while (True):
-            pass
-            
-    except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
-        pass
-    finally:
-        # cleanup all GPIO
-        GPIO.cleanup() 
-        print("Good bye.")
-        
+        #inits
+        initScreen()
+        initButtons()
+
+        p = player.Player()
     
+        #startup
+        d.clearScreen()
+
+        d.showStartupScreen()
+        
+        d.clearScreen()
+
+        #show how many radios
+        m = str(len(config.radios)) + " radios registered."
+        d.showMessage(m, font=d.fontSmall, sleep=1)
+
+        #play the first radio
+        #below line : make a list() before taking index 0 because dict_keys() is a set (there's no "order")
+        mCurrentRadioName = list(config.radios.keys())[0]
+
+        #Goto main screen
+        updatePlayerStatus()
+        showCurrentScreen()
+
+        try:
+            while (True):
+                pass
+
+        except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
+            pass
+        finally:
+            # cleanup all GPIO
+            GPIO.cleanup() 
+            print("Good bye.")
+    finally:
+        oled.poweroff()
+
+            
