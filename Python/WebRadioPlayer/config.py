@@ -7,5 +7,6 @@ radios = {
 }
 
 general = dict (
-    flipScreen = True
+    flipScreen = True,
+    shutdownOnlyExit = True
 )
