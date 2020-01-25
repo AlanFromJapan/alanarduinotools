@@ -20,6 +20,8 @@ import RPi.GPIO as GPIO
 import time
 import os
 import config
+import subprocess
+import sys
 
 #display
 import designer
@@ -85,6 +87,13 @@ def buttonCallbackA(channel):
         mCurrentState = "pause"
     elif mCurrentState == "pause":
         mCurrentState = "play"
+    elif mCurrentState == "stop":
+        if bool(config.general["shutdownOnlyExit"]):
+            oled.poweroff()
+            sys.exit()
+        else:
+            oled.poweroff()
+            subprocess.Popen (["sudo", "shutdown", "-h", "now"])
 
     updatePlayerStatus()
     
@@ -97,22 +106,26 @@ def buttonCallbackA(channel):
 def buttonCallbackB(channel):
     global mCurrentRadioName, mCurrentState
     print ("DEBUG: Pressed [B]/[YELLOW] !")
-    
-    l = list(config.radios.keys())
-    i = l.index(mCurrentRadioName)
-    i = (i + 1) % len(l)
-    mCurrentRadioName = l[i]
 
-    #in case, pause playing
-    mCurrentState = "pause"
+    if mCurrentState in ("play", "pause"):
+        l = list(config.radios.keys())
+        i = l.index(mCurrentRadioName)
+        i = (i + 1) % len(l)
+        mCurrentRadioName = l[i]
 
-    updatePlayerStatus()
-    """
-    if i == 0:
-        #go to settings
-        mCurrentState = "stop"
-arrete ici faut que je dorme
-"""
+        #in case, pause playing
+        mCurrentState = "pause"
+
+        updatePlayerStatus()
+
+        #we did a full cycle through channels back to the first one: squeeze in the options menu
+        if i == 0:
+            #go to settings
+            mCurrentState = "stop"
+    elif mCurrentState == "stop":
+        #in case, pause playing
+        mCurrentState = "pause"
+            
     #update the screen
     showCurrentScreen()
     
@@ -125,6 +138,8 @@ def showCurrentScreen():
         d.showScreenPlay(mCurrentRadioName)
     elif mCurrentState == "pause":
         d.showScreenPause(mCurrentRadioName)
+    elif mCurrentState == "stop":
+        d.showScreenStop()
 
 
 def updatePlayerStatus():

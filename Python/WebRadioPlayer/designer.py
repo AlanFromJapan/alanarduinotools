@@ -71,7 +71,7 @@ class Designer:
 
 
     #shows a "PLAY" or "PAUSE" screen with the radio name
-    def showScreenPlayPause(self, radioName, isPlay=True):
+    def showScreenLeftBox(self, label, boxtype="play"):
         image = Image.new('1', (self.oled.width, self.oled.height))
         draw = ImageDraw.Draw(image)
 
@@ -79,14 +79,16 @@ class Designer:
         draw.rectangle([(0,vpad), (self.PLAYBOXW-1, self.oled.height-1-vpad)], fill=255, outline=255)
 
         #the images apparently just work as a "mask": whatever is drawn, in black or white, becomes black on the screen...
-        if isPlay:
+        if boxtype == "play":
             bmp = Image.open (os.path.join(self.PATH_TO_IMG, "play_bt.png"))
-        else:
+        elif boxtype == "pause":
             bmp = Image.open (os.path.join(self.PATH_TO_IMG, "pause.png"))
+        else:
+            bmp = Image.open (os.path.join(self.PATH_TO_IMG, "settings.png"))
         draw.bitmap ( (0, vpad), bmp )
         
         # Draw the text        
-        draw.text((self.PLAYBOXW + 2, vpad), radioName, font=self.fontSmall, fill=255)
+        draw.text((self.PLAYBOXW + 2, vpad), label, font=self.fontSmall, fill=255)
 
         #Flip?
         if bool(config.general["flipScreen"]):
@@ -100,11 +102,13 @@ class Designer:
         
     #shows a "PLAY" screen with the radio name
     def showScreenPlay(self, radioName):
-        self.showScreenPlayPause (radioName, isPlay=True)
+        self.showScreenLeftBox (label=radioName, boxtype="play")
 
                 
     #shows a "PAUSE" screen with the radio name
     def showScreenPause(self, radioName):
-        self.showScreenPlayPause (radioName, isPlay=False)
+        self.showScreenLeftBox (label=radioName, boxtype="pause")
 
-        
+    #shows a "STOP" screen to allow turn off machine
+    def showScreenStop(self):
+        self.showScreenLeftBox(label="Shudown?", boxtype="stop")
