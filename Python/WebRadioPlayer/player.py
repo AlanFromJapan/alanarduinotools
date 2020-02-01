@@ -11,7 +11,7 @@ class Player:
     def play(self, url):
         if self.vlcproc == None:
             print ("Debug: about to start VLC for url '%s'" % (url))
-            #self.vlcproc = subprocess.Popen("vlc %s -I dummy" % (url))
+            #self.vlcproc = subprocess.Popen("vlc %s -I dummy" % (url))            
             self.vlcproc = subprocess.Popen(["vlc", url,"-I", "dummy"])
             print ("Debug: VLC process started as PID %d for url '%s'" % (self.vlcproc.pid, url))
         else:

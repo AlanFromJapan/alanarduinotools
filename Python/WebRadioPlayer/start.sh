@@ -4,15 +4,15 @@
 
 #to be ran as "radio" user
 echo "## STARTING WebRadioPlayer ..."
-sleep 5
 
-pulseaudio -k
-pulseaudio -D 
+#DONT start pulseaudio, it's systemwide BUT you must be in pulse-access to use it
+#pulseaudio -k
+#pulseaudio -D 
+#nohup pulseaudio --start
 
-sleep 5
 
 cd /usr/local/src/git/alanarduinotools/Python/WebRadioPlayer
-nohup python3 WebRadioPlayer.py > /tmp/radioplayer.log 2>&1 &
+python3 WebRadioPlayer.py > /tmp/radioplayer.log 2>&1 &
 echo "## STARTING WebRadioPlayer completed."
 
 

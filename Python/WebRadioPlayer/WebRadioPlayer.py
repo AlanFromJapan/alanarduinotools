@@ -193,7 +193,9 @@ if __name__ == '__main__':
 
         try:
             while (True):
+                time.sleep(1)
                 pass
+            
 
         except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
             pass
