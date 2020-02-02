@@ -185,6 +185,9 @@ if __name__ == '__main__':
 
         p = player.Player()
     
+        #statup sound (asynchronous)
+        p.playStartupSound()
+
         #startup
         d.clearScreen()
 
@@ -195,9 +198,6 @@ if __name__ == '__main__':
         #show how many radios
         m = str(len(config.radios)) + " radios registered."
         d.showMessage(m, font=d.fontSmall, sleep=1)
-
-        #statup sound
-        p.playStartupSound()
         
         #play the first radio
         #below line : make a list() before taking index 0 because dict_keys() is a set (there's no "order")

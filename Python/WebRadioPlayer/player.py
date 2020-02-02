@@ -27,10 +27,10 @@ class Player:
             print ("Debug: killed VLC process PID %d." % (self.vlcproc.pid))
             self.vlcproc = None
 
-            
+
+    #plays the sound "asynchrounously" (kick the process and it will stop after playing)
     def playStartupSound(self):
-        self.play(os.path.join("sounds", "351920__richerlandtv__o-s-start-up.mp3"))
-        time.sleep(10)
-        self.pause()
+        subprocess.Popen(["vlc", os.path.join("sounds", "351920__richerlandtv__o-s-start-up.mp3"),"-I", "dummy", "--play-and-exit"])
+
         
         
