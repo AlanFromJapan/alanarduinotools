@@ -11,36 +11,72 @@ import config
 import time
 import os
 
+import concurrent.futures
+
 #THE class in charge of the screen design
 class Designer:
     PLAYBOXW = 24
     PLAYBOXH = 24
     PATH_TO_IMG = "images/"
+
+    #FONTPATH = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
     
     #########################################################################################
 
     # Load a font in 2 different sizes.
-    fontBig = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 24)
-    fontSmall = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 12)
+    fontBig = ImageFont.truetype("fonts/SUBWT.ttf", 24)
+    fontSmall = ImageFont.truetype("fonts/DisposableDroidBB.ttf", 16)
 
     #the screen ref
     oled = None
+
+    #multithreading executor
+    executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+    fut = None
     
     #########################################################################################
 
     #Contructor
     def __init__(self, oled):
         self.oled = oled
+
         
     #clears the screen
     def clearScreen(self):
         # Clear display.
         self.oled.fill(0)
         self.oled.show()
-    
+
+        
+    #poweroff the screen (the backend function)
+    def powerOffScreen(self):
+        time.sleep(10)
+        self.oled.poweroff()
+
+
+    #turn off the screen (the caller)
+    def setScreenTimeout(self):
+        if not bool(config.general["screenAutoOff"]):
+            return
+        #if already scheduled, kill and reschedule
+        if self.fut is not None:
+            self.fut.cancel()            
+        self.fut = self.executor.submit(self.powerOffScreen())
+
+        
+    #wake up the screen
+    def screenWakeup(self):
+        if not bool(config.general["screenAutoOff"]):
+            return
+        if not self.oled.power:
+            self.oled.poweron()
+        
 
     #show a message on the screen
     def showMessage(self, m, sleep=0, clearAfter=False, font=fontSmall):
+        #reset the screen
+        self.screenWakeup()
+        
         image = Image.new('1', (self.oled.width, self.oled.height))
         draw = ImageDraw.Draw(image)
     
@@ -72,6 +108,9 @@ class Designer:
 
     #shows a "PLAY" or "PAUSE" screen with the radio name
     def showScreenLeftBox(self, label, boxtype="play"):
+        #reset the screen
+        self.screenWakeup()
+
         image = Image.new('1', (self.oled.width, self.oled.height))
         draw = ImageDraw.Draw(image)
 
@@ -103,16 +142,20 @@ class Designer:
     #shows a "PLAY" screen with the radio name
     def showScreenPlay(self, radioName):
         self.showScreenLeftBox (label=radioName, boxtype="play")
+        self.setScreenTimeout()
 
                 
     #shows a "PAUSE" screen with the radio name
     def showScreenPause(self, radioName):
         self.showScreenLeftBox (label=radioName, boxtype="pause")
+        self.setScreenTimeout()
 
+        
     #shows a "STOP" screen to allow turn off machine
     def showScreenStop(self):
         self.showScreenLeftBox(label="Shudown?", boxtype="stop")
 
+        
     #shows a "KILL" screen to allow to kill the current process
     def showScreenKill(self):
         self.showScreenLeftBox(label="Kill process?", boxtype="stop")

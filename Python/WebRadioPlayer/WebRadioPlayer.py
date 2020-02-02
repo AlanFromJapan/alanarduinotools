@@ -136,6 +136,8 @@ def buttonCallbackB(channel):
         else:
             #in case, pause playing
             mCurrentState = "pause"
+    elif mCurrentState == "kill":
+        mCurrentState = "pause"
             
     #update the screen
     showCurrentScreen()
