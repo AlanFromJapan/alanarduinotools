@@ -26,4 +26,11 @@ class Player:
             self.vlcproc.kill()
             print ("Debug: killed VLC process PID %d." % (self.vlcproc.pid))
             self.vlcproc = None
+
             
+    def playStartupSound(self):
+        self.play(os.path.join("sounds", "351920__richerlandtv__o-s-start-up.mp3"))
+        time.sleep(10)
+        self.pause()
+        
+        

@@ -112,3 +112,7 @@ class Designer:
     #shows a "STOP" screen to allow turn off machine
     def showScreenStop(self):
         self.showScreenLeftBox(label="Shudown?", boxtype="stop")
+
+    #shows a "KILL" screen to allow to kill the current process
+    def showScreenKill(self):
+        self.showScreenLeftBox(label="Kill process?", boxtype="stop")
