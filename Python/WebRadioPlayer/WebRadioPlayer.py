@@ -36,7 +36,7 @@ RESET_PIN = digitalio.DigitalInOut(board.D4)
 BUTTONA = 21
 BUTTONB = 20
 
-STATUS= ["play", "pause", "stop"]
+STATUS= ["play", "pause", "stop", "kill"]
 
 ##########################################################################################################
 
@@ -89,11 +89,19 @@ def buttonCallbackA(channel):
         mCurrentState = "play"
     elif mCurrentState == "stop":
         if bool(config.general["shutdownOnlyExit"]):
+            d.showMessage("exit only", font=d.fontSmall, sleep=1)
             oled.poweroff()
             sys.exit()
         else:
+            d.showMessage("Shutdown!", font=d.fontSmall, sleep=1)
             oled.poweroff()
             subprocess.Popen (["sudo", "shutdown", "-h", "now"])
+
+    elif mCurrentState == "kill":
+        d.showMessage("exit only", font=d.fontSmall, sleep=1)
+        oled.poweroff()
+        sys.exit()
+        
 
     updatePlayerStatus()
     
@@ -123,7 +131,12 @@ def buttonCallbackB(channel):
             #go to settings
             mCurrentState = "stop"
     elif mCurrentState == "stop":
-        #in case, pause playing
+        if bool(config.general["killMeScreen"]):
+            mCurrentState = "kill"
+        else:
+            #in case, pause playing
+            mCurrentState = "pause"
+    elif mCurrentState == "kill":
         mCurrentState = "pause"
             
     #update the screen
@@ -140,6 +153,8 @@ def showCurrentScreen():
         d.showScreenPause(mCurrentRadioName)
     elif mCurrentState == "stop":
         d.showScreenStop()
+    elif mCurrentState == "kill":
+        d.showScreenKill()
 
 
 def updatePlayerStatus():
@@ -172,6 +187,9 @@ if __name__ == '__main__':
 
         p = player.Player()
     
+        #statup sound (asynchronous)
+        p.playStartupSound()
+
         #startup
         d.clearScreen()
 
@@ -182,7 +200,7 @@ if __name__ == '__main__':
         #show how many radios
         m = str(len(config.radios)) + " radios registered."
         d.showMessage(m, font=d.fontSmall, sleep=1)
-
+        
         #play the first radio
         #below line : make a list() before taking index 0 because dict_keys() is a set (there's no "order")
         mCurrentRadioName = list(config.radios.keys())[0]
@@ -193,7 +211,9 @@ if __name__ == '__main__':
 
         try:
             while (True):
+                time.sleep(1)
                 pass
+            
 
         except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
             pass
