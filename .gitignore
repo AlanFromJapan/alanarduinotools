@@ -223,6 +223,7 @@ pip-log.txt
 #Eagle backup files
 *.b#*
 *.s#*
+*.l#*
 
 #Eagle other docs
 *.gbl
