@@ -224,6 +224,7 @@ pip-log.txt
 *.b#*
 *.s#*
 *.l#*
+*.job
 
 #Eagle other docs
 *.gbl

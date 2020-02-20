@@ -1206,6 +1206,22 @@ Free to reuse and modify.&lt;/p&gt;</description>
 <wire x1="0" y1="-2.54" x2="0" y2="2.54" width="0.127" layer="21" curve="-180"/>
 <wire x1="10.16" y1="2.54" x2="10.16" y2="-2.54" width="0.127" layer="21"/>
 </package>
+<package name="SNES_PAD2">
+<pad name="GND" x="0" y="0" drill="1" diameter="2.1844"/>
+<pad name="NC2" x="3.5" y="0" drill="1" diameter="2.1844" rot="R180"/>
+<pad name="NC1" x="7" y="0" drill="1" diameter="2.1844"/>
+<pad name="DATA" x="14" y="0" drill="1" diameter="2.1844"/>
+<pad name="LATCH" x="17.5" y="0" drill="1" diameter="2.1844"/>
+<pad name="CLOCK" x="21.5" y="0" drill="1" diameter="2.1844"/>
+<pad name="VCC" x="25.5" y="0" drill="1" diameter="2.1844"/>
+<wire x1="27.94" y1="2.54" x2="27.94" y2="-2.54" width="0.127" layer="21"/>
+<wire x1="27.94" y1="-2.54" x2="10.16" y2="-2.54" width="0.127" layer="21"/>
+<wire x1="10.16" y1="-2.54" x2="0" y2="-2.54" width="0.127" layer="21"/>
+<wire x1="0" y1="2.54" x2="10.16" y2="2.54" width="0.127" layer="21"/>
+<wire x1="10.16" y1="2.54" x2="27.94" y2="2.54" width="0.127" layer="21"/>
+<wire x1="0" y1="-2.54" x2="0" y2="2.54" width="0.127" layer="21" curve="-180"/>
+<wire x1="10.16" y1="2.54" x2="10.16" y2="-2.54" width="0.127" layer="21"/>
+</package>
 </packages>
 <symbols>
 <symbol name="PCF8584">
@@ -2171,6 +2187,20 @@ Sold here &lt;a href="http://akizukidenshi.com/catalog/g/gI-02225/"&gt;http://ak
 </gates>
 <devices>
 <device name="" package="SNES_PAD">
+<connects>
+<connect gate="G$1" pin="CLOCK" pad="CLOCK"/>
+<connect gate="G$1" pin="DATA" pad="DATA"/>
+<connect gate="G$1" pin="GND" pad="GND"/>
+<connect gate="G$1" pin="LATCH" pad="LATCH"/>
+<connect gate="G$1" pin="NC1" pad="NC1"/>
+<connect gate="G$1" pin="NC2" pad="NC2"/>
+<connect gate="G$1" pin="VCC" pad="VCC"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="CLOSER_PINS" package="SNES_PAD2">
 <connects>
 <connect gate="G$1" pin="CLOCK" pad="CLOCK"/>
 <connect gate="G$1" pin="DATA" pad="DATA"/>
