@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.2.0">
+<eagle version="9.5.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
+<setting keepoldvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="0.05" unitdist="inch" unit="mm" style="dots" multiple="1" display="yes" altdistance="0.15875" altunitdist="mm" altunit="mm"/>
@@ -76,6 +77,8 @@
 <layer number="111" name="LPC17xx" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="112" name="tSilk" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="113" name="IDFDebug" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="114" name="Badge_Outline" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="115" name="ReferenceISLANDS" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="116" name="Patch_BOT" color="9" fill="4" visible="yes" active="yes"/>
 <layer number="118" name="Rect_Pads" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="121" name="_tsilk" color="7" fill="1" visible="yes" active="yes"/>
@@ -129,6 +132,8 @@
 <layer number="229" name="229bmp" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="230" name="230bmp" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="231" name="231bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="232" name="Eagle3D_PG2" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="233" name="Eagle3D_PG3" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="248" name="Housing" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="249" name="Edge" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="250" name="Descript" color="3" fill="1" visible="no" active="no"/>
@@ -1535,11 +1540,11 @@ Free to reuse and modify.&lt;/p&gt;</description>
 </package>
 </packages>
 </library>
-<library name="crystal">
+<library name="crystal" urn="urn:adsk.eagle:library:204">
 <description>&lt;b&gt;Crystals and Crystal Resonators&lt;/b&gt;&lt;p&gt;
 &lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
 <packages>
-<package name="CTS406">
+<package name="CTS406" urn="urn:adsk.eagle:footprint:12012/1" library_version="2">
 <description>&lt;b&gt;Model 406 6.0x3.5mm Low Cost Surface Mount Crystal&lt;/b&gt;&lt;p&gt;
 Source: 008-0260-0_E.pdf</description>
 <wire x1="-2.475" y1="1.65" x2="-1.05" y2="1.65" width="0.2032" layer="51"/>
@@ -1567,8 +1572,17 @@ Source: 008-0260-0_E.pdf</description>
 <text x="-2.54" y="-3.81" size="1.27" layer="27">&gt;VALUE</text>
 </package>
 </packages>
+<packages3d>
+<package3d name="CTS406" urn="urn:adsk.eagle:package:12089/1" type="box" library_version="2">
+<description>Model 406 6.0x3.5mm Low Cost Surface Mount Crystal
+Source: 008-0260-0_E.pdf</description>
+<packageinstances>
+<packageinstance name="CTS406"/>
+</packageinstances>
+</package3d>
+</packages3d>
 </library>
-<library name="atmel">
+<library name="atmel" urn="urn:adsk.eagle:library:105">
 <description>&lt;b&gt;AVR Devices&lt;/b&gt;&lt;p&gt;
 Configurable logic, microcontrollers, nonvolatile memories&lt;p&gt;
 Based on the following sources:&lt;p&gt;
@@ -1580,7 +1594,7 @@ Based on the following sources:&lt;p&gt;
 &lt;/ul&gt;
 &lt;author&gt;Revised by librarian@cadsoft.de&lt;/author&gt;</description>
 <packages>
-<package name="SO20L">
+<package name="SO20L" urn="urn:adsk.eagle:footprint:4169/1" library_version="4">
 <description>&lt;B&gt;Small Outline Package&lt;/B&gt; SOIC 0.300"</description>
 <wire x1="-5.639" y1="-4.064" x2="6.909" y2="-4.064" width="0.1524" layer="21"/>
 <wire x1="6.909" y1="-4.064" x2="6.909" y2="3.277" width="0.1524" layer="21"/>
@@ -1631,8 +1645,16 @@ Based on the following sources:&lt;p&gt;
 <rectangle x1="-5.2832" y1="-5.4356" x2="-4.8768" y2="-4.1148" layer="51"/>
 </package>
 </packages>
+<packages3d>
+<package3d name="SO20L" urn="urn:adsk.eagle:package:4321/1" type="box" library_version="4">
+<description>Small Outline Package SOIC 0.300"</description>
+<packageinstances>
+<packageinstance name="SO20L"/>
+</packageinstances>
+</package3d>
+</packages3d>
 </library>
-<library name="diode">
+<library name="diode" urn="urn:adsk.eagle:library:210">
 <description>&lt;b&gt;Diodes&lt;/b&gt;&lt;p&gt;
 Based on the following sources:
 &lt;ul&gt;
@@ -1643,7 +1665,7 @@ Based on the following sources:
 &lt;/ul&gt;
 &lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
 <packages>
-<package name="ZDIO-2.5">
+<package name="ZDIO-2.5" urn="urn:adsk.eagle:footprint:43185/1" library_version="8">
 <description>&lt;b&gt;Z DIODE&lt;/b&gt;</description>
 <wire x1="-0.254" y1="0.762" x2="-0.508" y2="0.762" width="0.254" layer="21"/>
 <wire x1="-0.508" y1="0" x2="0.762" y2="0.762" width="0.254" layer="21"/>
@@ -1661,6 +1683,14 @@ Based on the following sources:
 <text x="-1.27" y="-2.286" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
 </package>
 </packages>
+<packages3d>
+<package3d name="ZDIO-2.5" urn="urn:adsk.eagle:package:43407/1" type="box" library_version="8">
+<description>Z DIODE</description>
+<packageinstances>
+<packageinstance name="ZDIO-2.5"/>
+</packageinstances>
+</package3d>
+</packages3d>
 </library>
 <library name="kalshagar-images">
 <packages>
@@ -2084,6 +2114,49 @@ Based on the following sources:
 </package>
 </packages>
 </library>
+<library name="SparkFun-Connectors" urn="urn:adsk.eagle:library:513">
+<description>&lt;h3&gt;SparkFun Connectors&lt;/h3&gt;
+This library contains electrically-functional connectors. 
+&lt;br&gt;
+&lt;br&gt;
+We've spent an enormous amount of time creating and checking these footprints and parts, but it is &lt;b&gt; the end user's responsibility&lt;/b&gt; to ensure correctness and suitablity for a given componet or application. 
+&lt;br&gt;
+&lt;br&gt;If you enjoy using this library, please buy one of our products at &lt;a href=" www.sparkfun.com"&gt;SparkFun.com&lt;/a&gt;.
+&lt;br&gt;
+&lt;br&gt;
+&lt;b&gt;Licensing:&lt;/b&gt; Creative Commons ShareAlike 4.0 International - https://creativecommons.org/licenses/by-sa/4.0/ 
+&lt;br&gt;
+&lt;br&gt;
+You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
+<packages>
+<package name="PAD.03X.05" urn="urn:adsk.eagle:footprint:37961/1" library_version="1">
+<description>&lt;h3&gt;Electrically Conductive Pad 0.05" Circle&lt;/h3&gt;
+Used as a test point connection for pogo pins or other debugging tools. 
+&lt;p&gt;Specifications:
+&lt;li&gt;Area: 0.05" x 0.05"&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;
+&lt;p&gt;Example device(s):
+&lt;ul&gt;&lt;li&gt;TEST_POINT&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;</description>
+<smd name="P$1" x="0" y="0" dx="1.27" dy="1.27" layer="1" roundness="100" cream="no"/>
+</package>
+</packages>
+<packages3d>
+<package3d name="PAD.03X.05" urn="urn:adsk.eagle:package:38285/1" type="box" library_version="1">
+<description>Electrically Conductive Pad 0.05" Circle
+Used as a test point connection for pogo pins or other debugging tools. 
+Specifications:
+Area: 0.05" x 0.05"
+
+Example device(s):
+TEST_POINT
+</description>
+<packageinstances>
+<packageinstance name="PAD.03X.05"/>
+</packageinstances>
+</package3d>
+</packages3d>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -2171,10 +2244,14 @@ design rules under a new name.</description>
 <param name="slThermalsForVias" value="0"/>
 <param name="dpMaxLengthDifference" value="10mm"/>
 <param name="dpGapFactor" value="2.5"/>
-<param name="checkGrid" value="0"/>
 <param name="checkAngle" value="0"/>
 <param name="checkFont" value="1"/>
 <param name="checkRestrict" value="0"/>
+<param name="checkStop" value="0"/>
+<param name="checkValues" value="0"/>
+<param name="checkNames" value="1"/>
+<param name="checkWireStubs" value="1"/>
+<param name="checkPolygonWidth" value="0"/>
 <param name="useDiameter" value="13"/>
 <param name="maxErrors" value="50"/>
 </designrules>
@@ -2275,59 +2352,166 @@ design rules under a new name.</description>
 </pass>
 </autorouter>
 <elements>
-<element name="C3" library="SparkFun-Capacitors" package="1206" value="1uF" x="11.7475" y="21.59" rot="R90"/>
-<element name="C4" library="SparkFun-Capacitors" package="PANASONIC_E" value="10uF+" x="33.02" y="19.05" rot="R270"/>
-<element name="C5" library="SparkFun-Capacitors" package="0805" value="10uF" x="13.97" y="21.59" rot="R90"/>
-<element name="C6" library="SparkFun-Capacitors" package="1206" value="22pF" x="1.74625" y="3.33375" rot="R270"/>
-<element name="C7" library="SparkFun-Capacitors" package="1206" value="22pF" x="11.58875" y="3.33375" rot="R90"/>
-<element name="GND" library="SparkFun-Connectors" package="1X01_NO_SILK" value="" x="38.1" y="1.27"/>
-<element name="J1" library="SparkFun-Connectors" package="2X3" value="" x="2.54" y="20.32"/>
-<element name="JPD+" library="SparkFun-Connectors" package="1X01_NO_SILK" value="" x="38.1" y="10.16"/>
-<element name="JPD-" library="SparkFun-Connectors" package="1X01_NO_SILK" value="" x="38.1" y="5.08"/>
-<element name="JP_D+" library="SparkFun-Passives" package="PAD.03X.05" value="" x="35.56" y="7.62"/>
-<element name="JP_D-" library="SparkFun-Passives" package="PAD.03X.05" value="" x="35.56" y="10.16"/>
-<element name="J_D+D2" library="SparkFun-Passives" package="PAD-JUMPER-2-NO_YES_SILK" value="" x="33.02" y="7.62"/>
-<element name="J_D-D4" library="SparkFun-Passives" package="PAD-JUMPER-2-NO_YES_SILK" value="" x="33.02" y="10.16"/>
-<element name="LED1" library="kalshagar" package="SMT-SQUARE6" value="RGB-SMT-SQUARE6X6MM" x="5.08" y="3.81" rot="MR90"/>
-<element name="LED2" library="kalshagar" package="SMT-SQUARE5" value="RGB-SMT-SQUARE5X5MM" x="2.54" y="13.335" rot="MR90"/>
-<element name="Q1" library="crystal" package="CTS406" value="12MHz" x="6.6675" y="3.33375" rot="R180">
-<attribute name="OC_NEWARK" value="unknown" x="6.6675" y="3.33375" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="MPN" value="" x="6.6675" y="3.33375" size="1.778" layer="27" rot="R180" display="off"/>
+<element name="C3" library="SparkFun-Capacitors" package="1206" value="1uF" x="11.7475" y="21.59" smashed="yes" rot="R90">
+<attribute name="NAME" x="10.6045" y="20.32" size="0.4064" layer="25" rot="R90"/>
+<attribute name="VALUE" x="13.2715" y="20.193" size="0.4064" layer="27" rot="R90"/>
+</element>
+<element name="C4" library="SparkFun-Capacitors" package="PANASONIC_E" value="10uF+" x="33.02" y="19.05" smashed="yes" rot="R270">
+<attribute name="NAME" x="34.29" y="20.32" size="0.4064" layer="25" rot="R270"/>
+<attribute name="VALUE" x="30.48" y="20.32" size="0.4064" layer="27" rot="R270"/>
+</element>
+<element name="C5" library="SparkFun-Capacitors" package="0805" value="10uF" x="13.97" y="21.59" smashed="yes" rot="R90">
+<attribute name="NAME" x="13.1445" y="20.828" size="0.4064" layer="25" rot="R90"/>
+<attribute name="VALUE" x="15.367" y="20.574" size="0.4064" layer="27" rot="R90"/>
+</element>
+<element name="C6" library="SparkFun-Capacitors" package="1206" value="22pF" x="1.74625" y="3.33375" smashed="yes" rot="R270">
+<attribute name="NAME" x="2.88925" y="4.60375" size="0.4064" layer="25" rot="R270"/>
+<attribute name="VALUE" x="0.22225" y="4.73075" size="0.4064" layer="27" rot="R270"/>
+</element>
+<element name="C7" library="SparkFun-Capacitors" package="1206" value="22pF" x="11.58875" y="3.33375" smashed="yes" rot="R90">
+<attribute name="NAME" x="10.44575" y="2.06375" size="0.4064" layer="25" rot="R90"/>
+<attribute name="VALUE" x="13.11275" y="1.93675" size="0.4064" layer="27" rot="R90"/>
+</element>
+<element name="GND" library="SparkFun-Connectors" package="1X01_NO_SILK" value="" x="38.1" y="1.27" smashed="yes">
+<attribute name="NAME" x="39.2938" y="3.0988" size="1.27" layer="25"/>
+<attribute name="VALUE" x="36.83" y="-1.905" size="1.27" layer="27"/>
+</element>
+<element name="J1" library="SparkFun-Connectors" package="2X3" value="" x="2.54" y="20.32" smashed="yes">
+<attribute name="NAME" x="1.27" y="24.765" size="1.27" layer="25" ratio="10"/>
+<attribute name="VALUE" x="1.27" y="17.145" size="1.27" layer="27"/>
+</element>
+<element name="JPD+" library="SparkFun-Connectors" package="1X01_NO_SILK" value="" x="38.1" y="10.16" smashed="yes">
+<attribute name="NAME" x="39.2938" y="11.9888" size="1.27" layer="25"/>
+<attribute name="VALUE" x="36.83" y="6.985" size="1.27" layer="27"/>
+</element>
+<element name="JPD-" library="SparkFun-Connectors" package="1X01_NO_SILK" value="" x="38.1" y="5.08" smashed="yes">
+<attribute name="NAME" x="39.2938" y="6.9088" size="1.27" layer="25"/>
+<attribute name="VALUE" x="36.83" y="1.905" size="1.27" layer="27"/>
+</element>
+<element name="JP_D+" library="SparkFun-Passives" package="PAD.03X.05" value="" x="35.56" y="7.62" smashed="yes"/>
+<element name="JP_D-" library="SparkFun-Passives" package="PAD.03X.05" value="" x="35.56" y="10.16" smashed="yes"/>
+<element name="J_D+D2" library="SparkFun-Passives" package="PAD-JUMPER-2-NO_YES_SILK" value="" x="33.02" y="7.62" smashed="yes">
+<attribute name="NAME" x="32.112" y="8.89" size="0.4064" layer="25"/>
+<attribute name="VALUE" x="32.112" y="5.969" size="0.4064" layer="27"/>
+</element>
+<element name="J_D-D4" library="SparkFun-Passives" package="PAD-JUMPER-2-NO_YES_SILK" value="" x="33.02" y="10.16" smashed="yes">
+<attribute name="NAME" x="32.112" y="11.43" size="0.4064" layer="25"/>
+<attribute name="VALUE" x="32.112" y="8.509" size="0.4064" layer="27"/>
+</element>
+<element name="LED1" library="kalshagar" package="SMT-SQUARE6" value="RGB-SMT-SQUARE6X6MM" x="5.08" y="3.81" smashed="yes" rot="MR90">
+<attribute name="NAME" x="2.54" y="2.5" size="1.27" layer="26" rot="MR180"/>
+</element>
+<element name="LED2" library="kalshagar" package="SMT-SQUARE5" value="RGB-SMT-SQUARE5X5MM" x="2.54" y="13.335" smashed="yes" rot="MR90">
+<attribute name="NAME" x="1.905" y="12.66" size="1.27" layer="26" rot="MR180"/>
+</element>
+<element name="Q1" library="crystal" library_urn="urn:adsk.eagle:library:204" package="CTS406" package3d_urn="urn:adsk.eagle:package:12089/1" value="12MHz" x="6.6675" y="3.33375" smashed="yes" rot="R180">
 <attribute name="MF" value="" x="6.6675" y="3.33375" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="MPN" value="" x="6.6675" y="3.33375" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="NAME" x="9.2075" y="0.79375" size="1.27" layer="25" rot="R180"/>
 <attribute name="OC_FARNELL" value="unknown" x="6.6675" y="3.33375" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="OC_NEWARK" value="unknown" x="6.6675" y="3.33375" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="POPULARITY" value="16" x="6.6675" y="3.33375" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="9.2075" y="7.14375" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="R1" library="resistor" package="0204V" value="1.5k" x="40.64" y="16.51"/>
-<element name="R10" library="resistor" package="M1206" value="" x="25.4" y="19.05"/>
-<element name="R11" library="resistor" package="0204V" value="" x="19.05" y="2.06375"/>
-<element name="R12" library="resistor" package="0204V" value="" x="19.05" y="9.68375"/>
-<element name="R13" library="resistor" package="0204V" value="" x="19.05" y="17.30375"/>
-<element name="R14" library="resistor" package="M1206" value="" x="19.05" y="3.81"/>
-<element name="R15" library="resistor" package="M1206" value="" x="19.05" y="11.43"/>
-<element name="R16" library="resistor" package="M1206" value="" x="19.05" y="19.05"/>
-<element name="R2" library="resistor" package="0204V" value="68" x="45.72" y="20.32" rot="R270"/>
-<element name="R3" library="resistor" package="0204V" value="68" x="48.26" y="20.32" rot="R90"/>
-<element name="R4" library="resistor" package="0204V" value="1M" x="40.64" y="20.32"/>
-<element name="R5" library="resistor" package="0204V" value="" x="25.4" y="2.06375"/>
-<element name="R6" library="resistor" package="0204V" value="" x="25.4" y="9.68375"/>
-<element name="R7" library="resistor" package="0204V" value="" x="25.4" y="17.30375"/>
-<element name="R8" library="resistor" package="M1206" value="" x="25.4" y="3.81"/>
-<element name="R9" library="resistor" package="M1206" value="" x="25.4" y="11.43"/>
-<element name="UC1" library="atmel" package="SO20L" value="AT90S2313S" x="7.62" y="12.7">
-<attribute name="OC_NEWARK" value="unknown" x="7.62" y="12.7" size="1.778" layer="27" display="off"/>
-<attribute name="MPN" value="" x="7.62" y="12.7" size="1.778" layer="27" display="off"/>
+<element name="R1" library="resistor" package="0204V" value="1.5k" x="40.64" y="16.51" smashed="yes">
+<attribute name="NAME" x="38.5064" y="17.6784" size="1.27" layer="25" ratio="10"/>
+<attribute name="VALUE" x="38.5064" y="14.1986" size="1.27" layer="27" ratio="10"/>
+</element>
+<element name="R10" library="resistor" package="M1206" value="" x="25.4" y="19.05" smashed="yes">
+<attribute name="NAME" x="24.13" y="20.32" size="1.27" layer="25"/>
+<attribute name="VALUE" x="24.13" y="16.51" size="1.27" layer="27"/>
+</element>
+<element name="R11" library="resistor" package="0204V" value="" x="19.05" y="2.06375" smashed="yes">
+<attribute name="NAME" x="16.9164" y="3.23215" size="1.27" layer="25" ratio="10"/>
+<attribute name="VALUE" x="16.9164" y="-0.24765" size="1.27" layer="27" ratio="10"/>
+</element>
+<element name="R12" library="resistor" package="0204V" value="" x="19.05" y="9.68375" smashed="yes">
+<attribute name="NAME" x="16.9164" y="10.85215" size="1.27" layer="25" ratio="10"/>
+<attribute name="VALUE" x="16.9164" y="7.37235" size="1.27" layer="27" ratio="10"/>
+</element>
+<element name="R13" library="resistor" package="0204V" value="" x="19.05" y="17.30375" smashed="yes">
+<attribute name="NAME" x="16.9164" y="18.47215" size="1.27" layer="25" ratio="10"/>
+<attribute name="VALUE" x="16.9164" y="14.99235" size="1.27" layer="27" ratio="10"/>
+</element>
+<element name="R14" library="resistor" package="M1206" value="" x="19.05" y="3.81" smashed="yes">
+<attribute name="NAME" x="17.78" y="5.08" size="1.27" layer="25"/>
+<attribute name="VALUE" x="17.78" y="1.27" size="1.27" layer="27"/>
+</element>
+<element name="R15" library="resistor" package="M1206" value="" x="19.05" y="11.43" smashed="yes">
+<attribute name="NAME" x="17.78" y="12.7" size="1.27" layer="25"/>
+<attribute name="VALUE" x="17.78" y="8.89" size="1.27" layer="27"/>
+</element>
+<element name="R16" library="resistor" package="M1206" value="" x="19.05" y="19.05" smashed="yes">
+<attribute name="NAME" x="17.78" y="20.32" size="1.27" layer="25"/>
+<attribute name="VALUE" x="17.78" y="16.51" size="1.27" layer="27"/>
+</element>
+<element name="R2" library="resistor" package="0204V" value="68" x="45.72" y="20.32" smashed="yes" rot="R270">
+<attribute name="NAME" x="46.8884" y="22.4536" size="1.27" layer="25" ratio="10" rot="R270"/>
+<attribute name="VALUE" x="43.4086" y="22.4536" size="1.27" layer="27" ratio="10" rot="R270"/>
+</element>
+<element name="R3" library="resistor" package="0204V" value="68" x="48.26" y="20.32" smashed="yes" rot="R90">
+<attribute name="NAME" x="47.0916" y="18.1864" size="1.27" layer="25" ratio="10" rot="R90"/>
+<attribute name="VALUE" x="50.5714" y="18.1864" size="1.27" layer="27" ratio="10" rot="R90"/>
+</element>
+<element name="R4" library="resistor" package="0204V" value="1M" x="40.64" y="20.32" smashed="yes">
+<attribute name="NAME" x="38.5064" y="21.4884" size="1.27" layer="25" ratio="10"/>
+<attribute name="VALUE" x="38.5064" y="18.0086" size="1.27" layer="27" ratio="10"/>
+</element>
+<element name="R5" library="resistor" package="0204V" value="" x="25.4" y="2.06375" smashed="yes">
+<attribute name="NAME" x="23.2664" y="3.23215" size="1.27" layer="25" ratio="10"/>
+<attribute name="VALUE" x="23.2664" y="-0.24765" size="1.27" layer="27" ratio="10"/>
+</element>
+<element name="R6" library="resistor" package="0204V" value="" x="25.4" y="9.68375" smashed="yes">
+<attribute name="NAME" x="23.2664" y="10.85215" size="1.27" layer="25" ratio="10"/>
+<attribute name="VALUE" x="23.2664" y="7.37235" size="1.27" layer="27" ratio="10"/>
+</element>
+<element name="R7" library="resistor" package="0204V" value="" x="25.4" y="17.30375" smashed="yes">
+<attribute name="NAME" x="23.2664" y="18.47215" size="1.27" layer="25" ratio="10"/>
+<attribute name="VALUE" x="23.2664" y="14.99235" size="1.27" layer="27" ratio="10"/>
+</element>
+<element name="R8" library="resistor" package="M1206" value="" x="25.4" y="3.81" smashed="yes">
+<attribute name="NAME" x="24.13" y="5.08" size="1.27" layer="25"/>
+<attribute name="VALUE" x="24.13" y="1.27" size="1.27" layer="27"/>
+</element>
+<element name="R9" library="resistor" package="M1206" value="" x="25.4" y="11.43" smashed="yes">
+<attribute name="NAME" x="24.13" y="12.7" size="1.27" layer="25"/>
+<attribute name="VALUE" x="24.13" y="8.89" size="1.27" layer="27"/>
+</element>
+<element name="UC1" library="atmel" library_urn="urn:adsk.eagle:library:105" package="SO20L" package3d_urn="urn:adsk.eagle:package:4321/1" value="AT90S2313S" x="7.62" y="12.7" smashed="yes">
 <attribute name="MF" value="" x="7.62" y="12.7" size="1.778" layer="27" display="off"/>
+<attribute name="MPN" value="" x="7.62" y="12.7" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="1.5494" y="8.89" size="1.778" layer="25" ratio="10" rot="R90"/>
 <attribute name="OC_FARNELL" value="unknown" x="7.62" y="12.7" size="1.778" layer="27" display="off"/>
+<attribute name="OC_NEWARK" value="unknown" x="7.62" y="12.7" size="1.778" layer="27" display="off"/>
+<attribute name="POPULARITY" value="0" x="7.62" y="12.7" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="3.175" y="11.1506" size="1.778" layer="27" ratio="10"/>
 </element>
-<element name="USB_MICRO" library="SparkFun-Connectors" package="USB-B-MICRO-SMD_V03" value="USB_MICROB_PLUGCONN-11752" x="48.26" y="6.35" rot="R180">
+<element name="USB_MICRO" library="SparkFun-Connectors" package="USB-B-MICRO-SMD_V03" value="USB_MICROB_PLUGCONN-11752" x="48.26" y="6.35" smashed="yes" rot="R180">
+<attribute name="NAME" x="49.53" y="0.381" size="0.4064" layer="25" rot="R180"/>
 <attribute name="PROD_ID" value="CONN-11752" x="48.26" y="6.35" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="49.53" y="0.889" size="0.4064" layer="27" rot="R180"/>
 </element>
-<element name="USB_MINI" library="SparkFun-Connectors" package="USB-MINIB" value="USBSMD" x="45.085" y="6.35" rot="R180">
+<element name="USB_MINI" library="SparkFun-Connectors" package="USB-MINIB" value="USBSMD" x="45.085" y="6.35" smashed="yes" rot="R180">
+<attribute name="NAME" x="48.895" y="5.08" size="0.4064" layer="25" rot="R180"/>
 <attribute name="PROD_ID" value="CONN-08193" x="45.085" y="6.35" size="1.778" layer="27" rot="R180" display="off"/>
+<attribute name="VALUE" x="48.895" y="6.35" size="0.4064" layer="27" rot="R180"/>
 </element>
-<element name="VCC" library="SparkFun-Connectors" package="1X01_NO_SILK" value="" x="38.1" y="13.97"/>
-<element name="ZENER1" library="diode" package="ZDIO-2.5" value="3.6v" x="45.72" y="15.24" rot="R90"/>
-<element name="ZENER2" library="diode" package="ZDIO-2.5" value="3.6v" x="48.26" y="15.24" rot="R90"/>
-<element name="U$1" library="kalshagar-images" package="VUSB_LOGO" value="" x="28.2575" y="1.27"/>
+<element name="VCC" library="SparkFun-Connectors" package="1X01_NO_SILK" value="" x="38.1" y="13.97" smashed="yes">
+<attribute name="NAME" x="39.2938" y="15.7988" size="1.27" layer="25"/>
+<attribute name="VALUE" x="36.83" y="10.795" size="1.27" layer="27"/>
+</element>
+<element name="ZENER1" library="diode" library_urn="urn:adsk.eagle:library:210" package="ZDIO-2.5" package3d_urn="urn:adsk.eagle:package:43407/1" value="3.6v" x="45.72" y="15.24" smashed="yes" rot="R90">
+<attribute name="NAME" x="44.6532" y="13.8938" size="1.27" layer="25" ratio="10" rot="R90"/>
+<attribute name="POPULARITY" value="4" x="45.72" y="15.24" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="VALUE" x="48.006" y="13.97" size="1.27" layer="27" ratio="10" rot="R90"/>
+</element>
+<element name="ZENER2" library="diode" library_urn="urn:adsk.eagle:library:210" package="ZDIO-2.5" package3d_urn="urn:adsk.eagle:package:43407/1" value="3.6v" x="48.26" y="15.24" smashed="yes" rot="R90">
+<attribute name="NAME" x="47.1932" y="13.8938" size="1.27" layer="25" ratio="10" rot="R90"/>
+<attribute name="POPULARITY" value="4" x="48.26" y="15.24" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="VALUE" x="50.546" y="13.97" size="1.27" layer="27" ratio="10" rot="R90"/>
+</element>
+<element name="U$1" library="kalshagar-images" package="VUSB_LOGO" value="" x="28.2575" y="1.27" smashed="yes"/>
+<element name="TP_ID" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" package="PAD.03X.05" package3d_urn="urn:adsk.eagle:package:38285/1" value="TEST-POINT3X5" x="39.6875" y="8.41375" smashed="yes"/>
 </elements>
 <signals>
 <signal name="USBD-">
@@ -2370,9 +2554,9 @@ design rules under a new name.</description>
 <wire x1="36.195" y1="12.7" x2="36.195" y2="17.145" width="0.254" layer="16"/>
 <wire x1="38.1" y1="10.795" x2="36.195" y2="12.7" width="0.254" layer="16"/>
 <wire x1="38.1" y1="10.16" x2="38.1" y2="10.795" width="0.254" layer="16"/>
-<wire x1="41.275" y1="6.35" x2="42.585" y2="6.35" width="0.254" layer="1"/>
-<wire x1="38.1" y1="9.525" x2="41.275" y2="6.35" width="0.254" layer="1"/>
-<wire x1="38.1" y1="10.16" x2="38.1" y2="9.525" width="0.254" layer="1"/>
+<wire x1="38.1" y1="10.16" x2="38.1" y2="7.62" width="0.254" layer="1"/>
+<wire x1="38.1" y1="7.62" x2="39.37" y2="6.35" width="0.254" layer="1"/>
+<wire x1="39.37" y1="6.35" x2="42.585" y2="6.35" width="0.254" layer="1"/>
 <wire x1="44.45" y1="20.32" x2="46.99" y2="20.32" width="0.254" layer="1"/>
 <wire x1="42.545" y1="22.225" x2="44.45" y2="20.32" width="0.254" layer="1"/>
 <wire x1="40.64" y1="22.225" x2="42.545" y2="22.225" width="0.254" layer="1"/>
@@ -2420,7 +2604,7 @@ design rules under a new name.</description>
 <via x="35.56" y="3.33375" extent="1-16" drill="0.5" shape="octagon"/>
 <wire x1="35.56" y1="13.97" x2="34.925" y2="15.875" width="0.3048" layer="16"/>
 <wire x1="45.4025" y1="5.08" x2="45.56" y2="5.05" width="0" layer="19" extent="1-1"/>
-<wire x1="42.585" y1="4.75" x2="42.545" y2="4.7625" width="0" layer="19" extent="1-1"/>
+<wire x1="42.585" y1="4.75" x2="45.4025" y2="5.08" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GND">
 <contactref element="USB_MINI" pad="GND"/>
@@ -2482,6 +2666,8 @@ design rules under a new name.</description>
 <wire x1="40.16375" y1="12.7" x2="41.91" y2="14.44625" width="0.3048" layer="1"/>
 <wire x1="41.91" y1="14.44625" x2="42.545" y2="14.44625" width="0.3048" layer="1"/>
 <via x="22.225" y="0.79375" extent="1-16" drill="0.5" shape="octagon"/>
+<wire x1="42.8625" y1="7.9375" x2="42.585" y2="7.95" width="0" layer="19" extent="1-1"/>
+<wire x1="45.56" y1="7.65" x2="45.56125" y2="7.62" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="RESET">
 <contactref element="J1" pad="5"/>
@@ -2541,14 +2727,15 @@ design rules under a new name.</description>
 <contactref element="JP_D+" pad="P$1"/>
 <contactref element="J_D+D2" pad="2"/>
 <wire x1="35.56" y1="7.62" x2="33.47" y2="7.62" width="0.254" layer="1"/>
-<wire x1="38.1" y1="7.62" x2="35.56" y2="7.62" width="0.254" layer="1"/>
+<wire x1="36.83" y1="7.62" x2="35.56" y2="7.62" width="0.254" layer="1"/>
 <wire x1="43.815" y1="13.335" x2="38.1" y2="7.62" width="0.254" layer="16"/>
+<wire x1="38.1" y1="7.62" x2="36.83" y2="7.62" width="0.254" layer="16"/>
 <wire x1="43.815" y1="16.51" x2="43.815" y2="13.335" width="0.254" layer="16"/>
 <wire x1="45.085" y1="17.78" x2="43.815" y2="16.51" width="0.254" layer="16"/>
 <wire x1="47.625" y1="17.78" x2="45.085" y2="17.78" width="0.254" layer="16"/>
 <wire x1="48.26" y1="18.415" x2="47.625" y2="17.78" width="0.254" layer="16"/>
 <wire x1="48.26" y1="19.05" x2="48.26" y2="18.415" width="0.254" layer="16"/>
-<via x="38.1" y="7.62" extent="1-16" drill="0.6096"/>
+<via x="36.83" y="7.62" extent="1-16" drill="0.6096"/>
 </signal>
 <signal name="D4">
 <contactref element="J_D-D4" pad="1"/>
@@ -2599,6 +2786,18 @@ design rules under a new name.</description>
 </signal>
 <signal name="N$14">
 <contactref element="USB_MICRO" pad="ID1"/>
+<contactref element="TP_ID" pad="P$1"/>
+<wire x1="46.37573125" y1="7.1706" x2="46.866" y2="7.66086875" width="0.254" layer="1"/>
+<wire x1="46.866" y1="7.66086875" x2="46.866" y2="8.58385625" width="0.254" layer="1"/>
+<wire x1="42.848125" y1="15.17805" x2="42.0311375" y2="15.17805" width="0.254" layer="1"/>
+<wire x1="42.0311375" y1="15.17805" x2="39.73195" y2="12.8788625" width="0.254" layer="1"/>
+<wire x1="39.73195" y1="12.8788625" x2="39.73195" y2="8.4582" width="0.254" layer="1"/>
+<wire x1="39.73195" y1="8.4582" x2="39.6875" y2="8.41375" width="0.254" layer="1"/>
+<wire x1="46.866" y1="8.58385625" x2="44.1144" y2="11.33545625" width="0.254" layer="1"/>
+<wire x1="44.1144" y1="11.33545625" x2="44.1144" y2="13.911775" width="0.254" layer="1"/>
+<wire x1="44.1144" y1="13.911775" x2="42.848125" y2="15.17805" width="0.254" layer="1"/>
+<wire x1="45.56" y1="7" x2="45.7306" y2="7.1706" width="0.254" layer="1"/>
+<wire x1="45.7306" y1="7.1706" x2="46.37573125" y2="7.1706" width="0.254" layer="1"/>
 </signal>
 <signal name="N$15">
 <contactref element="LED1" pad="AG"/>
@@ -2815,7 +3014,37 @@ design rules under a new name.</description>
 <signal name="N$2">
 <wire x1="45.56125" y1="5.715" x2="42.545" y2="5.55625" width="0.3048" layer="1"/>
 </signal>
+<signal name="N$3">
+<wire x1="45.24375" y1="6.985" x2="42.8625" y2="7.14375" width="0.254" layer="1"/>
+</signal>
+<signal name="N$4">
+<wire x1="41.11625" y1="8.255" x2="44.29125" y2="8.255" width="0.4064" layer="1"/>
+</signal>
 </signals>
+<mfgpreviewcolors>
+<mfgpreviewcolor name="soldermaskcolor" color="0xC8008000"/>
+<mfgpreviewcolor name="silkscreencolor" color="0xFFFEFEFE"/>
+<mfgpreviewcolor name="backgroundcolor" color="0xFF282828"/>
+<mfgpreviewcolor name="coppercolor" color="0xFFFFBF00"/>
+<mfgpreviewcolor name="substratecolor" color="0xFF786E46"/>
+</mfgpreviewcolors>
 </board>
 </drawing>
+<compatibility>
+<note version="8.2" severity="warning">
+Since Version 8.2, EAGLE supports online libraries. The ids
+of those online libraries will not be understood (or retained)
+with this version.
+</note>
+<note version="8.3" severity="warning">
+Since Version 8.3, EAGLE supports URNs for individual library
+assets (packages, symbols, and devices). The URNs of those assets
+will not be understood (or retained) with this version.
+</note>
+<note version="8.3" severity="warning">
+Since Version 8.3, EAGLE supports the association of 3D packages
+with devices in libraries, schematics, and board files. Those 3D
+packages will not be understood (or retained) with this version.
+</note>
+</compatibility>
 </eagle>
