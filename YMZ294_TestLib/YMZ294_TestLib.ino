@@ -442,6 +442,3 @@ void ffiv(){
    set_ch(ADDR_FREQ_B,65);
 
 }
-
-
-

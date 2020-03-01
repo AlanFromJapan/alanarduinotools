@@ -1,5 +1,5 @@
-#include "WProgram.h"
-#include "wiring.h"
+//#include "WProgram.h"
+//#include "wiring.h"
 
 /*
 * Uses the Yamaha YMZ294 with a shift register CD4015 SIPO (Serial in, parallel out)
