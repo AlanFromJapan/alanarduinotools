@@ -1,5 +1,5 @@
 /* Nes/Snes/Genesis/SMS/Atari to USB
- * Copyright (C) 2006-2011 Raphaël Assénat
+ * Copyright (C) 2006-2011 Raphaï¿½l Assï¿½nat
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  * The author may be contacted at raph@raphnet.net
  */
 #include <avr/io.h>
+//#include <avr/iom328p.h>
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 #include <avr/sleep.h>
@@ -25,16 +26,16 @@
 #include <util/delay.h>
 #include <string.h>
 
-#include "usbdrv.h"
-#include "oddebug.h"
+#include "usbdrv/usbdrv.h"
+#include "usbdrv/oddebug.h"
 #include "gamepad.h"
 
 #include "snes.h"
-#include "snesmouse.h"
-#include "nes.h"
-#include "db9.h"
-#include "tg16.h"
-#include "segamtap.h"
+//#include "snesmouse.h"
+//#include "nes.h"
+//#include "db9.h"
+//#include "tg16.h"
+//#include "segamtap.h"
 
 #include "leds.h"
 #include "devdesc.h"
@@ -46,7 +47,7 @@ static uchar rt_usbDeviceDescriptorSize=0;
 
 #define MAX_REPORTS	8
 
-PROGMEM int usbDescriptorStringSerialNumber[]  = {
+PROGMEM const int usbDescriptorStringSerialNumber[]  = {
  	USB_STRING_DESCRIPTOR_HEADER(4),
 	'1','0','0','0'
 };
@@ -134,10 +135,10 @@ static void hardwareInit(void)
 	}
 	DDRD = 0x00;    /* 0000 0000 bin: remove USB reset condition */
 			/* configure timer 0 for a rate of 12M/(1024 * 256) = 45.78 Hz (~22ms) */
-	TCCR0 = 5;      /* timer 0 prescaler: 1024 */
+	TCCR0B = 5;      /* timer 0 prescaler: 1024 */
 
-	TCCR2 = (1<<WGM21)|(1<<CS22)|(1<<CS21)|(1<<CS20);
-	OCR2 = 196; // for 60 hz
+	TCCR2B = (1<<WGM21)|(1<<CS22)|(1<<CS21)|(1<<CS20);
+	OCR2B = 196; // for 60 hz
 
 }
 
@@ -236,59 +237,8 @@ int main(void)
 
 	_delay_ms(10); /* let pins settle */
 
-	run_mode = (PINB & 0x06)>>1;
 
-	switch(run_mode)
-	{
-		default:
-		case 0:
-			curGamepad = db9GetGamepad();
-			if (curGamepad->init()) {
-				int mtap_prod_string[] = {
- 					USB_STRING_DESCRIPTOR_HEADER(DEVICE_STRING_LENGTH),
-					MTAP_PROD_STRING
-				};
-				memcpy(usbDescriptorStringDevice, mtap_prod_string, sizeof(mtap_prod_string));
-				// if db9 init fails, the multi-tap was detected.
-				// switch to multi-tap mode.
-				curGamepad = segamtapGetGamepad();
-			}
-			break;
-		case 1:
-			curGamepad = tg16_GetGamepad();
-			{
-				int tg16_prod_string[] = {
- 					USB_STRING_DESCRIPTOR_HEADER(DEVICE_STRING_LENGTH),
-					TG16_PROD_STRING
-				};
-				memcpy(usbDescriptorStringDevice, tg16_prod_string, sizeof(tg16_prod_string));
-			}
-
-			break;
-		case 2:	
-			curGamepad = nesGetGamepad();
-			break;
-		case 3:
 			curGamepad = snesGetGamepad();
-//#define NOMOUSE		
-#ifndef NOMOUSE
-			// auto-detect snes mouse
-			
-			curGamepad->init();
-			if (isSnesMouse())
-//			if (1)
-			{
-				int mouse_prod_string[] = {
- 					USB_STRING_DESCRIPTOR_HEADER(DEVICE_STRING_LENGTH),
-					MOUSE_PROD_STRING
-				};
-				memcpy(usbDescriptorStringDevice, mouse_prod_string, sizeof(mouse_prod_string));
-
-				curGamepad = snesmouseGetGamepad();
-			}
-#endif
-			break;
-	}
 
 
 	// configure report descriptor according to
@@ -341,9 +291,9 @@ int main(void)
 
 		/* Try to report at the granularity requested by
 		 * the host */
-		if(TIFR & (1<<TOV0))  /* 22 ms timer */
+		if(TIFR0 & (1<<TOV0))  /* 22 ms timer */
 		{ 
-			TIFR = 1<<TOV0;
+			TIFR0 = 1<<TOV0;
 
 			for (i=0; i<curGamepad->num_reports; i++) 
 			{
@@ -361,9 +311,9 @@ int main(void)
 		}
 
 		/* Read the controller periodically*/
-		if ((TIFR & (1<<OCF2)) )
+		if ((TIFR2 & (1<<OCF2A)) )
 		{
-			TIFR = 1<<OCF2;
+			TIFR2 = 1<<OCF2A;
 	
 			// Ok, the timer tells us it is time to update
 			// the controller status. 

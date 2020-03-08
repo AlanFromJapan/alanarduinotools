@@ -1,5 +1,5 @@
 /* Nes/Snes/Genesis/SMS/Atari to USB
- * Copyright (C) 2006-2007 Raphaël Assénat
+ * Copyright (C) 2006-2007 Raphaï¿½l Assï¿½nat
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
  * The author may be contacted at raph@raphnet.net
  */
 #include "devdesc.h"
-#include "usbdrv.h"
+#include "usbdrv/usbdrv.h"
 #include "usbconfig.h"
 
 #define USBDESCR_DEVICE         1

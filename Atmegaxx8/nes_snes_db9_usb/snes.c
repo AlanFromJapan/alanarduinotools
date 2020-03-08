@@ -1,5 +1,5 @@
 /* Nes/Snes/Genesis/SMS/Atari to USB
- * Copyright (C) 2006-2007 Raphaël Assénat
+ * Copyright (C) 2006-2007 Raphaï¿½l Assï¿½nat
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include "gamepad.h"
 #include "leds.h"
 #include "snes.h"
+#include "snes_descriptor.h"
 
 #define REPORT_SIZE		3
 #define GAMEPAD_BYTES	2
@@ -229,7 +230,7 @@ Gamepad SnesGamepad = {
 
 Gamepad *snesGetGamepad(void)
 {
-	SnesGamepad.reportDescriptor = (void*)snes_usbHidReportDescriptor;
+	SnesGamepad.reportDescriptor = (void*) snes_usbHidReportDescriptor;
 
 	return &SnesGamepad;
 }
