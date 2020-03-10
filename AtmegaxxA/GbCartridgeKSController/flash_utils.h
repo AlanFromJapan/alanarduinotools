@@ -27,4 +27,7 @@ void flashWriteByteDecode() ;
 void flashWriteByteDecode2(uint16_t pAddr, uint8_t pData) ;
 uint8_t flashGetByteDecode2(uint16_t pAddr) ;
 
+void flashReset();
+void flashErase();
+
 #endif /* FLASH_UTILS_H_ */

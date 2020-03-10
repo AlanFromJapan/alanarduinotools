@@ -19,7 +19,7 @@
 void test1(uint8_t n){
 
 	uint16_t vAddr = 0x0000;
-	uint8_t vVal = 0;
+	uint8_t vVal = 0+1;
 
 	//write
 	for (uint8_t i = 0; i < n; i++){
@@ -31,7 +31,7 @@ void test1(uint8_t n){
 	vAddr = 0x0000;
 	//read
 	for (uint8_t i = 0; i < n; i++){
-		if (i == flashGetByteDecode2(vAddr++))
+		if ((i+1) == flashGetByteDecode2(vAddr++))
 			serialWriteString("ok\n");
 		else
 			serialWriteString("** ERROR !!!***\n");

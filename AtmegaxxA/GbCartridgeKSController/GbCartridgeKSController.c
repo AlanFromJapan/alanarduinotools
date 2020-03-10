@@ -97,12 +97,19 @@ void decodeCommand (){
 				//show content of data port
 				showDataPort();
 				break;
+
+#endif //TALKATIVE
 			case 't':
 				//run tests
 				test1(50);
 				break;
-#endif //TALKATIVE
-
+			case 'Z':
+				//delete everything
+				flashReset();
+				flashErase();
+				flashReset();
+				serialWriteString("Erase all completed.");
+				break;
 			default:
 			//Unknown command
 #ifdef TALKATIVE

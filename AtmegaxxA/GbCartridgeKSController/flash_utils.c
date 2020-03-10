@@ -53,12 +53,7 @@ void setupExternalFlash(){
 	setDataBusWrite();
 
 	//RESET flash
-	PORT_CONTROL &= ~PIN_RST;
-	_delay_ms(10);
-	PORT_CONTROL |= PIN_RST;
-	_delay_ms(10);
-
-	PORT_CONTROL = PIN_RST | PIN_WE | PIN_OE;
+	flashReset();
 }
 
 
@@ -284,3 +279,42 @@ void flashWriteByteDecode() {
 
 	flashWriteByteDecode2(vAddress, vData);
 }
+
+
+
+
+/*************************************************************************************************************
+ * Utilitary methods
+ *
+ */
+
+void flashReset(){
+	//Reset low
+	PORT_CONTROL &= ~PIN_RST;
+	_delay_ms(10);
+	PORT_CONTROL |= PIN_RST;
+	_delay_ms(10);
+
+	PORT_CONTROL |= PIN_WE | PIN_OE;
+	PORT_CONTROL &= ~PIN_CE;
+}
+
+
+void flashErase(){
+	//go write mode
+	setDataBusWrite();
+
+	flashWriteSeq1Byte(0x5555, 0xaa);
+	flashWriteSeq1Byte(0x2aaa, 0x55);
+	flashWriteSeq1Byte(0x5555, 0x80);
+	flashWriteSeq1Byte(0x5555, 0xaa);
+	flashWriteSeq1Byte(0x2aaa, 0x55);
+	flashWriteSeq1Byte(0x5555, 0x10);
+
+	//waitForDataConfirmation(0xff);
+
+	//back to read mode
+	setDataBusRead();
+}
+
+
