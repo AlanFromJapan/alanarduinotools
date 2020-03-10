@@ -69,7 +69,7 @@ void establishContact() {
 		delayLong();
 	}
 #ifdef TALKATIVE
-	serialWriteString("***GBCartridgeKS ***\r\n");
+	serialWriteString("***GBCartridgeKS ***\n");
 #endif //TALKATIVE
 }
 

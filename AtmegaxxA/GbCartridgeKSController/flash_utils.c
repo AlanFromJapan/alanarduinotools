@@ -9,6 +9,7 @@
 #define TALKATIVE
 
 #include <avr/io.h>
+#include <avr/iom64.h>
 #include <util/delay.h>
 //#include <avr/interrupt.h>
 #include <stddef.h>
@@ -161,7 +162,7 @@ uint8_t flashGetByteDecode2(uint16_t pAddr) {
 
 	serialWriteString("GET ");
 	debugPrint(pAddr, vData);
-	serialWriteString("\r\n");
+	serialWriteString("\n");
 
 #endif //TALKATIVE
 	return vData;
@@ -264,14 +265,14 @@ void flashWriteByteDecode2(uint16_t pAddr, uint8_t pData) {
 
 	debugPrint(pAddr, pData);
 
-	serialWriteString("\r\n");
+	serialWriteString("\n");
 
 
 	//
 	//serialWriteString("Confirm addr: 0x");
 	//serialWriteString(itoa(PORT_ADDR_M, vBuffChar, 16));
 	//serialWriteString(itoa(PORT_ADDR_L, vBuffChar, 16));
-	//serialWriteString("\r\n");
+	//serialWriteString("\n");
 #endif //TALKATIVE
 }
 

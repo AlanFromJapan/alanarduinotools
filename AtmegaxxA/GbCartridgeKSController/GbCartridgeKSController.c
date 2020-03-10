@@ -22,6 +22,8 @@
 #include "serial_utils.h"
 #include "flash_utils.h"
 
+#include "tests/unit_tests.h"
+
 
 
 void showHelp(){
@@ -94,6 +96,10 @@ void decodeCommand (){
 			case 'D':
 				//show content of data port
 				showDataPort();
+				break;
+			case 't':
+				//run tests
+				test1(50);
 				break;
 #endif //TALKATIVE
 
