@@ -139,25 +139,41 @@ namespace GbReaper.Classes {
         }
 
         internal void ExportToGBDK(string pPath) {
+            int vIndex = 0;
             string vLibNameC = CleanFileName(this.Name);
             string vFilename = Path.Combine(pPath, (string.IsNullOrWhiteSpace(this.Name) ? "GbReaper_lib.c" : vLibNameC + ".c"));
 
             using (FileStream vFS = new FileStream(vFilename, FileMode.Create, FileAccess.ReadWrite, FileShare.None)) {
                 using (StreamWriter vSW = new StreamWriter(vFS)) {
+                    //count header
                     vSW.WriteLine(string.Format(@"
 #define {1}_COUNT   {0}
 
 ", this.mTiles.Count,  vLibNameC));
 
-                    vSW.WriteLine(@"unsigned char " + vLibNameC + @"[] =
+
+                    //write the defines indexes by name if any
+                    vIndex = 0;
+                    foreach (Tile vT in this.mTiles) {
+                        string s = vT.ExportTileToGBDKDefine(vIndex++);
+                        if (s != null)
+                            vSW.Write(s);
+                    }
+
+
+                    //Write the bytes contents
+                    vSW.WriteLine(@"
+
+unsigned char " + vLibNameC + @"[] =
 {
 ");
                     bool vFirst = true;
+                    vIndex = 0;
                     foreach (Tile vT in this.mTiles){
                         if (!vFirst)
                             vSW.WriteLine(",");
 
-                        vSW.Write(vT.ExportTileToGBDKString());
+                        vSW.Write(vT.ExportTileToGBDKString(vIndex++));
 
                         vFirst = false;
                     }
