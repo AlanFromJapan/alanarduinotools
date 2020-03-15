@@ -102,6 +102,12 @@
     <Compile Include="Forms\FrmNewMap.Designer.cs">
       <DependentUpon>FrmNewMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FrmTileDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmTileDetails.Designer.cs">
+      <DependentUpon>FrmTileDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FrmTilizator.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,6 +136,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmNewMap.resx">
       <DependentUpon>FrmNewMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmTileDetails.resx">
+      <DependentUpon>FrmTileDetails.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmTilizator.resx">
       <DependentUpon>FrmTilizator.cs</DependentUpon>

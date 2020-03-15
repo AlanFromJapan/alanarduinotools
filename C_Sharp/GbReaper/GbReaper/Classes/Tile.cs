@@ -64,6 +64,9 @@ namespace GbReaper.Classes {
 
 
         internal void SetPixel(int x, int y, Color pColor) {
+            if (x < 0 || x > 7 || y < 0 || y > 7)
+                return;
+
             this.mImage.SetPixel(x, y, pColor);
             OnTileChanged();
         }
