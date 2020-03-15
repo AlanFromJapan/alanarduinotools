@@ -179,8 +179,15 @@ namespace GbReaper {
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e) {
-            this.mCurrentProject.SaveAs(this.mCurrentProject.LatestKnownFilename);
-            SetStatus("Saved as " + this.mCurrentProject.LatestKnownFilename + " completed.");
+            if (this.mCurrentProject.LatestKnownFilename == null)
+            {
+                saveAsToolStripMenuItem_Click(sender, e);
+            }
+            else
+            {
+                this.mCurrentProject.SaveAs(this.mCurrentProject.LatestKnownFilename);
+                SetStatus("Saved as " + this.mCurrentProject.LatestKnownFilename + " completed.");
+            }
         }
 
         private void exportForGBDKToolStripMenuItem_Click(object sender, EventArgs e) {
