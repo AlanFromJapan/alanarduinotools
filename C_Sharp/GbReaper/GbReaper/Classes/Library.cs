@@ -13,6 +13,7 @@ namespace GbReaper.Classes {
         private string mName = null;
 
         public string Name { get { return mName; } set { mName = value; } }
+        public string NameClean { get { return CleanFileName(this.mName); } }
 
         public Tile this[int i] {
             get {

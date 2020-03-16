@@ -148,13 +148,52 @@ namespace GbReaper.Classes {
 
         internal void ExportToGBDK(string pPath) {
             string vMapNameC = CleanFileName(this.Name);
-            string vFilename = Path.Combine(pPath, (string.IsNullOrWhiteSpace(this.Name) ? "GbReaper_map.c" : vMapNameC + ".c"));
+            string vFilenameC = Path.Combine(pPath, (string.IsNullOrWhiteSpace(this.Name) ? "GbReaper_map.c" : vMapNameC + ".c"));
+
+            //export the C file
+            this.ExportToGBDK_C(vMapNameC, vFilenameC);
+
+            string vFilenameH = Path.Combine(pPath, (string.IsNullOrWhiteSpace(this.Name) ? "GbReaper_map.c" : vMapNameC + ".h"));
+            //export the H file
+            this.ExportToGBDK_H(vMapNameC, vFilenameH);
+        }
+
+        /// <summary>
+        /// Makes the H file
+        /// </summary>
+        /// <param name="vMapNameC"></param>
+        /// <param name="vFilename"></param>        
+        protected void ExportToGBDK_H(string vMapNameC, string vFilename) {
+            using (FileStream vFS = new FileStream(vFilename, FileMode.Create, FileAccess.ReadWrite, FileShare.None)) {
+                using (StreamWriter vSW = new StreamWriter(vFS)) {
+                    vSW.WriteLine(string.Format(@"
+#ifndef __{2}_H__
+#define __{2}_H__
+
+#define {2}_WIDTH   {0}
+#define {2}_HEIGHT  {1}
+
+extern unsigned char {2}[];
+
+#endif  //__{2}_H__
+
+", this.Width, this.Height, vMapNameC));
+                }
+            }
+        }
+
+            /// <summary>
+            /// Makes the C file
+            /// </summary>
+            /// <param name="vMapNameC"></param>
+            /// <param name="vFilename"></param>        
+            protected void ExportToGBDK_C(string vMapNameC, string vFilename) {
 
             using (FileStream vFS = new FileStream(vFilename, FileMode.Create, FileAccess.ReadWrite, FileShare.None)) {
                 using (StreamWriter vSW = new StreamWriter(vFS)) {
                     vSW.WriteLine(string.Format(@"
-#define {2}_WIDTH   {0}
-#define {2}_HEIGHT  {1}
+
+#include ""{2}.h""
 
 ", this.Width, this.Height, vMapNameC));
 
@@ -184,6 +223,7 @@ namespace GbReaper.Classes {
 
                     vSW.WriteLine(@"
 };
+
 ");
                 }
             }

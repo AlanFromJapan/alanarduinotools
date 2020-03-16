@@ -191,6 +191,10 @@ namespace GbReaper {
         }
 
         private void exportForGBDKToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (this.mCurrentProject.LatestKnownFilename != null) {
+                fbdExport.SelectedPath = Path.GetDirectoryName(this.mCurrentProject.LatestKnownFilename);
+            }
+
             if (fbdExport.ShowDialog(this) == System.Windows.Forms.DialogResult.OK) {
                 this.mCurrentProject.ExportToGBDK(fbdExport.SelectedPath);
                 SetStatus("Export to " + fbdExport.SelectedPath + " completed.");
