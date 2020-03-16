@@ -7,13 +7,25 @@ using System.Drawing;
 namespace GbReaper.Classes {
     public class Palette {
         public string mName = null;
-        public static readonly Palette DEFAULT_PALETTE2 = new Palette("Pastel", new Color[] { Color.White, Color.LightGray, Color.DarkGray, Color.Gray });
-        public static readonly Palette DEFAULT_PALETTE = new Palette("Equilibrated", new Color[] { 
+
+        public static readonly Palette DEFAULT_PALETTE_PASTEL = new Palette("Pastel", new Color[] { Color.White, Color.LightGray, Color.DarkGray, Color.Gray });
+        public static readonly Palette DEFAULT_PALETTE_EQUILIBRATED = new Palette("Equilibrated", new Color[] { 
             Color.FromArgb(255,255,255), 
             Color.FromArgb(3*255/4,3*255/4,3*255/4), 
             Color.FromArgb(2*255/4,2*255/4,2*255/4), 
             Color.FromArgb(255/4,255/4,255/4)
         });
+        /// <summary>
+        /// From https://lospec.com/palette-list/nostalgia
+        /// </summary>
+        public static readonly Palette DEFAULT_PALETTE_GREEN = new Palette("Green", new Color[] { 
+            ColorTranslator.FromHtml("#d0d058"),
+            ColorTranslator.FromHtml("#a0a840"),
+            ColorTranslator.FromHtml("#708028"),
+            ColorTranslator.FromHtml("#405010")
+        });
+
+        public static readonly Palette DEFAULT_PALETTE = DEFAULT_PALETTE_GREEN;
 
         public Color[] mColors;
 
