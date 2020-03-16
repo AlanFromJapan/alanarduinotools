@@ -10,8 +10,8 @@ namespace GbReaper.Classes {
 
         const int READ_BUFFER_LENGTH = 8 * 2;
 
-        public static Image GetRomAsImage(string pFilename, int pZoomFactor) {
-            Bitmap vBmp = (Bitmap)GetRomAsImageUnscaled(pFilename);
+        public static Image GetRomAsImage(string pFilename, int pZoomFactor, Palette pPalette) {
+            Bitmap vBmp = (Bitmap)GetRomAsImageUnscaled(pFilename, pPalette);
             if (pZoomFactor == 1)
                 return vBmp;
 
@@ -27,7 +27,7 @@ namespace GbReaper.Classes {
             return vResult;
         }
 
-        public static Image GetRomAsImageUnscaled(string pFilename) {
+        public static Image GetRomAsImageUnscaled(string pFilename, Palette pPalette) {
             int vFileLength = (int)(new FileInfo(pFilename).Length);
             int vTileH = 14;
 
@@ -50,7 +50,7 @@ namespace GbReaper.Classes {
                             vVal = vVal | (0x01 & (vBuff[2 * line] >> (8-1 - pix)));
                             vVal = vVal | (0x02 & ((vBuff[2 * line+1] >> (8-1  - pix))) << 1);
 
-                            Color vColor = GetColorFromPalette(vVal);
+                            Color vColor = GetColorFromPalette(vVal, pPalette);
                             vBitBuff.SetPixel(pix, line, vColor);
                         }
                     }
@@ -74,8 +74,8 @@ namespace GbReaper.Classes {
             }
         }
 
-        private static Color GetColorFromPalette(int pVal) {
-            return Palette.DEFAULT_PALETTE.mColors[pVal];
+        private static Color GetColorFromPalette(int pVal, Palette pPalette) {
+            return pPalette.mColors[pVal];
         }
     }
 }

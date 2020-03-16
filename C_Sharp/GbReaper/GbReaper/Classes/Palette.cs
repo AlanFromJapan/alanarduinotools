@@ -9,16 +9,16 @@ namespace GbReaper.Classes {
         public string mName = null;
 
         public static readonly Palette DEFAULT_PALETTE_PASTEL = new Palette("Pastel", new Color[] { Color.White, Color.LightGray, Color.DarkGray, Color.Gray });
-        public static readonly Palette DEFAULT_PALETTE_EQUILIBRATED = new Palette("Equilibrated", new Color[] { 
-            Color.FromArgb(255,255,255), 
-            Color.FromArgb(3*255/4,3*255/4,3*255/4), 
-            Color.FromArgb(2*255/4,2*255/4,2*255/4), 
+        public static readonly Palette DEFAULT_PALETTE_EQUILIBRATED = new Palette("Equilibrated", new Color[] {
+            Color.FromArgb(255,255,255),
+            Color.FromArgb(3*255/4,3*255/4,3*255/4),
+            Color.FromArgb(2*255/4,2*255/4,2*255/4),
             Color.FromArgb(255/4,255/4,255/4)
         });
         /// <summary>
         /// From https://lospec.com/palette-list/nostalgia
         /// </summary>
-        public static readonly Palette DEFAULT_PALETTE_GREEN = new Palette("Green", new Color[] { 
+        public static readonly Palette DEFAULT_PALETTE_GREEN = new Palette("Green", new Color[] {
             ColorTranslator.FromHtml("#d0d058"),
             ColorTranslator.FromHtml("#a0a840"),
             ColorTranslator.FromHtml("#708028"),
@@ -26,6 +26,13 @@ namespace GbReaper.Classes {
         });
 
         public static readonly Palette DEFAULT_PALETTE = DEFAULT_PALETTE_GREEN;
+
+        public static readonly Dictionary<string, Palette> WellknownPalettes = new Dictionary<string, Palette>();
+        static Palette() {
+            WellknownPalettes.Add(DEFAULT_PALETTE_EQUILIBRATED.mName, DEFAULT_PALETTE_EQUILIBRATED);
+            WellknownPalettes.Add(DEFAULT_PALETTE_PASTEL.mName, DEFAULT_PALETTE_PASTEL);
+            WellknownPalettes.Add(DEFAULT_PALETTE_GREEN.mName, DEFAULT_PALETTE_GREEN);
+        }
 
         public Color[] mColors;
 

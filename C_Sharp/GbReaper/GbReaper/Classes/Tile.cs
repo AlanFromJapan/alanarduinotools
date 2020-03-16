@@ -111,7 +111,7 @@ namespace GbReaper.Classes {
         }
 
         internal void SaveToStream(System.IO.StreamWriter pSW) {
-            pSW.Write("\t\t\t<tile id=\""+this.UID+"\" name=\"" + this.Name + "\" palette=\""+this.Palette.mName+"\">");
+            pSW.Write("\t\t\t<tile id=\""+this.UID+"\" name=\"" + this.Name + "\" palette=\"" + this.Palette.mName + "\" >");
 
             Bitmap vBmp = (Bitmap)this.mImage;
 
@@ -127,7 +127,7 @@ namespace GbReaper.Classes {
             pSW.WriteLine("</tile>");
         }
 
-        internal static Tile LoadFromXml (XmlNode pNode){
+        internal static Tile LoadFromXml (XmlNode pNode, Palette pPalette){
             try {
                 Bitmap vBmp = new Bitmap(Tile.WIDTH_PX, Tile.HEIGHT_PX);
 
@@ -155,7 +155,7 @@ namespace GbReaper.Classes {
                 return new Tile(Guid.Parse(pNode.Attributes["id"].Value),
                     pNode.Attributes["name"].Value,
                     vBmp,
-                    Palette.DEFAULT_PALETTE //todo fix this one day
+                    pPalette
                     );
             }
             catch (Exception ex) {
