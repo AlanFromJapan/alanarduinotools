@@ -178,6 +178,7 @@
             // cbxPalette
             // 
             this.cbxPalette.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxPalette.Enabled = false;
             this.cbxPalette.Name = "cbxPalette";
             this.cbxPalette.Size = new System.Drawing.Size(121, 23);
             this.cbxPalette.SelectedIndexChanged += new System.EventHandler(this.cbxPalette_SelectedIndexChanged);
