@@ -33,6 +33,8 @@
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportForGBDKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutGbReaperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ofdRom = new System.Windows.Forms.OpenFileDialog();
@@ -40,8 +42,11 @@
             this.tabMaps = new System.Windows.Forms.TabControl();
             this.tpMapWelcome = new System.Windows.Forms.TabPage();
             this.btnNewMap = new System.Windows.Forms.Button();
+            this.ucTileEd = new GbReaper.Controls.UcTileEditor();
             this.panLib = new System.Windows.Forms.Panel();
+            this.ucLibView = new GbReaper.Controls.UcLibraryList();
             this.panLeft = new System.Windows.Forms.Panel();
+            this.ucRomViewer1 = new GbReaper.Controls.UcRomViewer();
             this.panLeftBottom = new System.Windows.Forms.Panel();
             this.pan128Alt = new System.Windows.Forms.Panel();
             this.pan32 = new System.Windows.Forms.Panel();
@@ -49,11 +54,6 @@
             this.strip = new System.Windows.Forms.StatusStrip();
             this.stripLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.ofdProject = new System.Windows.Forms.OpenFileDialog();
-            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportForGBDKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ucTileEd = new GbReaper.Controls.UcTileEditor();
-            this.ucLibView = new GbReaper.Controls.UcLibraryList();
-            this.ucRomViewer1 = new GbReaper.Controls.UcRomViewer();
             this.fbdExport = new System.Windows.Forms.FolderBrowserDialog();
             this.menuStrip1.SuspendLayout();
             this.panMain.SuspendLayout();
@@ -73,7 +73,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1054, 26);
+            this.menuStrip1.Size = new System.Drawing.Size(1054, 24);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -88,7 +88,7 @@
             this.toolStripMenuItem1,
             this.quitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(40, 22);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
             this.fileToolStripMenuItem.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
             // 
@@ -96,20 +96,20 @@
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
             this.loadToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F4;
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.loadToolStripMenuItem.Text = "&Load ROM";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(209, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(186, 6);
             // 
             // loadProjectToolStripMenuItem
             // 
             this.loadProjectToolStripMenuItem.Name = "loadProjectToolStripMenuItem";
             this.loadProjectToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
-            this.loadProjectToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.loadProjectToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.loadProjectToolStripMenuItem.Text = "Load project";
             this.loadProjectToolStripMenuItem.Click += new System.EventHandler(this.loadProjectToolStripMenuItem_Click);
             // 
@@ -117,7 +117,7 @@
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F11;
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.saveToolStripMenuItem.Text = "Save project";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -125,35 +125,51 @@
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.saveAsToolStripMenuItem.Text = "Save project as ...";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(209, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(186, 6);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
             this.quitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.quitToolStripMenuItem.Text = "&Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportForGBDKToolStripMenuItem});
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
+            this.exportToolStripMenuItem.Text = "&Export";
+            // 
+            // exportForGBDKToolStripMenuItem
+            // 
+            this.exportForGBDKToolStripMenuItem.Name = "exportForGBDKToolStripMenuItem";
+            this.exportForGBDKToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.exportForGBDKToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.exportForGBDKToolStripMenuItem.Text = "Export for GBDK";
+            this.exportForGBDKToolStripMenuItem.Click += new System.EventHandler(this.exportForGBDKToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutGbReaperToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(46, 22);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
             // aboutGbReaperToolStripMenuItem
             // 
             this.aboutGbReaperToolStripMenuItem.Name = "aboutGbReaperToolStripMenuItem";
-            this.aboutGbReaperToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.aboutGbReaperToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.aboutGbReaperToolStripMenuItem.Text = "&About GbReaper...";
             this.aboutGbReaperToolStripMenuItem.Click += new System.EventHandler(this.aboutGbReaperToolStripMenuItem_Click);
             // 
@@ -168,9 +184,9 @@
             this.panMain.Controls.Add(this.ucTileEd);
             this.panMain.Controls.Add(this.panLib);
             this.panMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panMain.Location = new System.Drawing.Point(252, 26);
+            this.panMain.Location = new System.Drawing.Point(252, 24);
             this.panMain.Name = "panMain";
-            this.panMain.Size = new System.Drawing.Size(802, 744);
+            this.panMain.Size = new System.Drawing.Size(802, 812);
             this.panMain.TabIndex = 4;
             // 
             // tabMaps
@@ -178,10 +194,10 @@
             this.tabMaps.Alignment = System.Windows.Forms.TabAlignment.Bottom;
             this.tabMaps.Controls.Add(this.tpMapWelcome);
             this.tabMaps.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabMaps.Location = new System.Drawing.Point(0, 256);
+            this.tabMaps.Location = new System.Drawing.Point(0, 277);
             this.tabMaps.Name = "tabMaps";
             this.tabMaps.SelectedIndex = 0;
-            this.tabMaps.Size = new System.Drawing.Size(602, 488);
+            this.tabMaps.Size = new System.Drawing.Size(602, 535);
             this.tabMaps.TabIndex = 3;
             // 
             // tpMapWelcome
@@ -189,7 +205,7 @@
             this.tpMapWelcome.Controls.Add(this.btnNewMap);
             this.tpMapWelcome.Location = new System.Drawing.Point(4, 4);
             this.tpMapWelcome.Name = "tpMapWelcome";
-            this.tpMapWelcome.Size = new System.Drawing.Size(594, 462);
+            this.tpMapWelcome.Size = new System.Drawing.Size(594, 509);
             this.tpMapWelcome.TabIndex = 0;
             this.tpMapWelcome.Text = "Maps";
             this.tpMapWelcome.UseVisualStyleBackColor = true;
@@ -197,14 +213,23 @@
             // btnNewMap
             // 
             this.btnNewMap.Image = ((System.Drawing.Image)(resources.GetObject("btnNewMap.Image")));
-            this.btnNewMap.Location = new System.Drawing.Point(187, 187);
+            this.btnNewMap.Location = new System.Drawing.Point(187, 203);
             this.btnNewMap.Name = "btnNewMap";
-            this.btnNewMap.Size = new System.Drawing.Size(230, 110);
+            this.btnNewMap.Size = new System.Drawing.Size(230, 119);
             this.btnNewMap.TabIndex = 0;
             this.btnNewMap.Text = "Create new map...";
             this.btnNewMap.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnNewMap.UseVisualStyleBackColor = true;
             this.btnNewMap.Click += new System.EventHandler(this.btnNewMap_Click);
+            // 
+            // ucTileEd
+            // 
+            this.ucTileEd.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ucTileEd.Location = new System.Drawing.Point(0, 0);
+            this.ucTileEd.MinimumSize = new System.Drawing.Size(0, 277);
+            this.ucTileEd.Name = "ucTileEd";
+            this.ucTileEd.Size = new System.Drawing.Size(602, 277);
+            this.ucTileEd.TabIndex = 1;
             // 
             // panLib
             // 
@@ -212,27 +237,44 @@
             this.panLib.Dock = System.Windows.Forms.DockStyle.Right;
             this.panLib.Location = new System.Drawing.Point(602, 0);
             this.panLib.Name = "panLib";
-            this.panLib.Size = new System.Drawing.Size(200, 744);
+            this.panLib.Size = new System.Drawing.Size(200, 812);
             this.panLib.TabIndex = 0;
+            // 
+            // ucLibView
+            // 
+            this.ucLibView.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ucLibView.Location = new System.Drawing.Point(0, 0);
+            this.ucLibView.Name = "ucLibView";
+            this.ucLibView.Size = new System.Drawing.Size(200, 812);
+            this.ucLibView.TabIndex = 0;
             // 
             // panLeft
             // 
             this.panLeft.Controls.Add(this.ucRomViewer1);
             this.panLeft.Controls.Add(this.panLeftBottom);
             this.panLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panLeft.Location = new System.Drawing.Point(0, 26);
+            this.panLeft.Location = new System.Drawing.Point(0, 24);
             this.panLeft.Name = "panLeft";
-            this.panLeft.Size = new System.Drawing.Size(252, 744);
+            this.panLeft.Size = new System.Drawing.Size(252, 812);
             this.panLeft.TabIndex = 5;
+            // 
+            // ucRomViewer1
+            // 
+            this.ucRomViewer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ucRomViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ucRomViewer1.Location = new System.Drawing.Point(0, 0);
+            this.ucRomViewer1.Name = "ucRomViewer1";
+            this.ucRomViewer1.Size = new System.Drawing.Size(252, 670);
+            this.ucRomViewer1.TabIndex = 3;
             // 
             // panLeftBottom
             // 
             this.panLeftBottom.Controls.Add(this.pan128Alt);
             this.panLeftBottom.Controls.Add(this.pan32);
             this.panLeftBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panLeftBottom.Location = new System.Drawing.Point(0, 613);
+            this.panLeftBottom.Location = new System.Drawing.Point(0, 670);
             this.panLeftBottom.Name = "panLeftBottom";
-            this.panLeftBottom.Size = new System.Drawing.Size(252, 131);
+            this.panLeftBottom.Size = new System.Drawing.Size(252, 142);
             this.panLeftBottom.TabIndex = 4;
             // 
             // pan128Alt
@@ -240,15 +282,15 @@
             this.pan128Alt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pan128Alt.Location = new System.Drawing.Point(62, 1);
             this.pan128Alt.Name = "pan128Alt";
-            this.pan128Alt.Size = new System.Drawing.Size(128, 128);
+            this.pan128Alt.Size = new System.Drawing.Size(128, 139);
             this.pan128Alt.TabIndex = 4;
             // 
             // pan32
             // 
             this.pan32.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pan32.Location = new System.Drawing.Point(12, 6);
+            this.pan32.Location = new System.Drawing.Point(12, 7);
             this.pan32.Name = "pan32";
-            this.pan32.Size = new System.Drawing.Size(32, 32);
+            this.pan32.Size = new System.Drawing.Size(32, 35);
             this.pan32.TabIndex = 3;
             // 
             // sfdProject
@@ -261,7 +303,7 @@
             // 
             this.strip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.stripLabel});
-            this.strip.Location = new System.Drawing.Point(0, 770);
+            this.strip.Location = new System.Drawing.Point(0, 836);
             this.strip.Name = "strip";
             this.strip.Size = new System.Drawing.Size(1054, 22);
             this.strip.TabIndex = 6;
@@ -269,9 +311,9 @@
             // stripLabel
             // 
             this.stripLabel.AutoToolTip = true;
-            this.stripLabel.Font = new System.Drawing.Font("Meiryo", 8F);
+            this.stripLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.stripLabel.Name = "stripLabel";
-            this.stripLabel.Size = new System.Drawing.Size(35, 17);
+            this.stripLabel.Size = new System.Drawing.Size(31, 17);
             this.stripLabel.Text = "Hello";
             // 
             // ofdProject
@@ -279,57 +321,15 @@
             this.ofdProject.Filter = "GbReaper projects|*.gbxml";
             this.ofdProject.Title = "Open project ...";
             // 
-            // exportToolStripMenuItem
-            // 
-            this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.exportForGBDKToolStripMenuItem});
-            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(58, 22);
-            this.exportToolStripMenuItem.Text = "&Export";
-            // 
-            // exportForGBDKToolStripMenuItem
-            // 
-            this.exportForGBDKToolStripMenuItem.Name = "exportForGBDKToolStripMenuItem";
-            this.exportForGBDKToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.exportForGBDKToolStripMenuItem.Size = new System.Drawing.Size(194, 22);
-            this.exportForGBDKToolStripMenuItem.Text = "Export for GBDK";
-            this.exportForGBDKToolStripMenuItem.Click += new System.EventHandler(this.exportForGBDKToolStripMenuItem_Click);
-            // 
-            // ucTileEd
-            // 
-            this.ucTileEd.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ucTileEd.Location = new System.Drawing.Point(0, 0);
-            this.ucTileEd.MinimumSize = new System.Drawing.Size(0, 256);
-            this.ucTileEd.Name = "ucTileEd";
-            this.ucTileEd.Size = new System.Drawing.Size(602, 256);
-            this.ucTileEd.TabIndex = 1;
-            // 
-            // ucLibView
-            // 
-            this.ucLibView.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ucLibView.Location = new System.Drawing.Point(0, 0);
-            this.ucLibView.Name = "ucLibView";
-            this.ucLibView.Size = new System.Drawing.Size(200, 744);
-            this.ucLibView.TabIndex = 0;
-            // 
-            // ucRomViewer1
-            // 
-            this.ucRomViewer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ucRomViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ucRomViewer1.Location = new System.Drawing.Point(0, 0);
-            this.ucRomViewer1.Name = "ucRomViewer1";
-            this.ucRomViewer1.Size = new System.Drawing.Size(252, 613);
-            this.ucRomViewer1.TabIndex = 3;
-            // 
             // fbdExport
             // 
             this.fbdExport.Description = "Choose path to export";
             // 
             // FrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1054, 792);
+            this.ClientSize = new System.Drawing.Size(1054, 858);
             this.Controls.Add(this.panMain);
             this.Controls.Add(this.panLeft);
             this.Controls.Add(this.menuStrip1);
@@ -339,6 +339,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FrmMain";
             this.Text = "GB Reaper";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FrmMain_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

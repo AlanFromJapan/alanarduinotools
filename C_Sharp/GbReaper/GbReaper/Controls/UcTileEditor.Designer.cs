@@ -25,11 +25,11 @@
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             this.panTools = new System.Windows.Forms.Panel();
-            this.btnLeft = new System.Windows.Forms.Button();
             this.btnRight = new System.Windows.Forms.Button();
+            this.btnLeft = new System.Windows.Forms.Button();
             this.ctxColors = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.color1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.color0ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.color1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.color2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.color3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pan128Alt = new GbReaper.Controls.PanelX();
@@ -51,30 +51,30 @@
             this.panTools.Dock = System.Windows.Forms.DockStyle.Left;
             this.panTools.Location = new System.Drawing.Point(0, 0);
             this.panTools.Name = "panTools";
-            this.panTools.Size = new System.Drawing.Size(32, 256);
+            this.panTools.Size = new System.Drawing.Size(32, 277);
             this.panTools.TabIndex = 3;
-            // 
-            // btnLeft
-            // 
-            this.btnLeft.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLeft.Location = new System.Drawing.Point(0, 195);
-            this.btnLeft.Name = "btnLeft";
-            this.btnLeft.Size = new System.Drawing.Size(32, 32);
-            this.btnLeft.TabIndex = 0;
-            this.btnLeft.Text = "L";
-            this.btnLeft.UseVisualStyleBackColor = true;
-            this.btnLeft.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnLeft_MouseUp);
             // 
             // btnRight
             // 
             this.btnRight.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRight.Location = new System.Drawing.Point(0, 224);
+            this.btnRight.Location = new System.Drawing.Point(0, 32);
             this.btnRight.Name = "btnRight";
-            this.btnRight.Size = new System.Drawing.Size(32, 32);
+            this.btnRight.Size = new System.Drawing.Size(32, 35);
             this.btnRight.TabIndex = 1;
             this.btnRight.Text = "R";
             this.btnRight.UseVisualStyleBackColor = true;
             this.btnRight.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnRight_MouseUp);
+            // 
+            // btnLeft
+            // 
+            this.btnLeft.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLeft.Location = new System.Drawing.Point(0, 0);
+            this.btnLeft.Name = "btnLeft";
+            this.btnLeft.Size = new System.Drawing.Size(32, 35);
+            this.btnLeft.TabIndex = 0;
+            this.btnLeft.Text = "L";
+            this.btnLeft.UseVisualStyleBackColor = true;
+            this.btnLeft.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnLeft_MouseUp);
             // 
             // ctxColors
             // 
@@ -84,38 +84,38 @@
             this.color2ToolStripMenuItem,
             this.color3ToolStripMenuItem});
             this.ctxColors.Name = "ctxColors";
-            this.ctxColors.Size = new System.Drawing.Size(153, 114);
+            this.ctxColors.Size = new System.Drawing.Size(120, 92);
             this.ctxColors.Opening += new System.ComponentModel.CancelEventHandler(this.ctxColors_Opening);
             this.ctxColors.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.ctxColors_ItemClicked);
-            // 
-            // color1ToolStripMenuItem
-            // 
-            this.color1ToolStripMenuItem.Name = "color1ToolStripMenuItem";
-            this.color1ToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
-            this.color1ToolStripMenuItem.Text = "Color #1";
             // 
             // color0ToolStripMenuItem
             // 
             this.color0ToolStripMenuItem.Name = "color0ToolStripMenuItem";
-            this.color0ToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.color0ToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.color0ToolStripMenuItem.Text = "Color #0";
+            // 
+            // color1ToolStripMenuItem
+            // 
+            this.color1ToolStripMenuItem.Name = "color1ToolStripMenuItem";
+            this.color1ToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.color1ToolStripMenuItem.Text = "Color #1";
             // 
             // color2ToolStripMenuItem
             // 
             this.color2ToolStripMenuItem.Name = "color2ToolStripMenuItem";
-            this.color2ToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.color2ToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.color2ToolStripMenuItem.Text = "Color #2";
             // 
             // color3ToolStripMenuItem
             // 
             this.color3ToolStripMenuItem.Name = "color3ToolStripMenuItem";
-            this.color3ToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.color3ToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.color3ToolStripMenuItem.Text = "Color #3";
             // 
             // pan128Alt
             // 
             this.pan128Alt.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pan128Alt.Location = new System.Drawing.Point(441, 87);
+            this.pan128Alt.Location = new System.Drawing.Point(441, 94);
             this.pan128Alt.Name = "pan128Alt";
             this.pan128Alt.Size = new System.Drawing.Size(128, 128);
             this.pan128Alt.TabIndex = 2;
@@ -123,7 +123,7 @@
             // pan128
             // 
             this.pan128.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pan128.Location = new System.Drawing.Point(307, 87);
+            this.pan128.Location = new System.Drawing.Point(307, 94);
             this.pan128.Name = "pan128";
             this.pan128.Size = new System.Drawing.Size(128, 128);
             this.pan128.TabIndex = 2;
@@ -131,7 +131,7 @@
             // pan64
             // 
             this.pan64.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pan64.Location = new System.Drawing.Point(381, 14);
+            this.pan64.Location = new System.Drawing.Point(381, 15);
             this.pan64.Name = "pan64";
             this.pan64.Size = new System.Drawing.Size(64, 64);
             this.pan64.TabIndex = 2;
@@ -139,7 +139,7 @@
             // pan32
             // 
             this.pan32.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pan32.Location = new System.Drawing.Point(343, 14);
+            this.pan32.Location = new System.Drawing.Point(343, 15);
             this.pan32.Name = "pan32";
             this.pan32.Size = new System.Drawing.Size(32, 32);
             this.pan32.TabIndex = 2;
@@ -147,7 +147,7 @@
             // pan16
             // 
             this.pan16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pan16.Location = new System.Drawing.Point(321, 14);
+            this.pan16.Location = new System.Drawing.Point(321, 15);
             this.pan16.Name = "pan16";
             this.pan16.Size = new System.Drawing.Size(16, 16);
             this.pan16.TabIndex = 2;
@@ -155,7 +155,7 @@
             // pan8
             // 
             this.pan8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pan8.Location = new System.Drawing.Point(307, 14);
+            this.pan8.Location = new System.Drawing.Point(307, 15);
             this.pan8.Name = "pan8";
             this.pan8.Size = new System.Drawing.Size(8, 8);
             this.pan8.TabIndex = 1;
@@ -171,7 +171,7 @@
             // 
             // UcTileEditor
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panTools);
             this.Controls.Add(this.pan128Alt);
@@ -181,9 +181,9 @@
             this.Controls.Add(this.pan16);
             this.Controls.Add(this.pan8);
             this.Controls.Add(this.panEdit);
-            this.MinimumSize = new System.Drawing.Size(0, 256);
+            this.MinimumSize = new System.Drawing.Size(0, 277);
             this.Name = "UcTileEditor";
-            this.Size = new System.Drawing.Size(646, 256);
+            this.Size = new System.Drawing.Size(646, 277);
             this.Load += new System.EventHandler(this.UcTileEditor_Load);
             this.panTools.ResumeLayout(false);
             this.ctxColors.ResumeLayout(false);

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.Globalization;
 using GbReaper.Classes;
+using GbReaper.Forms;
 
 namespace GbReaper.Controls {
     public partial class UcLibraryList : UserControl {
@@ -120,7 +121,7 @@ namespace GbReaper.Controls {
                 Rectangle vR = new Rectangle(e.Bounds.Location, e.Bounds.Size);
                 vR.Offset(Tile.WIDTH_PX * 2, 0);
                 e.Graphics.DrawString(
-                    vSVI.mTile.UID.ToString(), 
+                    (string.IsNullOrEmpty(vSVI.mTile.Name) ? vSVI.mTile.UID.ToString() : vSVI.mTile.Name), 
                     lvLibrary.Font,
                     Brushes.Black,
                     vR, 
@@ -214,6 +215,26 @@ namespace GbReaper.Controls {
 
             Tile vT = new Tile(vBmp, Palette.DEFAULT_PALETTE);
             this.mCurrentLib.AddTile(vT);
+
+            RenameTilePopup(vT);
+        }
+
+        private void lvLibrary_DoubleClick(object sender, EventArgs e) {
+            RenameTilePopup(this.SelectedTile);
+        }
+
+        private void RenameTilePopup(Tile pTile) {
+            if (pTile == null)
+                return;
+
+            using (FrmTileDetails f = new FrmTileDetails()) {
+                f.TileName = pTile.Name;
+                if (f.ShowDialog(this.ParentForm) == DialogResult.OK) {
+                    pTile.Name = f.TileName;
+                }
+            }
+
+            this.Invalidate();
         }
     }
 }

@@ -64,11 +64,24 @@ namespace GbReaper.Classes {
 
 
         internal void SetPixel(int x, int y, Color pColor) {
+            if (x < 0 || x > 7 || y < 0 || y > 7)
+                return;
+
             this.mImage.SetPixel(x, y, pColor);
             OnTileChanged();
         }
 
-        internal string ExportTileToGBDKString() {
+        internal string ExportTileToGBDKDefine(int pIndex) {
+            if (string.IsNullOrEmpty(this.Name))
+                return null;
+
+            string vN = this.Name.ToUpper().Trim().Replace(" ", "_");
+
+            return string.Format("#define TILE_{0}   {1}\r\n", vN, pIndex);
+        }
+
+
+        internal string ExportTileToGBDKString(int pIndex = -1) {
             byte b1, b2;
             StringBuilder vSB = new StringBuilder(100);
 
@@ -94,7 +107,7 @@ namespace GbReaper.Classes {
                 vSB.AppendFormat("0x{0:X02},0x{1:X02}", b1, b2);
             }
 
-            return string.Format("// {0} [{1}]\r\n{2}", this.Name, this.UID, vSB.ToString());
+            return string.Format("//{3} {0} [{1}]\r\n{2}", this.Name, this.UID, vSB.ToString(), (pIndex >= 0? pIndex + ":": ""));
         }
 
         internal void SaveToStream(System.IO.StreamWriter pSW) {
