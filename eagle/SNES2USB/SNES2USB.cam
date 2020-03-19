@@ -167,7 +167,8 @@
                     "filename_format": "%N.GTO",
                     "layers": [
                         21,
-                        25
+                        25,
+                        125
                     ],
                     "milling": false,
                     "name": "Top Silkscreen",
@@ -261,7 +262,7 @@
             ]
         }
     ],
-    "timestamp": "2020-02-21T00:27:02",
+    "timestamp": "2020-02-24T00:58:58",
     "type": "EAGLE CAM job",
     "units": "metric",
     "version": "8.6.0"
