@@ -120,11 +120,23 @@
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="btnFill.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
+        EgAACxIB0t1+/AAAAAd0SU1FB98CAQkSOcXg8wsAAACESURBVDhPlY/BDYAwDAP7QGILnt1/JwYB+WEI
+        jtsUSxEizp2gnUdPs+37xXF9nLRQqJKkRQRWviItCOCJVJK0IMBUos8LJsKIylQ0hRHdqWQJ1o4CzBBm
+        XPcRzGCXCP8W4JZf/AiqX2AIW0ElifBQwEKjMO+sgCXjYN6wSyUmHrh5u95udJf1cxeEY1IAAAAASUVO
+        RK5CYII=
+</value>
+  </data>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="btnTilizator.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAACxIAAAsSAdLdfvwAAAAHdElNRQffAgEJEjnF4PMLAAAAHWlUWHRDb21tZW50AAAA
-        AABDcmVhdGVkIHdpdGggR0lNUGQuZQcAAACESURBVDhPlY/BDYAwDAP7QGILnt1/JwYB+WEIjtsUSxEi
-        zp2gnUdPs+37xXF9nLRQqJKkRQRWviItCOCJVJK0IMBUos8LJsKIylQ0hRHdqWQJ1o4CzBBmXPcRzGCX
-        CP8W4JZf/AiqX2AIW0ElifBQwEKjMO+sgCXjYN6wSyUmHrh5u95udJf1cxeEY1IAAAAASUVORK5CYII=
+        YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfkAxAMLCUtl5j2AAAAnklEQVQ4T2MYNOAqEP8n
+        EYP0wAFIgBPCJApwAzFIDxygcHCAbiD+AaWZgJhkA0CaQepANEEDQE4sBGJkbxHtApDkGiAGiW0CYhYg
+        Rgd4DWgCYhAfhpcAcTIQvwJiWyAGAUYgxmpAOBD/A2JkA5DxByA2AGKsBpgA8TcoGx9+AcRqUDYcgDhP
+        oDQx+AGUhgN0BcRiOCAnKV8B4gEHDAwAdY5pM7ZHIwYAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="btnGrid.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

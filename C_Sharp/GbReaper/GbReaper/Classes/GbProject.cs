@@ -11,6 +11,12 @@ namespace GbReaper.Classes {
         public List<Library> mLibraries = new List<Library>();
         protected string mLatestKnownFilename = null;
 
+        protected Palette mPalette = Palette.DEFAULT_PALETTE;
+        public Palette Palette {
+            get { return this.mPalette; }
+            set { this.mPalette = value; }
+        }
+
         public string LatestKnownFilename {
             get { return mLatestKnownFilename; }
             set { mLatestKnownFilename = value; }
@@ -88,6 +94,9 @@ void main() {{
                     vSW.WriteLine(@"<?xml version=""1.0"" encoding=""utf-8"" ?>");
                     vSW.WriteLine("<gbProject format=\"1.0\">");
 
+                    vSW.WriteLine("\t<palette name=\""+this.mPalette.mName+"\">");
+                    vSW.WriteLine("\t</palette>");
+
                     vSW.WriteLine("\t<libraries>");
                     foreach (Library vLib in this.mLibraries) {
                         vLib.SaveToStream(vSW);
@@ -113,12 +122,19 @@ void main() {{
                     XmlDocument vDoc = new XmlDocument();
                     vDoc.LoadXml(vSR.ReadToEnd());
 
+                    //pick the palette
+                    XmlNode vPalet = vDoc.DocumentElement.SelectSingleNode("/gbProject/palette");
+                    if (vPalet != null && Palette.WellknownPalettes.ContainsKey(vPalet.Attributes["name"].Value))
+                        vResult.mPalette = Palette.WellknownPalettes[vPalet.Attributes["name"].Value];
+                    else
+                        vResult.mPalette = Palette.DEFAULT_PALETTE;
+
                     //First, load the library and its tiles
                     foreach (XmlNode vNode in vDoc.DocumentElement.SelectNodes("/gbProject/libraries/library")) {
                         Library vLib = new Library(vNode.Attributes["name"].Value);
 
                         foreach (XmlNode vNodeTile in vNode.SelectNodes("./tile")) {
-                            Tile vS = Tile.LoadFromXml(vNodeTile);
+                            Tile vS = Tile.LoadFromXml(vNodeTile, vResult.Palette);
                             vLib.AddTile(vS);
                         }
 

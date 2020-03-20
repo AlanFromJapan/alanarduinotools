@@ -17,7 +17,7 @@ namespace GbReaper {
             InitializeComponent();
         }
 
-        private GbProject mCurrentProject = new GbProject();
+        internal GbProject mCurrentProject = new GbProject();
 
         private void FrmMain_Load(object sender, EventArgs e) {
             string[] vArgs = Environment.GetCommandLineArgs();
@@ -27,6 +27,14 @@ namespace GbReaper {
             else {
                 StartEmptyNewProject();
             }
+
+            foreach (Palette p in Palette.WellknownPalettes.Values) {
+                cbxPalette.Items.Add(p.mName);
+                if (p == Palette.DEFAULT_PALETTE) {
+                    cbxPalette.SelectedItem =p.mName;
+                }
+            }
+
 
             //Event handlers
             ucRomViewer1.RomTileViewed += new GbReaper.Controls.UcRomViewer.RomTileSelectDelegate(RomViewer_RomTileViewed);
@@ -134,7 +142,7 @@ namespace GbReaper {
 
         void RomViewer_RomTileSelected(Image pImage) {
             bool pAlreadyExisted;
-            mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile(pImage, Palette.DEFAULT_PALETTE), out pAlreadyExisted);
+            mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile(pImage, mCurrentProject.Palette), out pAlreadyExisted);
         }
 
        
@@ -146,7 +154,7 @@ namespace GbReaper {
         private void loadToolStripMenuItem_Click(object sender, EventArgs e) {
             if (DialogResult.OK == ofdRom.ShowDialog(this)) {
                 SetStatus("Loading ROM " + ofdRom.FileName + " ...");
-                Image vM = RomReader.GetRomAsImage(ofdRom.FileName, 2);
+                Image vM = RomReader.GetRomAsImage(ofdRom.FileName, 2, mCurrentProject.Palette);
                 ucRomViewer1.SetImage(vM, 2);
                 SetStatus("Loading ROM " + ofdRom.FileName + " completed.");
             }
@@ -203,6 +211,10 @@ namespace GbReaper {
 
         private void aboutGbReaperToolStripMenuItem_Click(object sender, EventArgs e) {
             MessageBox.Show("http://kalshagar.wikispaces.com/GbReaper");
+        }
+
+        private void cbxPalette_SelectedIndexChanged(object sender, EventArgs e) {
+            this.mCurrentProject.Palette = Palette.WellknownPalettes[cbxPalette.SelectedItem.ToString()];
         }
     }
 }

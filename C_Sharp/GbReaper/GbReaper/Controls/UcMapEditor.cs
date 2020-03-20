@@ -13,7 +13,9 @@ namespace GbReaper.Controls {
     public partial class UcMapEditor : UserControl {
         public const int TILE_SIZE = Tile.HEIGHT_PX * 3;
 
-        protected bool mShowGrid = true;
+        protected enum GridMode { Background, Foreground, None}
+        protected GridMode mGridMode = GridMode.Background;
+
 
         protected Map mCurrentMap = null;
         protected Tile mCurrentTile = null;
@@ -154,8 +156,8 @@ namespace GbReaper.Controls {
             //Get the limits
             Rectangle vBorders = GridBorders;
 
-            //draw grid
-            if (mShowGrid) {
+            //draw BACKGROUND grid
+            if (mGridMode == GridMode.Background) {
                 DrawingLogic.DrawGrid(e, vBorders, Pens.LightGray, this.mCurrentMap.Width, this.mCurrentMap.Height);
             }
 
@@ -189,6 +191,12 @@ namespace GbReaper.Controls {
                     }
                 } 
             }
+
+            //draw FOREGROUND grid
+            if (mGridMode == GridMode.Foreground) {
+                DrawingLogic.DrawGrid(e, vBorders, Pens.DarkRed, this.mCurrentMap.Width, this.mCurrentMap.Height);
+            }
+
         }
 
         private void btnNew_Click(object sender, EventArgs e) {
@@ -224,7 +232,16 @@ namespace GbReaper.Controls {
         }
 
         private void btnGrid_Click(object sender, EventArgs e) {
-            mShowGrid = !mShowGrid;
+            if (this.mGridMode == GridMode.Background)
+                this.mGridMode = GridMode.Foreground;
+            else
+                if (this.mGridMode == GridMode.Foreground)
+                    this.mGridMode = GridMode.None;
+                else
+                    if (this.mGridMode == GridMode.None)
+                        this.mGridMode = GridMode.Background;
+
+
             this.panMap.Invalidate();
         }
 

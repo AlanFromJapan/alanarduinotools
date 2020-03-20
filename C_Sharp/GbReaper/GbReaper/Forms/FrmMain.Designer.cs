@@ -37,6 +37,7 @@
             this.exportForGBDKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutGbReaperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cbxPalette = new System.Windows.Forms.ToolStripComboBox();
             this.ofdRom = new System.Windows.Forms.OpenFileDialog();
             this.panMain = new System.Windows.Forms.Panel();
             this.tabMaps = new System.Windows.Forms.TabControl();
@@ -70,10 +71,11 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.exportToolStripMenuItem,
-            this.helpToolStripMenuItem});
+            this.helpToolStripMenuItem,
+            this.cbxPalette});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1054, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1054, 27);
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -88,7 +90,7 @@
             this.toolStripMenuItem1,
             this.quitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 23);
             this.fileToolStripMenuItem.Text = "&File";
             this.fileToolStripMenuItem.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
             // 
@@ -147,7 +149,7 @@
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exportForGBDKToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(53, 23);
             this.exportToolStripMenuItem.Text = "&Export";
             // 
             // exportForGBDKToolStripMenuItem
@@ -163,7 +165,7 @@
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutGbReaperToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 23);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
             // aboutGbReaperToolStripMenuItem
@@ -172,6 +174,14 @@
             this.aboutGbReaperToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.aboutGbReaperToolStripMenuItem.Text = "&About GbReaper...";
             this.aboutGbReaperToolStripMenuItem.Click += new System.EventHandler(this.aboutGbReaperToolStripMenuItem_Click);
+            // 
+            // cbxPalette
+            // 
+            this.cbxPalette.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxPalette.Enabled = false;
+            this.cbxPalette.Name = "cbxPalette";
+            this.cbxPalette.Size = new System.Drawing.Size(121, 23);
+            this.cbxPalette.SelectedIndexChanged += new System.EventHandler(this.cbxPalette_SelectedIndexChanged);
             // 
             // ofdRom
             // 
@@ -184,9 +194,9 @@
             this.panMain.Controls.Add(this.ucTileEd);
             this.panMain.Controls.Add(this.panLib);
             this.panMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panMain.Location = new System.Drawing.Point(252, 24);
+            this.panMain.Location = new System.Drawing.Point(252, 27);
             this.panMain.Name = "panMain";
-            this.panMain.Size = new System.Drawing.Size(802, 812);
+            this.panMain.Size = new System.Drawing.Size(802, 809);
             this.panMain.TabIndex = 4;
             // 
             // tabMaps
@@ -197,7 +207,7 @@
             this.tabMaps.Location = new System.Drawing.Point(0, 277);
             this.tabMaps.Name = "tabMaps";
             this.tabMaps.SelectedIndex = 0;
-            this.tabMaps.Size = new System.Drawing.Size(602, 535);
+            this.tabMaps.Size = new System.Drawing.Size(602, 532);
             this.tabMaps.TabIndex = 3;
             // 
             // tpMapWelcome
@@ -205,7 +215,7 @@
             this.tpMapWelcome.Controls.Add(this.btnNewMap);
             this.tpMapWelcome.Location = new System.Drawing.Point(4, 4);
             this.tpMapWelcome.Name = "tpMapWelcome";
-            this.tpMapWelcome.Size = new System.Drawing.Size(594, 509);
+            this.tpMapWelcome.Size = new System.Drawing.Size(594, 506);
             this.tpMapWelcome.TabIndex = 0;
             this.tpMapWelcome.Text = "Maps";
             this.tpMapWelcome.UseVisualStyleBackColor = true;
@@ -237,7 +247,7 @@
             this.panLib.Dock = System.Windows.Forms.DockStyle.Right;
             this.panLib.Location = new System.Drawing.Point(602, 0);
             this.panLib.Name = "panLib";
-            this.panLib.Size = new System.Drawing.Size(200, 812);
+            this.panLib.Size = new System.Drawing.Size(200, 809);
             this.panLib.TabIndex = 0;
             // 
             // ucLibView
@@ -245,7 +255,7 @@
             this.ucLibView.Dock = System.Windows.Forms.DockStyle.Right;
             this.ucLibView.Location = new System.Drawing.Point(0, 0);
             this.ucLibView.Name = "ucLibView";
-            this.ucLibView.Size = new System.Drawing.Size(200, 812);
+            this.ucLibView.Size = new System.Drawing.Size(200, 809);
             this.ucLibView.TabIndex = 0;
             // 
             // panLeft
@@ -253,9 +263,9 @@
             this.panLeft.Controls.Add(this.ucRomViewer1);
             this.panLeft.Controls.Add(this.panLeftBottom);
             this.panLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panLeft.Location = new System.Drawing.Point(0, 24);
+            this.panLeft.Location = new System.Drawing.Point(0, 27);
             this.panLeft.Name = "panLeft";
-            this.panLeft.Size = new System.Drawing.Size(252, 812);
+            this.panLeft.Size = new System.Drawing.Size(252, 809);
             this.panLeft.TabIndex = 5;
             // 
             // ucRomViewer1
@@ -264,7 +274,7 @@
             this.ucRomViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ucRomViewer1.Location = new System.Drawing.Point(0, 0);
             this.ucRomViewer1.Name = "ucRomViewer1";
-            this.ucRomViewer1.Size = new System.Drawing.Size(252, 670);
+            this.ucRomViewer1.Size = new System.Drawing.Size(252, 667);
             this.ucRomViewer1.TabIndex = 3;
             // 
             // panLeftBottom
@@ -272,7 +282,7 @@
             this.panLeftBottom.Controls.Add(this.pan128Alt);
             this.panLeftBottom.Controls.Add(this.pan32);
             this.panLeftBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panLeftBottom.Location = new System.Drawing.Point(0, 670);
+            this.panLeftBottom.Location = new System.Drawing.Point(0, 667);
             this.panLeftBottom.Name = "panLeftBottom";
             this.panLeftBottom.Size = new System.Drawing.Size(252, 142);
             this.panLeftBottom.TabIndex = 4;
@@ -389,6 +399,7 @@
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportForGBDKToolStripMenuItem;
         private System.Windows.Forms.FolderBrowserDialog fbdExport;
+        private System.Windows.Forms.ToolStripComboBox cbxPalette;
     }
 }
 
