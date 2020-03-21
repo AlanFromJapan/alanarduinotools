@@ -41,11 +41,23 @@ namespace GbReaper {
             ucRomViewer1.RomTileSelectedMultiple += UcRomViewer1_RomTileSelectedMultiple;
             this.ucRomViewer1.RomTileSelected += new GbReaper.Controls.UcRomViewer.RomTileSelectDelegate(RomViewer_RomTileSelected);
             this.ucLibView.SelectedTileChanged += new GbReaper.Controls.UcLibraryList.SelectedTileChangedDelegate(LibView_SelectedTileChanged);
+            this.ucLibView.TilesDeleted += UcLibView_TilesDeleted;
 
             pan32.Paint += new PaintEventHandler(pan32_Paint);
             pan128Alt.Paint += new PaintEventHandler(pan128Alt_Paint);
 
             
+        }
+
+        private void UcLibView_TilesDeleted(IList<Tile> pDeletedTiles) {
+            foreach (TabPage vTP in tabMaps.TabPages) {
+                foreach (Control vC in vTP.Controls) {
+                    if (vC is UcMapEditor) {
+                        ((UcMapEditor)vC).DeleteTiles(pDeletedTiles);
+                    }
+                }
+            }
+
         }
 
         private void UcRomViewer1_RomTileSelectedMultiple(IList<Image> pImages) {

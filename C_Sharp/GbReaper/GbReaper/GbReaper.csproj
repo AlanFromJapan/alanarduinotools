@@ -151,6 +151,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -164,6 +165,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Pixture-Halloween-ReaperScythe.ico" />
+    <None Include="Resources\delete.png" />
+    <None Include="Resources\delete-737-475058.png" />
     <None Include="Resources\icon-image-16.png" />
     <None Include="Resources\bucket16.PNG" />
     <None Include="Resources\master_sword.png" />

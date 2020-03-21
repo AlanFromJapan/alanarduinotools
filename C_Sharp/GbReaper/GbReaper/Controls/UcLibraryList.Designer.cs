@@ -26,8 +26,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UcLibraryList));
             this.lvLibrary = new System.Windows.Forms.ListView();
             this.panTop = new System.Windows.Forms.Panel();
-            this.btnNew = new System.Windows.Forms.Button();
             this.btnDel = new System.Windows.Forms.Button();
+            this.btnNew = new System.Windows.Forms.Button();
             this.panTop.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,6 +55,17 @@
             this.panTop.Size = new System.Drawing.Size(381, 35);
             this.panTop.TabIndex = 2;
             // 
+            // btnDel
+            // 
+            this.btnDel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnDel.Image = global::GbReaper.Properties.Resources.delete;
+            this.btnDel.Location = new System.Drawing.Point(32, 0);
+            this.btnDel.Name = "btnDel";
+            this.btnDel.Size = new System.Drawing.Size(32, 35);
+            this.btnDel.TabIndex = 1;
+            this.btnDel.UseVisualStyleBackColor = true;
+            this.btnDel.Click += new System.EventHandler(this.btnDel_Click);
+            // 
             // btnNew
             // 
             this.btnNew.Dock = System.Windows.Forms.DockStyle.Left;
@@ -65,17 +76,6 @@
             this.btnNew.TabIndex = 0;
             this.btnNew.UseVisualStyleBackColor = true;
             this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
-            // 
-            // btnDel
-            // 
-            this.btnDel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.btnDel.Location = new System.Drawing.Point(32, 0);
-            this.btnDel.Name = "btnDel";
-            this.btnDel.Size = new System.Drawing.Size(32, 35);
-            this.btnDel.TabIndex = 1;
-            this.btnDel.Text = "Del";
-            this.btnDel.UseVisualStyleBackColor = true;
-            this.btnDel.Click += new System.EventHandler(this.btnDel_Click);
             // 
             // UcLibraryList
             // 

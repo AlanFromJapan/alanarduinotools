@@ -71,6 +71,22 @@ namespace GbReaper.Controls {
                         
         }
 
+        public void DeleteTiles(IList<Tile> pTiles) {
+            for (int x = 0; x < this.mCurrentMap.Width; x++) {
+                for (int y = 0; y < this.mCurrentMap.Height; y++) {
+                    Tile vT = this.mCurrentMap[x, y];
+
+                    if (vT != null) {
+                        if (pTiles.Contains(vT)) {
+                            this.mCurrentMap.ClearTileAt(x, y);
+                        }
+                    }
+                }
+            }
+
+            this.panMap.Invalidate();
+        }
+
         private void MousePaintCell(MouseEventArgs e) {
             if (this.mCurrentTile == null || this.mCurrentMap == null)
                 return;

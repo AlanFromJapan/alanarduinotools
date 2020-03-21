@@ -17,6 +17,9 @@ namespace GbReaper.Controls {
 
         public delegate void SelectedTileChangedDelegate(Tile pS);
         public event SelectedTileChangedDelegate SelectedTileChanged;
+        
+        public delegate void TilesDeletedDelegate(IList<Tile> pDeletedTiles);
+        public event TilesDeletedDelegate TilesDeleted;
 
         public Tile SelectedTile {
             get { 
@@ -238,7 +241,19 @@ namespace GbReaper.Controls {
         }
 
         private void btnDel_Click(object sender, EventArgs e) {
-            MessageBox.Show("TODO");
+            List<Tile> vDeletedTiles = new List<Tile>();
+            foreach (ListViewItem v in lvLibrary.SelectedItems) {
+                vDeletedTiles.Add(((TileViewItem)v).mTile);
+                lvLibrary.Items.Remove(v);
+            }
+
+            this.OnTilesDeleted(vDeletedTiles);
+        }
+
+        protected void OnTilesDeleted(IList<Tile> tiles) {
+            if (this.TilesDeleted != null) {
+                this.TilesDeleted(tiles);
+            }
         }
 
         public Tile GetNthNextTile(int pNth) {
