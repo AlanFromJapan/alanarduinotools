@@ -11408,9 +11408,9 @@ This is the "KIT" version, which has limited top masking for improved ease of as
 <attribute name="VALUE" x="60.96" y="5.334" size="1.778" layer="96" font="vector"/>
 <attribute name="NAME" x="60.96" y="25.908" size="1.778" layer="95" font="vector"/>
 </instance>
-<instance part="J10" gate="G$1" x="55.88" y="66.04" smashed="yes" rot="R180">
-<attribute name="VALUE" x="60.96" y="78.486" size="1.778" layer="96" font="vector" rot="R180"/>
-<attribute name="NAME" x="60.96" y="52.832" size="1.778" layer="95" font="vector" rot="R180"/>
+<instance part="J10" gate="G$1" x="63.5" y="66.04" smashed="yes" rot="R180">
+<attribute name="VALUE" x="68.58" y="78.486" size="1.778" layer="96" font="vector" rot="R180"/>
+<attribute name="NAME" x="68.58" y="52.832" size="1.778" layer="95" font="vector" rot="R180"/>
 </instance>
 <instance part="H1" gate="G$1" x="93.98" y="33.02" smashed="yes">
 <attribute name="NAME" x="96.012" y="33.6042" size="1.778" layer="95"/>
@@ -11666,45 +11666,45 @@ This is the "KIT" version, which has limited top masking for improved ease of as
 <net name="D4" class="0">
 <segment>
 <pinref part="J_D-D4" gate="G$1" pin="1"/>
-<wire x1="96.52" y1="58.42" x2="66.04" y2="58.42" width="0.1524" layer="91"/>
-<wire x1="66.04" y1="58.42" x2="66.04" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="58.42" x2="93.98" y2="58.42" width="0.1524" layer="91"/>
+<wire x1="93.98" y1="58.42" x2="93.98" y2="66.04" width="0.1524" layer="91"/>
 <pinref part="UC1" gate="G$1" pin="(T0)PD4"/>
-<wire x1="66.04" y1="66.04" x2="50.8" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="93.98" y1="66.04" x2="58.42" y2="66.04" width="0.1524" layer="91"/>
 <pinref part="J10" gate="G$1" pin="4"/>
-<wire x1="50.8" y1="66.04" x2="48.26" y2="66.04" width="0.1524" layer="91"/>
-<junction x="50.8" y="66.04"/>
+<wire x1="58.42" y1="66.04" x2="48.26" y2="66.04" width="0.1524" layer="91"/>
+<junction x="58.42" y="66.04"/>
 </segment>
 </net>
 <net name="D2" class="0">
 <segment>
 <pinref part="J_D+D2" gate="G$1" pin="1"/>
-<wire x1="96.52" y1="50.8" x2="63.5" y2="50.8" width="0.1524" layer="91"/>
-<wire x1="63.5" y1="50.8" x2="63.5" y2="60.96" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="50.8" x2="91.44" y2="50.8" width="0.1524" layer="91"/>
+<wire x1="91.44" y1="50.8" x2="91.44" y2="60.96" width="0.1524" layer="91"/>
 <pinref part="UC1" gate="G$1" pin="(INT0)PD2"/>
-<wire x1="63.5" y1="60.96" x2="50.8" y2="60.96" width="0.1524" layer="91"/>
+<wire x1="91.44" y1="60.96" x2="58.42" y2="60.96" width="0.1524" layer="91"/>
 <pinref part="J10" gate="G$1" pin="6"/>
-<wire x1="50.8" y1="60.96" x2="48.26" y2="60.96" width="0.1524" layer="91"/>
-<junction x="50.8" y="60.96"/>
+<wire x1="58.42" y1="60.96" x2="48.26" y2="60.96" width="0.1524" layer="91"/>
+<junction x="58.42" y="60.96"/>
 </segment>
 </net>
 <net name="D3" class="0">
 <segment>
 <pinref part="UC1" gate="G$1" pin="(INT1)PD3"/>
-<wire x1="48.26" y1="63.5" x2="50.8" y2="63.5" width="0.1524" layer="91"/>
+<wire x1="48.26" y1="63.5" x2="58.42" y2="63.5" width="0.1524" layer="91"/>
 <pinref part="J10" gate="G$1" pin="5"/>
 </segment>
 </net>
 <net name="D1" class="0">
 <segment>
 <pinref part="UC1" gate="G$1" pin="(TXD)PD1"/>
-<wire x1="48.26" y1="58.42" x2="50.8" y2="58.42" width="0.1524" layer="91"/>
+<wire x1="48.26" y1="58.42" x2="58.42" y2="58.42" width="0.1524" layer="91"/>
 <pinref part="J10" gate="G$1" pin="7"/>
 </segment>
 </net>
 <net name="D0" class="0">
 <segment>
 <pinref part="UC1" gate="G$1" pin="(RXD)PD0"/>
-<wire x1="48.26" y1="55.88" x2="50.8" y2="55.88" width="0.1524" layer="91"/>
+<wire x1="48.26" y1="55.88" x2="58.42" y2="55.88" width="0.1524" layer="91"/>
 <pinref part="J10" gate="G$1" pin="8"/>
 </segment>
 </net>
@@ -11763,8 +11763,9 @@ This is the "KIT" version, which has limited top masking for improved ease of as
 </segment>
 <segment>
 <pinref part="UC1" gate="G$1" pin="(ICP)PD6"/>
-<wire x1="48.26" y1="71.12" x2="50.8" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="48.26" y1="71.12" x2="58.42" y2="71.12" width="0.1524" layer="91"/>
 <pinref part="J10" gate="G$1" pin="2"/>
+<label x="50.038" y="70.358" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="LED1R" class="0">
@@ -11777,8 +11778,9 @@ This is the "KIT" version, which has limited top masking for improved ease of as
 </segment>
 <segment>
 <pinref part="UC1" gate="G$1" pin="(T1)PD5"/>
-<wire x1="48.26" y1="68.58" x2="50.8" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="48.26" y1="68.58" x2="58.42" y2="68.58" width="0.1524" layer="91"/>
 <pinref part="J10" gate="G$1" pin="3"/>
+<label x="50.546" y="67.818" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="LED1B" class="0">
@@ -11795,6 +11797,7 @@ This is the "KIT" version, which has limited top masking for improved ease of as
 <pinref part="J3" gate="G$1" pin="8"/>
 <wire x1="71.12" y1="76.2" x2="73.66" y2="76.2" width="0.1524" layer="91"/>
 <junction x="71.12" y="76.2"/>
+<label x="50.292" y="75.438" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$19" class="0">
@@ -11838,6 +11841,7 @@ This is the "KIT" version, which has limited top masking for improved ease of as
 <pinref part="J3" gate="G$1" pin="6"/>
 <wire x1="71.12" y1="81.28" x2="73.66" y2="81.28" width="0.1524" layer="91"/>
 <junction x="71.12" y="81.28"/>
+<label x="50.292" y="80.518" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="LED2R" class="0">
@@ -11854,6 +11858,7 @@ This is the "KIT" version, which has limited top masking for improved ease of as
 <pinref part="J3" gate="G$1" pin="7"/>
 <wire x1="71.12" y1="78.74" x2="48.26" y2="78.74" width="0.1524" layer="91"/>
 <junction x="71.12" y="78.74"/>
+<label x="54.102" y="77.978" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="LED2B" class="0">
@@ -11870,6 +11875,7 @@ This is the "KIT" version, which has limited top masking for improved ease of as
 <pinref part="J3" gate="G$1" pin="5"/>
 <wire x1="71.12" y1="83.82" x2="48.26" y2="83.82" width="0.1524" layer="91"/>
 <junction x="71.12" y="83.82"/>
+<label x="57.912" y="83.312" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$22" class="0">
