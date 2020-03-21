@@ -19,7 +19,9 @@ namespace GbReaper.Controls {
         public Image SelectedTile { get { return this.mSelectedTile; } }
 
         public delegate void RomTileSelectDelegate(Image pImage);
+        public delegate void RomTileSelectMulitpleDelegate(IList<Image> pImages);
         public event RomTileSelectDelegate RomTileSelected;
+        public event RomTileSelectMulitpleDelegate RomTileSelectedMultiple;
         public event RomTileSelectDelegate RomTileViewed;
 
         protected Rectangle SourceRectangle {
@@ -131,6 +133,12 @@ namespace GbReaper.Controls {
             }
         }
 
+        protected void OnRomTileSelectedMultiple(IList<Image> pImages) {
+            if (this.RomTileSelectedMultiple != null) {
+                this.RomTileSelectedMultiple(pImages);
+            }
+        }
+
         protected override void OnMouseUp(MouseEventArgs e) {
             base.OnMouseUp(e);
 
@@ -147,12 +155,59 @@ namespace GbReaper.Controls {
             base.OnDoubleClick(e);
 
             if (!this.mMouseHover.IsEmpty && this.mImage != null) {
-                Bitmap vBmpTile = GetSelectedBitmap8x8();
+                if (ModifierKeys == Keys.None) {
+                    //pick ONE
+                    Bitmap vBmpTile = GetSelectedBitmap8x8();
 
-                this.OnRomTileSelected(vBmpTile);
+                    this.OnRomTileSelected(vBmpTile);
+                }
+                else if (ModifierKeys == Keys.Control){
+                    //Pick 4 in a row
+                    IList<Image> vList = GetSelectedNBitmaps(4);
+
+                    this.OnRomTileSelectedMultiple(vList);
+
+                }
             }
         }
 
+
+        private IList<Image> GetSelectedNBitmaps(int pCount) {
+            List<Image> vList = new List<Image>();
+            if (this.mImage == null)
+                return null;
+
+            Rectangle vSource = SourceRectangle;
+
+            for (int i = 0; i < pCount; i++) {
+                Bitmap vBmpTileZoomed = ((Bitmap)this.mImage).Clone(vSource, ((Bitmap)this.mImage).PixelFormat);
+
+                if (this.mZoomfactor != 1) {
+                    Bitmap vBmp8x8 = new Bitmap(Tile.WIDTH_PX, Tile.HEIGHT_PX);
+
+                    using (Graphics vG = Graphics.FromImage(vBmp8x8)) {
+                        DrawingLogic.SetGraphicsNoInterpol(vG);
+
+
+                        vG.DrawImage(vBmpTileZoomed, 0, 0, vBmp8x8.Width, vBmp8x8.Height);
+                    }
+
+                    vBmpTileZoomed.Dispose();
+                    vBmpTileZoomed = vBmp8x8;
+                }
+
+                vList.Add(vBmpTileZoomed);
+
+                //now move to NEXT bitmap
+                vSource.X += 8 * this.mZoomfactor;
+                if (vSource.X >= this.mImage.Width) {
+                    vSource.X = 0;
+                    vSource.Y += 8 * this.mZoomfactor;
+                }
+            }
+
+            return vList;
+        }
         private Bitmap GetSelectedBitmap8x8() {
             if (this.mImage == null)
                 return null;
@@ -178,5 +233,15 @@ namespace GbReaper.Controls {
 
         }
 
+        private void UcRomViewer_KeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode == Keys.PageDown) {
+                vbar.Value += 64;
+            }
+            else if (e.KeyCode == Keys.PageUp) {
+                vbar.Value = Math.Max(0, vbar.Value - 64);
+            }
+
+            this.Invalidate();
+        }
     }
 }

@@ -59,6 +59,7 @@
             this.Name = "UcRomViewer";
             this.Size = new System.Drawing.Size(325, 321);
             this.Load += new System.EventHandler(this.UcRomViewer_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.UcRomViewer_KeyDown);
             this.ResumeLayout(false);
 
         }

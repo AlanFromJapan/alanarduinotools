@@ -38,11 +38,21 @@ namespace GbReaper {
 
             //Event handlers
             ucRomViewer1.RomTileViewed += new GbReaper.Controls.UcRomViewer.RomTileSelectDelegate(RomViewer_RomTileViewed);
+            ucRomViewer1.RomTileSelectedMultiple += UcRomViewer1_RomTileSelectedMultiple;
             this.ucRomViewer1.RomTileSelected += new GbReaper.Controls.UcRomViewer.RomTileSelectDelegate(RomViewer_RomTileSelected);
             this.ucLibView.SelectedTileChanged += new GbReaper.Controls.UcLibraryList.SelectedTileChangedDelegate(LibView_SelectedTileChanged);
 
             pan32.Paint += new PaintEventHandler(pan32_Paint);
             pan128Alt.Paint += new PaintEventHandler(pan128Alt_Paint);
+        }
+
+        private void UcRomViewer1_RomTileSelectedMultiple(IList<Image> pImages) {
+            bool pAlreadyExisted;
+            if (pImages == null)
+                return;
+            foreach (Image vImage in pImages) {
+                mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile(vImage, mCurrentProject.Palette), out pAlreadyExisted);
+            }
         }
 
         /// <summary>

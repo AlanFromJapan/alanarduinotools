@@ -27,6 +27,7 @@
             this.lvLibrary = new System.Windows.Forms.ListView();
             this.panTop = new System.Windows.Forms.Panel();
             this.btnNew = new System.Windows.Forms.Button();
+            this.btnDel = new System.Windows.Forms.Button();
             this.panTop.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,6 +47,7 @@
             // 
             // panTop
             // 
+            this.panTop.Controls.Add(this.btnDel);
             this.panTop.Controls.Add(this.btnNew);
             this.panTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panTop.Location = new System.Drawing.Point(0, 0);
@@ -63,6 +65,17 @@
             this.btnNew.TabIndex = 0;
             this.btnNew.UseVisualStyleBackColor = true;
             this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
+            // 
+            // btnDel
+            // 
+            this.btnDel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnDel.Location = new System.Drawing.Point(32, 0);
+            this.btnDel.Name = "btnDel";
+            this.btnDel.Size = new System.Drawing.Size(32, 35);
+            this.btnDel.TabIndex = 1;
+            this.btnDel.Text = "Del";
+            this.btnDel.UseVisualStyleBackColor = true;
+            this.btnDel.Click += new System.EventHandler(this.btnDel_Click);
             // 
             // UcLibraryList
             // 
@@ -83,5 +96,6 @@
         private System.Windows.Forms.ListView lvLibrary;
         private System.Windows.Forms.Panel panTop;
         private System.Windows.Forms.Button btnNew;
+        private System.Windows.Forms.Button btnDel;
     }
 }

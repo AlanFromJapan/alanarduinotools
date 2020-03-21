@@ -236,5 +236,9 @@ namespace GbReaper.Controls {
 
             this.Invalidate();
         }
+
+        private void btnDel_Click(object sender, EventArgs e) {
+            MessageBox.Show("TODO");
+        }
     }
 }
