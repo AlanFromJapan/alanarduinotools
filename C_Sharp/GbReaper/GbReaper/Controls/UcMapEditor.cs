@@ -13,12 +13,16 @@ namespace GbReaper.Controls {
     public partial class UcMapEditor : UserControl {
         public const int TILE_SIZE = Tile.HEIGHT_PX * 3;
 
-        protected enum GridMode { Background, Foreground, None}
+        protected enum GridMode { Background, Foreground, None }
         protected GridMode mGridMode = GridMode.Background;
 
 
         protected Map mCurrentMap = null;
         protected Tile mCurrentTile = null;
+        protected UcLibraryList mLibraryList = null;
+        public UcLibraryList LibraryList {
+            set { mLibraryList = value; }
+        }
 
         
         public Map CurrentMap { 
@@ -82,26 +86,39 @@ namespace GbReaper.Controls {
                     );
 
                 if (e.Button == System.Windows.Forms.MouseButtons.Left) {
-                    if (!mFillMode) {
-                        //REGULAR PAINT cell by cell
-                        if (this.mCurrentMap[vP.X, vP.Y] != null && this.mCurrentMap[vP.X, vP.Y].Equals(this.mCurrentTile)) {
-                            //ignore, already set
+                    if (ModifierKeys == Keys.Control) {
+                        //4 cells
+                        this.mCurrentMap.SetTile(this.mCurrentTile, vP.X, vP.Y);
+                        this.mCurrentMap.SetTile(this.mLibraryList.GetNthNextTile(1) , vP.X, vP.Y +1);
+                        this.mCurrentMap.SetTile(this.mLibraryList.GetNthNextTile(2), vP.X+1, vP.Y);
+                        this.mCurrentMap.SetTile(this.mLibraryList.GetNthNextTile(3), vP.X+1, vP.Y + 1);
+
+                        this.panMap.Invalidate();
+                    }
+                    else {
+                        //1 cell at a time
+                        if (!mFillMode) {
+                            //REGULAR PAINT cell by cell
+                            if (this.mCurrentMap[vP.X, vP.Y] != null && this.mCurrentMap[vP.X, vP.Y].Equals(this.mCurrentTile)) {
+                                //ignore, already set
+                            }
+                            else {
+                                //set and repaint
+                                this.mCurrentMap.SetTile(this.mCurrentTile, vP.X, vP.Y);
+                                this.panMap.Invalidate();
+                            }
                         }
                         else {
-                            //set and repaint
-                            this.mCurrentMap.SetTile(this.mCurrentTile, vP.X, vP.Y);
-                            this.panMap.Invalidate();
+                            //FILL MODE
+                            Tile vCellTile = this.mCurrentMap[vP.X, vP.Y];
+                            //don't replace by itself or you will have infinite reccursion
+                            if (!this.mCurrentTile.Equals(vCellTile)) {
+                                RecFillTile(vP, vCellTile, this.mCurrentTile);
+                                this.panMap.Invalidate();
+                            }
                         }
                     }
-                    else { 
-                        //FILL MODE
-                        Tile vCellTile = this.mCurrentMap[vP.X, vP.Y];
-                        //don't replace by itself or you will have infinite reccursion
-                        if (!this.mCurrentTile.Equals(vCellTile)) {
-                            RecFillTile(vP, vCellTile, this.mCurrentTile);
-                            this.panMap.Invalidate();
-                        }
-                    }
+
                 }
                 else { 
                     //right click clears

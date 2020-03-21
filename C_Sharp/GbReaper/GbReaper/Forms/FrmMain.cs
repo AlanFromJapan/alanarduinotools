@@ -44,6 +44,8 @@ namespace GbReaper {
 
             pan32.Paint += new PaintEventHandler(pan32_Paint);
             pan128Alt.Paint += new PaintEventHandler(pan128Alt_Paint);
+
+            
         }
 
         private void UcRomViewer1_RomTileSelectedMultiple(IList<Image> pImages) {
@@ -95,6 +97,7 @@ namespace GbReaper {
                 UcMapEditor vME = new UcMapEditor();
                 vME.CurrentMap = vM;
                 vME.CurrentTile = ucLibView.SelectedTile;
+                vME.LibraryList = this.ucLibView;
                 vTP.Controls.Add(vME);
                 vME.Dock = DockStyle.Fill;
                 tabMaps.TabPages.Add(vTP);
@@ -122,6 +125,7 @@ namespace GbReaper {
                     UcMapEditor vME = new UcMapEditor();
                     vME.CurrentMap = vNew;
                     vME.CurrentTile = ucLibView.SelectedTile;
+                    vME.LibraryList = this.ucLibView;
                     vTP.Controls.Add(vME);
                     vME.Dock = DockStyle.Fill;
                     tabMaps.TabPages.Add(vTP);

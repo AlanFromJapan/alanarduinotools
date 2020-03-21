@@ -240,5 +240,22 @@ namespace GbReaper.Controls {
         private void btnDel_Click(object sender, EventArgs e) {
             MessageBox.Show("TODO");
         }
+
+        public Tile GetNthNextTile(int pNth) {
+
+            bool vStartCounting = false;
+            foreach (ListViewItem vLVI in this.lvLibrary.Items) {
+                if (vStartCounting) {
+                    pNth--;
+                    if (pNth == 0) {
+                        return ((TileViewItem)vLVI).mTile;
+                    }
+                }
+                if (vLVI == lvLibrary.SelectedItems[0])
+                    vStartCounting = true;
+            }
+
+            return null;
+        }
     }
 }
