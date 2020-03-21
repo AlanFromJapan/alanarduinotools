@@ -33,6 +33,14 @@ namespace GbReaper.Classes {
             this.mPalette = pPalette;
         }
 
+        public Tile(string pName, Image pImage, Palette pPalette)
+        : this(
+            Guid.NewGuid(),
+            pName,
+            pImage,
+            pPalette) {
+                }
+
         public Tile(Image pImage, Palette pPalette)
             : this(
             Guid.NewGuid(),

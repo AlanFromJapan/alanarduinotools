@@ -51,18 +51,26 @@ namespace GbReaper {
             if (pImages == null)
                 return;
 
+            string vName = null;
+            using (FrmTileDetails vFrm = new FrmTileDetails()) {
+                if (askTileNameOnImportToolStripMenuItem.Checked && vFrm.ShowDialog(this) == DialogResult.OK) {
+                    vName = vFrm.TileName;
+                }
+            }
+
             if (!this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.Checked || pImages.Count != 4) {
                 //not checked or not 4 images
+                int i = 1;
                 foreach (Image vImage in pImages) {
-                    mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile(vImage, mCurrentProject.Palette), out pAlreadyExisted);
+                    mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile((vName == null ? string.Empty : string.Format("{0} {1}", vName, i)), vImage, mCurrentProject.Palette), out pAlreadyExisted);
                 }
             }
             else {
                 //import order 1-3-2-4 so that the sprite loading is easier
-                mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile(pImages[0], mCurrentProject.Palette), out pAlreadyExisted);
-                mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile(pImages[2], mCurrentProject.Palette), out pAlreadyExisted);
-                mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile(pImages[1], mCurrentProject.Palette), out pAlreadyExisted);
-                mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile(pImages[3], mCurrentProject.Palette), out pAlreadyExisted);
+                mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile((vName == null ? string.Empty : string.Format("{0} {1}", vName, "NW")), pImages[0], mCurrentProject.Palette), out pAlreadyExisted);
+                mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile((vName == null ? string.Empty : string.Format("{0} {1}", vName, "SW")), pImages[2], mCurrentProject.Palette), out pAlreadyExisted);
+                mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile((vName == null ? string.Empty : string.Format("{0} {1}", vName, "NE")), pImages[1], mCurrentProject.Palette), out pAlreadyExisted);
+                mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile((vName == null ? string.Empty : string.Format("{0} {1}", vName, "SE")), pImages[3], mCurrentProject.Palette), out pAlreadyExisted);
             }
         }
 
