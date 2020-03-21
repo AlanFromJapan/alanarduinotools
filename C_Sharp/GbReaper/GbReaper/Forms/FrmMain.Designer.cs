@@ -56,6 +56,8 @@
             this.stripLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.ofdProject = new System.Windows.Forms.OpenFileDialog();
             this.fbdExport = new System.Windows.Forms.FolderBrowserDialog();
+            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panMain.SuspendLayout();
             this.tabMaps.SuspendLayout();
@@ -70,6 +72,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.importToolStripMenuItem,
             this.exportToolStripMenuItem,
             this.helpToolStripMenuItem,
             this.cbxPalette});
@@ -335,6 +338,23 @@
             // 
             this.fbdExport.Description = "Choose path to export";
             // 
+            // importToolStripMenuItem
+            // 
+            this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem});
+            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(55, 23);
+            this.importToolStripMenuItem.Text = "&Import";
+            // 
+            // horizontalToVerticalWhenROMImportBy4ToolStripMenuItem
+            // 
+            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.Checked = true;
+            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.CheckOnClick = true;
+            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.Name = "horizontalToVerticalWhenROMImportBy4ToolStripMenuItem";
+            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
+            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.Text = "Horizontal to Vertical when ROM import by 4";
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -400,6 +420,8 @@
         private System.Windows.Forms.ToolStripMenuItem exportForGBDKToolStripMenuItem;
         private System.Windows.Forms.FolderBrowserDialog fbdExport;
         private System.Windows.Forms.ToolStripComboBox cbxPalette;
+        private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem horizontalToVerticalWhenROMImportBy4ToolStripMenuItem;
     }
 }
 

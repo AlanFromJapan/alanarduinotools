@@ -50,8 +50,19 @@ namespace GbReaper {
             bool pAlreadyExisted;
             if (pImages == null)
                 return;
-            foreach (Image vImage in pImages) {
-                mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile(vImage, mCurrentProject.Palette), out pAlreadyExisted);
+
+            if (!this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.Checked || pImages.Count != 4) {
+                //not checked or not 4 images
+                foreach (Image vImage in pImages) {
+                    mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile(vImage, mCurrentProject.Palette), out pAlreadyExisted);
+                }
+            }
+            else {
+                //import order 1-3-2-4 so that the sprite loading is easier
+                mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile(pImages[0], mCurrentProject.Palette), out pAlreadyExisted);
+                mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile(pImages[2], mCurrentProject.Palette), out pAlreadyExisted);
+                mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile(pImages[1], mCurrentProject.Palette), out pAlreadyExisted);
+                mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile(pImages[3], mCurrentProject.Palette), out pAlreadyExisted);
             }
         }
 
