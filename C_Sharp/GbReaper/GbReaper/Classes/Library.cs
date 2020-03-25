@@ -139,18 +139,30 @@ namespace GbReaper.Classes {
             return s;
         }
 
+
         internal void ExportToGBDK(string pPath) {
-            int vIndex = 0;
             string vLibNameC = CleanFileName(this.Name);
-            string vFilename = Path.Combine(pPath, (string.IsNullOrWhiteSpace(this.Name) ? "GbReaper_lib.c" : vLibNameC + ".c"));
+            string vFilename = Path.Combine(pPath, (string.IsNullOrWhiteSpace(this.Name) ? "GbReaper_lib" : vLibNameC ));
+
+            //make .c file
+            this.ExportToGBDK_C(vLibNameC, vFilename + ".c");
+            //make .h file
+            this.ExportToGBDK_H(vLibNameC, vFilename + ".h");
+        }
+
+        internal void ExportToGBDK_H(string vLibNameC, string vFilename) {
+            int vIndex = 0;
 
             using (FileStream vFS = new FileStream(vFilename, FileMode.Create, FileAccess.ReadWrite, FileShare.None)) {
                 using (StreamWriter vSW = new StreamWriter(vFS)) {
                     //count header
                     vSW.WriteLine(string.Format(@"
+#ifndef __{1}_H__
+#define __{1}_H__
+
 #define {1}_COUNT   {0}
 
-", this.mTiles.Count,  vLibNameC));
+", this.mTiles.Count, vLibNameC));
 
 
                     //write the defines indexes by name if any
@@ -163,11 +175,35 @@ namespace GbReaper.Classes {
 
 
                     //Write the bytes contents
-                    vSW.WriteLine(@"
+                    vSW.WriteLine(string.Format(@"
 
-unsigned char " + vLibNameC + @"[] =
-{
-");
+//declared as const to save compile and execution time/space
+extern const unsigned char {0}[]; 
+
+#endif //__{0}_H__
+
+", vLibNameC));
+                }
+            }
+        }
+
+
+        internal void ExportToGBDK_C(string vLibNameC, string vFilename) {
+            int vIndex = 0;
+
+            using (FileStream vFS = new FileStream(vFilename, FileMode.Create, FileAccess.ReadWrite, FileShare.None)) {
+                using (StreamWriter vSW = new StreamWriter(vFS)) {
+
+
+                    //Write the bytes contents
+                    vSW.WriteLine(string.Format(@"
+#include ""{0}.h""
+
+//declared as const to save compile and execution time/space
+const unsigned char {0}[] = 
+{{
+", vLibNameC));
+
                     bool vFirst = true;
                     vIndex = 0;
                     foreach (Tile vT in this.mTiles){

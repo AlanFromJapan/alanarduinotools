@@ -249,7 +249,7 @@ namespace GbReaper {
             }
 
             if (fbdExport.ShowDialog(this) == System.Windows.Forms.DialogResult.OK) {
-                this.mCurrentProject.ExportToGBDK(fbdExport.SelectedPath);
+                this.mCurrentProject.ExportToGBDK(fbdExport.SelectedPath, generateStubMaincToolStripMenuItem.Checked);
                 SetStatus("Export to " + fbdExport.SelectedPath + " completed.");
             }
         }

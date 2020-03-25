@@ -33,6 +33,9 @@
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.askTileNameOnImportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportForGBDKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,8 +46,11 @@
             this.tabMaps = new System.Windows.Forms.TabControl();
             this.tpMapWelcome = new System.Windows.Forms.TabPage();
             this.btnNewMap = new System.Windows.Forms.Button();
+            this.ucTileEd = new GbReaper.Controls.UcTileEditor();
             this.panLib = new System.Windows.Forms.Panel();
+            this.ucLibView = new GbReaper.Controls.UcLibraryList();
             this.panLeft = new System.Windows.Forms.Panel();
+            this.ucRomViewer1 = new GbReaper.Controls.UcRomViewer();
             this.panLeftBottom = new System.Windows.Forms.Panel();
             this.pan128Alt = new System.Windows.Forms.Panel();
             this.pan32 = new System.Windows.Forms.Panel();
@@ -53,12 +59,8 @@
             this.stripLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.ofdProject = new System.Windows.Forms.OpenFileDialog();
             this.fbdExport = new System.Windows.Forms.FolderBrowserDialog();
-            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ucTileEd = new GbReaper.Controls.UcTileEditor();
-            this.ucLibView = new GbReaper.Controls.UcLibraryList();
-            this.ucRomViewer1 = new GbReaper.Controls.UcRomViewer();
-            this.askTileNameOnImportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.generateStubMaincToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panMain.SuspendLayout();
             this.tabMaps.SuspendLayout();
@@ -148,10 +150,39 @@
             this.quitToolStripMenuItem.Text = "&Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
+            // importToolStripMenuItem
+            // 
+            this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem,
+            this.askTileNameOnImportToolStripMenuItem});
+            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(55, 23);
+            this.importToolStripMenuItem.Text = "&Import";
+            // 
+            // horizontalToVerticalWhenROMImportBy4ToolStripMenuItem
+            // 
+            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.Checked = true;
+            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.CheckOnClick = true;
+            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.Name = "horizontalToVerticalWhenROMImportBy4ToolStripMenuItem";
+            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
+            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.Text = "Horizontal to Vertical when ROM import by 4";
+            // 
+            // askTileNameOnImportToolStripMenuItem
+            // 
+            this.askTileNameOnImportToolStripMenuItem.Checked = true;
+            this.askTileNameOnImportToolStripMenuItem.CheckOnClick = true;
+            this.askTileNameOnImportToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.askTileNameOnImportToolStripMenuItem.Name = "askTileNameOnImportToolStripMenuItem";
+            this.askTileNameOnImportToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
+            this.askTileNameOnImportToolStripMenuItem.Text = "Ask tile name on import";
+            // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.exportForGBDKToolStripMenuItem});
+            this.exportForGBDKToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.generateStubMaincToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(53, 23);
             this.exportToolStripMenuItem.Text = "&Export";
@@ -160,7 +191,7 @@
             // 
             this.exportForGBDKToolStripMenuItem.Name = "exportForGBDKToolStripMenuItem";
             this.exportForGBDKToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.exportForGBDKToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.exportForGBDKToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.exportForGBDKToolStripMenuItem.Text = "Export for GBDK";
             this.exportForGBDKToolStripMenuItem.Click += new System.EventHandler(this.exportForGBDKToolStripMenuItem_Click);
             // 
@@ -236,6 +267,15 @@
             this.btnNewMap.UseVisualStyleBackColor = true;
             this.btnNewMap.Click += new System.EventHandler(this.btnNewMap_Click);
             // 
+            // ucTileEd
+            // 
+            this.ucTileEd.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ucTileEd.Location = new System.Drawing.Point(0, 0);
+            this.ucTileEd.MinimumSize = new System.Drawing.Size(0, 277);
+            this.ucTileEd.Name = "ucTileEd";
+            this.ucTileEd.Size = new System.Drawing.Size(602, 277);
+            this.ucTileEd.TabIndex = 1;
+            // 
             // panLib
             // 
             this.panLib.Controls.Add(this.ucLibView);
@@ -244,6 +284,14 @@
             this.panLib.Name = "panLib";
             this.panLib.Size = new System.Drawing.Size(200, 809);
             this.panLib.TabIndex = 0;
+            // 
+            // ucLibView
+            // 
+            this.ucLibView.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ucLibView.Location = new System.Drawing.Point(0, 0);
+            this.ucLibView.Name = "ucLibView";
+            this.ucLibView.Size = new System.Drawing.Size(200, 809);
+            this.ucLibView.TabIndex = 0;
             // 
             // panLeft
             // 
@@ -254,6 +302,15 @@
             this.panLeft.Name = "panLeft";
             this.panLeft.Size = new System.Drawing.Size(252, 809);
             this.panLeft.TabIndex = 5;
+            // 
+            // ucRomViewer1
+            // 
+            this.ucRomViewer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ucRomViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ucRomViewer1.Location = new System.Drawing.Point(0, 0);
+            this.ucRomViewer1.Name = "ucRomViewer1";
+            this.ucRomViewer1.Size = new System.Drawing.Size(252, 667);
+            this.ucRomViewer1.TabIndex = 3;
             // 
             // panLeftBottom
             // 
@@ -313,58 +370,17 @@
             // 
             this.fbdExport.Description = "Choose path to export";
             // 
-            // importToolStripMenuItem
+            // toolStripSeparator1
             // 
-            this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem,
-            this.askTileNameOnImportToolStripMenuItem});
-            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
-            this.importToolStripMenuItem.Size = new System.Drawing.Size(55, 23);
-            this.importToolStripMenuItem.Text = "&Import";
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(183, 6);
             // 
-            // horizontalToVerticalWhenROMImportBy4ToolStripMenuItem
+            // generateStubMaincToolStripMenuItem
             // 
-            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.Checked = true;
-            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.CheckOnClick = true;
-            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.Name = "horizontalToVerticalWhenROMImportBy4ToolStripMenuItem";
-            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
-            this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem.Text = "Horizontal to Vertical when ROM import by 4";
-            // 
-            // ucTileEd
-            // 
-            this.ucTileEd.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ucTileEd.Location = new System.Drawing.Point(0, 0);
-            this.ucTileEd.MinimumSize = new System.Drawing.Size(0, 277);
-            this.ucTileEd.Name = "ucTileEd";
-            this.ucTileEd.Size = new System.Drawing.Size(602, 277);
-            this.ucTileEd.TabIndex = 1;
-            // 
-            // ucLibView
-            // 
-            this.ucLibView.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ucLibView.Location = new System.Drawing.Point(0, 0);
-            this.ucLibView.Name = "ucLibView";
-            this.ucLibView.Size = new System.Drawing.Size(200, 809);
-            this.ucLibView.TabIndex = 0;
-            // 
-            // ucRomViewer1
-            // 
-            this.ucRomViewer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ucRomViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ucRomViewer1.Location = new System.Drawing.Point(0, 0);
-            this.ucRomViewer1.Name = "ucRomViewer1";
-            this.ucRomViewer1.Size = new System.Drawing.Size(252, 667);
-            this.ucRomViewer1.TabIndex = 3;
-            // 
-            // askTileNameOnImportToolStripMenuItem
-            // 
-            this.askTileNameOnImportToolStripMenuItem.Checked = true;
-            this.askTileNameOnImportToolStripMenuItem.CheckOnClick = true;
-            this.askTileNameOnImportToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.askTileNameOnImportToolStripMenuItem.Name = "askTileNameOnImportToolStripMenuItem";
-            this.askTileNameOnImportToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
-            this.askTileNameOnImportToolStripMenuItem.Text = "Ask tile name on import";
+            this.generateStubMaincToolStripMenuItem.CheckOnClick = true;
+            this.generateStubMaincToolStripMenuItem.Name = "generateStubMaincToolStripMenuItem";
+            this.generateStubMaincToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.generateStubMaincToolStripMenuItem.Text = "Generate stub main.c";
             // 
             // FrmMain
             // 
@@ -434,6 +450,8 @@
         private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem horizontalToVerticalWhenROMImportBy4ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem askTileNameOnImportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem generateStubMaincToolStripMenuItem;
     }
 }
 

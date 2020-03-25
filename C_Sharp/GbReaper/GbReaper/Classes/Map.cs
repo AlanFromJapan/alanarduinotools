@@ -173,7 +173,7 @@ namespace GbReaper.Classes {
 #define {2}_WIDTH   {0}
 #define {2}_HEIGHT  {1}
 
-extern unsigned char {2}[];
+extern const unsigned char {2}[];
 
 #endif  //__{2}_H__
 
@@ -197,7 +197,7 @@ extern unsigned char {2}[];
 
 ", this.Width, this.Height, vMapNameC));
 
-                    vSW.WriteLine(@"unsigned char " + vMapNameC + @"[] =
+                    vSW.WriteLine(@"const unsigned char " + vMapNameC + @"[] =
 {
 ");
                     bool vFirst = true;
