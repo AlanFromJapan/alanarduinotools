@@ -132,11 +132,11 @@
   </metadata>
   <data name="btnTilizator.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfkAxAMLCUtl5j2AAAAnklEQVQ4T2MYNOAqEP8n
-        EYP0wAFIgBPCJApwAzFIDxygcHCAbiD+AaWZgJhkA0CaQepANEEDQE4sBGJkbxHtApDkGiAGiW0CYhYg
-        Rgd4DWgCYhAfhpcAcTIQvwJiWyAGAUYgxmpAOBD/A2JkA5DxByA2AGKsBpgA8TcoGx9+AcRqUDYcgDhP
-        oDQx+AGUhgN0BcRiOCAnKV8B4gEHDAwAdY5pM7ZHIwYAAAAASUVORK5CYII=
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
+        EwAACxMBAJqcGAAAAAd0SU1FB+QDEAwsJS2XmPYAAACeSURBVDhPYxg04CoQ/ycRg/TAAUiAE8IkCnAD
+        MUgPHKBwcIBuIP4BpZmAmGQDQJpB6kA0QQNATiwEYmRvEe0CkOQaIAaJbQJiFiBGB3gNaAJiEB+GlwBx
+        MhC/AmJbIAYBRiDGakA4EP8DYmQDkPEHIDYAYqwGmADxNygbH34BxGpQNhyAOE+gNDH4AZSGA3QFxGI4
+        ICcpXwHiAQcMDAB1jmkztkcjBgAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="btnGrid.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

@@ -330,7 +330,18 @@ namespace GbReaper.Controls {
             }
         }
 
+        private void btnDelete_Click(object sender, EventArgs e) {
+            if (MessageBox.Show("Really delete map?", "Comfirm map deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+                return;
 
+            this.mCurrentMap.ParentProject.DeleteMap(this.mCurrentMap);
 
+            if (this.Parent is TabPage) {
+                TabPage vTP = (TabPage)this.Parent;
+                TabControl vTC = (TabControl)vTP.Parent;
+
+                vTC.TabPages.Remove(vTP);
+            }
+        }
     }
 }

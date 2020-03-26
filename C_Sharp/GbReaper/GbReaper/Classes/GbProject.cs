@@ -31,6 +31,11 @@ namespace GbReaper.Classes {
             pNewMap.ParentProject = this;
         }
 
+        public void DeleteMap(Map pMap) {
+            this.mMaps.Remove(pMap);
+            pMap.ParentProject = null;
+        }
+
         public void ExportToGBDK(string pPath, bool pGenerateStubMain) {
             foreach (Library vLin in mLibraries) {
                 vLin.ExportToGBDK(pPath);

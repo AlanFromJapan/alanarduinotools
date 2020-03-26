@@ -32,6 +32,7 @@
             this.btnGrid = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.btnDelete = new System.Windows.Forms.Button();
             this.panTools.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,6 +47,7 @@
             // panTools
             // 
             this.panTools.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.panTools.Controls.Add(this.btnDelete);
             this.panTools.Controls.Add(this.btnFill);
             this.panTools.Controls.Add(this.btnTilizator);
             this.panTools.Controls.Add(this.btnGrid);
@@ -109,6 +111,17 @@
             this.btnNew.UseVisualStyleBackColor = true;
             this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
             // 
+            // btnDelete
+            // 
+            this.btnDelete.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnDelete.Location = new System.Drawing.Point(0, 140);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(32, 35);
+            this.btnDelete.TabIndex = 4;
+            this.btnDelete.Text = "Del";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
             // UcMapEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -132,5 +145,6 @@
         private System.Windows.Forms.Button btnTilizator;
         private System.Windows.Forms.Button btnFill;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Button btnDelete;
     }
 }
