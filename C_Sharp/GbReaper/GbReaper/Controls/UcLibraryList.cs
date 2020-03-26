@@ -243,8 +243,11 @@ namespace GbReaper.Controls {
         private void btnDel_Click(object sender, EventArgs e) {
             List<Tile> vDeletedTiles = new List<Tile>();
             foreach (ListViewItem v in lvLibrary.SelectedItems) {
-                vDeletedTiles.Add(((TileViewItem)v).mTile);
+                Tile vT = ((TileViewItem)v).mTile;
+                vDeletedTiles.Add(vT);
                 lvLibrary.Items.Remove(v);
+
+                mCurrentLib.DeleteTile(vT);
             }
 
             this.OnTilesDeleted(vDeletedTiles);
@@ -271,6 +274,29 @@ namespace GbReaper.Controls {
             }
 
             return null;
+        }
+
+        private void btnRename_Click(object sender, EventArgs e) {
+            if (lvLibrary.SelectedItems.Count == 0)
+                return;
+
+            string vTilePrefix = null;
+            int i = 1;
+            using (FrmTileDetails f = new FrmTileDetails()) {
+                if (f.ShowDialog(this.ParentForm) == DialogResult.OK) {
+                    vTilePrefix = f.TileName;
+                }
+            }
+
+            if (vTilePrefix == null)
+                return;
+
+            foreach (ListViewItem v in lvLibrary.SelectedItems) {
+                Tile vT = ((TileViewItem)v).mTile;
+                vT.Name = string.Format("{0} {1}", vTilePrefix, i++);
+            }
+
+            this.Invalidate();
         }
     }
 }
