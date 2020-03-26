@@ -186,8 +186,20 @@ namespace GbReaper {
         }
 
         void RomViewer_RomTileSelected(Image pImage) {
-            bool pAlreadyExisted;
-            mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile(pImage, mCurrentProject.Palette), out pAlreadyExisted);
+            Tile vT = new Tile(pImage, mCurrentProject.Palette);
+            if (allowImportOfDuplicateToolStripMenuItem.Checked) {
+                mCurrentProject.mLibraries[0].AddTile(vT);
+                SetStatus("Tile import success.");
+            }
+            else {
+                bool pAlreadyExisted;
+                mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(vT, out pAlreadyExisted);
+
+                if (pAlreadyExisted)
+                    SetStatus("Tile import cancelled - duplicate.");
+                else
+                    SetStatus("Tile import success.");
+            }
         }
 
        

@@ -38,6 +38,8 @@
             this.askTileNameOnImportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportForGBDKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.generateStubMaincToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutGbReaperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cbxPalette = new System.Windows.Forms.ToolStripComboBox();
@@ -59,8 +61,7 @@
             this.stripLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.ofdProject = new System.Windows.Forms.OpenFileDialog();
             this.fbdExport = new System.Windows.Forms.FolderBrowserDialog();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.generateStubMaincToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.allowImportOfDuplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panMain.SuspendLayout();
             this.tabMaps.SuspendLayout();
@@ -154,7 +155,8 @@
             // 
             this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem,
-            this.askTileNameOnImportToolStripMenuItem});
+            this.askTileNameOnImportToolStripMenuItem,
+            this.allowImportOfDuplicateToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
             this.importToolStripMenuItem.Size = new System.Drawing.Size(55, 23);
             this.importToolStripMenuItem.Text = "&Import";
@@ -194,6 +196,18 @@
             this.exportForGBDKToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.exportForGBDKToolStripMenuItem.Text = "Export for GBDK";
             this.exportForGBDKToolStripMenuItem.Click += new System.EventHandler(this.exportForGBDKToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(183, 6);
+            // 
+            // generateStubMaincToolStripMenuItem
+            // 
+            this.generateStubMaincToolStripMenuItem.CheckOnClick = true;
+            this.generateStubMaincToolStripMenuItem.Name = "generateStubMaincToolStripMenuItem";
+            this.generateStubMaincToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.generateStubMaincToolStripMenuItem.Text = "Generate stub main.c";
             // 
             // helpToolStripMenuItem
             // 
@@ -370,17 +384,14 @@
             // 
             this.fbdExport.Description = "Choose path to export";
             // 
-            // toolStripSeparator1
+            // allowImportOfDuplicateToolStripMenuItem
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(183, 6);
-            // 
-            // generateStubMaincToolStripMenuItem
-            // 
-            this.generateStubMaincToolStripMenuItem.CheckOnClick = true;
-            this.generateStubMaincToolStripMenuItem.Name = "generateStubMaincToolStripMenuItem";
-            this.generateStubMaincToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.generateStubMaincToolStripMenuItem.Text = "Generate stub main.c";
+            this.allowImportOfDuplicateToolStripMenuItem.Checked = true;
+            this.allowImportOfDuplicateToolStripMenuItem.CheckOnClick = true;
+            this.allowImportOfDuplicateToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.allowImportOfDuplicateToolStripMenuItem.Name = "allowImportOfDuplicateToolStripMenuItem";
+            this.allowImportOfDuplicateToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
+            this.allowImportOfDuplicateToolStripMenuItem.Text = "Allow import of duplicate";
             // 
             // FrmMain
             // 
@@ -452,6 +463,7 @@
         private System.Windows.Forms.ToolStripMenuItem askTileNameOnImportToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem generateStubMaincToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem allowImportOfDuplicateToolStripMenuItem;
     }
 }
 
