@@ -76,7 +76,7 @@ namespace GbReaper {
                 //not checked or not 4 images
                 int i = 1;
                 foreach (Image vImage in pImages) {
-                    mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile((vName == null ? string.Empty : string.Format("{0} {1}", vName, i)), vImage, mCurrentProject.Palette), out pAlreadyExisted);
+                    mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile((vName == null ? string.Empty : string.Format("{0} {1}", vName, i++)), vImage, mCurrentProject.Palette), out pAlreadyExisted);
                 }
             }
             else {
