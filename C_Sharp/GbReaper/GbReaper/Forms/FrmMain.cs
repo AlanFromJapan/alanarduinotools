@@ -103,6 +103,7 @@ namespace GbReaper {
             }
 
             ucLibView.SetLibrary(mCurrentProject.mLibraries[0]);
+            tabMaps.TabPages.Clear();
             foreach (Map vM in this.mCurrentProject.mMaps) {
 
                 TabPage vTP = new TabPage(vM.Name);
