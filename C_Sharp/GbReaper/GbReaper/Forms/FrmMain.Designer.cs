@@ -36,6 +36,7 @@
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.askTileNameOnImportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.allowImportOfDuplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportForGBDKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -61,7 +62,8 @@
             this.stripLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.ofdProject = new System.Windows.Forms.OpenFileDialog();
             this.fbdExport = new System.Windows.Forms.FolderBrowserDialog();
-            this.allowImportOfDuplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeUnusedTilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panMain.SuspendLayout();
             this.tabMaps.SuspendLayout();
@@ -78,6 +80,7 @@
             this.fileToolStripMenuItem,
             this.importToolStripMenuItem,
             this.exportToolStripMenuItem,
+            this.toolsToolStripMenuItem,
             this.helpToolStripMenuItem,
             this.cbxPalette});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -178,6 +181,15 @@
             this.askTileNameOnImportToolStripMenuItem.Name = "askTileNameOnImportToolStripMenuItem";
             this.askTileNameOnImportToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
             this.askTileNameOnImportToolStripMenuItem.Text = "Ask tile name on import";
+            // 
+            // allowImportOfDuplicateToolStripMenuItem
+            // 
+            this.allowImportOfDuplicateToolStripMenuItem.Checked = true;
+            this.allowImportOfDuplicateToolStripMenuItem.CheckOnClick = true;
+            this.allowImportOfDuplicateToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.allowImportOfDuplicateToolStripMenuItem.Name = "allowImportOfDuplicateToolStripMenuItem";
+            this.allowImportOfDuplicateToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
+            this.allowImportOfDuplicateToolStripMenuItem.Text = "Allow import of duplicate";
             // 
             // exportToolStripMenuItem
             // 
@@ -384,14 +396,20 @@
             // 
             this.fbdExport.Description = "Choose path to export";
             // 
-            // allowImportOfDuplicateToolStripMenuItem
+            // toolsToolStripMenuItem
             // 
-            this.allowImportOfDuplicateToolStripMenuItem.Checked = true;
-            this.allowImportOfDuplicateToolStripMenuItem.CheckOnClick = true;
-            this.allowImportOfDuplicateToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.allowImportOfDuplicateToolStripMenuItem.Name = "allowImportOfDuplicateToolStripMenuItem";
-            this.allowImportOfDuplicateToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
-            this.allowImportOfDuplicateToolStripMenuItem.Text = "Allow import of duplicate";
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.removeUnusedTilesToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 23);
+            this.toolsToolStripMenuItem.Text = "&Tools";
+            // 
+            // removeUnusedTilesToolStripMenuItem
+            // 
+            this.removeUnusedTilesToolStripMenuItem.Name = "removeUnusedTilesToolStripMenuItem";
+            this.removeUnusedTilesToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.removeUnusedTilesToolStripMenuItem.Text = "&Remove unused tiles";
+            this.removeUnusedTilesToolStripMenuItem.Click += new System.EventHandler(this.removeUnusedTilesToolStripMenuItem_Click);
             // 
             // FrmMain
             // 
@@ -464,6 +482,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem generateStubMaincToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allowImportOfDuplicateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeUnusedTilesToolStripMenuItem;
     }
 }
 
