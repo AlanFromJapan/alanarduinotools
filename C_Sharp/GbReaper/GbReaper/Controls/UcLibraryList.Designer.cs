@@ -26,9 +26,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UcLibraryList));
             this.lvLibrary = new System.Windows.Forms.ListView();
             this.panTop = new System.Windows.Forms.Panel();
+            this.btnRename = new System.Windows.Forms.Button();
             this.btnDel = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
-            this.btnRename = new System.Windows.Forms.Button();
+            this.lblTileCount = new System.Windows.Forms.Label();
             this.panTop.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,6 +49,7 @@
             // 
             // panTop
             // 
+            this.panTop.Controls.Add(this.lblTileCount);
             this.panTop.Controls.Add(this.btnRename);
             this.panTop.Controls.Add(this.btnDel);
             this.panTop.Controls.Add(this.btnNew);
@@ -56,6 +58,18 @@
             this.panTop.Name = "panTop";
             this.panTop.Size = new System.Drawing.Size(381, 35);
             this.panTop.TabIndex = 2;
+            // 
+            // btnRename
+            // 
+            this.btnRename.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnRename.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRename.Location = new System.Drawing.Point(64, 0);
+            this.btnRename.Name = "btnRename";
+            this.btnRename.Size = new System.Drawing.Size(32, 35);
+            this.btnRename.TabIndex = 2;
+            this.btnRename.Text = "Ren";
+            this.btnRename.UseVisualStyleBackColor = true;
+            this.btnRename.Click += new System.EventHandler(this.btnRename_Click);
             // 
             // btnDel
             // 
@@ -79,17 +93,16 @@
             this.btnNew.UseVisualStyleBackColor = true;
             this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
             // 
-            // btnRename
+            // lblTileCount
             // 
-            this.btnRename.Dock = System.Windows.Forms.DockStyle.Left;
-            this.btnRename.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRename.Location = new System.Drawing.Point(64, 0);
-            this.btnRename.Name = "btnRename";
-            this.btnRename.Size = new System.Drawing.Size(32, 35);
-            this.btnRename.TabIndex = 2;
-            this.btnRename.Text = "Ren";
-            this.btnRename.UseVisualStyleBackColor = true;
-            this.btnRename.Click += new System.EventHandler(this.btnRename_Click);
+            this.lblTileCount.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lblTileCount.Font = new System.Drawing.Font("Segoe UI Black", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTileCount.Location = new System.Drawing.Point(312, 0);
+            this.lblTileCount.Name = "lblTileCount";
+            this.lblTileCount.Size = new System.Drawing.Size(69, 35);
+            this.lblTileCount.TabIndex = 3;
+            this.lblTileCount.Text = "Tiles: 0";
+            this.lblTileCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // UcLibraryList
             // 
@@ -112,5 +125,6 @@
         private System.Windows.Forms.Button btnNew;
         private System.Windows.Forms.Button btnDel;
         private System.Windows.Forms.Button btnRename;
+        private System.Windows.Forms.Label lblTileCount;
     }
 }

@@ -174,6 +174,7 @@ namespace GbReaper.Controls {
 
 
             lvLibrary.Invalidate();
+            lblTileCount.Text = "Tiles: " + this.lvLibrary.Items.Count;
         }
 
         void TileChanged(Tile pTile) {
@@ -183,6 +184,8 @@ namespace GbReaper.Controls {
         void CurrentLib_TileDeleted(Tile pTile) {
             //TODO
             lvLibrary.Invalidate();
+            lblTileCount.Text = "Tiles: " + this.lvLibrary.Items.Count;
+
         }
 
         void CurrentLib_TileAdded(Tile pTile) {
@@ -197,7 +200,9 @@ namespace GbReaper.Controls {
                 vLVI.Selected = false;
             }
             vTVI.Selected = true;
-            
+
+            lblTileCount.Text = "Tiles: " + this.lvLibrary.Items.Count;
+
         }
 
         private void lvLibrary_SelectedIndexChanged(object sender, EventArgs e) {
@@ -220,6 +225,8 @@ namespace GbReaper.Controls {
             this.mCurrentLib.AddTile(vT);
 
             RenameTilePopup(vT);
+
+            lblTileCount.Text = "Tiles: " + this.lvLibrary.Items.Count;
         }
 
         private void lvLibrary_DoubleClick(object sender, EventArgs e) {
@@ -249,6 +256,8 @@ namespace GbReaper.Controls {
 
                 mCurrentLib.DeleteTile(vT);
             }
+
+            lblTileCount.Text = "Tiles: " + this.lvLibrary.Items.Count;
 
             this.OnTilesDeleted(vDeletedTiles);
         }
@@ -298,5 +307,6 @@ namespace GbReaper.Controls {
 
             this.Invalidate();
         }
+
     }
 }
