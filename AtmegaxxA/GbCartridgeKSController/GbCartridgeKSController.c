@@ -24,14 +24,21 @@
 
 #include "tests/unit_tests.h"
 
-
+//NEXT address to write (usually last write +1), used for sequential write
+uint16_t mLastAddress = 0;
 
 void showHelp(){
 	serialWriteString("Help: \n");
 	serialWriteString("   rAAAA : gets the byte at 0xAAAAA\n");
 	serialWriteString("   wAAAADD : writes the value 0xDD at 0xAAAAA\n");
-	serialWriteString("   d : shows data port status\n");
+	serialWriteString("   sAAAA : sets the next SEQUENTIAL write at 0xAAAAA\n");
+	serialWriteString("   SDD : writes the value 0xDD at the SEQ address and moves to next address\n");
+	serialWriteString("   Z : erase the whole EEPROM\n");
+	serialWriteString("   t : runs a bunch of data and reads it to tests the result\n");
 	serialWriteString("   ? : print this help\n");
+#ifdef TALKATIVE
+	serialWriteString("   d/D : shows data port status\n");
+#endif
 }
 
 
@@ -78,6 +85,18 @@ void decodeCommand (){
 				flashWriteByteDecode();
 				break;
 
+			case 's':
+				//SET the address for sequential writing
+				//Format "sAAAA"
+				mLastAddress = getAddressFromSerial();
+				break;
+			case 'S':
+				//Write a SEQUENTIAL byte and move to next address
+				//Format "SDD"
+				flashWriteByteDecode1(mLastAddress);
+				mLastAddress++;
+				break;
+
 			case '?':
 				showHelp();
 				break;
@@ -102,6 +121,10 @@ void decodeCommand (){
 			case 't':
 				//run tests
 				test1(100);
+				break;
+			case 'T':
+				//run tests
+				test2(100);
 				break;
 			case 'Z':
 				//delete everything

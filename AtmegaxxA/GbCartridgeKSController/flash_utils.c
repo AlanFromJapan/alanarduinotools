@@ -85,7 +85,7 @@ uint16_t getAddressFromSerial() {
 	return vAddress;
 }
 
-uint8_t flashGetDataFromInput() {
+uint8_t getDataFromSerial() {
 	uint8_t inByte = 0;         // incoming serial byte
 
 	inByte = hexToInt(serialRead());
@@ -275,11 +275,15 @@ void flashWriteByteDecode2(uint16_t pAddr, uint8_t pData) {
 void flashWriteByteDecode() {
 	//address
 	uint16_t vAddress = getAddressFromSerial();
-	uint8_t vData = flashGetDataFromInput();
 
-	flashWriteByteDecode2(vAddress, vData);
+	flashWriteByteDecode1(vAddress);
 }
 
+void flashWriteByteDecode1(uint16_t pAddress) {
+	uint8_t vData = getDataFromSerial();
+
+	flashWriteByteDecode2(pAddress, vData);
+}
 
 
 
