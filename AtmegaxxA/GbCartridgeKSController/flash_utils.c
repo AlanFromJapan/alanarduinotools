@@ -182,7 +182,7 @@ void flashWriteSeq1Byte (uint16_t pAddr, uint8_t pData){
 
 
 	//Start : CE and WE high
-	PORT_CONTROL = (PIN_RST  | PIN_WE | PIN_OE | PIN_CE);
+	PORT_CONTROL = (PIN_RST  | PIN_WE | PIN_OE );
 	_delay_us(1);
 
 	setAddressOnBus(pAddr);
@@ -198,10 +198,10 @@ void flashWriteSeq1Byte (uint16_t pAddr, uint8_t pData){
 	//
 	//WE goes low
 	PORT_CONTROL &= ~PIN_WE;
-	_delay_us(1);
+	_delay_us(100);
 	//CE goes low
-	PORT_CONTROL &= ~PIN_CE;
-	_delay_us(1);
+	//PORT_CONTROL &= ~PIN_CE;
+	//_delay_us(1);
 
 	//put the data
 	PORT_DATA = pData;
@@ -211,8 +211,8 @@ void flashWriteSeq1Byte (uint16_t pAddr, uint8_t pData){
 	PORT_CONTROL |= PIN_WE;
 	_delay_us(50);
 	//CE goes high
-	PORT_CONTROL |= PIN_CE;
-	_delay_us(50);
+	//PORT_CONTROL |= PIN_CE;
+	//_delay_us(50);
 
 
 }
@@ -231,7 +231,7 @@ void waitForDataConfirmation( uint8_t pData )
 
 		//OE up
 		PORT_CONTROL = PORT_CONTROL | PIN_OE;
-		_delay_us(1);
+		_delay_ms(10);
 
 		if (pData == vCheckVal)
 			break;
@@ -311,7 +311,7 @@ void flashErase(){
 	flashWriteSeq1Byte(0x2aaa, 0x55);
 	flashWriteSeq1Byte(0x5555, 0x10);
 
-	//waitForDataConfirmation(0xff);
+	waitForDataConfirmation(0xff);
 
 	//back to read mode
 	setDataBusRead();

@@ -27,11 +27,11 @@
 
 
 void showHelp(){
-	serialWriteString("Help: \r\n");
-	serialWriteString("   rAAAA : gets the byte at 0xAAAAA\r\n");
-	serialWriteString("   wAAAADD : writes the value 0xDD at 0xAAAAA\r\n");
-	serialWriteString("   d : shows data port status\r\n");
-	serialWriteString("   ? : print this help\r\n");
+	serialWriteString("Help: \n");
+	serialWriteString("   rAAAA : gets the byte at 0xAAAAA\n");
+	serialWriteString("   wAAAADD : writes the value 0xDD at 0xAAAAA\n");
+	serialWriteString("   d : shows data port status\n");
+	serialWriteString("   ? : print this help\n");
 }
 
 
@@ -49,7 +49,7 @@ void showDataPort() {
 	serialWriteString(" PINA=0x");
 	serialWriteString(itoa(PINA, vBuffChar, 16));
 
-	serialWriteString("\r\n");
+	serialWriteString("\n");
 }
 #endif //TALKATIVE
 
@@ -101,19 +101,19 @@ void decodeCommand (){
 #endif //TALKATIVE
 			case 't':
 				//run tests
-				test1(50);
+				test1(100);
 				break;
 			case 'Z':
 				//delete everything
 				flashReset();
 				flashErase();
 				flashReset();
-				serialWriteString("Erase all completed.");
+				serialWriteString("Erase all completed.\n");
 				break;
 			default:
 			//Unknown command
 #ifdef TALKATIVE
-			serialWriteString("ERROR: unknown command: ");serialWrite(inByte);serialWriteString("\r\n");
+			serialWriteString("ERROR: unknown command: ");serialWrite(inByte);serialWriteString("\n");
 #endif //TALKATIVE				
 			break;
 		}
