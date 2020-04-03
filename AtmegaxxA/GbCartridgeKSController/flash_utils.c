@@ -117,7 +117,10 @@ void debugPrint(uint16_t pAddr, uint8_t pData){
 /************************************************************************/
 /* GET byte                                                             */
 /************************************************************************/
-uint8_t flashGetByteDecode2(uint16_t pAddr) {
+uint8_t flashGetByteDecode1(uint16_t pAddr){
+	return flashGetByteDecode2(pAddr, 0);
+}
+uint8_t flashGetByteDecode2(uint16_t pAddr, uint8_t pSilent) {
 	//read FLASH
 	setDataBusRead();
 
@@ -154,18 +157,19 @@ uint8_t flashGetByteDecode2(uint16_t pAddr) {
 
 
 #ifdef TALKATIVE
-
-	serialWriteString("GET ");
-	debugPrint(pAddr, vData);
-	serialWriteString("\n");
-
+	if (pSilent == 0){
+		serialWriteString("GET ");
+		debugPrint(pAddr, vData);
+		serialWriteString("\n");
+	}
 #endif //TALKATIVE
+
 	return vData;
 }
 uint8_t flashGetByteDecode() {
 	uint16_t vAddress = getAddressFromSerial();
 
-	return flashGetByteDecode2(vAddress);
+	return flashGetByteDecode1(vAddress);
 }
 
 
