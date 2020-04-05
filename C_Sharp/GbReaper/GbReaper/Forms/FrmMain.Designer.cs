@@ -36,6 +36,7 @@
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.askTileNameOnImportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.allowImportOfDuplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportForGBDKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -47,12 +48,8 @@
             this.panMain = new System.Windows.Forms.Panel();
             this.tabMaps = new System.Windows.Forms.TabControl();
             this.tpMapWelcome = new System.Windows.Forms.TabPage();
-            this.btnNewMap = new System.Windows.Forms.Button();
-            this.ucTileEd = new GbReaper.Controls.UcTileEditor();
             this.panLib = new System.Windows.Forms.Panel();
-            this.ucLibView = new GbReaper.Controls.UcLibraryList();
             this.panLeft = new System.Windows.Forms.Panel();
-            this.ucRomViewer1 = new GbReaper.Controls.UcRomViewer();
             this.panLeftBottom = new System.Windows.Forms.Panel();
             this.pan128Alt = new System.Windows.Forms.Panel();
             this.pan32 = new System.Windows.Forms.Panel();
@@ -61,7 +58,13 @@
             this.stripLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.ofdProject = new System.Windows.Forms.OpenFileDialog();
             this.fbdExport = new System.Windows.Forms.FolderBrowserDialog();
-            this.allowImportOfDuplicateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeUnusedTilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnNewMap = new System.Windows.Forms.Button();
+            this.ucTileEd = new GbReaper.Controls.UcTileEditor();
+            this.ucLibView = new GbReaper.Controls.UcLibraryList();
+            this.ucRomViewer1 = new GbReaper.Controls.UcRomViewer();
+            this.lblRomMemo = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.panMain.SuspendLayout();
             this.tabMaps.SuspendLayout();
@@ -78,6 +81,7 @@
             this.fileToolStripMenuItem,
             this.importToolStripMenuItem,
             this.exportToolStripMenuItem,
+            this.toolsToolStripMenuItem,
             this.helpToolStripMenuItem,
             this.cbxPalette});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -179,6 +183,15 @@
             this.askTileNameOnImportToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
             this.askTileNameOnImportToolStripMenuItem.Text = "Ask tile name on import";
             // 
+            // allowImportOfDuplicateToolStripMenuItem
+            // 
+            this.allowImportOfDuplicateToolStripMenuItem.Checked = true;
+            this.allowImportOfDuplicateToolStripMenuItem.CheckOnClick = true;
+            this.allowImportOfDuplicateToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.allowImportOfDuplicateToolStripMenuItem.Name = "allowImportOfDuplicateToolStripMenuItem";
+            this.allowImportOfDuplicateToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
+            this.allowImportOfDuplicateToolStripMenuItem.Text = "Allow import of duplicate";
+            // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -269,27 +282,6 @@
             this.tpMapWelcome.Text = "Maps";
             this.tpMapWelcome.UseVisualStyleBackColor = true;
             // 
-            // btnNewMap
-            // 
-            this.btnNewMap.Image = ((System.Drawing.Image)(resources.GetObject("btnNewMap.Image")));
-            this.btnNewMap.Location = new System.Drawing.Point(187, 203);
-            this.btnNewMap.Name = "btnNewMap";
-            this.btnNewMap.Size = new System.Drawing.Size(230, 119);
-            this.btnNewMap.TabIndex = 0;
-            this.btnNewMap.Text = "Create new map...";
-            this.btnNewMap.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnNewMap.UseVisualStyleBackColor = true;
-            this.btnNewMap.Click += new System.EventHandler(this.btnNewMap_Click);
-            // 
-            // ucTileEd
-            // 
-            this.ucTileEd.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ucTileEd.Location = new System.Drawing.Point(0, 0);
-            this.ucTileEd.MinimumSize = new System.Drawing.Size(0, 277);
-            this.ucTileEd.Name = "ucTileEd";
-            this.ucTileEd.Size = new System.Drawing.Size(602, 277);
-            this.ucTileEd.TabIndex = 1;
-            // 
             // panLib
             // 
             this.panLib.Controls.Add(this.ucLibView);
@@ -299,32 +291,16 @@
             this.panLib.Size = new System.Drawing.Size(200, 809);
             this.panLib.TabIndex = 0;
             // 
-            // ucLibView
-            // 
-            this.ucLibView.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ucLibView.Location = new System.Drawing.Point(0, 0);
-            this.ucLibView.Name = "ucLibView";
-            this.ucLibView.Size = new System.Drawing.Size(200, 809);
-            this.ucLibView.TabIndex = 0;
-            // 
             // panLeft
             // 
             this.panLeft.Controls.Add(this.ucRomViewer1);
+            this.panLeft.Controls.Add(this.lblRomMemo);
             this.panLeft.Controls.Add(this.panLeftBottom);
             this.panLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.panLeft.Location = new System.Drawing.Point(0, 27);
             this.panLeft.Name = "panLeft";
             this.panLeft.Size = new System.Drawing.Size(252, 809);
             this.panLeft.TabIndex = 5;
-            // 
-            // ucRomViewer1
-            // 
-            this.ucRomViewer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ucRomViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ucRomViewer1.Location = new System.Drawing.Point(0, 0);
-            this.ucRomViewer1.Name = "ucRomViewer1";
-            this.ucRomViewer1.Size = new System.Drawing.Size(252, 667);
-            this.ucRomViewer1.TabIndex = 3;
             // 
             // panLeftBottom
             // 
@@ -384,14 +360,70 @@
             // 
             this.fbdExport.Description = "Choose path to export";
             // 
-            // allowImportOfDuplicateToolStripMenuItem
+            // toolsToolStripMenuItem
             // 
-            this.allowImportOfDuplicateToolStripMenuItem.Checked = true;
-            this.allowImportOfDuplicateToolStripMenuItem.CheckOnClick = true;
-            this.allowImportOfDuplicateToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.allowImportOfDuplicateToolStripMenuItem.Name = "allowImportOfDuplicateToolStripMenuItem";
-            this.allowImportOfDuplicateToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
-            this.allowImportOfDuplicateToolStripMenuItem.Text = "Allow import of duplicate";
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.removeUnusedTilesToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 23);
+            this.toolsToolStripMenuItem.Text = "&Tools";
+            // 
+            // removeUnusedTilesToolStripMenuItem
+            // 
+            this.removeUnusedTilesToolStripMenuItem.Name = "removeUnusedTilesToolStripMenuItem";
+            this.removeUnusedTilesToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.removeUnusedTilesToolStripMenuItem.Text = "&Remove unused tiles";
+            this.removeUnusedTilesToolStripMenuItem.Click += new System.EventHandler(this.removeUnusedTilesToolStripMenuItem_Click);
+            // 
+            // btnNewMap
+            // 
+            this.btnNewMap.Image = ((System.Drawing.Image)(resources.GetObject("btnNewMap.Image")));
+            this.btnNewMap.Location = new System.Drawing.Point(187, 203);
+            this.btnNewMap.Name = "btnNewMap";
+            this.btnNewMap.Size = new System.Drawing.Size(230, 119);
+            this.btnNewMap.TabIndex = 0;
+            this.btnNewMap.Text = "Create new map...";
+            this.btnNewMap.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnNewMap.UseVisualStyleBackColor = true;
+            this.btnNewMap.Click += new System.EventHandler(this.btnNewMap_Click);
+            // 
+            // ucTileEd
+            // 
+            this.ucTileEd.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ucTileEd.Location = new System.Drawing.Point(0, 0);
+            this.ucTileEd.MinimumSize = new System.Drawing.Size(0, 277);
+            this.ucTileEd.Name = "ucTileEd";
+            this.ucTileEd.Size = new System.Drawing.Size(602, 277);
+            this.ucTileEd.TabIndex = 1;
+            // 
+            // ucLibView
+            // 
+            this.ucLibView.Dock = System.Windows.Forms.DockStyle.Right;
+            this.ucLibView.Location = new System.Drawing.Point(0, 0);
+            this.ucLibView.Name = "ucLibView";
+            this.ucLibView.Size = new System.Drawing.Size(200, 809);
+            this.ucLibView.TabIndex = 0;
+            // 
+            // ucRomViewer1
+            // 
+            this.ucRomViewer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ucRomViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ucRomViewer1.Location = new System.Drawing.Point(0, 0);
+            this.ucRomViewer1.Name = "ucRomViewer1";
+            this.ucRomViewer1.Size = new System.Drawing.Size(252, 625);
+            this.ucRomViewer1.TabIndex = 3;
+            // 
+            // lblRomMemo
+            // 
+            this.lblRomMemo.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblRomMemo.Font = new System.Drawing.Font("Segoe UI Black", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRomMemo.Location = new System.Drawing.Point(0, 625);
+            this.lblRomMemo.Name = "lblRomMemo";
+            this.lblRomMemo.Size = new System.Drawing.Size(252, 42);
+            this.lblRomMemo.TabIndex = 5;
+            this.lblRomMemo.Text = "Double click to add 1 to library, [Ctrl] to import 4 in crossed order, [Shift] to" +
+    " import up to 255";
+            this.lblRomMemo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FrmMain
             // 
@@ -464,6 +496,9 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem generateStubMaincToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allowImportOfDuplicateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeUnusedTilesToolStripMenuItem;
+        private System.Windows.Forms.Label lblRomMemo;
     }
 }
 

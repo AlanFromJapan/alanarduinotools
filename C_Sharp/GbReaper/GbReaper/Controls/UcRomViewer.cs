@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using GbReaper.Classes;
+using GbReaper.Forms;
 
 namespace GbReaper.Controls {
     public partial class UcRomViewer : UserControl {
@@ -161,12 +162,21 @@ namespace GbReaper.Controls {
 
                     this.OnRomTileSelected(vBmpTile);
                 }
-                else if (ModifierKeys == Keys.Control){
+                else if (ModifierKeys == Keys.Control) {
                     //Pick 4 in a row
                     IList<Image> vList = GetSelectedNBitmaps(4);
 
                     this.OnRomTileSelectedMultiple(vList);
 
+                }
+                else if (ModifierKeys == Keys.Shift) {
+                    //Pick n in a row
+                    using (FrmNumericInput vFrm = new FrmNumericInput()) {
+                        if (DialogResult.OK == vFrm.ShowDialog(this.ParentForm)) {
+                            IList<Image> vList = GetSelectedNBitmaps(vFrm.Count);
+                            this.OnRomTileSelectedMultiple(vList);
+                        }
+                    }
                 }
             }
         }

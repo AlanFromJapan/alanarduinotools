@@ -102,6 +102,12 @@
     <Compile Include="Forms\FrmNewMap.Designer.cs">
       <DependentUpon>FrmNewMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FrmNumericInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmNumericInput.Designer.cs">
+      <DependentUpon>FrmNumericInput.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FrmTileDetails.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -136,6 +142,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmNewMap.resx">
       <DependentUpon>FrmNewMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmNumericInput.resx">
+      <DependentUpon>FrmNumericInput.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FrmTileDetails.resx">
       <DependentUpon>FrmTileDetails.cs</DependentUpon>

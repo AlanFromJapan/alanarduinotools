@@ -76,7 +76,7 @@ namespace GbReaper {
                 //not checked or not 4 images
                 int i = 1;
                 foreach (Image vImage in pImages) {
-                    mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile((vName == null ? string.Empty : string.Format("{0} {1}", vName, i)), vImage, mCurrentProject.Palette), out pAlreadyExisted);
+                    mCurrentProject.mLibraries[0].AddTileWithoutDuplicate(new Tile((vName == null ? string.Empty : string.Format("{0} {1}", vName, i++)), vImage, mCurrentProject.Palette), out pAlreadyExisted);
                 }
             }
             else {
@@ -102,7 +102,15 @@ namespace GbReaper {
                 StartEmptyNewProject();
             }
 
+            LoadGbProject();
+
+            SetStatus("Loading project " + pFilename + " completed.");
+        }
+
+        private void LoadGbProject() {
+
             ucLibView.SetLibrary(mCurrentProject.mLibraries[0]);
+            tabMaps.TabPages.Clear();
             foreach (Map vM in this.mCurrentProject.mMaps) {
 
                 TabPage vTP = new TabPage(vM.Name);
@@ -117,10 +125,7 @@ namespace GbReaper {
 
                 vME.NewMap += new EventHandler(MapEditor_NewMap);
             }
-
-            SetStatus("Loading project " + pFilename + " completed.");
         }
-
 
         void MapEditor_NewMap(object sender, EventArgs e) {
             CreateNewMapAndTab();
@@ -272,6 +277,24 @@ namespace GbReaper {
 
         private void cbxPalette_SelectedIndexChanged(object sender, EventArgs e) {
             this.mCurrentProject.Palette = Palette.WellknownPalettes[cbxPalette.SelectedItem.ToString()];
+        }
+
+        private void removeUnusedTilesToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (DialogResult.No == MessageBox.Show("Tiles unused in any map will be deleted, you're sure?", "Confirm delete unused tiles?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2)) {
+                return;
+            }
+
+            if (this.mCurrentProject == null) {
+                MessageBox.Show("Load a project first, does not work with unsaved projects.");
+                return;
+            }
+
+            int vBefore = this.mCurrentProject.mLibraries[0].Count<Tile>();
+            this.mCurrentProject.RemoveUnusedTiles();
+            int vAfter = this.mCurrentProject.mLibraries[0].Count<Tile>();
+            LoadGbProject();
+
+            SetStatus(string.Format("Optimizing current project completed (Tile count {0} => {1}).", vBefore, vAfter));
         }
     }
 }

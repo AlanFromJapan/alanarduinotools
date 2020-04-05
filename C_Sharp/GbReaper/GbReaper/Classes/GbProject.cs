@@ -181,5 +181,40 @@ void main() {{
 
             return vResult;
         }
+
+        /// <summary>
+        /// Remove all the tiles from the library that are not used somewhere in a map
+        /// </summary>
+        public void RemoveUnusedTiles() {
+            //ok I&m too lazy to think of optimized code
+
+            foreach (Library l in this.mLibraries) {
+
+                for (int i = 0; i < l.Count<Tile>(); ) {
+                    Tile t = l[i];
+
+                    //used?
+                    bool used = false;
+                    foreach (Map m in this.mMaps) {
+                        for (int x = 0; !used && x < m.Width; x++) {
+                            for (int y = 0; !used && y < m.Height; y++) {
+                                used = used || t == m[x, y];
+                            }
+                        }
+
+                        if (used)
+                            break;
+                    }
+
+                    if (used)
+                        i++;
+                    else {
+                        //not used
+                        l.DeleteTile(t);
+                        //don't increment i
+                    }
+                }
+            }
+        }
     }
 }
