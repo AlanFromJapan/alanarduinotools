@@ -4,6 +4,9 @@ import sys
 import os
 import time
 
+#length of the ROM to read in Bytes
+#READROM_LEN = 32768
+READROM_LEN = 256
 
 def readser():
     reps = ser.readlines()
@@ -16,8 +19,10 @@ def prompt():
 
 
 def readRom(p):
-    print ("Read 32k ROM to '%s'" % (p) )
-    ser.write(b'l8000') #read 32k
+    print ("Read %dB ROM to '%s'" % (READROM_LEN, p) )
+    cmd = 'l' + hex(READROM_LEN)[2:].zfill(4)  #skip the '0x', pas left with zeroes to be 4 char long always
+    #print ("DBG: cmd = " + cmd)
+    ser.write(bytearray(cmd, 'utf8')) #read 32k
     rep = None
     
     while True:
@@ -33,11 +38,12 @@ def readRom(p):
     print("... received data, starting to write to file...")
     i = 0
     with open(p, "wb") as t:
-        while i < 32768:
+        while i < READROM_LEN:
             v = rep[i*3+1:i*3+3] #v has the hex value 
-            print("%d : %s" % (i, v))
             b = int(v, 16)
-            t.write(bytearray(b))
+            print("DBG %d : %s -> %d" % (i, v, b))
+            #print (bytearray([b]))            
+            t.write(bytearray([b]))
             i = i + 1
 
     print("Read rom finished.")
@@ -66,6 +72,9 @@ try:
                 writeRom(i[1:])
         elif i[0] == "Q":
             sys.exit()
+        elif i[0] == "!":
+            print("DBG runs '>toto.gb'")
+            readRom("toto.gb")
         else:
             ser.write(str.encode(i))
             
