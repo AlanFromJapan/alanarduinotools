@@ -3,6 +3,7 @@ import serial
 import sys
 import os
 import time
+import datetime
 
 #length of the ROM to read in Bytes
 READROM_LEN = 32768
@@ -32,6 +33,7 @@ def readRom(p):
     ser.write(bytearray(cmd, 'utf8')) #read 32k
     rep = None
     
+    #format is " ff ff ff a0" (space + hex value)
     while True:
         r = ser.read(99)
         if rep == None:
@@ -39,9 +41,11 @@ def readRom(p):
         else:
             rep = rep + r
         time.sleep(0.1)
+        print('ROM data reception in progress : %d%%\r'%( int((100 * len(rep))/(READROM_LEN*3))), end="")            
         if ser.in_waiting == 0:
             break
 
+    print("")
     print("... received data, starting to write to file...")
     i = 0
     with open(p, "wb") as f:
@@ -50,6 +54,9 @@ def readRom(p):
             b = int(v, 16)
             #print("DBG %d : %s -> %d" % (i, v, b))
             f.write(bytearray([b])) #must put the value in an array
+
+            print('ROM save to disk in progress : byte %d/%d (%d%%)\r'%(i, READROM_LEN, int((100 * i)/READROM_LEN)), end="")            
+
             i = i + 1
 
     print("Read rom finished.")
@@ -77,9 +84,13 @@ def writeRom(p):
     
     #LASTLY: start writing
     print("Starting writing!")
+    filesize = os.path.getsize(p)
+
+    tstart = datetime.datetime.now()
     with open(p, "rb") as f:
         i = 0
-        while i < WRITEROM_MAXLEN: 
+
+        while i < WRITEROM_MAXLEN: #used for debug, will quit anyway once file completely read from disk
             buf = f.read(1)
             if buf == None:
                 break
@@ -88,11 +99,25 @@ def writeRom(p):
             #print("DBG: [%s] %s -> %s " % (str(i).zfill(4), cmd, buf))
             
             ser.write(bytearray(cmd, 'utf8'))
-            time.sleep(0.05)
-            print(ser.read(30).decode(), end="")
-            time.sleep(0.01)
+            #time.sleep(0.05)
+            #print(ser.read(30).decode(), end="")
+            ser.flushInput()
+            time.sleep(0.04) #a pause of 0.04 sec (experimentally) at 9600bps is necessary to allow to process the data, otherwise it's corrupted
 
             i = i+1
+
+            tnow = datetime.datetime.now()
+            tpast = (tnow - tstart).total_seconds()
+            tETAsec = (tpast * filesize / i)
+            tremain = tETAsec - tpast
+            if tremain > 60:
+                tRemainstring = "{0} minutes".format(int(tremain/60))
+            else:
+                tRemainstring = "{0} seconds".format(int(tremain))
+
+            print('ROM write in progress : byte %d/%d (%d%%) - Remaining time: %s\r'%(i, filesize, int((100 * i)/filesize), tRemainstring), end="")
+
+    print ("Write ROM completed.")
 
 
 
@@ -125,8 +150,12 @@ def commandLineUI():
         print()
 
 
-
-#default 9600,8,N,1 and 2sec timeout
+##############################################################################################3
+# 
+# Main
+#
+# Serial params: default 9600,8,N,1 and 2sec timeout
+#
 ser = serial.Serial('/dev/ttyUSB0', timeout=2)  # open serial port
 try:
     print("Connected to " + ser.name)         # check which port was really used
