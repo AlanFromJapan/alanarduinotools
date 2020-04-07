@@ -36,6 +36,7 @@ void showHelp(){
 	serialWriteString("   lAAAA : read the EEPROM from 0 to AAAA\n");
 	serialWriteString("   Z : erase the whole EEPROM\n");
 	serialWriteString("   t : runs a bunch of data and reads it to tests the result\n");
+	serialWriteString("   T : just reads the first tests the result\n");
 	serialWriteString("   ? : print this help\n");
 #ifdef TALKATIVE
 	serialWriteString("   d/D : shows data port status\n");
@@ -129,14 +130,14 @@ void decodeCommand (){
 				break;
 
 #ifdef TALKATIVE
-			case 'n':
-				//GET a byte for the test
-				flashGetByteDecode1(0xffff);
-				break;
-			case 'm':
-				//WRITE a byte for the test
-				flashWriteByteDecode2(0xffff, 0x67);
-				break;
+//			case 'n':
+//				//GET a byte for the test
+//				flashGetByteDecode1(0xffff);
+//				break;
+//			case 'm':
+//				//WRITE a byte for the test
+//				flashWriteByteDecode2(0xffff, 0x67);
+//				break;
 
 			case 'd':
 			case 'D':

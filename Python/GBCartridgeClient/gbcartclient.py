@@ -33,14 +33,15 @@ def readRom(p):
     ser.write(bytearray(cmd, 'utf8')) #read 32k
     rep = None
     
+    ser.flushInput()
     #format is " ff ff ff a0" (space + hex value)
     while True:
-        r = ser.read(99)
+        r = ser.read(READROM_LEN*4)
         if rep == None:
             rep = r
         else:
             rep = rep + r
-        time.sleep(0.1)
+        time.sleep(0.5) 
         print('ROM data reception in progress : %d%%\r'%( int((100 * len(rep))/(READROM_LEN*3))), end="")            
         if ser.in_waiting == 0:
             break
@@ -102,7 +103,9 @@ def writeRom(p):
             #time.sleep(0.05)
             #print(ser.read(30).decode(), end="")
             ser.flushInput()
-            time.sleep(0.04) #a pause of 0.04 sec (experimentally) at 9600bps is necessary to allow to process the data, otherwise it's corrupted
+            #a pause of 0.04 sec (experimentally) at 9600bps is necessary to allow to process the data, otherwise it's corrupted
+            #0.01sec is enough for 57600 bps speed
+            time.sleep(0.01) 
 
             i = i+1
 
@@ -156,7 +159,7 @@ def commandLineUI():
 #
 # Serial params: default 9600,8,N,1 and 2sec timeout
 #
-ser = serial.Serial('/dev/ttyUSB0', timeout=2)  # open serial port
+ser = serial.Serial('/dev/ttyUSB0', baudrate= 57600, timeout=2)  # open serial port
 try:
     print("Connected to " + ser.name)         # check which port was really used
 
