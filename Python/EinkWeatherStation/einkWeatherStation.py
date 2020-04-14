@@ -65,9 +65,10 @@ wprovider = None
 #Does the init for the eInk display
 def eInkInit():
     epd = epd2in13.EPD()
-    epd.init(epd.lut_full_update)
-
-    epd.clear_frame_memory(0xFF)
+    epd.init(epd.FULL_UPDATE)
+    epd.Clear(0xFF)
+    
+    #epd.clear_frame_memory(0xFF)
     #    epd.set_frame_memory(image, 0, 0)
     #    epd.display_frame()
     #    epd.init(epd.lut_partial_update)
@@ -76,8 +77,12 @@ def eInkInit():
 
 #shows the image parameter on the eInk display
 def eInkShow(epd, img):
-    epd.set_frame_memory(img, 0, 0)
-    epd.display_frame()
+    epd.Clear(0xFF)
+
+    #new V2 screen has different corrdinate, so just rotate the image upside down
+    img = img.rotate(180, expand=True)
+    
+    epd.display(epd.getbuffer(img))
     #go to sleep to not damage the display
     epd.sleep()
 
@@ -211,7 +216,7 @@ if __name__ == '__main__':
 
     #show startup
     showStartup()
-    
+
     #init buttons
     initButtons()
 
