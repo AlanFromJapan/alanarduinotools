@@ -26,6 +26,7 @@ namespace GbReaper {
             }
             else {
                 StartEmptyNewProject();
+                LoadGbProject();
             }
 
             foreach (Palette p in Palette.WellknownPalettes.Values) {
