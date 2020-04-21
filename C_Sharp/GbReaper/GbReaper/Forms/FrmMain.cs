@@ -21,8 +21,8 @@ namespace GbReaper {
 
         private void FrmMain_Load(object sender, EventArgs e) {
             string[] vArgs = Environment.GetCommandLineArgs();
-            if (vArgs != null && vArgs.Length > 0) {
-                LoadGbProject(vArgs[0]);
+            if (vArgs != null && vArgs.Length > 1) {
+                LoadGbProject(vArgs[1]);
             }
             else {
                 StartEmptyNewProject();
@@ -191,7 +191,14 @@ namespace GbReaper {
         }
 
         void RomViewer_RomTileSelected(Image pImage) {
-            Tile vT = new Tile(pImage, mCurrentProject.Palette);
+            string vName = null;
+            using (FrmTileDetails vFrm = new FrmTileDetails()) {
+                if (askTileNameOnImportToolStripMenuItem.Checked && vFrm.ShowDialog(this) == DialogResult.OK) {
+                    vName = vFrm.TileName;
+                }
+            }
+
+            Tile vT = new Tile((vName == null? string.Empty : vName), pImage, mCurrentProject.Palette);
             if (allowImportOfDuplicateToolStripMenuItem.Checked) {
                 mCurrentProject.mLibraries[0].AddTile(vT);
                 SetStatus("Tile import success.");
@@ -272,7 +279,7 @@ namespace GbReaper {
         }
 
         private void aboutGbReaperToolStripMenuItem_Click(object sender, EventArgs e) {
-            MessageBox.Show("http://kalshagar.wikispaces.com/GbReaper");
+            MessageBox.Show("http://electrogeek.cc/GbReaper");
         }
 
         private void cbxPalette_SelectedIndexChanged(object sender, EventArgs e) {
@@ -295,6 +302,10 @@ namespace GbReaper {
             LoadGbProject();
 
             SetStatus(string.Format("Optimizing current project completed (Tile count {0} => {1}).", vBefore, vAfter));
+        }
+
+        private void createMapsToolStripMenuItem_Click(object sender, EventArgs e) {
+            CreateNewMapAndTab();
         }
     }
 }
