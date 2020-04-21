@@ -9,5 +9,7 @@
 #define TESTS_UNIT_TESTS_H_
 
 void test1(uint8_t n);
+void test2(uint8_t n);
+void test2_table (uint8_t n);
 
 #endif /* TESTS_UNIT_TESTS_H_ */

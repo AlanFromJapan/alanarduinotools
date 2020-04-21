@@ -24,14 +24,23 @@
 
 #include "tests/unit_tests.h"
 
-
+//NEXT address to write (usually last write +1), used for sequential write
+uint16_t mLastAddress = 0;
 
 void showHelp(){
-	serialWriteString("Help: \r\n");
-	serialWriteString("   rAAAA : gets the byte at 0xAAAAA\r\n");
-	serialWriteString("   wAAAADD : writes the value 0xDD at 0xAAAAA\r\n");
-	serialWriteString("   d : shows data port status\r\n");
-	serialWriteString("   ? : print this help\r\n");
+	serialWriteString("Help: \n");
+	serialWriteString("   rAAAA : gets the byte at 0xAAAAA\n");
+	serialWriteString("   wAAAADD : writes the value 0xDD at 0xAAAAA\n");
+	serialWriteString("   sAAAA : sets the next SEQUENTIAL write at 0xAAAAA\n");
+	serialWriteString("   SDD : writes the value 0xDD at the SEQ address and moves to next address\n");
+	serialWriteString("   lAAAA : read the EEPROM from 0 to AAAA\n");
+	serialWriteString("   Z : erase the whole EEPROM\n");
+	serialWriteString("   t : runs a bunch of data and reads it to tests the result\n");
+	serialWriteString("   T : just reads the first tests the result\n");
+	serialWriteString("   ? : print this help\n");
+#ifdef TALKATIVE
+	serialWriteString("   d/D : shows data port status\n");
+#endif
 }
 
 
@@ -49,9 +58,29 @@ void showDataPort() {
 	serialWriteString(" PINA=0x");
 	serialWriteString(itoa(PINA, vBuffChar, 16));
 
-	serialWriteString("\r\n");
+	serialWriteString("\n");
 }
 #endif //TALKATIVE
+
+
+/**
+ * Read from 0 until n
+ *
+ */
+void readRomUntil(uint16_t n){
+
+	uint16_t vAddr = 0x0000;
+	char vBuffChar[8];
+
+	//read
+	while(vAddr < n){
+		uint8_t b = flashGetByteDecode2(vAddr++, 1);
+		sprintf(vBuffChar, " %02x", b);
+		serialWriteString(vBuffChar);
+	}
+
+
+}
 
 /************************************************************************/
 /* DECODE command                                                       */
@@ -78,19 +107,37 @@ void decodeCommand (){
 				flashWriteByteDecode();
 				break;
 
+			case 's':
+				//SET the address for sequential writing
+				//Format "sAAAA"
+				mLastAddress = getAddressFromSerial();
+				break;
+			case 'S':
+				//Write a SEQUENTIAL byte and move to next address
+				//Format "SDD"
+				flashWriteByteDecode1(mLastAddress);
+				mLastAddress++;
+				break;
+
+			case 'l':
+				//read until AAAA
+				//Format "lAAAA"
+				readRomUntil(getAddressFromSerial());
+				break;
+
 			case '?':
 				showHelp();
 				break;
 
 #ifdef TALKATIVE
-			case 'n':
-				//GET a byte for the test
-				flashGetByteDecode2(0xffff);
-				break;
-			case 'm':
-				//WRITE a byte for the test
-				flashWriteByteDecode2(0xffff, 0x67);
-				break;
+//			case 'n':
+//				//GET a byte for the test
+//				flashGetByteDecode1(0xffff);
+//				break;
+//			case 'm':
+//				//WRITE a byte for the test
+//				flashWriteByteDecode2(0xffff, 0x67);
+//				break;
 
 			case 'd':
 			case 'D':
@@ -101,19 +148,23 @@ void decodeCommand (){
 #endif //TALKATIVE
 			case 't':
 				//run tests
-				test1(50);
+				test1(30);
+				break;
+			case 'T':
+				//run tests
+				test2_table(30);
 				break;
 			case 'Z':
 				//delete everything
 				flashReset();
 				flashErase();
 				flashReset();
-				serialWriteString("Erase all completed.");
+				serialWriteString("Erase all completed.\n");
 				break;
 			default:
 			//Unknown command
 #ifdef TALKATIVE
-			serialWriteString("ERROR: unknown command: ");serialWrite(inByte);serialWriteString("\r\n");
+			serialWriteString("ERROR: unknown command: ");serialWrite(inByte);serialWriteString("\n");
 #endif //TALKATIVE				
 			break;
 		}

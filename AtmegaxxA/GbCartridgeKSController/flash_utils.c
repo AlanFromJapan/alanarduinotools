@@ -85,7 +85,7 @@ uint16_t getAddressFromSerial() {
 	return vAddress;
 }
 
-uint8_t flashGetDataFromInput() {
+uint8_t getDataFromSerial() {
 	uint8_t inByte = 0;         // incoming serial byte
 
 	inByte = hexToInt(serialRead());
@@ -117,7 +117,10 @@ void debugPrint(uint16_t pAddr, uint8_t pData){
 /************************************************************************/
 /* GET byte                                                             */
 /************************************************************************/
-uint8_t flashGetByteDecode2(uint16_t pAddr) {
+uint8_t flashGetByteDecode1(uint16_t pAddr){
+	return flashGetByteDecode2(pAddr, 0);
+}
+uint8_t flashGetByteDecode2(uint16_t pAddr, uint8_t pSilent) {
 	//read FLASH
 	setDataBusRead();
 
@@ -154,18 +157,19 @@ uint8_t flashGetByteDecode2(uint16_t pAddr) {
 
 
 #ifdef TALKATIVE
-
-	serialWriteString("GET ");
-	debugPrint(pAddr, vData);
-	serialWriteString("\n");
-
+	if (pSilent == 0){
+		serialWriteString("GET ");
+		debugPrint(pAddr, vData);
+		serialWriteString("\n");
+	}
 #endif //TALKATIVE
+
 	return vData;
 }
 uint8_t flashGetByteDecode() {
 	uint16_t vAddress = getAddressFromSerial();
 
-	return flashGetByteDecode2(vAddress);
+	return flashGetByteDecode1(vAddress);
 }
 
 
@@ -182,7 +186,7 @@ void flashWriteSeq1Byte (uint16_t pAddr, uint8_t pData){
 
 
 	//Start : CE and WE high
-	PORT_CONTROL = (PIN_RST  | PIN_WE | PIN_OE | PIN_CE);
+	PORT_CONTROL = (PIN_RST  | PIN_WE | PIN_OE );
 	_delay_us(1);
 
 	setAddressOnBus(pAddr);
@@ -198,10 +202,10 @@ void flashWriteSeq1Byte (uint16_t pAddr, uint8_t pData){
 	//
 	//WE goes low
 	PORT_CONTROL &= ~PIN_WE;
-	_delay_us(1);
+	_delay_us(100);
 	//CE goes low
-	PORT_CONTROL &= ~PIN_CE;
-	_delay_us(1);
+	//PORT_CONTROL &= ~PIN_CE;
+	//_delay_us(1);
 
 	//put the data
 	PORT_DATA = pData;
@@ -211,8 +215,8 @@ void flashWriteSeq1Byte (uint16_t pAddr, uint8_t pData){
 	PORT_CONTROL |= PIN_WE;
 	_delay_us(50);
 	//CE goes high
-	PORT_CONTROL |= PIN_CE;
-	_delay_us(50);
+	//PORT_CONTROL |= PIN_CE;
+	//_delay_us(50);
 
 
 }
@@ -231,7 +235,7 @@ void waitForDataConfirmation( uint8_t pData )
 
 		//OE up
 		PORT_CONTROL = PORT_CONTROL | PIN_OE;
-		_delay_us(1);
+		_delay_ms(10);
 
 		if (pData == vCheckVal)
 			break;
@@ -275,11 +279,15 @@ void flashWriteByteDecode2(uint16_t pAddr, uint8_t pData) {
 void flashWriteByteDecode() {
 	//address
 	uint16_t vAddress = getAddressFromSerial();
-	uint8_t vData = flashGetDataFromInput();
 
-	flashWriteByteDecode2(vAddress, vData);
+	flashWriteByteDecode1(vAddress);
 }
 
+void flashWriteByteDecode1(uint16_t pAddress) {
+	uint8_t vData = getDataFromSerial();
+
+	flashWriteByteDecode2(pAddress, vData);
+}
 
 
 
@@ -311,7 +319,7 @@ void flashErase(){
 	flashWriteSeq1Byte(0x2aaa, 0x55);
 	flashWriteSeq1Byte(0x5555, 0x10);
 
-	//waitForDataConfirmation(0xff);
+	waitForDataConfirmation(0xff);
 
 	//back to read mode
 	setDataBusRead();

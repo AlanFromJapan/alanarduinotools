@@ -8,7 +8,7 @@
 #ifndef SERIAL_UTILS_H_
 #define SERIAL_UTILS_H_
 
-#define BaudRate 9600
+#define BaudRate 57600
 #define MYUBRR (F_CPU / 16 / BaudRate ) - 1
 
 

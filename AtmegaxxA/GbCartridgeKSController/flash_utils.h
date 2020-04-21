@@ -23,9 +23,14 @@
 void setupExternalFlash();
 
 uint8_t flashGetByteDecode() ;
+uint8_t flashGetByteDecode1(uint16_t pAddr) ;
+uint8_t flashGetByteDecode2(uint16_t pAddr, uint8_t pSilent);
+
 void flashWriteByteDecode() ;
+void flashWriteByteDecode1(uint16_t pAddr);
 void flashWriteByteDecode2(uint16_t pAddr, uint8_t pData) ;
-uint8_t flashGetByteDecode2(uint16_t pAddr) ;
+
+uint16_t getAddressFromSerial();
 
 void flashReset();
 void flashErase();
