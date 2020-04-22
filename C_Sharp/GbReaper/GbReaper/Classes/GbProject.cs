@@ -39,6 +39,7 @@ namespace GbReaper.Classes {
         public void ExportToGBDK(string pPath, bool pGenerateStubMain) {
             foreach (Library vLin in mLibraries) {
                 vLin.ExportToGBDK(pPath);
+                vLin.ExportToPNG(pPath);
             }
 
             foreach (Map vM in mMaps) {

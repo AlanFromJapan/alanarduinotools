@@ -308,5 +308,11 @@ namespace GbReaper.Controls {
             this.Invalidate();
         }
 
+        private void btnPNG_Click(object sender, EventArgs e) {
+            if (this.mCurrentLib == null)
+                return;
+
+            this.mCurrentLib.ExportToPNG(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
+        }
     }
 }
