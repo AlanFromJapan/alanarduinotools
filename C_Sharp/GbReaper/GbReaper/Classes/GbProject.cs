@@ -66,7 +66,7 @@ namespace GbReaper.Classes {
 #include <gb/gb.h>
 #include <gb/drawing.h>
 
-#include ""{1}.c""
+#include ""{1}.h""
 #include ""{2}.h""
 
 void main() {{
