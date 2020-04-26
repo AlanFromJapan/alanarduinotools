@@ -139,7 +139,9 @@ namespace GbReaper {
             UcMapEditor vME = CreateNewMapAndTab(vOriginalMap);
 
             //copy old to new
-            vME.CurrentMap.Duplicate(vOriginalMap);
+            if (vME != null) {
+                vME.CurrentMap.Duplicate(vOriginalMap);
+            }
 
         }
 
