@@ -39,6 +39,22 @@ namespace GbReaper.Classes {
             this.mMatrix = new MapBucket[this.Width, this.Height];
         }
 
+        /// <summary>
+        /// Duplicates the contents of the param map into self. Must be same size.
+        /// </summary>
+        /// <param name="pSource"></param>
+        public void Duplicate(Map pSource) {
+            if (pSource.Width != this.Width || pSource.Height != this.Height) {
+                throw new ArgumentException("Duplicate map source must have same size as target");
+            }
+
+            for (int x = 0; x < this.Width; x++)
+                for (int y = 0; y < this.Height; y++) {
+                    //this.mMatrix[x, y] = pSource.mMatrix[x, y];
+                    this.SetTile(pSource[x, y], x, y);
+                }
+        }
+
         public void SetTile(Tile pTile, int pX, int pY) { 
             //no check
 

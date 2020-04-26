@@ -32,7 +32,7 @@ namespace GbReaper {
             foreach (Palette p in Palette.WellknownPalettes.Values) {
                 cbxPalette.Items.Add(p.mName);
                 if (p == Palette.DEFAULT_PALETTE) {
-                    cbxPalette.SelectedItem =p.mName;
+                    cbxPalette.SelectedItem = p.mName;
                 }
             }
 
@@ -47,7 +47,7 @@ namespace GbReaper {
             pan32.Paint += new PaintEventHandler(pan32_Paint);
             pan128Alt.Paint += new PaintEventHandler(pan128Alt_Paint);
 
-            
+
         }
 
         private void UcLibView_TilesDeleted(IList<Tile> pDeletedTiles) {
@@ -125,15 +125,26 @@ namespace GbReaper {
                 tabMaps.SelectedTab = vTP;
 
                 vME.NewMap += new EventHandler(MapEditor_NewMap);
+                vME.DuplicateMap += new EventHandler(MapEditor_DuplicateMap);
             }
         }
 
         void MapEditor_NewMap(object sender, EventArgs e) {
-            CreateNewMapAndTab();
+            CreateNewMapAndTab(null);
         }
 
-        private void CreateNewMapAndTab() {
-            using (FrmNewMap vFrm = new FrmNewMap()) {
+        void MapEditor_DuplicateMap(object sender, EventArgs e) {
+            //not a fan of doing like that but too lazy to do it right
+            Map vOriginalMap = (tabMaps.SelectedTab.Controls[0] as UcMapEditor).CurrentMap;
+            UcMapEditor vME = CreateNewMapAndTab(vOriginalMap);
+
+            //copy old to new
+            vME.CurrentMap.Duplicate(vOriginalMap);
+
+        }
+
+        UcMapEditor CreateNewMapAndTab(Map pPrototype) {
+            using (FrmNewMap vFrm = new FrmNewMap(pPrototype)) {
                 if (DialogResult.OK == vFrm.ShowDialog(this)) {
                     Map vNew = new Map(vFrm.CreateWidth, vFrm.CreateHeight);
                     vNew.Name = vFrm.CreateName;
@@ -150,7 +161,11 @@ namespace GbReaper {
                     tabMaps.SelectedTab = vTP;
 
                     vME.NewMap += new EventHandler(MapEditor_NewMap);
+                    vME.DuplicateMap += new EventHandler(MapEditor_DuplicateMap);
+
+                    return vME;
                 }
+                return null;
             }
         }
 
@@ -243,7 +258,7 @@ namespace GbReaper {
         }
 
         private void btnNewMap_Click(object sender, EventArgs e) {
-            CreateNewMapAndTab();
+            CreateNewMapAndTab(null);
         }
 
         public void SetStatus(string pStatusText) {
@@ -306,7 +321,7 @@ namespace GbReaper {
         }
 
         private void createMapsToolStripMenuItem_Click(object sender, EventArgs e) {
-            CreateNewMapAndTab();
+            CreateNewMapAndTab(null);
         }
     }
 }
