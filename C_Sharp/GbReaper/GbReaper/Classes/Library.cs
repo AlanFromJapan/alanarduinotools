@@ -150,6 +150,8 @@ namespace GbReaper.Classes {
             g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixel;
 
+            g.FillRectangle(Brushes.White, 0,0,400,total_h);
+
             int vIndex = 0;
             Font font = new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold);
             Font font2 = new Font(FontFamily.GenericMonospace, 12f, FontStyle.Regular);
