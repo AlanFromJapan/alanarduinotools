@@ -8,6 +8,7 @@ from PIL import ImageFont
 import traceback
 import os
 import config
+import epd2in13
 
 
 #some utils functions
@@ -88,9 +89,7 @@ def makeBlankPanelImage():
     EPD_HEIGHT      = 250
 
     # For simplicity, the arguments are explicit numerical coordinates
-    #image = Image.new('1', (epd2in13.EPD_HEIGHT, epd2in13.EPD_WIDTH), 255)  # 255: clear the frame
-    
-    image = Image.new('L', (EPD_HEIGHT, EPD_WIDTH), 255)  # 255: clear the frame
+    image = Image.new('1', (epd2in13.EPD_HEIGHT, epd2in13.EPD_WIDTH), 255)  # 255: clear the frame
     draw = ImageDraw.Draw(image)
 
     #Screen is horizontal

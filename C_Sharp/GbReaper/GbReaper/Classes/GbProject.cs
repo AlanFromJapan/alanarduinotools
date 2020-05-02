@@ -39,6 +39,7 @@ namespace GbReaper.Classes {
         public void ExportToGBDK(string pPath, bool pGenerateStubMain) {
             foreach (Library vLin in mLibraries) {
                 vLin.ExportToGBDK(pPath);
+                vLin.ExportToPNG(pPath);
             }
 
             foreach (Map vM in mMaps) {
@@ -66,7 +67,7 @@ namespace GbReaper.Classes {
 #include <gb/gb.h>
 #include <gb/drawing.h>
 
-#include ""{1}.c""
+#include ""{1}.h""
 #include ""{2}.h""
 
 void main() {{

@@ -27,13 +27,14 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UcMapEditor));
             this.panMap = new GbReaper.Controls.PanelX();
             this.panTools = new System.Windows.Forms.Panel();
+            this.btnPick = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnFill = new System.Windows.Forms.Button();
             this.btnTilizator = new System.Windows.Forms.Button();
             this.btnGrid = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.btnPick = new System.Windows.Forms.Button();
+            this.btnDuplicate = new System.Windows.Forms.Button();
             this.panTools.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,6 +49,7 @@
             // panTools
             // 
             this.panTools.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.panTools.Controls.Add(this.btnDuplicate);
             this.panTools.Controls.Add(this.btnPick);
             this.panTools.Controls.Add(this.btnDelete);
             this.panTools.Controls.Add(this.btnFill);
@@ -59,6 +61,18 @@
             this.panTools.Name = "panTools";
             this.panTools.Size = new System.Drawing.Size(32, 308);
             this.panTools.TabIndex = 1;
+            // 
+            // btnPick
+            // 
+            this.btnPick.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnPick.Location = new System.Drawing.Point(0, 175);
+            this.btnPick.Name = "btnPick";
+            this.btnPick.Size = new System.Drawing.Size(32, 35);
+            this.btnPick.TabIndex = 5;
+            this.btnPick.Text = "Pick";
+            this.toolTip1.SetToolTip(this.btnPick, "Pick the tile on the map and makes it current tile");
+            this.btnPick.UseVisualStyleBackColor = true;
+            this.btnPick.Click += new System.EventHandler(this.btnPick_Click);
             // 
             // btnDelete
             // 
@@ -124,15 +138,17 @@
             this.btnNew.UseVisualStyleBackColor = true;
             this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
             // 
-            // btnPick
+            // btnDuplicate
             // 
-            this.btnPick.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnPick.Location = new System.Drawing.Point(0, 175);
-            this.btnPick.Name = "btnPick";
-            this.btnPick.Size = new System.Drawing.Size(32, 35);
-            this.btnPick.TabIndex = 5;
-            this.btnPick.Text = "Pick";
-            this.btnPick.UseVisualStyleBackColor = true;
+            this.btnDuplicate.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnDuplicate.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDuplicate.Location = new System.Drawing.Point(0, 276);
+            this.btnDuplicate.Name = "btnDuplicate";
+            this.btnDuplicate.Size = new System.Drawing.Size(32, 32);
+            this.btnDuplicate.TabIndex = 6;
+            this.btnDuplicate.Text = "Dup";
+            this.btnDuplicate.UseVisualStyleBackColor = true;
+            this.btnDuplicate.Click += new System.EventHandler(this.btnDuplicate_Click);
             // 
             // UcMapEditor
             // 
@@ -159,5 +175,6 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnPick;
+        private System.Windows.Forms.Button btnDuplicate;
     }
 }

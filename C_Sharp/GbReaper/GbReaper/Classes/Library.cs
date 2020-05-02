@@ -22,12 +22,12 @@ namespace GbReaper.Classes {
         }
 
 
-        
+
         public event GbReaper.Classes.Tile.TileChangeDelegate TileDeleted;
         public event GbReaper.Classes.Tile.TileChangeDelegate TileAdded;
 
-        public Library(string pName) { 
-            mName = pName; 
+        public Library(string pName) {
+            mName = pName;
         }
 
         public IEnumerator<Tile> GetEnumerator() {
@@ -100,7 +100,7 @@ namespace GbReaper.Classes {
 
             pAlreadyExisted = false;
             this.mTiles.Add(pTile);
-            
+
             OnTileAdded(pTile);
 
             return pTile;
@@ -139,6 +139,34 @@ namespace GbReaper.Classes {
             return s;
         }
 
+        internal const int PNG_EXPORT_HEIGHT = 32;
+        internal const int PNG_EXPORT_PADLEFT = 40;
+
+        public void ExportToPNG(string pPath) {
+            int total_h = (PNG_EXPORT_HEIGHT + 2) * this.mTiles.Count;
+            Bitmap bmp = new Bitmap(400, total_h);
+            Graphics g = Graphics.FromImage(bmp);
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixel;
+
+            g.FillRectangle(Brushes.White, 0,0,400,total_h);
+
+            int vIndex = 0;
+            Font font = new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold);
+            Font font2 = new Font(FontFamily.GenericMonospace, 12f, FontStyle.Regular);
+            foreach (Tile vT in this.mTiles) {
+                g.DrawImage(vT.Image, PNG_EXPORT_PADLEFT, (2 + PNG_EXPORT_HEIGHT) * vIndex, PNG_EXPORT_HEIGHT, PNG_EXPORT_HEIGHT);
+                g.DrawString(vT.Name, font, Brushes.Black, PNG_EXPORT_PADLEFT + PNG_EXPORT_HEIGHT + 4, (2 + PNG_EXPORT_HEIGHT) * vIndex + (PNG_EXPORT_HEIGHT -font.Size) / 2);
+
+                g.DrawString(vIndex.ToString(), font2, Brushes.Gray, 2, (2 + PNG_EXPORT_HEIGHT) * vIndex + (PNG_EXPORT_HEIGHT - font.Size) / 2);
+
+                vIndex++;
+            }
+
+            bmp.Save(Path.Combine(pPath, this.mName + ".png"), ImageFormat.Png);
+        }
+    
 
         internal void ExportToGBDK(string pPath) {
             string vLibNameC = CleanFileName(this.Name);

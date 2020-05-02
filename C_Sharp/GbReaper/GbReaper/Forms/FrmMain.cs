@@ -21,17 +21,18 @@ namespace GbReaper {
 
         private void FrmMain_Load(object sender, EventArgs e) {
             string[] vArgs = Environment.GetCommandLineArgs();
-            if (vArgs != null && vArgs.Length > 0) {
-                LoadGbProject(vArgs[0]);
+            if (vArgs != null && vArgs.Length > 1) {
+                LoadGbProject(vArgs[1]);
             }
             else {
                 StartEmptyNewProject();
+                LoadGbProject();
             }
 
             foreach (Palette p in Palette.WellknownPalettes.Values) {
                 cbxPalette.Items.Add(p.mName);
                 if (p == Palette.DEFAULT_PALETTE) {
-                    cbxPalette.SelectedItem =p.mName;
+                    cbxPalette.SelectedItem = p.mName;
                 }
             }
 
@@ -46,7 +47,7 @@ namespace GbReaper {
             pan32.Paint += new PaintEventHandler(pan32_Paint);
             pan128Alt.Paint += new PaintEventHandler(pan128Alt_Paint);
 
-            
+
         }
 
         private void UcLibView_TilesDeleted(IList<Tile> pDeletedTiles) {
@@ -124,15 +125,28 @@ namespace GbReaper {
                 tabMaps.SelectedTab = vTP;
 
                 vME.NewMap += new EventHandler(MapEditor_NewMap);
+                vME.DuplicateMap += new EventHandler(MapEditor_DuplicateMap);
             }
         }
 
         void MapEditor_NewMap(object sender, EventArgs e) {
-            CreateNewMapAndTab();
+            CreateNewMapAndTab(null);
         }
 
-        private void CreateNewMapAndTab() {
-            using (FrmNewMap vFrm = new FrmNewMap()) {
+        void MapEditor_DuplicateMap(object sender, EventArgs e) {
+            //not a fan of doing like that but too lazy to do it right
+            Map vOriginalMap = (tabMaps.SelectedTab.Controls[0] as UcMapEditor).CurrentMap;
+            UcMapEditor vME = CreateNewMapAndTab(vOriginalMap);
+
+            //copy old to new
+            if (vME != null) {
+                vME.CurrentMap.Duplicate(vOriginalMap);
+            }
+
+        }
+
+        UcMapEditor CreateNewMapAndTab(Map pPrototype) {
+            using (FrmNewMap vFrm = new FrmNewMap(pPrototype)) {
                 if (DialogResult.OK == vFrm.ShowDialog(this)) {
                     Map vNew = new Map(vFrm.CreateWidth, vFrm.CreateHeight);
                     vNew.Name = vFrm.CreateName;
@@ -149,7 +163,11 @@ namespace GbReaper {
                     tabMaps.SelectedTab = vTP;
 
                     vME.NewMap += new EventHandler(MapEditor_NewMap);
+                    vME.DuplicateMap += new EventHandler(MapEditor_DuplicateMap);
+
+                    return vME;
                 }
+                return null;
             }
         }
 
@@ -191,7 +209,14 @@ namespace GbReaper {
         }
 
         void RomViewer_RomTileSelected(Image pImage) {
-            Tile vT = new Tile(pImage, mCurrentProject.Palette);
+            string vName = null;
+            using (FrmTileDetails vFrm = new FrmTileDetails()) {
+                if (askTileNameOnImportToolStripMenuItem.Checked && vFrm.ShowDialog(this) == DialogResult.OK) {
+                    vName = vFrm.TileName;
+                }
+            }
+
+            Tile vT = new Tile((vName == null? string.Empty : vName), pImage, mCurrentProject.Palette);
             if (allowImportOfDuplicateToolStripMenuItem.Checked) {
                 mCurrentProject.mLibraries[0].AddTile(vT);
                 SetStatus("Tile import success.");
@@ -235,7 +260,7 @@ namespace GbReaper {
         }
 
         private void btnNewMap_Click(object sender, EventArgs e) {
-            CreateNewMapAndTab();
+            CreateNewMapAndTab(null);
         }
 
         public void SetStatus(string pStatusText) {
@@ -272,7 +297,7 @@ namespace GbReaper {
         }
 
         private void aboutGbReaperToolStripMenuItem_Click(object sender, EventArgs e) {
-            MessageBox.Show("http://kalshagar.wikispaces.com/GbReaper");
+            MessageBox.Show("http://electrogeek.cc/GbReaper");
         }
 
         private void cbxPalette_SelectedIndexChanged(object sender, EventArgs e) {
@@ -295,6 +320,10 @@ namespace GbReaper {
             LoadGbProject();
 
             SetStatus(string.Format("Optimizing current project completed (Tile count {0} => {1}).", vBefore, vAfter));
+        }
+
+        private void createMapsToolStripMenuItem_Click(object sender, EventArgs e) {
+            CreateNewMapAndTab(null);
         }
     }
 }

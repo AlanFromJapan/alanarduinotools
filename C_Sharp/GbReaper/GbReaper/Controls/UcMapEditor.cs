@@ -16,6 +16,7 @@ namespace GbReaper.Controls {
         protected enum GridMode { Background, Foreground, None }
         protected GridMode mGridMode = GridMode.Background;
 
+        
 
         protected Map mCurrentMap = null;
         protected Tile mCurrentTile = null;
@@ -56,6 +57,7 @@ namespace GbReaper.Controls {
 
 
         public event EventHandler NewMap;
+        public event EventHandler DuplicateMap;
 
 
         public UcMapEditor() {
@@ -258,7 +260,13 @@ namespace GbReaper.Controls {
                 this.NewMap(this, EventArgs.Empty);
             }
         }
-        
+
+        protected void OnDuplicateMap() {
+            if (this.DuplicateMap != null) {
+                this.DuplicateMap(this, EventArgs.Empty);
+            }
+        }
+
         void CurrentMap_MapChanged(object sender, EventArgs e) {
             this.Invalidate();
             //this.Refresh();
@@ -342,6 +350,14 @@ namespace GbReaper.Controls {
 
                 vTC.TabPages.Remove(vTP);
             }
+        }
+
+        private void btnPick_Click(object sender, EventArgs e) {
+            MessageBox.Show("TODO!");
+        }
+
+        private void btnDuplicate_Click(object sender, EventArgs e) {
+            this.OnDuplicateMap();
         }
     }
 }
