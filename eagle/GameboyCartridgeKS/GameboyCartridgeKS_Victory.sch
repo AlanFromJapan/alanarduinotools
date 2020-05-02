@@ -5151,6 +5151,9 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="TP6" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="TEST-POINT" device="3X5" package3d_urn="urn:adsk.eagle:package:38285/1"/>
 <part name="TP7" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="TEST-POINT" device="3X5" package3d_urn="urn:adsk.eagle:package:38285/1"/>
 <part name="TP8" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="TEST-POINT" device="3X5" package3d_urn="urn:adsk.eagle:package:38285/1"/>
+<part name="TP9" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="TEST-POINT" device="3X5" package3d_urn="urn:adsk.eagle:package:38285/1"/>
+<part name="TP10" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="TEST-POINT" device="3X5" package3d_urn="urn:adsk.eagle:package:38285/1"/>
+<part name="TP11" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="TEST-POINT" device="3X5" package3d_urn="urn:adsk.eagle:package:38285/1"/>
 </parts>
 <sheets>
 <sheet>
@@ -5211,6 +5214,15 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <instance part="TP8" gate="G$1" x="139.7" y="55.88" smashed="yes" rot="R90">
 <attribute name="NAME" x="137.16" y="53.34" size="1.778" layer="95" font="vector" rot="R90"/>
 <attribute name="VALUE" x="142.24" y="53.34" size="1.778" layer="96" font="vector" rot="R90"/>
+</instance>
+<instance part="TP9" gate="G$1" x="2.54" y="55.88" smashed="yes" rot="R90">
+<attribute name="NAME" x="0" y="53.34" size="1.778" layer="95" font="vector" rot="R90"/>
+</instance>
+<instance part="TP10" gate="G$1" x="12.7" y="55.88" smashed="yes" rot="R90">
+<attribute name="NAME" x="10.16" y="53.34" size="1.778" layer="95" font="vector" rot="R90"/>
+</instance>
+<instance part="TP11" gate="G$1" x="-2.54" y="53.34" smashed="yes" rot="R90">
+<attribute name="NAME" x="-5.08" y="50.8" size="1.778" layer="95" font="vector" rot="R90"/>
 </instance>
 </instances>
 <busses>
@@ -5314,6 +5326,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="U$1" gate="G$1" pin="/RCS"/>
 <wire x1="12.7" y1="53.34" x2="12.7" y2="55.88" width="0.1524" layer="91"/>
 <label x="12.7" y="55.88" size="1.778" layer="95" rot="R90"/>
+<pinref part="TP10" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="3" class="0">
@@ -5321,6 +5334,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="U$1" gate="G$1" pin="/WR"/>
 <wire x1="2.54" y1="53.34" x2="2.54" y2="55.88" width="0.1524" layer="91"/>
 <label x="2.54" y="55.88" size="1.778" layer="95" rot="R90"/>
+<pinref part="TP9" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="21" class="0">
@@ -5659,6 +5673,12 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="114.3" y1="91.44" x2="119.38" y2="91.44" width="0.1524" layer="91"/>
 <pinref part="TP4" gate="G$1" pin="1"/>
 <junction x="88.9" y="88.9"/>
+</segment>
+</net>
+<net name="N$2" class="0">
+<segment>
+<pinref part="U$1" gate="G$1" pin="NC"/>
+<pinref part="TP11" gate="G$1" pin="1"/>
 </segment>
 </net>
 </nets>

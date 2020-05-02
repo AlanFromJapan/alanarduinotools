@@ -7,7 +7,7 @@
 <setting keepoldvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
+<grid distance="50" unitdist="mil" unit="mm" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mm"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
@@ -10771,6 +10771,43 @@
 <rectangle x1="23.95" y1="49.85" x2="77.95" y2="49.95" layer="200"/>
 <rectangle x1="78.95" y1="49.85" x2="87.95" y2="49.95" layer="200"/>
 <rectangle x1="88.95" y1="49.85" x2="99.95" y2="49.95" layer="200"/>
+</package>
+<package name="PIGMAN1">
+<wire x1="0.635" y1="0" x2="0" y2="0.508" width="0.127" layer="21" curve="-90"/>
+<wire x1="0" y1="0.508" x2="0" y2="5.08" width="0.127" layer="21"/>
+<wire x1="0" y1="5.08" x2="0.508" y2="5.08" width="0.127" layer="21"/>
+<wire x1="0.508" y1="5.08" x2="1.905" y2="5.08" width="0.127" layer="21"/>
+<wire x1="1.905" y1="5.08" x2="2.54" y2="5.08" width="0.127" layer="21"/>
+<wire x1="2.54" y1="5.08" x2="5.08" y2="5.08" width="0.127" layer="21"/>
+<wire x1="5.08" y1="5.08" x2="6.477" y2="5.08" width="0.127" layer="21"/>
+<wire x1="6.477" y1="5.08" x2="7.112" y2="5.08" width="0.127" layer="21"/>
+<wire x1="7.112" y1="5.08" x2="7.62" y2="5.08" width="0.127" layer="21"/>
+<wire x1="7.62" y1="5.08" x2="7.62" y2="0.635" width="0.127" layer="21"/>
+<wire x1="7.62" y1="0.635" x2="7.112" y2="0" width="0.127" layer="21" curve="-90"/>
+<wire x1="0.635" y1="0" x2="7.112" y2="0" width="0.127" layer="21"/>
+<wire x1="0" y1="5.715" x2="0.508" y2="6.35" width="0.127" layer="21" curve="-90"/>
+<wire x1="6.985" y1="6.35" x2="7.62" y2="5.842" width="0.127" layer="21" curve="-90"/>
+<wire x1="0" y1="5.08" x2="0" y2="5.715" width="0.127" layer="21"/>
+<wire x1="7.62" y1="5.08" x2="7.62" y2="5.842" width="0.127" layer="21"/>
+<wire x1="0.508" y1="6.35" x2="1.27" y2="7.62" width="0.127" layer="21"/>
+<wire x1="1.27" y1="7.62" x2="1.905" y2="6.35" width="0.127" layer="21"/>
+<wire x1="1.905" y1="6.35" x2="5.715" y2="6.35" width="0.127" layer="21"/>
+<wire x1="5.715" y1="6.35" x2="6.35" y2="7.62" width="0.127" layer="21"/>
+<wire x1="6.35" y1="7.62" x2="6.985" y2="6.35" width="0.127" layer="21"/>
+<wire x1="0.508" y1="5.08" x2="0.508" y2="3.048" width="0.127" layer="21"/>
+<wire x1="0.508" y1="3.048" x2="1.143" y2="3.048" width="0.127" layer="21"/>
+<wire x1="1.143" y1="3.048" x2="2.54" y2="3.048" width="0.127" layer="21"/>
+<wire x1="2.54" y1="3.048" x2="2.54" y2="5.08" width="0.127" layer="21"/>
+<wire x1="5.08" y1="5.08" x2="5.08" y2="3.048" width="0.127" layer="21"/>
+<wire x1="5.08" y1="3.048" x2="5.969" y2="3.048" width="0.127" layer="21"/>
+<wire x1="5.969" y1="3.048" x2="7.112" y2="3.048" width="0.127" layer="21"/>
+<wire x1="7.112" y1="3.048" x2="7.112" y2="5.08" width="0.127" layer="21"/>
+<wire x1="3.302" y1="1.143" x2="4.318" y2="1.143" width="0.127" layer="21"/>
+<wire x1="4.318" y1="1.143" x2="4.699" y2="1.524" width="0.127" layer="21"/>
+<wire x1="1.905" y1="5.08" x2="1.143" y2="4.191" width="0.0762" layer="21"/>
+<wire x1="1.143" y1="3.048" x2="1.905" y2="4.064" width="0.0762" layer="21"/>
+<wire x1="6.477" y1="5.08" x2="5.842" y2="4.191" width="0.0762" layer="21"/>
+<wire x1="5.969" y1="3.048" x2="6.604" y2="3.937" width="0.0762" layer="21"/>
 </package>
 </packages>
 <symbols>
