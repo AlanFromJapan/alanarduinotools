@@ -291,7 +291,7 @@ namespace GbReaper {
             }
 
             if (fbdExport.ShowDialog(this) == System.Windows.Forms.DialogResult.OK) {
-                this.mCurrentProject.ExportToGBDK(fbdExport.SelectedPath, generateStubMaincToolStripMenuItem.Checked);
+                this.mCurrentProject.ExportToGBDK(fbdExport.SelectedPath, generateStubMaincToolStripMenuItem.Checked, exportGridOnTheMapsToolStripMenuItem.Checked);
                 SetStatus("Export to " + fbdExport.SelectedPath + " completed.");
             }
         }

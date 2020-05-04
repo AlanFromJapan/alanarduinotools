@@ -193,7 +193,7 @@ namespace GbReaper.Controls {
 
             //draw BACKGROUND grid
             if (mGridMode == GridMode.Background) {
-                DrawingLogic.DrawGrid(e, vBorders, Pens.LightGray, this.mCurrentMap.Width, this.mCurrentMap.Height);
+                DrawingLogic.DrawGrid(e.Graphics, vBorders, Pens.LightGray, this.mCurrentMap.Width, this.mCurrentMap.Height);
             }
 
             //draw the external borders
@@ -229,7 +229,7 @@ namespace GbReaper.Controls {
 
             //draw FOREGROUND grid
             if (mGridMode == GridMode.Foreground) {
-                DrawingLogic.DrawGrid(e, vBorders, Pens.DarkRed, this.mCurrentMap.Width, this.mCurrentMap.Height);
+                DrawingLogic.DrawGrid(e.Graphics, vBorders, Pens.DarkRed, this.mCurrentMap.Width, this.mCurrentMap.Height);
             }
 
         }

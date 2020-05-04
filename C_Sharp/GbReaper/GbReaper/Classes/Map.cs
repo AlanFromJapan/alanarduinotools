@@ -55,7 +55,7 @@ namespace GbReaper.Classes {
                 }
         }
 
-        public void SetTile(Tile pTile, int pX, int pY) { 
+        public void SetTile(Tile pTile, int pX, int pY) {
             //no check
 
             //unregister event handler of previous sprite
@@ -106,7 +106,7 @@ namespace GbReaper.Classes {
             }
         }
 
-        public Image GetImage() {
+        public Image GetImage(bool pGridOnMaps) {
             Bitmap vBuff = new Bitmap(this.Width * Tile.WIDTH_PX, this.Height * Tile.HEIGHT_PX);
             Graphics vG = Graphics.FromImage(vBuff);
 
@@ -120,16 +120,19 @@ namespace GbReaper.Classes {
                                 vG.DrawImageUnscaled(vOld.mTile.Image, x * Tile.WIDTH_PX, y * Tile.HEIGHT_PX);
 
                             }
-                        }                        
+                        }
                     }
                 }
 
+                if (pGridOnMaps) {
+                    DrawingLogic.DrawGrid(vG, new Rectangle(0, 0, vBuff.Width, vBuff.Height), Pens.LightGray, this.Width, this.Height);
+                }
             }
             finally {
                 vG.Dispose();
                 vG = null;
-            }            
-            
+            }
+
             return vBuff;
         }
 
@@ -145,13 +148,13 @@ namespace GbReaper.Classes {
                     }
 
                     pSW.WriteLine(string.Format("\t\t\t<cell tileID=\"{0}\" x=\"{1}\" y=\"{2}\" />",
-                        (mMatrix[x,y] == null || mMatrix[x,y].mTile == null ? null: mMatrix[x,y].mTile.UID.ToString()),
+                        (mMatrix[x, y] == null || mMatrix[x, y].mTile == null ? null : mMatrix[x, y].mTile.UID.ToString()),
                         x,
                         y
                         ));
                 }
             }
-                
+
             pSW.WriteLine("\t\t</map>");
         }
 
@@ -160,6 +163,16 @@ namespace GbReaper.Classes {
             string s = Path.GetInvalidFileNameChars().Aggregate(fileName, (current, c) => current.Replace(c.ToString(), string.Empty));
             s = s.Replace(" ", "_");
             return s;
+        }
+
+
+        internal void ExportToPNG(string pPath, bool pGridOnMaps) {
+            string vMapNameC = CleanFileName(this.Name);
+            string vFilenameC = Path.Combine(pPath, vMapNameC + ".png");
+
+            Image img = this.GetImage(pGridOnMaps);
+            img.Save(vFilenameC);
+
         }
 
         internal void ExportToGBDK(string pPath) {

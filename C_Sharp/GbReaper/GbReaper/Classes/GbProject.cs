@@ -36,7 +36,7 @@ namespace GbReaper.Classes {
             pMap.ParentProject = null;
         }
 
-        public void ExportToGBDK(string pPath, bool pGenerateStubMain) {
+        public void ExportToGBDK(string pPath, bool pGenerateStubMain, bool pGridOnMaps) {
             foreach (Library vLin in mLibraries) {
                 vLin.ExportToGBDK(pPath);
                 vLin.ExportToPNG(pPath);
@@ -44,6 +44,7 @@ namespace GbReaper.Classes {
 
             foreach (Map vM in mMaps) {
                 vM.ExportToGBDK(pPath);
+                vM.ExportToPNG(pPath, pGridOnMaps);
             }
 
             if (pGenerateStubMain)

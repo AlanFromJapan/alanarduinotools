@@ -33,6 +33,8 @@
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.horizontalToVerticalWhenROMImportBy4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.askTileNameOnImportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,8 +67,7 @@
             this.stripLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.ofdProject = new System.Windows.Forms.OpenFileDialog();
             this.fbdExport = new System.Windows.Forms.FolderBrowserDialog();
-            this.mapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportGridOnTheMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panMain.SuspendLayout();
             this.tabMaps.SuspendLayout();
@@ -158,6 +159,22 @@
             this.quitToolStripMenuItem.Text = "&Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
+            // mapsToolStripMenuItem
+            // 
+            this.mapsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createMapsToolStripMenuItem});
+            this.mapsToolStripMenuItem.Name = "mapsToolStripMenuItem";
+            this.mapsToolStripMenuItem.Size = new System.Drawing.Size(48, 23);
+            this.mapsToolStripMenuItem.Text = "&Maps";
+            // 
+            // createMapsToolStripMenuItem
+            // 
+            this.createMapsToolStripMenuItem.Name = "createMapsToolStripMenuItem";
+            this.createMapsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
+            this.createMapsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createMapsToolStripMenuItem.Text = "&Create map";
+            this.createMapsToolStripMenuItem.Click += new System.EventHandler(this.createMapsToolStripMenuItem_Click);
+            // 
             // importToolStripMenuItem
             // 
             this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -200,7 +217,8 @@
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exportForGBDKToolStripMenuItem,
             this.toolStripSeparator1,
-            this.generateStubMaincToolStripMenuItem});
+            this.generateStubMaincToolStripMenuItem,
+            this.exportGridOnTheMapsToolStripMenuItem});
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(53, 23);
             this.exportToolStripMenuItem.Text = "&Export";
@@ -209,20 +227,20 @@
             // 
             this.exportForGBDKToolStripMenuItem.Name = "exportForGBDKToolStripMenuItem";
             this.exportForGBDKToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.exportForGBDKToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.exportForGBDKToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.exportForGBDKToolStripMenuItem.Text = "Export for GBDK";
             this.exportForGBDKToolStripMenuItem.Click += new System.EventHandler(this.exportForGBDKToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(183, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(198, 6);
             // 
             // generateStubMaincToolStripMenuItem
             // 
             this.generateStubMaincToolStripMenuItem.CheckOnClick = true;
             this.generateStubMaincToolStripMenuItem.Name = "generateStubMaincToolStripMenuItem";
-            this.generateStubMaincToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.generateStubMaincToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.generateStubMaincToolStripMenuItem.Text = "Generate stub main.c";
             // 
             // toolsToolStripMenuItem
@@ -428,21 +446,14 @@
             // 
             this.fbdExport.Description = "Choose path to export";
             // 
-            // mapsToolStripMenuItem
+            // exportGridOnTheMapsToolStripMenuItem
             // 
-            this.mapsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createMapsToolStripMenuItem});
-            this.mapsToolStripMenuItem.Name = "mapsToolStripMenuItem";
-            this.mapsToolStripMenuItem.Size = new System.Drawing.Size(48, 23);
-            this.mapsToolStripMenuItem.Text = "&Maps";
-            // 
-            // createMapsToolStripMenuItem
-            // 
-            this.createMapsToolStripMenuItem.Name = "createMapsToolStripMenuItem";
-            this.createMapsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
-            this.createMapsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.createMapsToolStripMenuItem.Text = "&Create map";
-            this.createMapsToolStripMenuItem.Click += new System.EventHandler(this.createMapsToolStripMenuItem_Click);
+            this.exportGridOnTheMapsToolStripMenuItem.Checked = true;
+            this.exportGridOnTheMapsToolStripMenuItem.CheckOnClick = true;
+            this.exportGridOnTheMapsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.exportGridOnTheMapsToolStripMenuItem.Name = "exportGridOnTheMapsToolStripMenuItem";
+            this.exportGridOnTheMapsToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.exportGridOnTheMapsToolStripMenuItem.Text = "Export grid on the maps";
             // 
             // FrmMain
             // 
@@ -520,6 +531,7 @@
         private System.Windows.Forms.Label lblRomMemo;
         private System.Windows.Forms.ToolStripMenuItem mapsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createMapsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportGridOnTheMapsToolStripMenuItem;
     }
 }
 

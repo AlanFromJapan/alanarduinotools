@@ -146,7 +146,7 @@ namespace GbReaper.Controls {
 
         void panEdit_Paint(object sender, PaintEventArgs e) {
             ScalePaintBackground(e, new Rectangle(new Point(0,0),((Control)sender).Size));
-            DrawingLogic.DrawGrid(e, new Rectangle(new Point(0, 0), ((Control)sender).Size), Pens.DarkGray, 8, 8);
+            DrawingLogic.DrawGrid(e.Graphics, new Rectangle(new Point(0, 0), ((Control)sender).Size), Pens.DarkGray, 8, 8);
         }
 
 
