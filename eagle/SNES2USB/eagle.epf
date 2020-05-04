@@ -15,10 +15,6 @@ UsedLibrary="/home/alan/Git/alanarduinotools/eagle/LBR/kalshagar-images.lbr"
 UsedLibrary="/home/alan/Git/alanarduinotools/eagle/LBR/kalshagar.lbr"
 
 [Win_1]
-Type="Control Panel"
-Number=0
-
-[Win_2]
 Type="Schematic Editor"
 Number=2
 File="/home/alan/Git/alanarduinotools/eagle/RapideUSB/RapideUSB.sch"
@@ -61,9 +57,10 @@ ArcDirection=0
 AddLevel=2
 PadsSameType=0
 Layer=91
+Views=" 1: -39.3805 -31.954 260.547 136.094"
 Sheet="1"
 
-[Win_3]
+[Win_2]
 Type="Board Editor"
 Number=1
 File="/home/alan/Git/alanarduinotools/eagle/RapideUSB/RapideUSB.brd"
@@ -106,6 +103,10 @@ ArcDirection=0
 AddLevel=2
 PadsSameType=0
 Layer=1
+
+[Win_3]
+Type="Control Panel"
+Number=0
 
 [Desktop]
 Screen="3600 1080"
