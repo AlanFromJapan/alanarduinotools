@@ -314,5 +314,25 @@ namespace GbReaper.Controls {
 
             this.mCurrentLib.ExportToPNG(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
         }
+
+        private void btnDuplicate_Click(object sender, EventArgs e) {
+            if (this.mCurrentLib == null)
+                return;
+
+            if (this.SelectedTile == null)
+                return;
+
+            Bitmap vBmp = new Bitmap(Tile.WIDTH_PX, Tile.HEIGHT_PX, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            using (Graphics g = Graphics.FromImage(vBmp)) {
+                g.DrawImageUnscaled(this.SelectedTile.Image, 0, 0);
+            }
+
+            Tile vT = new Tile(vBmp, Palette.DEFAULT_PALETTE);
+            this.mCurrentLib.AddTile(vT);
+
+            RenameTilePopup(vT);
+
+            lblTileCount.Text = "Tiles: " + this.lvLibrary.Items.Count;
+        }
     }
 }

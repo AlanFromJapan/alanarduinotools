@@ -30,7 +30,7 @@
             this.btnRename = new System.Windows.Forms.Button();
             this.btnDel = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
-            this.btnPNG = new System.Windows.Forms.Button();
+            this.btnDuplicate = new System.Windows.Forms.Button();
             this.panTop.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,7 +50,7 @@
             // 
             // panTop
             // 
-            this.panTop.Controls.Add(this.btnPNG);
+            this.panTop.Controls.Add(this.btnDuplicate);
             this.panTop.Controls.Add(this.lblTileCount);
             this.panTop.Controls.Add(this.btnRename);
             this.panTop.Controls.Add(this.btnDel);
@@ -106,17 +106,17 @@
             this.btnNew.UseVisualStyleBackColor = true;
             this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
             // 
-            // btnPNG
+            // btnDuplicate
             // 
-            this.btnPNG.Dock = System.Windows.Forms.DockStyle.Left;
-            this.btnPNG.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPNG.Location = new System.Drawing.Point(96, 0);
-            this.btnPNG.Name = "btnPNG";
-            this.btnPNG.Size = new System.Drawing.Size(32, 35);
-            this.btnPNG.TabIndex = 4;
-            this.btnPNG.Text = "PNG";
-            this.btnPNG.UseVisualStyleBackColor = true;
-            this.btnPNG.Click += new System.EventHandler(this.btnPNG_Click);
+            this.btnDuplicate.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnDuplicate.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDuplicate.Location = new System.Drawing.Point(96, 0);
+            this.btnDuplicate.Name = "btnDuplicate";
+            this.btnDuplicate.Size = new System.Drawing.Size(32, 35);
+            this.btnDuplicate.TabIndex = 4;
+            this.btnDuplicate.Text = "Dup";
+            this.btnDuplicate.UseVisualStyleBackColor = true;
+            this.btnDuplicate.Click += new System.EventHandler(this.btnDuplicate_Click);
             // 
             // UcLibraryList
             // 
@@ -140,6 +140,6 @@
         private System.Windows.Forms.Button btnDel;
         private System.Windows.Forms.Button btnRename;
         private System.Windows.Forms.Label lblTileCount;
-        private System.Windows.Forms.Button btnPNG;
+        private System.Windows.Forms.Button btnDuplicate;
     }
 }
