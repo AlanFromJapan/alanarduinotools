@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\DrawingLogic.cs" />
+    <Compile Include="Classes\FloydSteinbergDither.cs" />
     <Compile Include="Classes\GbProject.cs" />
     <Compile Include="Classes\Library.cs" />
     <Compile Include="Classes\Map.cs" />
