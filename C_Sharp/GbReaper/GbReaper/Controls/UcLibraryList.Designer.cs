@@ -26,16 +26,17 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UcLibraryList));
             this.lvLibrary = new System.Windows.Forms.ListView();
             this.panTop = new System.Windows.Forms.Panel();
+            this.btnDuplicate = new System.Windows.Forms.Button();
             this.lblTileCount = new System.Windows.Forms.Label();
             this.btnRename = new System.Windows.Forms.Button();
             this.btnDel = new System.Windows.Forms.Button();
             this.btnNew = new System.Windows.Forms.Button();
-            this.btnDuplicate = new System.Windows.Forms.Button();
             this.panTop.SuspendLayout();
             this.SuspendLayout();
             // 
             // lvLibrary
             // 
+            this.lvLibrary.AutoArrange = false;
             this.lvLibrary.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvLibrary.HideSelection = false;
             this.lvLibrary.Location = new System.Drawing.Point(0, 35);
@@ -47,6 +48,11 @@
             this.lvLibrary.View = System.Windows.Forms.View.Tile;
             this.lvLibrary.SelectedIndexChanged += new System.EventHandler(this.lvLibrary_SelectedIndexChanged);
             this.lvLibrary.DoubleClick += new System.EventHandler(this.lvLibrary_DoubleClick);
+            this.lvLibrary.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lvLibrary_MouseDown);
+            this.lvLibrary.MouseLeave += new System.EventHandler(this.lvLibrary_MouseLeave);
+            this.lvLibrary.MouseHover += new System.EventHandler(this.lvLibrary_MouseHover);
+            this.lvLibrary.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lvLibrary_MouseMove);
+            this.lvLibrary.MouseUp += new System.Windows.Forms.MouseEventHandler(this.lvLibrary_MouseUp);
             // 
             // panTop
             // 
@@ -60,6 +66,18 @@
             this.panTop.Name = "panTop";
             this.panTop.Size = new System.Drawing.Size(381, 35);
             this.panTop.TabIndex = 2;
+            // 
+            // btnDuplicate
+            // 
+            this.btnDuplicate.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnDuplicate.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDuplicate.Location = new System.Drawing.Point(96, 0);
+            this.btnDuplicate.Name = "btnDuplicate";
+            this.btnDuplicate.Size = new System.Drawing.Size(32, 35);
+            this.btnDuplicate.TabIndex = 4;
+            this.btnDuplicate.Text = "Dup";
+            this.btnDuplicate.UseVisualStyleBackColor = true;
+            this.btnDuplicate.Click += new System.EventHandler(this.btnDuplicate_Click);
             // 
             // lblTileCount
             // 
@@ -105,18 +123,6 @@
             this.btnNew.TabIndex = 0;
             this.btnNew.UseVisualStyleBackColor = true;
             this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
-            // 
-            // btnDuplicate
-            // 
-            this.btnDuplicate.Dock = System.Windows.Forms.DockStyle.Left;
-            this.btnDuplicate.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDuplicate.Location = new System.Drawing.Point(96, 0);
-            this.btnDuplicate.Name = "btnDuplicate";
-            this.btnDuplicate.Size = new System.Drawing.Size(32, 35);
-            this.btnDuplicate.TabIndex = 4;
-            this.btnDuplicate.Text = "Dup";
-            this.btnDuplicate.UseVisualStyleBackColor = true;
-            this.btnDuplicate.Click += new System.EventHandler(this.btnDuplicate_Click);
             // 
             // UcLibraryList
             // 

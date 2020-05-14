@@ -43,6 +43,7 @@
             this.exportForGBDKToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.generateStubMaincToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportGridOnTheMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeUnusedTilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,7 +68,7 @@
             this.stripLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.ofdProject = new System.Windows.Forms.OpenFileDialog();
             this.fbdExport = new System.Windows.Forms.FolderBrowserDialog();
-            this.exportGridOnTheMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panMain.SuspendLayout();
             this.tabMaps.SuspendLayout();
@@ -100,6 +101,7 @@
             this.loadToolStripMenuItem,
             this.toolStripMenuItem2,
             this.loadProjectToolStripMenuItem,
+            this.reloadToolStripMenuItem,
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
             this.toolStripMenuItem1,
@@ -242,6 +244,15 @@
             this.generateStubMaincToolStripMenuItem.Name = "generateStubMaincToolStripMenuItem";
             this.generateStubMaincToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.generateStubMaincToolStripMenuItem.Text = "Generate stub main.c";
+            // 
+            // exportGridOnTheMapsToolStripMenuItem
+            // 
+            this.exportGridOnTheMapsToolStripMenuItem.Checked = true;
+            this.exportGridOnTheMapsToolStripMenuItem.CheckOnClick = true;
+            this.exportGridOnTheMapsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.exportGridOnTheMapsToolStripMenuItem.Name = "exportGridOnTheMapsToolStripMenuItem";
+            this.exportGridOnTheMapsToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.exportGridOnTheMapsToolStripMenuItem.Text = "Export grid on the maps";
             // 
             // toolsToolStripMenuItem
             // 
@@ -446,14 +457,13 @@
             // 
             this.fbdExport.Description = "Choose path to export";
             // 
-            // exportGridOnTheMapsToolStripMenuItem
+            // reloadToolStripMenuItem
             // 
-            this.exportGridOnTheMapsToolStripMenuItem.Checked = true;
-            this.exportGridOnTheMapsToolStripMenuItem.CheckOnClick = true;
-            this.exportGridOnTheMapsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.exportGridOnTheMapsToolStripMenuItem.Name = "exportGridOnTheMapsToolStripMenuItem";
-            this.exportGridOnTheMapsToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.exportGridOnTheMapsToolStripMenuItem.Text = "Export grid on the maps";
+            this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
+            this.reloadToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F7;
+            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.reloadToolStripMenuItem.Text = "Reload";
+            this.reloadToolStripMenuItem.Click += new System.EventHandler(this.reloadToolStripMenuItem_Click);
             // 
             // FrmMain
             // 
@@ -532,6 +542,7 @@
         private System.Windows.Forms.ToolStripMenuItem mapsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createMapsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportGridOnTheMapsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem reloadToolStripMenuItem;
     }
 }
 

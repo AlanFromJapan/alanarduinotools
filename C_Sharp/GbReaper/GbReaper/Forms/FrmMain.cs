@@ -325,5 +325,13 @@ namespace GbReaper {
         private void createMapsToolStripMenuItem_Click(object sender, EventArgs e) {
             CreateNewMapAndTab(null);
         }
+
+        private void reloadToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (this.mCurrentProject != null) {
+                LoadGbProject();
+
+                SetStatus("Reloaded.");
+            }
+        }
     }
 }
