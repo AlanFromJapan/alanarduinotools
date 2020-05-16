@@ -36,7 +36,6 @@
             // 
             // lvLibrary
             // 
-            this.lvLibrary.AutoArrange = false;
             this.lvLibrary.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvLibrary.HideSelection = false;
             this.lvLibrary.Location = new System.Drawing.Point(0, 35);
