@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using GbReaper.Classes;
 using GbReaper.Forms;
+using FloydSteinberg;
 
 namespace GbReaper.Controls {
     public partial class UcMapEditor : UserControl {
@@ -294,7 +295,17 @@ namespace GbReaper.Controls {
 
                     //map colors
                     Palette vPal = Palette.DEFAULT_PALETTE;
-                    DrawingLogic.MapBitmapColorsToPalette(vTarget, vPal);
+                    
+                    switch (vFrm.ColorMethod) {
+                        case FrmTilizator.METHOD_NEAREST:
+                            //Updates the bitmap in parameter
+                            vTarget = DrawingLogic.MapBitmapColorsToPalette(vTarget, vPal);
+                            break;
+                        case FrmTilizator.METHOD_FLOYDSTEINBERG:
+                            vTarget = FloydSteinbergDither.Process(vTarget, vPal.mColors);
+                            break;
+
+                    }
 
                     //tilization
                     int vTileNewCount = 0, vTileReusedCount = 0;

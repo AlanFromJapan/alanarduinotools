@@ -166,7 +166,7 @@ namespace GbReaper.Classes {
                     pPalette
                     );
             }
-            catch (Exception ex) {
+            catch (Exception) {
 
                 throw;
             }
