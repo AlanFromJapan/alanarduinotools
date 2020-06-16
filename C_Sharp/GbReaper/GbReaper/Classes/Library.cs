@@ -48,6 +48,16 @@ namespace GbReaper.Classes {
             OnTileDeleted(pTile);
         }
 
+        /// <summary>
+        /// Moves tile B before tile A
+        /// </summary>
+        /// <param name="ta"></param>
+        /// <param name="tb"></param>
+        public void MoveTileBefore(Tile ta, Tile tb) {
+            this.mTiles.Remove(tb);
+            this.mTiles.Insert(this.mTiles.IndexOf(ta), tb);
+        }
+
         protected void OnTileDeleted(Tile pTile) {
             if (this.TileDeleted != null) {
                 this.TileDeleted(pTile);

@@ -21,6 +21,9 @@ namespace GbReaper.Controls {
         public delegate void TilesDeletedDelegate(IList<Tile> pDeletedTiles);
         public event TilesDeletedDelegate TilesDeleted;
 
+        protected ListViewItem lviReorderingTile = null;
+        protected ListViewItem lviReorderingTarget = null;
+
         public Tile SelectedTile {
             get { 
                 if (lvLibrary.SelectedItems!= null && lvLibrary.SelectedItems.Count > 0){
@@ -114,8 +117,14 @@ namespace GbReaper.Controls {
                 // Draw the background and focus rectangle for a selected item.
                 //e.Graphics.FillRectangle(Brushes.YellowGreen, e.Bounds);
 
+                //selected item is gold
                 if (this.lvLibrary.SelectedItems.Contains(e.Item)) {
                     e.Graphics.FillRectangle(Brushes.Gold, e.Bounds);
+                }
+
+                //hovering effect for reorder
+                if (e.Item == lviReorderingTarget) {
+                    e.Graphics.FillRectangle(Brushes.LightBlue, e.Bounds);
                 }
 
                 TileViewItem vSVI = (TileViewItem)e.Item;
@@ -333,6 +342,45 @@ namespace GbReaper.Controls {
             RenameTilePopup(vT);
 
             lblTileCount.Text = "Tiles: " + this.lvLibrary.Items.Count;
+        }
+
+        private void lvLibrary_MouseDown(object sender, MouseEventArgs e) {
+            lviReorderingTile = lvLibrary.GetItemAt(e.X, e.Y);
+        }
+
+        private void lvLibrary_MouseLeave(object sender, EventArgs e) {
+            lviReorderingTile = null;
+            lviReorderingTarget = null;
+        }
+
+        private void lvLibrary_MouseUp(object sender, MouseEventArgs e) {
+            if (lviReorderingTile == null)
+                return;
+
+            ListViewItem lviTarget = lvLibrary.GetItemAt(e.X, e.Y);
+            if (lviTarget != null && lviTarget != lviReorderingTile) {
+                //drop onto an item take its place
+                lvLibrary.Items.Remove(lviReorderingTile);
+                lvLibrary.Items.Insert(lvLibrary.Items.IndexOf(lviTarget), lviReorderingTile);
+
+                this.mCurrentLib.MoveTileBefore((lviTarget as TileViewItem).mTile, (lviReorderingTile as TileViewItem).mTile);
+
+                lvLibrary.RedrawItems(0, lvLibrary.Items.Count-1, false);
+                lvLibrary.Refresh();
+                lvLibrary.Invalidate();
+            }
+
+            lviReorderingTarget = null;
+        }
+
+        private void lvLibrary_MouseHover(object sender, EventArgs e) {
+
+        }
+
+        private void lvLibrary_MouseMove(object sender, MouseEventArgs e) {
+            if (lviReorderingTile != null) {
+                lviReorderingTarget = lvLibrary.GetItemAt(e.X, e.Y);
+            }
         }
     }
 }
