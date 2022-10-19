@@ -1,3 +1,4 @@
+from lib2to3.pgen2.token import STAR
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
@@ -37,9 +38,13 @@ for l in range(0, LINE_PER_PAGE):
         #text
         txt = str(val)
         _,_,tw,th =draw.textbbox(xy=(0, 0), text=txt, font=font_xbig)
-        #tw=th=0
         draw.text((x+(w - tw)/2, y +(h - th)/2), text=txt, font=font_xbig, fill="black")
-        val = val +1
+        #next
+        if isinstance(START, int):
+            val = val +1
+        else:
+            #assume char
+            val = chr(ord(val) +1)
 
 img.show()
 
