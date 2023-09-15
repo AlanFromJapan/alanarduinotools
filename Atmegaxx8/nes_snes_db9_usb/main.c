@@ -40,10 +40,6 @@
 #include "leds.h"
 #include "devdesc.h"
 
-//ATMEGA8 has less counters so uses less/different control registers but otherwise will do the job
-#define CPU_IS_ATMEGA8
-
-
 static uchar *rt_usbHidReportDescriptor=NULL;
 static uchar rt_usbHidReportDescriptorSize=0;
 static uchar *rt_usbDeviceDescriptor=NULL;
