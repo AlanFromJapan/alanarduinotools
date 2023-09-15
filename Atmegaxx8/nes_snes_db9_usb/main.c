@@ -141,7 +141,7 @@ static void hardwareInit(void)
 			/* configure timer 0 for a rate of 12M/(1024 * 256) = 45.78 Hz (~22ms) */
 
 
-#ifdef CPU_IS_ATMEGA8
+#if defined(__AVR_ATmega8__)
 	//If using Atmega8 the registers are different so need tweaking
 	TCCR0 = 5;      /* timer 0 prescaler: 1024 */
 
@@ -238,7 +238,7 @@ int main(void)
 {
 	char must_report = 0, first_run = 1;
 	uchar idleCounters[MAX_REPORTS];
-	int run_mode, i;
+	int i;
 
 	memset(idleCounters, 0, MAX_REPORTS);
 	memset(idleRates, 0, MAX_REPORTS); // infinity
@@ -306,7 +306,8 @@ int main(void)
 
 		/* Try to report at the granularity requested by
 		 * the host */
-#ifdef CPU_IS_ATMEGA8
+#if defined(__AVR_ATmega8__)
+		//If using Atmega8 the registers are different so need tweaking
 		if(TIFR & (1<<TOV0))  /* 22 ms timer */
 		{
 			TIFR = 1<<TOV0;
@@ -332,7 +333,8 @@ int main(void)
 		}
 
 		/* Read the controller periodically*/
-#ifdef CPU_IS_ATMEGA8
+#if defined(__AVR_ATmega8__)
+		//If using Atmega8 the registers are different so need tweaking
 		if ((TIFR & (1<<OCF2)) )
 		{
 			TIFR = 1<<OCF2;
