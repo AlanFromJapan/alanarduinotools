@@ -40,6 +40,10 @@
 #include "leds.h"
 #include "devdesc.h"
 
+//ATMEGA8 has less counters so uses less/different control registers but otherwise will do the job
+#define CPU_IS_ATMEGA8
+
+
 static uchar *rt_usbHidReportDescriptor=NULL;
 static uchar rt_usbHidReportDescriptorSize=0;
 static uchar *rt_usbDeviceDescriptor=NULL;
@@ -135,11 +139,22 @@ static void hardwareInit(void)
 	}
 	DDRD = 0x00;    /* 0000 0000 bin: remove USB reset condition */
 			/* configure timer 0 for a rate of 12M/(1024 * 256) = 45.78 Hz (~22ms) */
+
+
+#ifdef CPU_IS_ATMEGA8
+	//If using Atmega8 the registers are different so need tweaking
+	TCCR0 = 5;      /* timer 0 prescaler: 1024 */
+
+//TODO Might be a problem with the WGM21 : compare both chips, shouldn't work even on the ATMEGA328
+	TCCR2 = (1<<WGM21)|(1<<CS22)|(1<<CS21)|(1<<CS20);
+	OCR2 = 196; // for 60 hz
+#else
+	//Default code for ATMEGA328 etc.
 	TCCR0B = 5;      /* timer 0 prescaler: 1024 */
 
 	TCCR2B = (1<<WGM21)|(1<<CS22)|(1<<CS21)|(1<<CS20);
 	OCR2B = 196; // for 60 hz
-
+#endif
 }
 
 static uchar    reportBuffer[6];    /* buffer for HID reports */
@@ -291,9 +306,15 @@ int main(void)
 
 		/* Try to report at the granularity requested by
 		 * the host */
+#ifdef CPU_IS_ATMEGA8
+		if(TIFR & (1<<TOV0))  /* 22 ms timer */
+		{
+			TIFR = 1<<TOV0;
+#else
 		if(TIFR0 & (1<<TOV0))  /* 22 ms timer */
 		{ 
 			TIFR0 = 1<<TOV0;
+#endif
 
 			for (i=0; i<curGamepad->num_reports; i++) 
 			{
@@ -311,10 +332,16 @@ int main(void)
 		}
 
 		/* Read the controller periodically*/
+#ifdef CPU_IS_ATMEGA8
+		if ((TIFR & (1<<OCF2)) )
+		{
+			TIFR = 1<<OCF2;
+#else
 		if ((TIFR2 & (1<<OCF2A)) )
 		{
 			TIFR2 = 1<<OCF2A;
-	
+
+#endif
 			// Ok, the timer tells us it is time to update
 			// the controller status. 
 			//
