@@ -380,6 +380,9 @@ int main(void)
 			
 		if(must_report)
 		{
+			//C0 turns high
+			PORTC |= 0x01;
+
 			for (i=0; i<curGamepad->num_reports; i++)
 			{
 				if ((must_report & (1<<i)) == 0)
@@ -405,6 +408,9 @@ int main(void)
 			}
 				
 			must_report = 0;
+
+			//C0 turns low
+			PORTC &= ~0x01;
 
 		}
 	}
