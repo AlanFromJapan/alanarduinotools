@@ -111,9 +111,9 @@ static void hardwareInit(void)
 {
 	uchar	i, j;
 
-	// init port C as input with pullup
-	DDRC = 0x00;
-	PORTC = 0xff;
+	// init port C as input with pullup EXCEPT C0-2 that are LED outputs
+	DDRC = 0x05;
+	PORTC = ~0x05;
 	
 	/* 1101 1000 bin: activate pull-ups except on USB lines 
 	 *
@@ -141,13 +141,13 @@ static void hardwareInit(void)
 	//If using Atmega8 the registers are different so need tweaking
 	TCCR0 = 5;      /* timer 0 prescaler: 1024 */
 
-//TODO Might be a problem with the WGM21 : compare both chips, shouldn't work even on the ATMEGA328
 	TCCR2 = (1<<WGM21)|(1<<CS22)|(1<<CS21)|(1<<CS20);
 	OCR2 = 196; // for 60 hz
 #else
 	//Default code for ATMEGA328 etc.
 	TCCR0B = 5;      /* timer 0 prescaler: 1024 */
 
+	//TODO CHECK me 20230920 then WGM21 is NOT in TCCR2B therefore it SHOULD not trigger on overflow of OCR2B value but happens to work?
 	TCCR2B = (1<<WGM21)|(1<<CS22)|(1<<CS21)|(1<<CS20);
 	OCR2B = 196; // for 60 hz
 #endif
@@ -340,6 +340,10 @@ int main(void)
 			TIFR2 = 1<<OCF2A;
 
 #endif
+
+			//C1 turns high
+			PORTC |= 0x02;
+
 			// Ok, the timer tells us it is time to update
 			// the controller status. 
 			//
@@ -376,6 +380,9 @@ int main(void)
 					must_report |= (1<<i);
 				}
 			}
+
+			//C1 turns off
+			PORTC &= ~0x02;
 		}
 			
 		if(must_report)
