@@ -3,6 +3,9 @@
  *
  * Created: 2015/07/07 23:38:08
  *  Author: Alan
+ *
+ *  2024/01/14 For future me: the USART pins RX/TX are PD0/PD1. Don't thank me.
+ *
  */ 
 
 

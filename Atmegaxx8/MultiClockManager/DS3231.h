@@ -14,7 +14,7 @@
 #ifndef DS3231_H_
 #define DS3231_H_
 
-#define SERIAL_DEBUG
+//#define SERIAL_DEBUG
 
 #include "MCMShared.h"
 #include "twi.h"
@@ -39,10 +39,11 @@
 
 
 void ReadTime3231(Date* pTimeDate){
-	uint8_t v = 0x00;
+	uint8_t status = 0x00;
 	
 	TWIStart();
 #ifdef SERIAL_DEBUG
+	char vBuff[15];
 	USART_Transmit('A');
 #endif
 	if (TWIGetStatus() != TW_START){
@@ -64,9 +65,17 @@ USART_Transmit('C');
 #ifdef SERIAL_DEBUG
 USART_Transmit('D');
 #endif
-	//TWIWrite(0x00); //move to reg 0
+
+	TWIWrite(0x00); //move to reg 0
+
+
+	_delay_ms(1);
+	status = TWIGetStatus();
+
 #ifdef SERIAL_DEBUG
-USART_Transmit('E');
+	itoa(status, vBuff, 16);
+	USART_SendString(vBuff);
+	USART_Transmit('E');
 #endif
 	TWIStop();
 #ifdef SERIAL_DEBUG
@@ -94,11 +103,15 @@ USART_Transmit('I');
 		pTimeDate->hour = TWIGetStatus();
 		pTimeDate->minute = pTimeDate->hour;
 		pTimeDate->second = pTimeDate->minute;
+
+		//Finished the read phase
+		TWIStop();
+
 		return;
 	}
 	
 	//Read 1: Seconds
-	v = TWIReadNACK();	
+	status = TWIReadNACK();	
 	if (TWIGetStatus() != TW_MR_DATA_NACK){
 		//something wrong
 		pTimeDate->hour = TWIGetStatus();
@@ -106,7 +119,7 @@ USART_Transmit('I');
 		pTimeDate->second = pTimeDate->minute;
 		return;
 	}
-	pTimeDate->second = bcdToDec(v & 0x7f);
+	pTimeDate->second = bcdToDec(status & 0x7f);
 	
 	//...etc etc...
 	
@@ -114,8 +127,135 @@ USART_Transmit('I');
 	TWIStop();
 	
 }
-uint8_t SetTimeDate3231(Date* pDateTime){ return 0; }	
-uint8_t setupDS3231(){ return 0; }
+
+//=====================================================================================
+
+void SetTimeDate3231(Date* pDateTime){
+	uint8_t status = 0;
+#ifdef SERIAL_DEBUG
+	char vBuff[15];
+
+	USART_SendString("\nSet:");
+#endif
+
+	TWIInit();
+
+
+	TWIStart();
+
+	_delay_ms(1);
+	status = TWIGetStatus();
+
+#ifdef SERIAL_DEBUG
+	itoa(status, vBuff, 16);
+	USART_SendString(vBuff);
+
+	USART_Transmit('a');
+#endif
+	TWIWrite((DS3231_I2C_ADDRESS << 1) | TW_WRITE);
+
+	_delay_ms(1);
+	status = TWIGetStatus();
+
+#ifdef SERIAL_DEBUG
+	itoa(status, vBuff, 16);
+	USART_SendString(vBuff);
+
+	USART_Transmit('b');
+#endif
+
+	//got to register 0x00
+	TWIWrite(0x00);
+
+	_delay_ms(1);
+	status = TWIGetStatus();
+
+#ifdef SERIAL_DEBUG
+	itoa(status, vBuff, 16);
+	USART_SendString(vBuff);
+
+	USART_Transmit('c');
+#endif
+
+	//init ALL to 1 (7 values)
+	for (uint8_t i = 0; i < 7; i++){
+		TWIWrite(decToBcd(1));
+	}
+
+
+#ifdef SERIAL_DEBUG
+	USART_Transmit('d');
+#endif
+
+
+	//Finished the setup
+	TWIStop();
+}
+
+//=====================================================================================
+
+void setupDS3231(){
+	uint8_t status = 0;
+#ifdef SERIAL_DEBUG
+	char vBuff[15];
+
+	USART_SendString("\nInit:");
+#endif
+
+	TWIInit();
+
+	TWIStart();
+
+	_delay_ms(1);
+	status = TWIGetStatus();
+
+#ifdef SERIAL_DEBUG
+	itoa(status, vBuff, 16);
+	USART_SendString(vBuff);
+
+	USART_Transmit('a');
+#endif
+	TWIWrite((DS3231_I2C_ADDRESS << 1) | TW_WRITE);
+
+	_delay_ms(1);
+	status = TWIGetStatus();
+
+#ifdef SERIAL_DEBUG
+	itoa(status, vBuff, 16);
+	USART_SendString(vBuff);
+
+	USART_Transmit('b');
+#endif
+
+	TWIWrite(0x0E);
+
+	_delay_ms(1);
+	status = TWIGetStatus();
+
+#ifdef SERIAL_DEBUG
+	itoa(status, vBuff, 16);
+	USART_SendString(vBuff);
+
+	USART_Transmit('c');
+#endif
+
+	//TWIWrite(0x1C);
+	TWIWrite(0x1C);
+
+
+#ifdef SERIAL_DEBUG
+	USART_Transmit('d');
+#endif
+
+	TWIWrite(0x80);
+
+#ifdef SERIAL_DEBUG
+	USART_Transmit('e');
+#endif
+
+	//Finished the setup
+	TWIStop();
+}
 	
 /*
 // Gets the Date3231 and time from the ds1307 and prints result

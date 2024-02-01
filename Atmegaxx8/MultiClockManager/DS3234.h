@@ -2,6 +2,9 @@
 #ifndef __DS3234_h__
 #define __DS3234_h__
 
+//System includes
+#include <avr/io.h>
+
 #include "SPI.h"
 #include "MCMShared.h"
 

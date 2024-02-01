@@ -24,6 +24,8 @@
 //for delay.h >> defined in the compilation symbols
 //#define F_CPU 16000000L
 
+#include <stdlib.h>
+
 //System includes
 #include <avr/io.h>
 #include <util/delay.h>
@@ -38,9 +40,9 @@
 
 
 //Choose the display to use (put the define BEFORE the includes!)
-#define USE_DISPLAY_BCD1
-#include "MCMLedMatrix.h"
-#include "WordclockLayouts.h"
+//#define USE_DISPLAY_BCD1
+//#include "MCMLedMatrix.h"
+//#include "WordclockLayouts.h"
 //#include "VoltmeterDisplay.h"
 
 #include "serialComm.h"
@@ -50,14 +52,19 @@
 /************************************************************************/
 void mainSetup() {
 
+	//Start Serial
+	serialHardwareInit();
+	USART_SendString("\n\n------------------------");
+
 	//macro to be redefined by each RTC
 	RTC_INIT();
 	
+	//Set time! (don't do it every time ;) Remove me later)
+	//SetTimeDate3231(NULL);
+
 	//macro to be redefined by each display
-	SETUP_DISPLAY(); 
+	//SETUP_DISPLAY();
 	
-	//Start Serial
-	serialHardwareInit();
 }
 
 
@@ -67,34 +74,51 @@ void mainSetup() {
 /************************************************************************/
 int main(void) {
 	mainSetup();
+
+	//C0 as out
+	DDRC |= 0x01;
+	//C0 off
+	PORTC &= ~0x01;
 	
 	Date vLastDate;
 
-	USART_SendString("Let's start.\r\n");
+	USART_SendString("\nLet's start.\n");
 	
     while(1) {
-/*		
-	    //macro to be redefined by each RTC
-       RTC_READ_TIME(&vLastDate);
-		
-		//macro to be redefined by each display
-		MAP_DATE_TO_DISPLAY(&vLastDate); 
-		
-		//macro to be redefined by each display
-		DRAW_DISPLAY(); 
-*/
 
 	    //macro to be redefined by each RTC
-	    RTC_READ_TIME(&vLastDate);
+    	RTC_READ_TIME(&vLastDate);
+		
+		//macro to be redefined by each display
+		//MAP_DATE_TO_DISPLAY(&vLastDate);
+		
+		//macro to be redefined by each display
+		//DRAW_DISPLAY();
 
-		char vBuff[5];
-		itoa(vLastDate.second, vBuff, 8);
-		USART_SendString("0x");
+
+	    //macro to be redefined by each RTC
+//	    RTC_READ_TIME(&vLastDate);
+
+    	USART_SendString("h=");
+		char vBuff[15];
+		itoa(vLastDate.second, vBuff, 10);
 		USART_SendString(vBuff);
-		USART_SendString("\r\n");
-		//small delay
-		_delay_ms(1000);
-		
+
+		USART_SendString(". ");
+
+
+    	//C0 off
+    	PORTC &= ~0x01;
+
+	    //small delay
+		_delay_ms(500);
+
+		//C0 on
+		PORTC |= 0x01;
+
+	    //small delay
+		_delay_ms(500);
+
 		
     }
 }
