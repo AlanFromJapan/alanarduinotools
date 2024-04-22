@@ -59,36 +59,36 @@ uint8_t mDisplayTab[4];
 const uint8_t KEYS_LOOKUP[] = {7, 8, 9, 4, 5, 6, 1, 2, 3, 'C', 0, '*'};
 
 
-#define POV_DURATION 5
+#define POV_DURATION_MS 	5
 //Shows the in-memory table of 4 7segs
 //Says from which to start and till which to go (0= leftmost, 3= rightmost)
 void showDisplayTab(uint8_t pFromLeft, uint8_t pToRight){
 	if (pFromLeft <= 0 && pToRight >= 0){
 		PORTD = mDisplayTab[0];
 		PORTC = 0x01;
-		_delay_ms(POV_DURATION);
+		_delay_ms(POV_DURATION_MS);
 	}
 
 	if (pFromLeft <= 1 && pToRight >= 1){
 		PORTD = mDisplayTab[1];
 		PORTC = 0x02;
-		_delay_ms(POV_DURATION);
+		_delay_ms(POV_DURATION_MS);
 	}
 	
 	if (pFromLeft <= 2 && pToRight >= 2){
 		PORTD = mDisplayTab[2];
 		PORTC = 0x04;
-		_delay_ms(POV_DURATION);
+		_delay_ms(POV_DURATION_MS);
 	}
 
 	if (pFromLeft <= 3 && pToRight >= 3){
 		PORTD = mDisplayTab[3];
 		PORTC = 0x08;
-		_delay_ms(POV_DURATION);
+		_delay_ms(POV_DURATION_MS);
 	}
 }
 
-#define POV_ITERATIONS 10
+
 void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight){
 	//display on the 3 leftmost digits
 	mDisplayTab[2] = DIGITS[pNumber % (uint16_t)10];
@@ -97,6 +97,7 @@ void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight){
 			
 	showDisplayTab(pFromLeft,pToRight);
 }
+
 
 /*
  * Returns the pressed button
@@ -107,17 +108,20 @@ void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight){
  *
  *
  */
-uint8_t readButton() {
+inline uint8_t readButton() {
 
 	for (uint8_t col = 0; col < 3; col++){
 		// left most column is PB4 -> PB3 -> PB2
-		PORTB = (~(1 << (4 - col)) | 0xC3);
+		PORTB = (~(1 << (4 - col))) | 0xC3;
+
+		//in case to stabilize output?
+		_delay_loop_1(16);
 
 		// keep the rows only from what you read 0b11000011
 		uint8_t rows = PINB & 0xC3;
 
 		//turn off
-		PORTB = 0xC3;
+		PORTB = 0xff; //0xC3;
 
 		if (rows != 0){
 			//something pressed
@@ -126,18 +130,18 @@ uint8_t readButton() {
 				// 7 8 9
 				rowid = 0;
 			}
-			else if ((rows & 0x01) == 0) {
-				// 4 5 6
-				rowid = 1;
-			}
-			else if ((rows & 0x40) == 0) {
-				// 1 2 3
-				rowid = 2;
-			}
-			else {
-				// C 0 *
-				rowid = 3;
-			}
+//			else if ((rows & 0x01) == 0) {
+//				// 4 5 6
+//				rowid = 1;
+//			}
+//			else if ((rows & 0x40) == 0) {
+//				// 1 2 3
+//				rowid = 2;
+//			}
+//			else {
+//				// C 0 *
+//				rowid = 3;
+//			}
 
 			return KEYS_LOOKUP[rowid * 3 + col];
 		}
@@ -147,13 +151,17 @@ uint8_t readButton() {
 	return 0xff;
 }
 
+
 /*
  * The interrupt of timer overflow to trigger reading of keys status
  */
 ISR(TIMER1_OVF_vect){
-	theValue += 1;
+	if (readButton() != 0xff) {
+		theValue += 1;
+	}
 
 }
+
 
 /*
  * Prepares the registers and other init
@@ -175,6 +183,7 @@ inline void setup7segments(){
 	DDRD = 0xFF;
 
 }
+
 
 /*
  * Init for they key matrix
@@ -198,6 +207,9 @@ inline void setupKeymatrix(){
 }
 
 
+/*
+ * Setup the TIMER1 interrupt (16bits) as overflow to know when to read the keyboard status
+ */
 inline void setupInterrupts(){
 
 	//Timer1 is 16 bit overflow timer (65535)
@@ -207,6 +219,10 @@ inline void setupInterrupts(){
 	sei();        // Enable global interrupts by setting global interrupt enable bit in SREG
 }
 
+
+/*****************************************************************************************************
+ * MAIN
+ *****************************************************************************************************/
 int main(void)
 {
 	setup7segments();
