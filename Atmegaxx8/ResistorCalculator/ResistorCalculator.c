@@ -50,11 +50,8 @@ uint8_t DIGITS[] = {
 	DIGIT_F
 };
 
-//How much to count prescaled ticks before calling TIM1 ovf interrupt
-#define TIMER1_OVF_VALUE	97
-
 //volatile since will change in an interrupt
-volatile uint16_t theValue = 9990;
+volatile uint16_t theValue = 0;
 
 //one value, one digit, left to right
 uint8_t mDisplayTab[4];
@@ -94,15 +91,10 @@ void showDisplayTab(uint8_t pFromLeft, uint8_t pToRight){
 #define POV_ITERATIONS 10
 void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight){
 	//display on the 3 leftmost digits
-	mDisplayTab[3] = DIGITS[pNumber % (uint16_t)10];
-	mDisplayTab[2] = DIGITS[(pNumber / (uint16_t)10) % (uint16_t)10];
-	mDisplayTab[1] = DIGITS[(pNumber / (uint16_t)100) % (uint16_t)10];
-	mDisplayTab[0] = DIGITS[(pNumber / (uint16_t)1000) % (uint16_t)10];
+	mDisplayTab[2] = DIGITS[pNumber % (uint16_t)10];
+	mDisplayTab[1] = DIGITS[(pNumber / (uint16_t)10) % (uint16_t)10];
+	mDisplayTab[0] = DIGITS[(pNumber / (uint16_t)100) % (uint16_t)10];
 			
-//	for (uint16_t vPOV = 0; vPOV < POV_ITERATIONS; vPOV++){
-//		showDisplayTab(pFromLeft,pToRight);
-//	}
-
 	showDisplayTab(pFromLeft,pToRight);
 }
 
@@ -159,9 +151,8 @@ uint8_t readButton() {
  * The interrupt of timer overflow to trigger reading of keys status
  */
 ISR(TIMER1_OVF_vect){
-	theValue += 10;
+	theValue += 1;
 
-	TCNT1 = TIMER1_OVF_VALUE;
 }
 
 /*
@@ -209,9 +200,9 @@ inline void setupKeymatrix(){
 
 inline void setupInterrupts(){
 
-	TCNT1 = TIMER1_OVF_VALUE;
+	//Timer1 is 16 bit overflow timer (65535)
 	TCCR1A = 0x00;
-	TCCR1B = (1<<CS11) /*| (1 <<CS10) */;  // Timer mode with 1024 prescler
+	TCCR1B = (1<<CS11) ;  // Timer mode with 8 prescler
 	TIMSK1 = (1 << TOIE1) ;   // Enable timer1 overflow interrupt(TOIE1)
 	sei();        // Enable global interrupts by setting global interrupt enable bit in SREG
 }
