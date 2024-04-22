@@ -3,12 +3,15 @@
 *
 * Created: 2012/12/09 23:52:15
 *  Author: Alan
+*
+*  This thing will continuously display the whatever value it wants to (for retinal persistence) as main loop, and regularly read the buttons pressed via timer interrupt.
 */
 
 //#define F_CPU 8000000
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
 #define DIGIT_DOT	0b01111111
 #define DIGIT_0		0b11000000
@@ -46,6 +49,12 @@ uint8_t DIGITS[] = {
 	DIGIT_E,
 	DIGIT_F
 };
+
+//How much to count prescaled ticks before calling TIM1 ovf interrupt
+#define TIMER1_OVF_VALUE	97
+
+//volatile since will change in an interrupt
+volatile uint16_t theValue = 9990;
 
 //one value, one digit, left to right
 uint8_t mDisplayTab[4];
@@ -90,9 +99,11 @@ void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight){
 	mDisplayTab[1] = DIGITS[(pNumber / (uint16_t)100) % (uint16_t)10];
 	mDisplayTab[0] = DIGITS[(pNumber / (uint16_t)1000) % (uint16_t)10];
 			
-	for (uint16_t vPOV = 0; vPOV < POV_ITERATIONS; vPOV++){
-		showDisplayTab(pFromLeft,pToRight);
-	}	
+//	for (uint16_t vPOV = 0; vPOV < POV_ITERATIONS; vPOV++){
+//		showDisplayTab(pFromLeft,pToRight);
+//	}
+
+	showDisplayTab(pFromLeft,pToRight);
 }
 
 /*
@@ -145,6 +156,15 @@ uint8_t readButton() {
 }
 
 /*
+ * The interrupt of timer overflow to trigger reading of keys status
+ */
+ISR(TIMER1_OVF_vect){
+	theValue += 10;
+
+	TCNT1 = TIMER1_OVF_VALUE;
+}
+
+/*
  * Prepares the registers and other init
  */
 inline void setup7segments(){
@@ -186,26 +206,28 @@ inline void setupKeymatrix(){
 	PORTB = 0xC3;
 }
 
+
+inline void setupInterrupts(){
+
+	TCNT1 = TIMER1_OVF_VALUE;
+	TCCR1A = 0x00;
+	TCCR1B = (1<<CS11) /*| (1 <<CS10) */;  // Timer mode with 1024 prescler
+	TIMSK1 = (1 << TOIE1) ;   // Enable timer1 overflow interrupt(TOIE1)
+	sei();        // Enable global interrupts by setting global interrupt enable bit in SREG
+}
+
 int main(void)
 {
 	setup7segments();
 	
 	setupKeymatrix();
 
-	showNumber(0, 0, 2);
+	setupInterrupts();
 
+	//main loop, just show number, that's it
 	while(1)
 	{
-//		for (uint16_t vNumber = 0; vNumber < 1000; vNumber++){
-//			uint16_t vVal = vNumber * 10;
-//			showNumber(vVal, 0, 2);
-//		}
-
-		uint8_t keypress = readButton();
-		if (keypress != 0xff) {
-			showNumber(keypress * 10, 0, 2);
-			_delay_ms(300);
-		}
+		showNumber(theValue, 0, 2);
 	}
 }
 
