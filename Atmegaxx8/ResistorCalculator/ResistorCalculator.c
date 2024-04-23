@@ -12,6 +12,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+#include <avr/cpufunc.h> //for _NOP()
 
 #define DIGIT_DOT	0b01111111
 #define DIGIT_0		0b11000000
@@ -56,6 +57,11 @@ volatile uint16_t theValue = 0;
 //one value, one digit, left to right
 uint8_t mDisplayTab[4];
 
+//Columns are (1 << PORTB4) | (1 << PORTB3) | (1 << PORTB2)
+#define KEYMX_COLUMNS	0x1C
+//Rows are PB1,0,6,7
+#define KEYMX_ROWS		0xC3
+//easy mapping to pressed key
 const uint8_t KEYS_LOOKUP[] = {7, 8, 9, 4, 5, 6, 1, 2, 3, 'C', 0, '*'};
 
 
@@ -100,7 +106,7 @@ void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight){
 
 
 /*
- * Returns the pressed button
+ * Returns the pressed button (or 0xff if nothing pressed)
  *   7  8  9
  *   4  5  6
  *   1  2  3
@@ -111,39 +117,42 @@ void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight){
 inline uint8_t readButton() {
 
 	for (uint8_t col = 0; col < 3; col++){
-		// left most column is PB4 -> PB3 -> PB2
-		PORTB = (~(1 << (4 - col))) | 0xC3;
+		// left most column is PB4 -> PB3 -> PB2 (and keep the Rows pulled up)
+		PORTB = KEYMX_ROWS | (1 << (4 - col));
 
-		//in case to stabilize output?
-		_delay_loop_1(16);
+		//in case to stabilize output (need one as per the doc, make it 2 because I'm generous like that)
+		_NOP();
+		_NOP();
 
 		// keep the rows only from what you read 0b11000011
-		uint8_t rows = PINB & 0xC3;
+		uint8_t rowsStatus = PINB & KEYMX_ROWS;
 
-		//turn off
-		PORTB = 0xff; //0xC3;
+		//turn off (only keep the rows pulled up)
+		PORTB = KEYMX_ROWS;
 
-		if (rows != 0){
+		if (rowsStatus != KEYMX_ROWS){
 			//something pressed
-			uint8_t rowid = 0;
-			if ((rows & 0x02) == 0){
+			uint8_t rowid = 255;
+			if ((rowsStatus & 0x02) == 0){
 				// 7 8 9
 				rowid = 0;
 			}
-//			else if ((rows & 0x01) == 0) {
-//				// 4 5 6
-//				rowid = 1;
-//			}
-//			else if ((rows & 0x40) == 0) {
-//				// 1 2 3
-//				rowid = 2;
-//			}
-//			else {
-//				// C 0 *
-//				rowid = 3;
-//			}
+			else if ((rowsStatus & 0x01) == 0) {
+				// 4 5 6
+				rowid = 1;
+			}
+			else if ((rowsStatus & 0x40) == 0) {
+				// 1 2 3
+				rowid = 2;
+			}
+			else if ((rowsStatus & 0x80) == 0){
+				// C 0 *
+				rowid = 3;
+			}
+
 
 			return KEYS_LOOKUP[rowid * 3 + col];
+
 		}
 	}
 
@@ -156,10 +165,11 @@ inline uint8_t readButton() {
  * The interrupt of timer overflow to trigger reading of keys status
  */
 ISR(TIMER1_OVF_vect){
-	if (readButton() != 0xff) {
-		theValue += 1;
-	}
+//	if (readButton() != 0xff) {
+//		theValue += 1;
+//	}
 
+	theValue = readButton();
 }
 
 
@@ -185,6 +195,7 @@ inline void setup7segments(){
 }
 
 
+
 /*
  * Init for they key matrix
  */
@@ -196,14 +207,14 @@ inline void setupKeymatrix(){
 	//       PB6   1   2   3
 	//       PB7   C   0   *
 
-	//Cols are output
-	DDRB = (1 << PORTB4) | (1 << PORTB3) | (1 << PORTB2);
+	//Columns are output (and rows input)
+	DDRB = KEYMX_COLUMNS;
 
-	//just make sure pullups are NOT disabled
-	MCUCR |= (0 << PUD);
+	//just make sure pullups are NOT disabled (set PUD in MCUCR to 0)
+	MCUCR &= ~(1 << PUD);
 
-	//all low EXCEPT the input to become pulled up
-	PORTB = 0xC3;
+	//Outputs (columns) are low and Inputs (rows) are high to enable the pull-up
+	PORTB = KEYMX_ROWS;
 }
 
 
