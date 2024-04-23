@@ -128,12 +128,11 @@ void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t 
 		   PB0   4   5   6
 		   PB6   1   2   3
 		   PB7   C   0   *
-
  */
 inline uint8_t readButton() {
 
 	for (uint8_t col = 0; col < 3; col++){
-		// left most column is PB4 -> PB3 -> PB2 (and keep the Rows pulled up), pull DOWN the row you want to check
+		// left most column is PB4 -> PB3 -> PB2 (and keep the Rows pulled up), pull *DOWN* the Column you want to check
 		PORTB = KEYMX_ROWS | ~(1 << (4 - col));
 
 		//in case to stabilize output (need one as per the doc, make it 2 because I'm generous like that)
