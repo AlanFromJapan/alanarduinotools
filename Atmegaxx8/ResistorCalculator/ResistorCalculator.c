@@ -31,6 +31,7 @@
 #define DIGIT_D		0b10100001
 #define DIGIT_E		0b10000110
 #define DIGIT_F		0b10001110
+#define DIGIT_NONE	0b11111111
 
 uint8_t DIGITS[] = {
 	DIGIT_0,
@@ -53,6 +54,9 @@ uint8_t DIGITS[] = {
 
 //volatile since will change in an interrupt
 volatile uint16_t theValue = 0;
+
+//show number in which base (base <= 16)
+#define DIGIT_SHOW_BASE		10
 
 //one value, one digit, left to right
 uint8_t mDisplayTab[4];
@@ -95,11 +99,22 @@ void showDisplayTab(uint8_t pFromLeft, uint8_t pToRight){
 }
 
 
-void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight){
+/**
+ * Turn off the display
+ */
+void displayOff(){
+	PORTD = DIGIT_NONE;
+	PORTC = 0x00;
+}
+
+/**
+ * Shows a number from pFromLeft display (start at 0) to pFromRight (max 3) in base (where base <=16)
+ */
+void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t base){
 	//display on the 3 leftmost digits
-	mDisplayTab[2] = DIGITS[pNumber % (uint16_t)10];
-	mDisplayTab[1] = DIGITS[(pNumber / (uint16_t)10) % (uint16_t)10];
-	mDisplayTab[0] = DIGITS[(pNumber / (uint16_t)100) % (uint16_t)10];
+	mDisplayTab[2] = DIGITS[pNumber % (uint16_t)base];
+	mDisplayTab[1] = DIGITS[(pNumber / (uint16_t)(base)) % (uint16_t)base];
+	mDisplayTab[0] = DIGITS[(pNumber / (uint16_t)(base*base)) % (uint16_t)base];
 			
 	showDisplayTab(pFromLeft,pToRight);
 }
@@ -107,18 +122,19 @@ void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight){
 
 /*
  * Returns the pressed button (or 0xff if nothing pressed)
- *   7  8  9
- *   4  5  6
- *   1  2  3
- *   C  0  .
- *
- *
+	PortB is used in scanning matrix mode : 4 rows of 3 buttons
+	 Cols:      PB4 PB3 PB2
+	 Rows: PB1   7   8   9
+		   PB0   4   5   6
+		   PB6   1   2   3
+		   PB7   C   0   *
+
  */
 inline uint8_t readButton() {
 
 	for (uint8_t col = 0; col < 3; col++){
-		// left most column is PB4 -> PB3 -> PB2 (and keep the Rows pulled up)
-		PORTB = KEYMX_ROWS | (1 << (4 - col));
+		// left most column is PB4 -> PB3 -> PB2 (and keep the Rows pulled up), pull DOWN the row you want to check
+		PORTB = KEYMX_ROWS | ~(1 << (4 - col));
 
 		//in case to stabilize output (need one as per the doc, make it 2 because I'm generous like that)
 		_NOP();
@@ -131,7 +147,8 @@ inline uint8_t readButton() {
 		PORTB = KEYMX_ROWS;
 
 		if (rowsStatus != KEYMX_ROWS){
-			//something pressed
+			//something pressed, consider only 1 key (multipress NOT supported)
+
 			uint8_t rowid = 255;
 			if ((rowsStatus & 0x02) == 0){
 				// 7 8 9
@@ -150,9 +167,7 @@ inline uint8_t readButton() {
 				rowid = 3;
 			}
 
-
 			return KEYS_LOOKUP[rowid * 3 + col];
-
 		}
 	}
 
@@ -165,11 +180,29 @@ inline uint8_t readButton() {
  * The interrupt of timer overflow to trigger reading of keys status
  */
 ISR(TIMER1_OVF_vect){
-//	if (readButton() != 0xff) {
-//		theValue += 1;
-//	}
+	uint8_t button = readButton();
 
-	theValue = readButton();
+	if (readButton() != 0xff) {
+		//display off
+		displayOff();
+
+		//something pressed
+		switch (button){
+			case 'C':
+				//reset
+				theValue = 0;
+				break;
+			case '*':
+				; //nothing for now, free for later
+				break;
+			default:
+				//other numbers
+				theValue += button;
+		}
+
+		//debouncing on the cheap
+		_delay_ms(200);
+	}
 }
 
 
@@ -245,7 +278,7 @@ int main(void)
 	//main loop, just show number, that's it
 	while(1)
 	{
-		showNumber(theValue, 0, 2);
+		showNumber(theValue, 0, 2, DIGIT_SHOW_BASE);
 	}
 }
 
