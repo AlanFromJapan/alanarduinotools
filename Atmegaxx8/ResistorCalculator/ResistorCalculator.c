@@ -13,7 +13,6 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include <avr/cpufunc.h> //for _NOP()
-#include <math.h>
 
 #define DIGIT_DOT		0b01111111
 #define DIGIT_0			0b11000000
@@ -149,13 +148,10 @@ void showNumber(float pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t bas
 		//display on the 3 leftmost digits
 		mDisplayTab[2] = DIGITS[v % base];
 
+		//there's always a 2nd digit when there's a dot (even if it's a zero)
 		v = v / base;
-		if (v > 0) {
-			mDisplayTab[1] = DIGITS[v % base] & DIGIT_DOT; //<== Dot if there is is ALWAYS on 2nd digit
-		}
-		else {
-			mDisplayTab[1] = DIGIT_0 & DIGIT_DOT; //<== Dot if there is is ALWAYS on 2nd digit
-		}
+		mDisplayTab[1] = DIGITS[v % base] & DIGIT_DOT; //<== Dot if there is is ALWAYS on 2nd digit
+
 
 		v = v / base;
 		if (v > 0) {
