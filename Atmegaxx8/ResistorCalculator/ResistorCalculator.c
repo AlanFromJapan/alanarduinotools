@@ -14,24 +14,25 @@
 #include <avr/interrupt.h>
 #include <avr/cpufunc.h> //for _NOP()
 
-#define DIGIT_DOT	0b01111111
-#define DIGIT_0		0b11000000
-#define DIGIT_1		0b11111001
-#define DIGIT_2		0b10100100
-#define DIGIT_3		0b10110000
-#define DIGIT_4		0b10011001
-#define DIGIT_5		0b10010010
-#define DIGIT_6		0b10000010
-#define DIGIT_7		0b11111000
-#define DIGIT_8		0b10000000
-#define DIGIT_9		0b10010000
-#define DIGIT_A		0b10001000
-#define DIGIT_B		0b10000011
-#define DIGIT_C		0b11000110
-#define DIGIT_D		0b10100001
-#define DIGIT_E		0b10000110
-#define DIGIT_F		0b10001110
-#define DIGIT_NONE	0b11111111
+#define DIGIT_DOT		0b01111111
+#define DIGIT_0			0b11000000
+#define DIGIT_1			0b11111001
+#define DIGIT_2			0b10100100
+#define DIGIT_3			0b10110000
+#define DIGIT_4			0b10011001
+#define DIGIT_5			0b10010010
+#define DIGIT_6			0b10000010
+#define DIGIT_7			0b11111000
+#define DIGIT_8			0b10000000
+#define DIGIT_9			0b10010000
+#define DIGIT_A			0b10001000
+#define DIGIT_B			0b10000011
+#define DIGIT_C			0b11000110
+#define DIGIT_D			0b10100001
+#define DIGIT_E			0b10000110
+#define DIGIT_F			0b10001110
+#define DIGIT_NONE		0b11111111
+#define DIGIT_HYPHEN	0b10111111
 
 uint8_t DIGITS[] = {
 	DIGIT_0,
@@ -57,6 +58,10 @@ volatile uint16_t theValue = 0;
 
 //show number in which base (base <= 16)
 #define DIGIT_SHOW_BASE		10
+
+#define MODE_RESISTOR	0
+#define MODE_TEST		1
+volatile uint8_t mode = MODE_RESISTOR;
 
 //one value, one digit, left to right
 uint8_t mDisplayTab[4];
@@ -192,11 +197,20 @@ ISR(TIMER1_OVF_vect){
 				theValue = 0;
 				break;
 			case '*':
-				; //nothing for now, free for later
+				//toggle mode
+				mode = (mode == MODE_RESISTOR? MODE_TEST: MODE_RESISTOR);
 				break;
 			default:
 				//other numbers
-				theValue += button;
+				if (mode == MODE_TEST){
+					//shows pressed key
+					theValue = button;
+				}
+				else if (mode == MODE_RESISTOR){
+					//TODO
+					theValue += button;
+				}
+
 		}
 
 		//debouncing on the cheap
