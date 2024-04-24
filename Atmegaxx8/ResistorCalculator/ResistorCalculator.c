@@ -118,7 +118,7 @@ void displayOff(){
  * Shows a number from pFromLeft display (start at 0) to pFromRight (max 3) in base (where base <=16)
  */
 void showNumber(float pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t base){
-	uint8_t decimal = ((uint16_t)(pNumber * 10.0)) % 10;
+	uint8_t decimal = ((uint16_t)(pNumber * (float)base)) % base;
 
 	if (decimal == 0){
 		//no decimal
@@ -144,7 +144,7 @@ void showNumber(float pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t bas
 	}
 	else {
 		//1 decimal (the max for resistor anyway)
-		uint16_t v = (uint16_t)(pNumber * 10.0);
+		uint16_t v = (uint16_t)(pNumber * (float)base);
 
 		//display on the 3 leftmost digits
 		mDisplayTab[2] = DIGITS[v % base];
