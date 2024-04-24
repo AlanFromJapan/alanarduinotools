@@ -13,6 +13,7 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include <avr/cpufunc.h> //for _NOP()
+#include <math.h>
 
 #define DIGIT_DOT		0b01111111
 #define DIGIT_0			0b11000000
@@ -54,7 +55,8 @@ uint8_t DIGITS[] = {
 };
 
 //volatile since will change in an interrupt
-volatile uint16_t theValue = 0;
+volatile float theValue = 0;
+volatile uint8_t theValueNthDigit = 0;
 
 //show number in which base (base <= 16)
 #define DIGIT_SHOW_BASE		10
@@ -115,11 +117,56 @@ void displayOff(){
 /**
  * Shows a number from pFromLeft display (start at 0) to pFromRight (max 3) in base (where base <=16)
  */
-void showNumber(uint16_t pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t base){
-	//display on the 3 leftmost digits
-	mDisplayTab[2] = DIGITS[pNumber % (uint16_t)base];
-	mDisplayTab[1] = DIGITS[(pNumber / (uint16_t)(base)) % (uint16_t)base];
-	mDisplayTab[0] = DIGITS[(pNumber / (uint16_t)(base*base)) % (uint16_t)base];
+void showNumber(float pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t base){
+	uint8_t decimal = ((uint16_t)(pNumber * 10.0)) % 10;
+
+	if (decimal == 0){
+		//no decimal
+		uint16_t v = (uint16_t)pNumber;
+		//display on the 3 leftmost digits
+		mDisplayTab[2] = DIGITS[v % base];
+
+		v = v / base;
+		if (v > 0) {
+			mDisplayTab[1] = DIGITS[v % base];
+		}
+		else {
+			mDisplayTab[1] = DIGIT_NONE;
+		}
+
+		v = v / base;
+		if (v > 0) {
+			mDisplayTab[0] = DIGITS[v % base];
+		}
+		else {
+			mDisplayTab[0] = DIGIT_NONE;
+		}
+	}
+	else {
+		//1 decimal (the max for resistor anyway)
+		uint16_t v = (uint16_t)(pNumber * 10.0);
+
+		//display on the 3 leftmost digits
+		mDisplayTab[2] = DIGITS[v % base];
+
+		v = v / base;
+		if (v > 0) {
+			mDisplayTab[1] = DIGITS[v % base] & DIGIT_DOT; //<== Dot if there is is ALWAYS on 2nd digit
+		}
+		else {
+			mDisplayTab[1] = DIGIT_0 & DIGIT_DOT; //<== Dot if there is is ALWAYS on 2nd digit
+		}
+
+		v = v / base;
+		if (v > 0) {
+			mDisplayTab[0] = DIGITS[v % base];
+		}
+		else {
+			mDisplayTab[0] = DIGIT_NONE;
+		}
+	}
+
+
 			
 	showDisplayTab(pFromLeft,pToRight);
 }
@@ -180,6 +227,40 @@ inline uint8_t readButton() {
 }
 
 
+/**
+ * Executes the calculation for resistor value
+ */
+inline void resistorCalculation(const uint8_t button){
+	switch (theValueNthDigit){
+		case 0:
+			//first digit
+			theValue = button;
+			break;
+		case 1:
+			//2nd digit
+			theValue = theValue * 10 + button;
+			break;
+		case 3:
+			//3rd digit (power!)
+			if (button <= 1){
+				//value <= 999: show full directly
+				theValue = theValue * (button == 0 ? 1 : 10);
+				//no multiplicator indicator
+				// TODO
+			}
+			else {
+				uint32_t v = theValue;
+				//v = v * ( (uint32_t)10 ** (uint32_t)button );
+
+				//WIP NOT FINISHED
+			}
+			break;
+	}
+
+	theValueNthDigit++;
+}
+
+
 /*
  * The interrupt of timer overflow to trigger reading of keys status
  */
@@ -192,13 +273,14 @@ ISR(TIMER1_OVF_vect){
 
 		//something pressed
 		switch (button){
-			case 'C':
-				//reset
-				theValue = 0;
-				break;
 			case '*':
 				//toggle mode
 				mode = (mode == MODE_RESISTOR? MODE_TEST: MODE_RESISTOR);
+				//break; //no break! Do a reset!
+			case 'C':
+				//reset
+				theValue = 0;
+				theValueNthDigit = 0;
 				break;
 			default:
 				//other numbers
@@ -207,8 +289,11 @@ ISR(TIMER1_OVF_vect){
 					theValue = button;
 				}
 				else if (mode == MODE_RESISTOR){
-					//TODO
-					theValue += button;
+					//calculate the value
+
+					//Dummy test
+					theValue += (float)button + 0.1;
+					//resistorCalculation(button);
 				}
 
 		}
