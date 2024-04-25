@@ -14,6 +14,7 @@
 #include <avr/interrupt.h>
 #include <avr/cpufunc.h> //for _NOP()
 
+
 #define DIGIT_DOT		0b01111111
 #define DIGIT_0			0b11000000
 #define DIGIT_1			0b11111001
@@ -117,11 +118,20 @@ void displayOff(){
  * Shows a number from pFromLeft display (start at 0) to pFromRight (max 3) in base (where base <=16)
  */
 void showNumber(float pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t base){
-	uint8_t decimal = ((uint16_t)(pNumber * (float)base)) % base;
+	float multiplicator = 1.0;
+	if (theValue > 1000000.0)
+		multiplicator = 1000000.0;
+	else if (theValue > 1000.0)
+		multiplicator = 1000.0;
+
+	//make an integer division to (hopefully) avoid float precision error
+	float adjustedValue = (float)((uint16_t)theValue / (uint16_t)multiplicator);
+
+	uint8_t decimal = ((uint16_t)(adjustedValue * (float)base)) % base;
 
 	if (decimal == 0){
 		//no decimal
-		uint16_t v = (uint16_t)pNumber;
+		uint16_t v = (uint16_t)adjustedValue;
 		//display on the 3 leftmost digits
 		mDisplayTab[2] = DIGITS[v % base];
 
@@ -143,7 +153,7 @@ void showNumber(float pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t bas
 	}
 	else {
 		//1 decimal (the max for resistor anyway)
-		uint16_t v = (uint16_t)(pNumber * (float)base);
+		uint16_t v = (uint16_t)(adjustedValue * (float)base);
 
 		//display on the 3 leftmost digits
 		mDisplayTab[2] = DIGITS[v % base];
@@ -230,25 +240,21 @@ inline void resistorCalculation(const uint8_t button){
 	switch (theValueNthDigit){
 		case 0:
 			//first digit
-			theValue = button;
+			theValue = (float)button;
 			break;
 		case 1:
 			//2nd digit
-			theValue = theValue * 10 + button;
+			theValue = theValue * 10.0 + (float)button;
 			break;
-		case 3:
+		case 2:
 			//3rd digit (power!)
-			if (button <= 1){
-				//value <= 999: show full directly
-				theValue = theValue * (button == 0 ? 1 : 10);
-				//no multiplicator indicator
-				// TODO
-			}
-			else {
-				uint32_t v = theValue;
-				//v = v * ( (uint32_t)10 ** (uint32_t)button );
 
-				//WIP NOT FINISHED
+			//not using math POW() since it creates strange roundings with float
+			//theValue = theValue * pow(10, button);
+
+			//homegrown "* 10 ^ button"
+			for (uint8_t po = 1; po <= button; po++){
+				theValue = theValue * 10.0;
 			}
 			break;
 	}
@@ -288,8 +294,9 @@ ISR(TIMER1_OVF_vect){
 					//calculate the value
 
 					//Dummy test
-					theValue += (float)button + 0.1;
-					//resistorCalculation(button);
+					//theValue += (float)button + 0.1;
+
+					resistorCalculation(button);
 				}
 
 		}
