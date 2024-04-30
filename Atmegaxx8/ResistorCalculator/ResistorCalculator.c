@@ -35,6 +35,11 @@
 #define DIGIT_NONE		0b11111111
 #define DIGIT_HYPHEN	0b10111111
 
+#define DIGIT_MULTIPLICATOR_MEGA	0b11110110
+#define DIGIT_MULTIPLICATOR_KILO 	0b11110111
+#define DIGIT_MULTIPLICATOR_NONE 	0b11111111
+
+
 uint8_t DIGITS[] = {
 	DIGIT_0,
 	DIGIT_1,
@@ -119,10 +124,17 @@ void displayOff(){
  */
 void showNumber(float pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t base){
 	float multiplicator = 1.0;
-	if (theValue > 1000000.0)
+	if (theValue > 1000000.0){
 		multiplicator = 1000000.0;
-	else if (theValue > 1000.0)
+		mDisplayTab[3] = DIGIT_MULTIPLICATOR_MEGA;
+	}
+	else if (theValue > 1000.0){
 		multiplicator = 1000.0;
+		mDisplayTab[3] = DIGIT_MULTIPLICATOR_KILO;
+	}
+	else {
+		mDisplayTab[3] = DIGIT_MULTIPLICATOR_NONE;
+	}
 
 	//make an integer division to (hopefully) avoid float precision error
 	float adjustedValue = (float)((uint16_t)theValue / (uint16_t)multiplicator);
@@ -173,8 +185,8 @@ void showNumber(float pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t bas
 	}
 
 
-			
-	showDisplayTab(pFromLeft,pToRight);
+
+	showDisplayTab(0,3);
 }
 
 
