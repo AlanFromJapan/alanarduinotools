@@ -124,11 +124,11 @@ void displayOff(){
  */
 void showNumber(float pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t base){
 	float multiplicator = 1.0;
-	if (theValue > 1000000.0){
+	if (theValue >= 1000000.0){
 		multiplicator = 1000000.0;
 		mDisplayTab[3] = DIGIT_MULTIPLICATOR_MEGA;
 	}
-	else if (theValue > 1000.0){
+	else if (theValue >= 1000.0){
 		multiplicator = 1000.0;
 		mDisplayTab[3] = DIGIT_MULTIPLICATOR_KILO;
 	}
@@ -136,17 +136,21 @@ void showNumber(float pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t bas
 		mDisplayTab[3] = DIGIT_MULTIPLICATOR_NONE;
 	}
 
-	//make an integer division to (hopefully) avoid float precision error
-	float adjustedValue = (float)((uint16_t)theValue / (uint16_t)multiplicator);
+	//keep only 3 relevant digit
+	float adjustedValue = theValue / multiplicator;
 
+	//if decimal is != 0 need to shift left the result
 	uint8_t decimal = ((uint16_t)(adjustedValue * (float)base)) % base;
 
 	if (decimal == 0){
 		//no decimal
+
 		uint16_t v = (uint16_t)adjustedValue;
 		//display on the 3 leftmost digits
 		mDisplayTab[2] = DIGITS[v % base];
 
+
+		//middle digit or nothing
 		v = v / base;
 		if (v > 0) {
 			mDisplayTab[1] = DIGITS[v % base];
@@ -155,6 +159,7 @@ void showNumber(float pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t bas
 			mDisplayTab[1] = DIGIT_NONE;
 		}
 
+		//leftmost digit or nothing
 		v = v / base;
 		if (v > 0) {
 			mDisplayTab[0] = DIGITS[v % base];
@@ -164,6 +169,8 @@ void showNumber(float pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t bas
 		}
 	}
 	else {
+		//there IS a decimal so shiftleft, add a dot and the one decimal
+
 		//1 decimal (the max for resistor anyway)
 		uint16_t v = (uint16_t)(adjustedValue * (float)base);
 
@@ -174,7 +181,7 @@ void showNumber(float pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t bas
 		v = v / base;
 		mDisplayTab[1] = DIGITS[v % base] & DIGIT_DOT; //<== Dot if there is is ALWAYS on 2nd digit
 
-
+		//leftmost digit or nothing
 		v = v / base;
 		if (v > 0) {
 			mDisplayTab[0] = DIGITS[v % base];
@@ -268,6 +275,7 @@ inline void resistorCalculation(const uint8_t button){
 			for (uint8_t po = 1; po <= button; po++){
 				theValue = theValue * 10.0;
 			}
+
 			break;
 	}
 
