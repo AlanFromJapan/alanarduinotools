@@ -258,6 +258,10 @@ inline uint8_t readButton() {
  */
 inline void resistorCalculation(const uint8_t button){
 	switch (theValueNthDigit){
+		case 3:
+			//reset theValueNthDigit
+			theValueNthDigit = 0;
+			//NO BREAK : want to fall into "first digit" case
 		case 0:
 			//first digit
 			theValue = (float)button;
