@@ -124,6 +124,7 @@ void displayOff(){
  */
 void showNumber(float pNumber, uint8_t pFromLeft, uint8_t pToRight, uint16_t base){
 	float multiplicator = 1.0;
+	//fix these dividers to make it work with other than base 10 (left for you. future me)
 	if (theValue >= 1000000.0){
 		multiplicator = 1000000.0;
 		mDisplayTab[3] = DIGIT_MULTIPLICATOR_MEGA;
