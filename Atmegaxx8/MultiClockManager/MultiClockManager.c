@@ -34,18 +34,19 @@
 #include "MCMShared.h"
 
 //Choose what RTC to use
-#include "DS3231.h"
-//#include "DS3234.h"
+//#include "DS3231.h"
+#include "DS3234.h"
 //#include "RTCFake.h"
 
 
 //Choose the display to use (put the define BEFORE the includes!)
-//#define USE_DISPLAY_BCD1
+#define USE_DISPLAY_NUMITRON
 //#include "MCMLedMatrix.h"
 //#include "WordclockLayouts.h"
 //#include "VoltmeterDisplay.h"
+#include "TinyNumitron.h"
 
-#include "serialComm.h"
+//#include "serialComm.h"
 
 /************************************************************************/
 /* Setup                                                                */
@@ -53,17 +54,18 @@
 void mainSetup() {
 
 	//Start Serial
-	serialHardwareInit();
-	USART_SendString("\n\n------------------------");
+//	serialHardwareInit();
+//	USART_SendString("\n\n------------------------");
 
 	//macro to be redefined by each RTC
 	RTC_INIT();
 	
 	//Set time! (don't do it every time ;) Remove me later)
 	//SetTimeDate3231(NULL);
+	//SetTimeDate3234(6,6,2024,22,03,55);
 
 	//macro to be redefined by each display
-	//SETUP_DISPLAY();
+	SETUP_DISPLAY();
 	
 }
 
@@ -75,14 +77,9 @@ void mainSetup() {
 int main(void) {
 	mainSetup();
 
-	//C0 as out
-	DDRC |= 0x01;
-	//C0 off
-	PORTC &= ~0x01;
 	
 	Date vLastDate;
 
-	USART_SendString("\nLet's start.\n");
 	
     while(1) {
 
@@ -90,31 +87,20 @@ int main(void) {
     	RTC_READ_TIME(&vLastDate);
 		
 		//macro to be redefined by each display
-		//MAP_DATE_TO_DISPLAY(&vLastDate);
+		MAP_DATE_TO_DISPLAY(&vLastDate);
 		
 		//macro to be redefined by each display
-		//DRAW_DISPLAY();
+		DRAW_DISPLAY();
 
 
-	    //macro to be redefined by each RTC
-//	    RTC_READ_TIME(&vLastDate);
 
-    	USART_SendString("h=");
-		char vBuff[15];
-		itoa(vLastDate.second, vBuff, 10);
-		USART_SendString(vBuff);
+//    	USART_SendString("h=");
+//		char vBuff[15];
+//		itoa(vLastDate.second, vBuff, 10);
+//		USART_SendString(vBuff);
+//
+//		USART_SendString(". ");
 
-		USART_SendString(". ");
-
-
-    	//C0 off
-    	PORTC &= ~0x01;
-
-	    //small delay
-		_delay_ms(500);
-
-		//C0 on
-		PORTC |= 0x01;
 
 	    //small delay
 		_delay_ms(500);
