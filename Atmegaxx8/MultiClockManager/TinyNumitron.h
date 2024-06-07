@@ -94,11 +94,17 @@ uint8_t max (uint8_t a, uint8_t b) {
 }
 
 void drawLedMatrix_TinyNumitron7seg() {
-#define DELTA_WAIT	5
+#define DELTA_WAIT		5
+#define MAX_DURATION 	100
    //basically override the "default version". do nothing for some time and the refresh
    if (mAnimationActive == TRUE){
-	   uint8_t m = max((uint8_t)100 - (uint8_t)mAnimationCounter, (uint8_t)DELTA_WAIT);
-	   for (; m <= DELTA_WAIT; m -= DELTA_WAIT){
+	   if (mAnimationCounter <= MAX_DURATION){
+		   uint8_t m = max((uint8_t)MAX_DURATION - (uint8_t)mAnimationCounter, (uint8_t)DELTA_WAIT);
+		   for (; m <= DELTA_WAIT; m -= DELTA_WAIT){
+			   _delay_ms(DELTA_WAIT);
+		   }
+	   }
+	   else {
 		   _delay_ms(DELTA_WAIT);
 	   }
    }
