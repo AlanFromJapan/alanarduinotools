@@ -39,10 +39,17 @@ uint8_t DIGITS[] = {
    DIGIT5, DIGIT6, DIGIT7, DIGIT8, DIGIT9 };
 
 
+#define TRUE 	1
+#define FALSE 	0
+
+#define EDIT_NOT	0
+#define EDIT_HOURS	1
+#define EDIT_MINS	2
+
 //animation requires fast update
-uint8_t mFastPace = 0;
-uint8_t mAnimationCounter = 0;
-uint8_t mNumitronEditStatus = 0x00;
+uint8_t mAnimationActive = FALSE;
+uint8_t mAnimationCounter = FALSE;
+uint8_t mNumitronEditStatus = EDIT_NOT;
 
 void setupTinyNumitron7seg() {
    //set pins to output so you can control the shift register
@@ -87,11 +94,12 @@ uint8_t max (uint8_t a, uint8_t b) {
 }
 
 void drawLedMatrix_TinyNumitron7seg() {
+#define DELTA_WAIT	5
    //basically override the "default version". do nothing for some time and the refresh
-   if (mFastPace != 0){
-	   uint8_t m = max((uint8_t)100 - (uint8_t)mAnimationCounter, (uint8_t)5);
-	   for (uint8_t t = m; t <= 5; t -= 5){
-		   _delay_ms(5);
+   if (mAnimationActive == TRUE){
+	   uint8_t m = max((uint8_t)100 - (uint8_t)mAnimationCounter, (uint8_t)DELTA_WAIT);
+	   for (; m <= DELTA_WAIT; m -= DELTA_WAIT){
+		   _delay_ms(DELTA_WAIT);
 	   }
    }
    else {
@@ -106,13 +114,15 @@ void MapTimeInLedMatrix_TinyNumitronIV16X(Date* pD){
 
    //every hour and half-hour, animation for 10 seconds   
    if ((pD->minute == 0 || pD->minute == 30) && pD->second < 7) {
-      if (mFastPace != 0){
-         mFastPace = 1;
-         mAnimationCounter = 0;
+      if (mAnimationActive == FALSE){
+    	  //start animation, init counter
+    	  mAnimationCounter = 0;
       }
+
+      mAnimationActive = TRUE;
    }  
    else {
-      mFastPace = 0;
+      mAnimationActive = FALSE;
    }
 
    int vSeconds = mAnimationCounter++;
@@ -121,20 +131,20 @@ void MapTimeInLedMatrix_TinyNumitronIV16X(Date* pD){
    
    //Minutes
    //units
-   shiftOutX(DIGITS[pD->minute % 10] | ((mNumitronEditStatus == 2) || (mFastPace !=0 && vSeconds % 4 == 0)? LED_MASK_ON : LED_MASK_OFF));
+   shiftOutX(DIGITS[pD->minute % 10] | ((mNumitronEditStatus == EDIT_MINS) || (mAnimationActive == TRUE && vSeconds % 4 == 0)? LED_MASK_ON : LED_MASK_OFF));
    //tens
-   shiftOutX(DIGITS[pD->minute / 10] | ((mNumitronEditStatus == 2) || (mFastPace !=0 && vSeconds % 4 == 1)? LED_MASK_ON : LED_MASK_OFF));
+   shiftOutX(DIGITS[pD->minute / 10] | ((mNumitronEditStatus == EDIT_MINS) || (mAnimationActive == TRUE && vSeconds % 4 == 1)? LED_MASK_ON : LED_MASK_OFF));
 
    //Hours
    //units
-   shiftOutX(DIGITS[pD->hour % 10] | ((mNumitronEditStatus == 1) || (mFastPace !=0 && vSeconds % 4 == 2)? LED_MASK_ON : LED_MASK_OFF));
+   shiftOutX(DIGITS[pD->hour % 10] | ((mNumitronEditStatus == EDIT_HOURS) || (mAnimationActive == TRUE && vSeconds % 4 == 2)? LED_MASK_ON : LED_MASK_OFF));
    //tens
    //if less than 10 turn the tens digit off for hours
    if (pD->hour < 10){
-      shiftOutX(DIGIT_OFF | ((mNumitronEditStatus == 1) || (mFastPace !=0 && vSeconds % 4 == 3)? LED_MASK_ON : LED_MASK_OFF));
+      shiftOutX(DIGIT_OFF | ((mNumitronEditStatus == EDIT_HOURS) || (mAnimationActive == TRUE && vSeconds % 4 == 3)? LED_MASK_ON : LED_MASK_OFF));
    }
    else {
-      shiftOutX(DIGITS[pD->hour / 10] | ((mNumitronEditStatus == 1) || (mFastPace !=0 && vSeconds % 4 == 3)? LED_MASK_ON : LED_MASK_OFF));
+      shiftOutX(DIGITS[pD->hour / 10] | ((mNumitronEditStatus == EDIT_HOURS) || (mAnimationActive == TRUE && vSeconds % 4 == 3)? LED_MASK_ON : LED_MASK_OFF));
    }
 
    PORTD |= (1 << NUMITRON_PIN_LATCH); // ~PD7  
