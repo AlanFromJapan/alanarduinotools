@@ -62,7 +62,7 @@ void mainSetup() {
 	
 	//Set time! (don't do it every time ;) Remove me later)
 	//SetTimeDate3231(NULL);
-	//SetTimeDate3234(6,6,2024,22,03,55);
+	//SetTimeDate3234(7,6,2024,21,57,00);
 
 	//macro to be redefined by each display
 	SETUP_DISPLAY();
@@ -103,7 +103,7 @@ int main(void) {
 
 
 	    //small delay
-		_delay_ms(500);
+		_delay_ms(50);
 
 		
     }
