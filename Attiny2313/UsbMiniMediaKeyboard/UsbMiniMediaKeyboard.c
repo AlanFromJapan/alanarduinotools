@@ -9,6 +9,8 @@
 *
 */
 
+// Set the fuses with "avrdude -pt2313 -cavrispmkII -u  -Ulfuse:w:0xce:m -Uhfuse:w:0xdf:m -Uefuse:w:0xff:m"
+// Will set the fuse to use ISP, no divide clock and external crystal (12MHz is what you should use)
 
 
 //defined in the compilation params "-D F_CPU=12000000" or define it here
@@ -27,15 +29,22 @@
 #include "vusb-config.h"
 
 //Key values to send to the host https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf p77-78
-#define VOL_UP		0xe9
-#define VOL_DOWN	0xea
-#define VOL_MUTE	0xe2
+#define PLAY_PAUSE 	0xcd
+#define PLAY_NEXT	0xb5
 
-#define LED_MASK	0x08
+// LEDS on PB3 & PB4
+#define LED_1_MASK 	0x08
+#define LED_2_MASK 	0x10
 
-#define KEYUP_MASK		0x04
-#define KEYDOWN_MASK	0x02
-#define KEYMUTE_MASK	0x01
+#define LEDS_MASK	(LED_1_MASK | LED_2_MASK)
+
+
+// Buttons on PB0 & PB1
+#define KEY_PAUSE_MASK	0x01
+#define KEY_NEXT_MASK	0x02
+
+#define KEYS_MASK		(KEY_PAUSE_MASK | KEY_NEXT_MASK)
+
 
 
 static void usbHardwareInit(void) {
@@ -64,9 +73,9 @@ static void usbPurgeEvents(){
 	} while (!usbInterruptIsReady());
 }
 
-#define USB_DELAY_DELTA_MS 50
-static void usbDelayMs(double pDelay){
-	uint8_t vDelay = (uint8_t)((uint16_t)pDelay / USB_DELAY_DELTA_MS);
+#define USB_DELAY_DELTA_MS ((uint16_t)50)
+static void usbDelayMs(uint16_t pDelay){
+	uint8_t vDelay = (uint8_t)(pDelay / USB_DELAY_DELTA_MS);
 	for (uint16_t t = 0; t < vDelay; t++){
 		_delay_ms(USB_DELAY_DELTA_MS);
 		//Keep USB connection alive
@@ -74,12 +83,12 @@ static void usbDelayMs(double pDelay){
 	}
 }
 
-static inline void ledsOn(){
-	PORTB |= LED_MASK;
+static inline void ledsOn(uint8_t pLedMask){
+	PORTB |= pLedMask;
 }
 
 static inline void ledsOff(){
-	PORTB &= ~(LED_MASK);
+	PORTB &= ~(LEDS_MASK);
 }
 
 /************************************************************************/
@@ -110,17 +119,18 @@ int main(void) {
 	//----------------------------------
 
 	//2: 3 tact switch setup (pullups)
-	//PB0-2 input
-	DDRB &= ~0x07;
+	//PB0-1 input
+	DDRB &= ~(KEYS_MASK);
+
 	//Pull up on PB0-2
-	PORTB |= 0x07;
+	PORTB |= KEYS_MASK;
 		
 	//just make sure pullups are NOT disabled
 	MCUCR |= (0 << PUD);
 
 	
 	//3: LED
-	DDRB |= LED_MASK;
+	DDRB |= LEDS_MASK;
 	//all leds off
 	ledsOff();
 
@@ -132,24 +142,21 @@ int main(void) {
 		//nothing pressed at the start
 		KeyPressed = 0x00;
 
-		//check buttons status
-		if ((PINB & KEYUP_MASK) == KEYUP_MASK){
-			KeyPressed = VOL_UP;
+		//check buttons status (buttons are pulled-up and when pressed they are tied to GND) so invert PINB status
+		if (((~PINB) & KEY_PAUSE_MASK) == KEY_PAUSE_MASK){
+			KeyPressed = PLAY_PAUSE;
+			ledsOn(LED_1_MASK);
 		}
 		else{
-			if ((PINB & KEYDOWN_MASK) == KEYDOWN_MASK){
-				KeyPressed = VOL_DOWN;
-			}
-			else{
-				if ((PINB & KEYMUTE_MASK) == KEYMUTE_MASK){
-					KeyPressed = VOL_MUTE;
-				}
+			if (((~PINB) & KEY_NEXT_MASK) == KEY_NEXT_MASK){
+				KeyPressed = PLAY_NEXT;
+				ledsOn(LED_2_MASK);
 			}
 		}
 
 		//if something was pressed
 		if (KeyPressed != 0x00) {
-			ledsOn();
+
 
 			//send the USB message
 			if (usbInterruptIsReady()){
@@ -166,8 +173,9 @@ int main(void) {
 
 			//wait a little to debounce on the cheap
 			usbDelayMs(250);
-			ledsOff();
 		}
+
+		ledsOff();
 	}
 	
 	return 0;	
