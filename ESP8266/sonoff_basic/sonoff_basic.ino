@@ -11,6 +11,8 @@
 #include <ESP8266mDNS.h>
 #include "PrivateConstants.h"
 
+#include <EEPROM.h>
+
 MDNSResponder mdns;
 
 // Replace with your network credentials
@@ -20,15 +22,34 @@ const char* password = WIFI_PASSWORD;
 ESP8266WebServer server(80);
 
 String webPage = "";
+String serverLabel = "#notset#";
 
 int gpio13Led = 13;
 int gpio12Relay = 12;
 volatile byte mStatus = 0;
 
 void generatePage(){
-  webPage = "<h1>SONOFF Web Server 2</h1><div style=\"height:300px;width:300px;background-color:";
+  webPage = "<h1>SONOFF Web Server 2: ";
+  webPage += serverLabel;
+  webPage += "</h1><div style=\"height:300px;width:300px;background-color:";
   webPage += (mStatus == 0? "red": "green") ;
   webPage += ";\"/><p><a href=\"on\"><button style=\"width:100px;\">ON</button></a>&nbsp;<a href=\"off\"><button style=\"width:100px;\">OFF</button></a></p>"; 
+  webPage += "<br/><br/><br/><p style=\"font-style:italic;\">Change the Sonoff label by going to http://..../label?new=xxxxxx</p>";
+}
+
+void readServerLabelFromEeprom(){
+  unsigned int addr = 0;
+  EEPROM.begin(128);
+  EEPROM.get(addr, serverLabel); 
+  EEPROM.end();
+}
+
+void writeServerLabelToEeprom(String lbl){
+  unsigned int addr = 0;
+  EEPROM.begin(128);
+  EEPROM.put(addr, lbl); 
+  EEPROM.commit();
+  EEPROM.end();
 }
 
 void setup(void){
@@ -45,6 +66,8 @@ void setup(void){
   delay(1000);
   WiFi.begin(ssid, password);
   Serial.println("");
+
+  readServerLabelFromEeprom();
 
   // Wait for connection (blinking)
   while (WiFi.status() != WL_CONNECTED) {    
@@ -81,6 +104,18 @@ void setup(void){
     digitalWrite(gpio13Led, HIGH);
     digitalWrite(gpio12Relay, LOW);
     mStatus = 0;
+    generatePage();
+
+    server.send(200, "text/html", webPage);
+  });
+
+  server.on("/label", [](){
+    // Sets the label of the server
+    String lbl = server.arg(0);
+
+    writeServerLabelToEeprom(lbl);
+    readServerLabelFromEeprom();
+
     generatePage();
 
     server.send(200, "text/html", webPage);
