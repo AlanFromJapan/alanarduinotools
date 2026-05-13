@@ -1,11 +1,12 @@
-/*
- * Blink_tiny10.asm
- *
- *  Created: 2014/11/16 22:49:10
- *   Author: Alan
- */ 
+;/*
+; * Blink_tiny10.asm
+; *
+; *  Created: 2014/11/16 22:49:10
+; *   Author: Alan
+; */ 
+.include "tn10def.inc"
 
-  rjmp RESET  ;go and set up PORTB as an output 
+rjmp RESET  ;go and set up PORTB as an output 
 
 
 ;name registers (selected >r15 arbitrarily)
