@@ -10,8 +10,8 @@
 ;----------------------------------------------------------------------
 ; constants
 .EQU F_CPU		= 8000000 ;CPU frequency (8MHz internal oscillator)
-.EQU INT_PIN    = 0 ;INT0 pin number (PB0)
-.EQU OUT_PIN    = (1 << 2) ;output pin number (PB2)
+.EQU INT_PIN    = 2 ;INT0 pin number (PB2)
+.EQU OUT_PIN    = 0 ;output pin number (PB0)
 
 ;----------------------------------------------------------------------
 ;variables
@@ -43,22 +43,23 @@ rjmp neant		    ;11 0x000A ADC ADC Conversion Complete (1)
 ; 20 micro second delay routine (assuming 8MHz clock)
 delay_20us:
     ; 20 microseconds at 8MHz is 160 clock cycles
-    ; rjmp (took us here for 2) + push (2) + ldi (1) + pop (2) + ret (4) = 11 => remains 149 for main loop
+    ; rcall (took us here for 3/4 say 4) + push (2) + ldi (1) + pop (2) + ret (4) = 13 => remains 147 for main loop
 
     push count1
 
-    ldi count1, 49
+    ldi count1, 36
 
     ; loop until down to zero 
-    ; subi 1 + tst 1 + brne 1 = 3 => 149 // 3 = 49 loops + 2 nops
+    ; subi 1 + tst 1 + brne 2 = 4 => 147 // 4 = 36 loops + 3 nops
 delay_20us_loop:
     subi count1, 1
     tst count1
     brne delay_20us_loop
 
-    ; remaining 2 cycles
-    nop
-    nop
+    ; remaining 3 cycles  => skip them, my calculation is a little off
+    ; nop 
+    ; nop
+    ; nop
 
     pop count1
     ret
@@ -103,12 +104,14 @@ INT0_handler:
     ; wait 20us
     rcall delay_20us
 
-    ; toggle the output pin ON (PB2)
-    sbi   PORTB, OUT_PIN  
+    ; toggle the output pin ON 
+    sbi PORTB, OUT_PIN  
+
     ; wait 300us
     rcall delay_300us
-    ; toggle the output pin OFF (PB2)
-    cbi   PORTB, OUT_PIN  
+
+    ; toggle the output pin OFF 
+    cbi PORTB, OUT_PIN  
 
     ; give a few us to the pin to stabilize before re-enabling interrupts in case
     rcall delay_20us
@@ -129,18 +132,17 @@ main:
 	out CCP, r17 ; Configuration Change Protection, allows protected changes
 	out CLKPSR, r16 ; sets the clock divider
 
-    ;set PB2 as an output in the Data Direction Register for PORTB
-	ldi r16, OUT_PIN ; sets PB2 to output
-	out DDRB, r16 ; data direction    
+    ;set PB0 as an output in the Data Direction Register for PORTB
+	sbi DDRB, OUT_PIN
 
     ; all off and no pull ups
-    ldi r16, 0x00
-	out PORTB, r16
+	cbi PORTB, OUT_PIN
+	cbi PORTB, INT_PIN
 
     ;Interrupts on INT0 (PB0) on FALLING EDGE
     cbi   EICRA, ISC00  ;set ISC00 to 0
     sbi   EICRA, ISC01  ;set ISC01 to 1 (FALLING EDGE)
-    sbi   EIMSK, INT_PIN ;enable INT0 interrupt
+    sbi   EIMSK, INT0 ;enable INT0 interrupt
 
     ;go interrupts!
     sei                 ;enable global interrupts
