@@ -11,7 +11,7 @@
 ; constants
 .EQU F_CPU		= 8000000 ;CPU frequency (8MHz internal oscillator)
 .EQU INT_PIN    = 0 ;INT0 pin number (PB0)
-.EQU OUT_PIN    = 2 ;output pin number (PB2)
+.EQU OUT_PIN    = (1 << 2) ;output pin number (PB2)
 
 ;----------------------------------------------------------------------
 ;variables
@@ -67,21 +67,21 @@ delay_20us_loop:
 ; 300 micro second delay routine (assuming 8MHz clock)
 delay_300us:
     ; small enough: just call the 20us delay 15 times!
-    rjmp delay_20us
-    rjmp delay_20us
-    rjmp delay_20us
-    rjmp delay_20us
-    rjmp delay_20us ; 5
-    rjmp delay_20us
-    rjmp delay_20us
-    rjmp delay_20us
-    rjmp delay_20us
-    rjmp delay_20us ; 10
-    rjmp delay_20us
-    rjmp delay_20us
-    rjmp delay_20us
-    rjmp delay_20us
-    rjmp delay_20us ; 15
+    rcall delay_20us
+    rcall delay_20us
+    rcall delay_20us
+    rcall delay_20us
+    rcall delay_20us ; 5
+    rcall delay_20us
+    rcall delay_20us
+    rcall delay_20us
+    rcall delay_20us
+    rcall delay_20us ; 10
+    rcall delay_20us
+    rcall delay_20us
+    rcall delay_20us
+    rcall delay_20us
+    rcall delay_20us ; 15
     ret
 
 
@@ -94,23 +94,27 @@ neant:
 ; handler for input line change (INT0)
 INT0_handler:
     ; no interrupts since we will manipulate the same input line
-    cli
+    ; cli 
+    ; not needed as per doc since we don't want nested interrupts (default behavior is fine)
+    ; "When an interrupt occurs, the Global Interrupt Enable I-bit is cleared and all interrupts are disabled. The user soft-
+    ; ware can write logic one to the I-bit to enable nested interrupts. All enabled interrupts can then interrupt the current
+    ; interrupt routine. The I-bit is automatically set when a Return from Interrupt instruction – RETI – is executed."
 
     ; wait 20us
-    rjmp delay_20us
+    rcall delay_20us
 
     ; toggle the output pin ON (PB2)
     sbi   PORTB, OUT_PIN  
     ; wait 300us
-    rjmp delay_300us
+    rcall delay_300us
     ; toggle the output pin OFF (PB2)
     cbi   PORTB, OUT_PIN  
 
     ; give a few us to the pin to stabilize before re-enabling interrupts in case
-    rjmp delay_20us
+    rcall delay_20us
 
     ;resume interrupts!
-    sei
+    ; sei ; not needed as per doc (See above comment about cli)
     
     ; job done
     reti
@@ -118,8 +122,20 @@ INT0_handler:
 ; ---------------------------------------------------------
 ; main loop
 main: 
+
+	; set clock divider (use in/out, not sbi/cbi since these are memory mapped registers, not I/O ports)
+	ldi r16, 0x00 ; clock divided by 1
+	ldi r17, 0xD8 ; the key for CCP
+	out CCP, r17 ; Configuration Change Protection, allows protected changes
+	out CLKPSR, r16 ; sets the clock divider
+
     ;set PB2 as an output in the Data Direction Register for PORTB
-    sbi   DDRB, OUT_PIN  ;connect LED to PB2 (Attiny10 pin 4)
+	ldi r16, OUT_PIN ; sets PB2 to output
+	out DDRB, r16 ; data direction    
+
+    ; all off and no pull ups
+    ldi r16, 0x00
+	out PORTB, r16
 
     ;Interrupts on INT0 (PB0) on FALLING EDGE
     cbi   EICRA, ISC00  ;set ISC00 to 0

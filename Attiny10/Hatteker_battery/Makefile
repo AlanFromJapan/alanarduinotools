@@ -8,4 +8,4 @@ clean:
 	rm -f hatteker_battery_faker.eep.hex
 
 upload:
-	avrdude -p t10 -cavrispmkII  -U flash:w:hatteker_battery_faker.hex:i -B12 
+	avrdude -p t10 -cavrispmkII  -U flash:w:hatteker_battery_faker.hex:i -B12 -v
