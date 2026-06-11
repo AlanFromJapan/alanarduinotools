@@ -1,6 +1,15 @@
-Fakes the response of a Hatteker Shaver batter on the "IN+" pin of the battery.
+Fakes the response of a Hatteker Shaver batter on the "IN+" pin of the battery. It waits for the signal on PB2 using interrupt INT0, and generates a reply pulse on PB0.
 
 Whole story and details on main site : https://electrogeek.cc/repair%20-%20electric%20shaver%20battery%20cloning.html
+
+# Pinout
+```
+                   +-\/-+
+     <Output>  PB0 |o   | PB3  
+               GND |    | VCC
+               PB1 |____| PB2  >INT0 input<
+```
+
 
 # Build
 Use `avra`: `sudo apt install avra`

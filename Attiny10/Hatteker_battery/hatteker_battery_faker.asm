@@ -4,6 +4,12 @@
 ; *  Created: 2026/05/17
 ; *   Author: AlanFromJapan (https://electrogeek.cc/)
 ; */ 
+;
+;                   +-\/-+
+;     <Output>  PB0 |o   | PB3  
+;               GND |    | VCC
+;               PB1 |____| PB2  >INT0 input<
+;
 
 .include "tn10def.inc"
 
